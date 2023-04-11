@@ -1,0 +1,136 @@
+/**
+ * Element styles
+ */
+h1 {
+  margin: auto;
+}
+
+html,
+body {
+  background-color: #eeeeff;
+  font-family: sans-serif;
+  margin: 0px;
+  height: 100%;
+}
+
+/**
+ * ID styles
+ */
+#view_container {
+  margin: auto;
+  height: 800px;
+  min-height: 400px;
+  max-width: 1000px;
+  /* border: 2px solid #99cccc; */
+  border: 2px solid darkblue;
+  position: sticky;
+  top: 0;
+}
+
+#log {
+  font-family: monospace;
+  overflow: scroll;
+  overflow-wrap: break-word;
+  height: 200px;
+}
+
+/**
+ * Class styles
+ */
+.grid {
+  display: grid;
+  grid-template-columns: 1em 6fr 4fr 1em;
+  column-gap: 1em;
+  row-gap: 1em;
+}
+
+.view-container {
+  grid-column: 2 / span 1;
+}
+
+.view-controls {
+  grid-column: 3 / span 1;
+}
+
+.log {
+  width: 100%
+}
+
+.heading {
+  grid-column: 2 / span 2;
+  align-self: center;
+}
+
+.subheading {
+  margin-bottom: 0.5em;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.subcontrols {
+  display: grid;
+  grid-template-columns: [label] auto [field] 3fr [button] 1fr;
+  column-gap: 0.5em;
+  row-gap: 0.5em;
+  border-bottom: 1px solid darkblue;
+  padding: 1em;
+}
+
+.subcontrols p,
+.subcontrols h1,
+.subcontrols h2,
+.subcontrols h3,
+.subcontrols h4,
+.subcontrols h5,
+.subcontrols h6 {
+  grid-column: label / end;
+  justify-items: stretch;
+}
+
+.subcontrols label {
+  grid-column: label / span 1;
+  justify-items: stretch;
+  padding-right: 5px;
+  font-family: monospace;
+  tab-size: 2;
+  white-space: pre;
+}
+
+.subcontrols input,
+.subcontrols select,
+.subcontrols img,
+.subcontrols div {
+  grid-column: field / span 1;
+  justify-items: left;
+}
+
+.subcontrols div {
+  white-space: pre;
+}
+
+.subcontrols input[type='text'],
+.subcontrols input[type='textarea'] {
+  width: 100%;
+}
+
+.checkbox {
+  display: inline;
+}
+
+.subcontrols input[type="checkbox"] {
+  width: auto;
+  text-align: left;
+}
+
+.subcontrols button {
+  grid-column: button / span 1;
+  justify-self: start;
+  width: 100%;
+}
+
+.hide {
+  display: none;
+}

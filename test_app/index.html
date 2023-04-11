@@ -1,0 +1,633 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>ControlledFrame in Isolated PWA Test</title>
+
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div class="content">
+    <div class="grid">
+      <h1 class="heading">Isolated Web App ControlledFrame Test</h1>
+
+      <div class="view-container">
+        <div class="subheading">
+          <h2>Controlled Frame</h2>
+        </div>
+
+        <div id="view_container">
+          <div id="controlledframe_container">
+            <controlledframe id="view"></controlledframe>
+          </div>
+          <hr />
+          <div class="log">
+            <h2>Log</h2>
+            <div id="log"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view-controls">
+        <h2>Controls</h2>
+
+        <div class="controls">
+          <h3>Page Controls</h3>
+          <div class="subcontrols">
+            <label for="update_sw_btn">Update ServiceWorker</label>
+            <button id="update_sw_btn">Update</button>
+
+            <label for="reset_controlledframe_btn">Recreate ControlledFrame</label>
+            <button id="reset_controlledframe_btn">Recreate</button>
+          </div>
+
+          <h3>Tag Attributes</h3>
+
+          <div class="subcontrols">
+            <label for="src_in">src</label>
+            <input type="text" id="src_in" />
+            <button id="src_btn">Set</button>
+
+            <label for="partition_in">partition</label>
+            <input type="text" id="partition_in" />
+            <button id="partition_btn">Set</button>
+
+            <label for="allowtransparency_chk">allowtransparency</label>
+            <div class="checkbox"><input type="checkbox" id="allowtransparency_chk" /></div>
+            <button id="allowtransparency_btn">Set</button>
+
+            <label for="autosize_chk">autosize</label>
+            <div class="checkbox"><input type="checkbox" id="autosize_chk" /></div>
+            <button id="autosize_btn">Set</button>
+
+            <label for="name_in">name</label>
+            <input type="text" id="name_in" />
+            <button id="name_btn">Set</button>
+          </div>
+
+          <h3>Tag Properties</h3>
+
+          <div class="subcontrols">
+            <h4>contentWindow</h4>
+
+            <label for="content_window_post_message_message_in">message</label>
+            <input type="text" id="content_window_post_message_message_in" />
+
+            <label for="content_window_post_message_target_origin_in">targetOrigin</label>
+            <input type="text" id="content_window_post_message_target_origin_in" />
+
+            <label for="content_window_post_message_btn">postMessage(<br> message,<br> targetOrigin)</label>
+            <button id="content_window_post_message_btn">Post Message</button>
+          </div>
+
+          <div class="subcontrols">
+            <h4>contextMenus</h4>
+
+            <label for="context_menus_on_show_prevent_default_chk">onShow event.preventDefault()</label>
+            <div class="checkbox"><input type="checkbox" id="context_menus_on_show_prevent_default_chk" /></div>
+
+            <h5>ContextMenusCreateProperites createProperties/updateProperties</h5>
+
+            <label for="context_menus_create_properties_checked_chk">checked</label>
+            <div class="checkbox"><input type="checkbox" id="context_menus_create_properties_checked_chk" /></div>
+
+            <label for="context_menus_create_properties_contexts_in">contexts</label>
+            <select id="context_menus_create_properties_contexts_in" multiple>
+              <option value="all">all</option>
+              <option value="page">page</option>
+              <option value="frame">frame</option>
+              <option value="selection">selection</option>
+              <option value="link">link</option>
+              <option value="editable">editable</option>
+              <option value="image">image</option>
+              <option value="video">video</option>
+              <option value="audio">audio</option>
+            </select>
+
+            <label for="context_menus_create_properties_document_url_patterns_in">documentUrlPatterns</label>
+            <input type="text" id="context_menus_create_properties_document_url_patterns_in" />
+
+            <label for="context_menus_create_properties_enabled_chk">enabled</label>
+            <div class="checkbox"><input type="checkbox" id="context_menus_create_properties_enabled_chk" /></div>
+
+            <label for="context_menus_create_properties_id_in">id</label>
+            <input type="text" id="context_menus_create_properties_id_in" />
+
+            <label for="context_menus_create_properties_parent_id_in">parentId</label>
+            <input type="text" id="context_menus_create_properties_parent_id_in" />
+
+            <label for="context_menus_create_properties_target_url_patterns_in">targetUrlPatterns</label>
+            <input type="text" id="context_menus_create_properties_target_url_patterns_in" />
+
+            <label for="context_menus_create_properties_title_in">title</label>
+            <input type="text" id="context_menus_create_properties_title_in" />
+
+            <label for="context_menus_create_properties_type_in">type</label>
+            <select id="context_menus_create_properties_type_in">
+              <option value="normal">normal</option>
+              <option value="checkbox">checkbox</option>
+              <option value="radio">radio</option>
+              <option value="separator">separator</option>
+            </select>
+
+            <label for="context_menus_create_result">create(<br> createProperties)</label>
+            <div id="context_menus_create_result"></div>
+            <button id="context_menus_create_btn">Create</button>
+
+            <label for="context_menus_on_click_result">onclick(info)</label>
+            <div id="context_menus_on_click_result"></div>
+
+            <label for="context_menus_remove_in">remove(<br>    menuItemId)</label>
+            <input type="text" id="context_menus_remove_in" />
+            <button id="context_menus_remove_btn">Remove</button>
+
+            <label for="context_menus_remove_all_btn">removeAll()</label>
+            <button id="context_menus_remove_all_btn">Remove All</button>
+
+            <label for="context_menus_update_in">id</label>
+            <input type="text" id="context_menus_update_in" />
+
+            <label for="context_menus_update_btn">update(<br>    id,<br>    updateProperties)</label>
+            <button id="context_menus_update_btn">Update</button>
+          </div>
+
+          <div class="subcontrols">
+            <h4>WebRequest</h4>
+
+            <h5>RequestFilter filter</h5>
+
+            <label for="request_filter_tab_id">tabId</label>
+            <input type="number" id="request_filter_tab_id" />
+
+            <label for="request_filter_types">types</label>
+            <select id="request_filter_types" multiple>
+              <option value="main_frame">main_frame</option>
+              <option value="sub_frame">sub_frame</option>
+              <option value="stylesheet">stylesheet</option>
+              <option value="script">script</option>
+              <option value="image">image</option>
+              <option value="font">font</option>
+              <option value="object">object</option>
+              <option value="xmlhttprequest">xmlhttprequest</option>
+              <option value="ping">ping</option>
+              <option value="csp_report">csp_report</option>
+              <option value="media">media</option>
+              <option value="websocket">websocket</option>
+              <option value="other">other</option>
+            </select>
+
+            <label for="request_filter_urls">urls</label>
+            <input type="text" id="request_filter_urls" />
+
+            <label for="request_filter_window_id">windowId</label>
+            <input type="number" id="request_filter_window_id" />
+
+            <h5>BlockingResponse response</h5>
+
+            <label for="blocking_response_cancel">cancel</label>
+            <input type="checkbox" id="blocking_response_cancel" />
+
+            <label for="blocking_response_redirect_url">redirectUrl</label>
+            <input type="text" id="blocking_response_redirect_url" />
+
+            <label for="blocking_response_request_headers">requestHeaders JSON</label>
+            <textarea id="blocking_response_request_headers">
+{
+  "name": "stringValue",
+  "name": [1, 255],
+}
+            </textarea>
+
+            <label for="blocking_response_response_headers">responseHeaders JSON</label>
+            <textarea id="blocking_response_response_headers">
+{
+  "name": "stringValue",
+  "name": [1, 255],
+}
+            </textarea>
+
+            <h6>authCredentials</h6>
+            <label for="blocking_response_auth_credentials_password">password</label>
+            <input type="password" id="blocking_response_auth_credentials_password" />
+
+            <label for="blocking_response_auth_credentials_username">username</label>
+            <input type="text" id="blocking_response_auth_credentials_username" />
+
+            <h5>onAuthRequired(callback, filter, extraInfoSpec)</h5>
+            <p>BlockingResponse <code>response</code> is used if
+            <code>blocking</code> is specified in <code>extraInfoSpec</code> or
+            in the <code>asyncCallback</code> parameter of
+            <code>callback</code>.</p>
+
+            <label for="on_auth_required_extra_info_spec">extraInfoSpec</label>
+            <select id="on_auth_required_extra_info_spec" multiple>
+              <option value="responseHeaders">responseHeaders</option>
+              <option value="blocking">blocking</option>
+              <option value="asyncBlocking">asyncBlocking</option>
+              <option value="extraHeaders">extraHeaders</option>
+            </select>
+
+            <label for="request_on_auth_required_btn">Add onAuthRequired handler</label>
+            <button id="request_on_auth_required_btn">Add</button>
+
+            <h5>onBeforeRedirect(callback, filter, extraInfoSpec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_before_redirect_extra_info_spec">extraInfoSpec</label>
+            <select id="on_before_redirect_extra_info_spec" multiple>
+              <option value="responseHeaders">responseHeaders</option>
+              <option value="extraHeaders">extraHeaders</option>
+            </select>
+
+            <label for="request_on_before_redirect_btn">Add onBeforeRedirect handler</label>
+            <button id="request_on_before_redirect_btn">Add</button>
+
+            <h5>onBeforeRequest(callback, filter, extrainfospec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_before_request_extra_info_spec">extraInfoSpec</label>
+            <select id="on_before_request_extra_info_spec" multiple>
+              <option value="blocking">blocking</option>
+              <option value="requestbody">requestbody</option>
+              <option value="extraheaders">extraheaders</option>
+            </select>
+
+            <label for="request_on_before_request_btn">add onBeforeRequest handler</label>
+            <button id="request_on_before_request_btn">add</button>
+
+            <h5>onBeforeSendHeaders(callback, filter, extrainfospec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_before_send_headers_extra_info_spec">extraInfoSpec</label>
+            <select id="on_before_send_headers_extra_info_spec" multiple>
+              <option value="blocking">blocking</option>
+              <option value="requestbody">requestbody</option>
+              <option value="extraheaders">extraheaders</option>
+            </select>
+
+            <label for="request_on_before_send_headers_btn">add onBeforeSendHeaders handler</label>
+            <button id="request_on_before_send_headers_btn">add</button>
+
+            <h5>onCompleted(callback, filter, extrainfospec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_completed_extra_info_spec">extraInfoSpec</label>
+            <select id="on_completed_extra_info_spec" multiple>
+              <option value="requestHeaders">requestHeaders</option>
+              <option value="blocking">blocking</option>
+              <option value="extraheaders">extraheaders</option>
+            </select>
+
+            <label for="request_on_completed_btn">add onCompleted handler</label>
+            <button id="request_on_completed_btn">add</button>
+
+            <h5>onErrorOccurred(callback, filter, extrainfospec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_error_occurred_extra_info_spec">extraInfoSpec</label>
+            <select id="on_error_occurred_extra_info_spec" multiple>
+              <option value="extraheaders">extraheaders</option>
+            </select>
+
+            <label for="request_on_error_occurred_btn">add onErrorOccurred handler</label>
+            <button id="request_on_error_occurred_btn">add</button>
+
+            <h5>onHeadersReceived(callback, filter, extrainfospec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_headers_received_extra_info_spec">extraInfoSpec</label>
+            <select id="on_headers_received_extra_info_spec" multiple>
+              <option value="blocking">blocking</option>
+              <option value="responseHeaders">responseHeaders</option>
+              <option value="extraheaders">extraheaders</option>
+            </select>
+
+            <label for="request_on_headers_received_btn">add onHeadersReceived handler</label>
+            <button id="request_on_headers_received_btn">add</button>
+
+            <h5>onResponseStarted(callback, filter, extrainfospec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_response_started_extra_info_spec">extraInfoSpec</label>
+            <select id="on_response_started_extra_info_spec" multiple>
+              <option value="responseHeaders">responseHeaders</option>
+              <option value="extraheaders">extraheaders</option>
+            </select>
+
+            <label for="request_on_response_started_btn">add onResponseStarted handler</label>
+            <button id="request_on_response_started_btn">add</button>
+
+            <h5>onSendHeaders(callback, filter, extrainfospec)</h5>
+            <p>BlockingResponse <code>response</code> is returned by
+            <code>callback</code>.</p>
+
+            <label for="on_send_headers_extra_info_spec">extraInfoSpec</label>
+            <select id="on_send_headers_extra_info_spec" multiple>
+              <option value="requestHeaders">requestHeaders</option>
+              <option value="extraheaders">extraheaders</option>
+            </select>
+
+            <label for="request_on_send_headers_btn">add onSendHeaders handler</label>
+            <button id="request_on_send_headers_btn">add</button>
+          </div>
+
+          <h3>Tag Methods</h3>
+          <!-- Navigation controls -->
+          <div class="subcontrols">
+            <h4>Navigation</h4>
+            <label for="can_go_back_chk">canGoBack()</label>
+            <div class="checkbox"><input type="checkbox" id="can_go_back_chk" /></div>
+
+            <label for="back_btn">back()</label>
+            <button id="back_btn">Back</button>
+
+            <label for="can_go_forward_chk">canGoForward()</label>
+            <div class="checkbox"><input type="checkbox" id="can_go_forward_chk" /></div>
+
+            <label for="forward_btn">forward()</label>
+            <button id="forward_btn">Forward</button>
+
+            <label for="go_in">go()</label>
+            <input type="number" id="go_in" value=0 />
+            <button id="go_btn">Go</button>
+
+            <label for="reload_btn">reload()</label>
+            <button id="reload_btn">Reload</button>
+
+            <label for="stop_btn">stop()</label>
+            <button id="stop_btn">Stop</button>
+
+            <label for="print_btn">print()</label>
+            <button id="print_btn">Print</button>
+
+            <label for="get_process_id_result">getProcessId()</label>
+            <div id="get_process_id_result"></div>
+            <button id="get_process_id_btn">Get Process ID</button>
+
+            <label for="terminate_btn">terminate()</label>
+            <button id="terminate_btn">Terminate</button>
+          </div>
+
+          <!-- Capture Visible Region controls -->
+          <div class="subcontrols">
+            <h4>Capture Visible Region</h4>
+
+            <h5>ImageDetails imageDetails</h5>
+            <label for="image_details_fmt_in">format</label>
+            <select id="image_details_fmt_in">
+              <option value="jpeg">JPEG</option>
+              <option value="png">PNG</option>
+            </select>
+
+            <label for="image_details_quality_in">quality</label>
+            <input type="number" id="image_details_quality_in" value=100 />
+
+            <label for="capture_visible_region_btn">captureVisibleRegion(<br> imageDetails)</label>
+            <button id="capture_visible_region_btn">Capture</button>
+
+            <img id="capture_visible_region_result" class="hide"></img>
+            <button id="capture_visible_region_result_btn">Toggle Show/Hide</button>
+          </div>
+
+          <!-- Clear Data controls -->
+          <div class="subcontrols">
+            <h4>Clear Data</h4>
+
+            <h5>ClearDataOptions options</h5>
+            <label for="clear_data_options_since_in">since</label>
+            <input type="number" id="clear_data_options_since_in" />
+
+            <h5>ClearDataTypeSet types</h5>
+            <label for="clear_data_type_set_in">types<br><br>ctrl + click<br>to select multiple</label>
+            <select id="clear_data_type_set_in" multiple>
+              <option value="appcache">appcache</option>
+              <option value="cache">cache</option>
+              <option value="cookies">cookies</option>
+              <option value="fileSystems">fileSystems</option>
+              <option value="indexedDB">indexedDB</option>
+              <option value="localStorage">localStorage</option>
+              <option value="persistentCookies">persistentCookies</option>
+              <option value="sessionCookies">sessionCookies</option>
+              <option value="webSQL">webSQL</option>
+            </select>
+
+            <label for="clear_data_btn">clearData(options, type)</label>
+            <button id="clear_data_btn">Clear Data</button>
+          </div>
+
+          <!-- Find controls -->
+          <div class="subcontrols">
+            <h4>Find</h4>
+
+            <h5>FindOptions options</h5>
+            <label for="find_options_backward_in">backward</label>
+            <div class="checkbox"><input type="checkbox" id="find_options_backward_in" /></div>
+
+            <label for="find_options_match_case_in">matchCase</label>
+            <div class="checkbox"><input type="checkbox" id="find_options_match_case_in" /></div>
+
+            <label for="find_search_text_in">find(<br> searchText,<br> options)</label>
+            <input type="text" id="find_search_text_in" />
+            <button id="find_btn">Find</button>
+
+            <div id="find_result" class="hide"></div>
+            <button id="find_result_btn">Toggle Show/Hide</button>
+
+            <label for="stop_finding_in">stopFinding()</label>
+            <select id="stop_finding_in">
+              <option value="activate">activate</option>
+              <option value="clear">clear</option>
+              <option value="keep">keep</option>
+            </select>
+            <button id="stop_finding_btn">Stop Finding</button>
+          </div>
+
+          <!-- Audio controls -->
+          <div class="subcontrols">
+            <h4>Audio</h4>
+
+            <label for="get_audio_state_chk">getAudioState()</label>
+            <div class="checkbox"><input type="checkbox" id="get_audio_state_chk" /></div>
+            <button id="get_audio_state_btn">Get Audio State</button>
+
+            <label for="is_audio_muted_chk">isAudioMuted()</label>
+            <div class="checkbox"><input type="checkbox" id="is_audio_muted_chk" /></div>
+            <button id="is_audio_muted_btn">Is Audio Muted</button>
+
+            <label for="set_audio_muted_chk">setAudioMuted()</label>
+            <div class="checkbox"><input type="checkbox" id="set_audio_muted_chk" /></div>
+            <button id="set_audio_muted_btn">Set</button>
+          </div>
+
+          <!-- Zoom controls -->
+          <div class="subcontrols">
+            <h4>Zoom</h4>
+
+            <label for="get_zoom_result">getZoom()</label>
+            <div id="get_zoom_result"></div>
+            <button id="get_zoom_btn">Get Zoom</button>
+
+            <label for="set_zoom_in">setZoom()</label>
+            <input type="number" id="set_zoom_in" value=1 />
+            <button id="set_zoom_btn">Set</button>
+
+            <label for="get_zoom_mode_result">getZoomMode()</label>
+            <div id="get_zoom_mode_result"></div>
+            <button id="get_zoom_mode_btn">Get Zoom Mode</button>
+
+            <label for="set_zoom_mode_in">setZoomMode()</label>
+            <select id="set_zoom_mode_in">
+              <option value="per-origin">per-origin</option>
+              <option value="per-view">per-view</option>
+              <option value="disabled">disabled</option>
+            </select>
+            <button id="set_zoom_mode_btn">Set</button>
+          </div>
+
+          <!-- Spatial Navigation Enabled controls -->
+          <div class="subcontrols">
+            <h4>Spatial Navigation</h4>
+
+            <label for="is_spatial_navigation_enabled_result">isSpatialNavigationEnabled()</label>
+            <div id="is_spatial_navigation_enabled_result"></div>
+            <button id="is_spatial_navigation_enabled_btn">Is Spatial Navigation Enabled</button>
+
+            <label for="set_spatial_navigation_enabled_chk">setSpatialNavigationEnabled()</label>
+            <div class="checkbox"><input type="checkbox" id="set_spatial_navigation_enabled_chk" /></div>
+            <button id="set_spatial_navigation_enabled_btn">Set</button>
+          </div>
+
+          <!-- Load Data With Base URL controls-->
+          <div class="subcontrols">
+            <h4>Load Data with Base URL</h4>
+
+            <label for="load_data_with_base_url_data_url_in">dataUrl</label>
+            <input type="text" id="load_data_with_base_url_data_url_in" />
+
+            <label for="load_data_with_base_url_base_url_in">baseUrl</label>
+            <input type="text" id="load_data_with_base_url_base_url_in" />
+
+            <label for="load_data_with_base_url_virtual_url_in">virtualUrl</label>
+            <input type="text" id="load_data_with_base_url_virtual_url_in" />
+
+            <label for="load_data_with_base_url_btn">loadDataWithBaseUrl(<br> dataUrl,<br> baseUrl,<br>
+              virtualUrl)</label>
+            <button id="load_data_with_base_url_btn">Load Data With Base URL</button>
+          </div>
+
+          <!-- User Agent controls-->
+          <div class="subcontrols">
+            <h4>User Agent</h4>
+
+            <label for="user_agent_in">getUserAgent()<br />setUserAgentOverride()</label>
+            <input type="text" id="user_agent_in" />
+            <button id="user_agent_btn">Set</button>
+
+            <label for="user_agent_chk">isUserAgentOverriden()</label>
+            <div class="checkbox"><input type="checkbox" id="user_agent_chk" /></div>
+          </div>
+
+          <!-- Content injection controls -->
+          <div class="subcontrols">
+            <h4>Content Injection</h4>
+
+            <h5>ContentScriptDetails detail</h5>
+            <label for="content_script_details_all_frames_chk">all_frames</label>
+            <div class="checkbox"><input type="checkbox" id="content_script_details_all_frames_chk" /></div>
+
+            <label for="content_script_details_exclude_globs_in">exclude_globs</label>
+            <input type="text" id="content_script_details_exclude_globs_in" />
+
+            <label for="content_script_details_exclude_matches_in">exclude_matches</label>
+            <input type="text" id="content_script_details_exclude_matches_in" />
+
+            <label for="content_script_details_include_globs_in">include_globs</label>
+            <input type="text" id="content_script_details_include_globs_in" />
+
+            <label for="content_script_details_match_about_blank_chk">match_about_blank</label>
+            <div class="checkbox"><input type="checkbox" id="content_script_details_match_about_blank_chk" /></div>
+
+            <label for="content_script_details_matches_in">matches</label>
+            <input type="text" id="content_script_details_matches_in" value="https://google.com" />
+
+            <label for="content_script_details_name_in">name</label>
+            <input type="text" id="content_script_details_name_in" value="myRule" />
+
+            <label for="content_script_details_run_at_in">run_at</label>
+            <select id="content_script_details_run_at_in">
+              <option value="document_start">document_start</option>
+              <option value="document_end" selected>document_end</option>
+              <option value="document_idle">document_idle</option>
+            </select>
+
+            <h6>InjectDetails detail.css</h6>
+            <label for="content_script_details_css_injection_items_code_in">code</label>
+            <textarea id="content_script_details_css_injection_items_code_in">
+body {
+  background-color = 'red';
+}
+            </textarea>
+
+            <label for="content_script_details_css_injection_items_files_in">files</label>
+            <input type="text" id="content_script_details_css_injection_items_files_in" />
+
+            <h6>InjectDetails detail.js</h6>
+            <label for="content_script_details_js_injection_items_code_in">code</label>
+            <textarea id="content_script_details_js_injection_items_code_in">
+(function () {
+  document.body.style.backgroundColor = 'red';
+  return true;
+})();
+            </textarea>
+
+            <label for="content_script_details_js_injection_items_files_in">files</label>
+            <input type="text" id="content_script_details_js_injection_items_files_in" />
+
+            <label for="add_content_scripts_result">addContentScripts([<br> detail])</label>
+            <div id="add_content_scripts_result"></div>
+            <button id="add_content_scripts_btn">Set</button>
+
+            <label for="remove_content_scripts_in">removeContentScripts()</label>
+            <input type="text" id="remove_content_scripts_in" value="myRule" />
+            <button id="remove_content_scripts_btn">Remove</button>
+
+            <h5>InjectDetails details</h5>
+            <label for="inject_details_code_in">code</label>
+            <textarea id="inject_details_code_in">
+(function () {
+  document.body.style.backgroundColor = 'red';
+  return true;
+})();
+            </textarea>
+
+            <label for="inject_details_fils_in">file</label>
+            <input type="text" id="inject_details_file_in" />
+
+            <label for="execute_script_result">executeScript(<br> details)</label>
+            <div id="execute_script_result"></div>
+            <button id="execute_script_btn">Set</button>
+
+            <label for="insert_css_result">insertCSS(<br> details)</label>
+            <div id="insert_css_result"></div>
+            <button id="insert_css_btn">Set</button>
+          </div>
+        </div>
+      </div>
+
+      <script type="module" src="/index.js"></script>
+    </div>
+  </div>
+</body>
+
+</html>
