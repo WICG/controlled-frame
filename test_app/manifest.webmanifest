@@ -1,0 +1,18 @@
+{
+  "name": "IWA WebView Test",
+  "short_name": "IWAWVT",
+  "description": "Isolated app to WebView.",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "theme_color": "white",
+  "background_color": "white",
+  "isolated_storage": true,
+  "permissions_policy": { "direct-sockets": [ "self" ] }
+}
