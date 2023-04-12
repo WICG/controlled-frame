@@ -1,7 +1,7 @@
 {
-  "name": "IWA WebView Test",
-  "short_name": "IWAWVT",
-  "description": "Isolated app to WebView.",
+  "name": "IWA Controlled Frame Test",
+  "short_name": "IWACFTest",
+  "description": "Isolated Web App to test the Controlled Frame API.",
   "icons": [
     {
       "src": "/icon.svg",
@@ -13,6 +13,5 @@
   "display": "fullscreen",
   "theme_color": "white",
   "background_color": "white",
-  "isolated_storage": true,
-  "permissions_policy": { "direct-sockets": [ "self" ] }
+  "isolated_storage": true
 }
