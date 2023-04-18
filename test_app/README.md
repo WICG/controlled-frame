@@ -3,31 +3,31 @@
 ## Setup
 
 This test app requires a binary of Chrome/Chromium that implements the
-\<controlledframe\> tag in Isolated Web Apps (IWAs), such as Chrome Canary
-114.0.5708.0.
+\<controlledframe\> tag in Isolated Web Apps (IWAs), such as Chrome Dev
+114.0.5714.0.
 
-### Chrome Canary
+### Chrome Dev
 
 Download
-[Chrome Canary](https://www.google.com/chrome/canary/) and set an alias for the
+[Chrome Dev](https://www.google.com/chrome/dev/) and set an alias for the
 executable path.
 
 #### MacOS
 
 ```sh
-CHROME="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+CHROME="/Applications/Google Chrome Dev.app/Contents/MacOS/Google Chrome Dev"
 ```
 
 #### Windows
 
 ```sh
-CHROME="C:\Program Files (x86)\Google\Chrome SxS\Application\chrome.exe"
+CHROME="C:\Program Files (x86)\Google\Chrome Dev\Application\chrome.exe"
 ```
 
 #### Linux
 
-Chrome Canary is not available for Linux, so Chrome must be
-[built](#build-chrome).
+Chrome Dev on Linux does not currently have Controlled Frame implemented yet,
+, so Chrome must be [built](#build-chrome).
 
 ### Build Chrome
 
