@@ -1,4 +1,4 @@
-import { $, Log, textareaExpand, textareaOninputHandler } from './common.js';
+import { $, Log, textareaExpand, textareaOninputHandler, toggleHide } from './common.js';
 
 const DEFAULT_ATTRIBUTES = {
   id: 'view',
@@ -546,7 +546,7 @@ class ControlledFrameController {
 
     let imageDetails = this.#readImageDetails();
 
-    handler = dataUrl => {
+    let handler = dataUrl => {
       Log.info(`captureVisibleRegion completed`);
       let resultEl = $('#capture_visible_region_result');
       resultEl.src = dataUrl;
