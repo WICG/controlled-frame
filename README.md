@@ -16,6 +16,10 @@ Zelin Liu <[zelin@google.com](mailto:zelin@google.com)>
 
 Last updated: Jan 30, 2023
 
+## Author's note: Work-in-progress specification available
+
+A work-in-progress Controlled Frame API specification is available at [https://chasephillips.github.io/controlled-frame/](https://chasephillips.github.io/controlled-frame/). The specification bikeshed source is available at [/index.bs](/index.bs). The specification is not intended to be authoritative over this explainer and is currently only available for reference.
+
 ## Introduction
 
 _Important: This explainer intends to only apply to Isolated Web Applications (IWAs). We expect no new APIs discussed here to be visible to or available to normal web pages. As Chromium developers we are aware of a limitation in our implementation that, for web pages, may expose via script-based policy introspection a policy-controlled feature that's always disabled. This is not intentional and we are exploring ways to restrict our new feature's visibility so it does not appear through policy introspection._
