@@ -12,6 +12,12 @@ Abstract: TODO
 Group: WebView-CG
 </pre>
 
+# Abstract # {#abstract}
+
+This document defines an API for embedding arbitrary web content only within the
+context of a Isolated Web Applications (IWAs). The embedded content is a new
+top-level browsing context that is able to be controlled by the API.
+
 # Introduction # {#introduction}
 
 Hello world!
