@@ -17,7 +17,24 @@ Group: WebView-CG
 
 # Introduction # {#introduction}
 
-Hello world!
+This specification describes a content embedding API that satisfies some
+critical use cases that <{iframe}> does not support. This embedding environment
+should allow embedding all content, including content which <{iframe}> cannot
+embed, and provide embedding sites more controlover that embedded content.
+Additionally, embedding a site's content should be possible without express
+permission from the embedded site.
+
+Since this is a particularly powerful API, it use and availability makes an app
+a target of various types of hacking. As a result, this API is limited to use in
+[Isolated Web Applications](https://github.com/WICG/isolated-web-apps/blob/main/README.md)
+(IWAs) which have addtional safeguards in place to protect users and developers.
+IWAs are not a normal web application and can exist only at a special
+'isolated-app:' scheme. This means that by design, this API will not be
+available to normal web pages.
+
+Note: This API is not intended to be a replacement or substitute for <{iframe}>.
+All <{iframe}> use cases are still valid and should continue to use <{iframe}>,
+including IWAs where possible.
 
 # Motivating Applications # {#motivating-applications}
 
