@@ -15,3 +15,62 @@ Group: WebView-CG
 # Introduction # {#introduction}
 
 Hello world!
+
+# Motivating Applications # {#motivating-applications}
+
+*This section is non-normative.*
+
+## Latency-sensitive applications in virtualized sessions ## {#latency-sensitive-apps}
+
+In virtualized environments, users typically have a local thin client that
+renders a full virtual desktop. The actual desktop execution environment will be
+running on a remote virtualization server. If the user's browser navigates to a
+latency-sensitive application (such as a video app), the rendered content will
+have additional latency ("lag") that makes the experience difficult or
+impossible for the user. This also applies for applications that record the
+user, such as video conferencing applications. In these latency-sensitive
+applications, the virtual desktop application can render the latency-sensitive
+content locally and overlay it on top of the rendered remote content to reduce
+this latency. This use case is also known as "browser content redirection."
+
+## Embedding third party web content without restriction ## {#embedding-3p-web-content}
+
+In a kiosk environment, applications must load content from third parties and
+display that content on screens within their applications. A teacher may trigger
+the navigation event, or it may be configured by an administrator such as a
+shopping mall manager. The content may prohibit embedding by <{iframe}> through
+the use of X-Frame-Options and CSP. An controlled frame, however, should be able
+to load all content, even content that prohibits embedding by <{iframe}>.
+
+## Remote display and manipulation of web content ## {#remote-web-content}
+
+In a kiosk environment, applications must ensure that content continues to
+display on screens and may need to interrupt content with their own supplied
+behaviors. This behavior should work without local attendance by an
+administrator, and ideally can be managed remotely over the network. If content
+were to crash, for example, these applications should observe and respond to the
+crash by reloading the content in a fresh embedded view.
+
+## Clearing user content after each session ## {#clearing-session-data}
+
+In some environments, someone only uses a single device for a brief time to
+complete their task, like ordering in a restaurant. When their task is complete,
+the embedder application should be able to clear all of the local user data
+associated with the task and then restart the embedded instance.
+
+## Monitor for idle sessions ## {#monitor-idle-sessions}
+
+While users interact with embedded content, the user may not explicitly end
+their session. This content may assume the user is present when they have
+actually finished or departed without completing the task. Embedder applications
+want to detect when users idle over their case's threshold and begin a fresh
+session.
+
+## Arbitrarily blocking navigations ## {#blocking-navigations}
+
+While displaying embedded web content that's not authored by the embedder, pages
+may link to third party web content that's disallowed. Allowing the embedder to
+edit elements in embedded content through arbitrary script injection into the
+web content can ensure navigation cannot occur to blocked pages. The embedder
+can also use the Controlled Frame API to capture navigation events and ensure
+that only pages to approved sites can be loaded within that controlled frame.
