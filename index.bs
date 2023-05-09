@@ -1,5 +1,9 @@
 <pre class="metadata">
 Title: Controlled Frame API
+Abstract: This document defines an API for embedding arbitrary web content only
+    within the context of an Isolated Web Application (IWA). The embedded
+    content is a new top-level browsing context within and controlled by the
+    embedder.
 Repository: chasephillips/controlled-frame
 Status: w3c/CG-DRAFT
 ED: TBD
@@ -7,7 +11,6 @@ Shortname: controlled-frame
 Level: 1
 Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@google.com
 Editor: Ovidio Ruiz-Henríquez 106543, Google LLC https://www.google.com, odejesush@google.com
-Abstract: TODO
 
 Group: WebView-CG
 </pre>
