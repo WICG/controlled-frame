@@ -13,6 +13,7 @@ Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@google.com
 Editor: Ovidio Ruiz-Henríquez 106543, Google LLC https://www.google.com, odejesush@google.com
 
 Group: WebView-CG
+Markup Shorthands: markdown yes
 </pre>
 
 <style>
@@ -42,6 +43,13 @@ Group: WebView-CG
     ],
     "href": "https://github.com/WICG/isolated-web-apps/blob/main/README.md",
     "title": "Isolated Web Apps Explainer"
+  },
+  "high-watermark-permissions": {
+    "authors": [
+        "Robbie McElrath"
+    ],
+    "href": "https://github.com/WICG/isolated-web-apps/blob/main/Permissions.md",
+    "title": "Isolated Web Apps High Watermark Permissions Explainer"
   }
 }
 </pre>
@@ -145,6 +153,244 @@ edit elements in embedded content through arbitrary script injection into the
 web content can ensure navigation cannot occur to blocked pages. The embedder
 can also use the Controlled Frame API to capture navigation events and ensure
 that only pages to approved sites can be loaded within that controlled frame.
+
+<!-- ====================================================================== -->
+# Security, Privacy, and Accessibility Considerations # {#considerations}
+<!-- ====================================================================== -->
+
+*This section is non-normative.*
+
+<!-- ====================================================================== -->
+## Security ## {#security}
+<!-- ====================================================================== -->
+
+<b>Controlled Frame is based upon [[Isolated-Web-Apps]] (IWA)
+and integrates with core security specs</b>
+
+Since Controlled Frame is a particularly powerful API, using it or even having
+it available makes an app a target of various types of hacking. As a result,
+this API is limited to use in [[Isolated-Web-Apps|IWA]] which have additional
+safeguards in place to protect application developers and users. The Isolated
+Web App explainer has this to say:
+
+> <i>"A user agent may also force an application to adopt this threat model if
+the developer needs access to APIs which would make the application an appealing
+target for XSS or server-side attacks."</i>
+
+Controlled Frame makes just such an appealing target, and to expose this with
+caution we're opting into [[Isolated-Web-Apps|IWA]] to guard against certain
+attacks. Generally, [[Isolated-Web-Apps|IWAs]] provide strong security
+assurances that each of the resources in an application are secure both at rest
+and in-transit. You can read more about [[Isolated-Web-Apps|IWAs]] security and
+permissions in the [[Isolated-Web-Apps|IWA]] explainer and the
+[[Isolated-Web-Apps|IWAs]] [[High-Watermark-Permissions]] explainer.
+
+Controlled Frame integrates with [[!Permissions-Policy]] and [[!Permissions]].
+You can read more about [[Permissions-Policy#privacy]] and
+[[Permissions#security-considerations]] (note the entry is currently sparse).
+
+<b>Attacking web sites could display content that doesn't otherwise allow itself
+to be embedded and trick users on non-[[Isolated-Web-Apps|IWAs]].</b>
+
+Planned mitigation:
+
+-  Controlled Frame will only be available within [[Isolated-Web-Apps|IWAs]]
+
+<b>An [[Isolated-Web-Apps|IWA]] may embed another [[Isolated-Web-Apps|IWA]] (or
+itself) via Controlled Frame to manipulate our [[Isolated-Web-Apps|IWA]]
+policies somehow (e.g. an Controlled Frame embedded [[Isolated-Web-Apps|IWA]]
+may detect it's being embedded due to the absence of the "controlledframe"
+policy-controlled feature).</b>
+
+Planned mitigation:
+
+-  Controlled Frame can only point to "https" schemes, excluding the
+    "isolated-app" scheme used for [[Isolated-Web-Apps|IWAs]]
+
+<b>Controlled Frame could gain access to the powerful &lt;controlledframe&gt;
+element.</b>
+
+An [[Isolated-Web-Apps|IWA]] that's not expected to use Controlled Frame may
+attempt to embed content.
+
+Planned mitigation:
+
+-  Only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
+    child navigables that have been granted the "controlledframe"
+    policy-controlled feature will be allowed access to the Controlled Frame
+    element.
+-  Same-origin child navigables without the "controlledframe"
+    policy-controlled feature will not be allowed to use a Controlled Frame
+    element (to be confirmed, see note below)
+-  Cross-origin iframes to [[Isolated-Web-Apps|IWAs]] can use the "allow"
+    attribute to disable Controlled Frame
+-  Cross-origin iframes to non-[[Isolated-Web-Apps|IWAs]] will not have
+    access to the "controlledframe" policy-controlled feature, and so will not
+    be allowed to use a Controlled Frame element
+-  See the "Embedder Policies Using the "controlledframe" Feature" section
+    above for more details
+
+<b>An IWA may attempt to embed content from non-https schemes, such as 'http:'
+or 'isolated-app:'</b>
+
+Planned mitigation:
+
+-  Controlled Frame will only work when the navigable's "src" URL has an
+    'https:' scheme
+
+<b>Malicious Controlled Frame could access the embedder's running process (eg.
+Spectre attack)</b>
+
+Planned mitigation:
+
+-  Controlled Frame will be executed in a separate process from the
+    embedder's process
+
+<b>Controlled Frame for a given "https origin" could interact or interfere with
+the user's own storage user agent data for that https origin</b>
+
+Planned mitigation:
+
+-  Controlled Frame will always store data in a separate storage user agent
+    that's apart from the default storage user agent
+-  Data written to by a given "https origin" while the user accesses that
+    origin via an [[Isolated-Web-Apps|IWA]] Controlled Frame will be isolated
+    from the user's storage user agent that backs "normal" window and tab usage,
+    and vice versa
+
+<b>Malicious Controlled Frame could overwrite embedder's stored data</b>
+
+-  The embedder and embedded storage user agent could overlap, and possibly
+    multiple same-site [[Isolated-Web-Apps|IWA]] child navigables could be
+    affected by activity in the Controlled Frame
+-  if storage user agents were shared between the embedder and embedded
+    sites, clearing data for either one could negatively impact the other
+
+Planned mitigation:
+
+-  [[Isolated-Web-Apps|IWA]] and Controlled Frame will always have separate
+    storage user agents
+-  A Controlled Frame should not have read or write access to other storage
+    user agents besides its own
+
+<b>Malicious Controlled Frame may detect it is embedded and attempt to attack
+the embedder application</b>
+
+Planned mitigation:
+
+-  The user agent will match the browser.
+-  The Controlled Frame storage user agent will be separate from the
+    [[Isolated-Web-Apps|IWA]] and the default storage user agents.
+-  The Controlled Frame process will be separate from the
+    [[Isolated-Web-Apps|IWA]] and the default renderer and browser processes.
+-  The Controlled Frame environment will appear to be the top-most navigable:
+    -  window should match window.parent and window.top
+    -  List of policy-controlled features and their disable/enable status
+        should match the default for a navigable
+
+Ideas:
+
+-  Investigate for potential interactions around filesystem, quota storage,
+    and localStorage APIs
+
+<b>User may not be able to verify the origin of the page being viewed in the
+Controlled Frame</b>
+
+Ideas:
+
+-  Expose the origin to the user somehow, such as adding UI at the top of a
+    Controlled Frame that displays the origin?
+-  Have the [[Isolated-Web-Apps|IWA]] specify in the manifest the origins that
+    they expect to access?
+
+<b>Controlled Frame may exploit vulnerabilities in out-of-date browser
+engine</b>
+
+Already addressed with:
+
+-  Existing browser engine auto-update mechanisms
+
+<!-- ====================================================================== -->
+## Privacy ## {#privacy}
+<!-- ====================================================================== -->
+
+Controlled Frame integrates with Permissions Policy and Permissions. You can
+read more about [[Permissions-Policy#privacy]].  You can read more about
+[[Permissions#security-considerations]].
+
+For Controlled Frame specifically, we've identified the following privacy
+considerations:
+
+-  Users' browsing within Controlled Frame will be visible to the
+    [[Isolated-Web-Apps|IWA]]
+-  [[Isolated-Web-Apps|IWAs]] can access and exfiltrate the Controlled Frame's
+    session cookies (this only applies to the Controlled Frame's session since
+    they use a separate storage partition from the [[Isolated-Web-Apps|IWA]] and
+    the third party origin when browsed in a tab)
+-  User activity in Controlled Frame can be observed by the
+    [[Isolated-Web-Apps|IWA]] (e.g. keyboard events can be monitored, password
+    entry can be sniffed)
+-  User file upload to Controlled Frame can be hijacked
+-  User data held in the Controlled Frame's remote server could be accessed by
+    code implanted by the [[Isolated-Web-Apps|IWA]]
+-  Users that wish to clear their session history must also do so via the
+    [[Isolated-Web-Apps|IWA]], which will then need to clear the associated
+    storage user agents
+    -  This would be necessary since embedded storage user agents are separate
+        from the non-embedded storage user agents for any given https origin
+-  We plan to investigate browser UX to allow users to clear the Controlled
+    Frame storage user agents, the following cases will be considered:
+    -  If a user wants to clear site data for an [[Isolated-Web-Apps|IWA]], the
+        associated embedded storage user agents will also be cleared
+        -  This is because if the [[Isolated-Web-Apps|IWA]]'s data is cleared,
+            the app will no longer have any context for the associated embedded
+            storage user agents and therefore will no longer be used or useful
+            to the user or organization
+        -  As a result, we expect that clearing an [[Isolated-Web-Apps|IWA]]'s
+            site data will require clearing all of the associated embedded
+            storage user agents
+    -  A user may want to clear all site data for a given "https origin", even
+        if that origin is stored within an [[Isolated-Web-Apps|IWA]]'s embedded
+        storage user agent
+        -  We may choose to provide the ability to clear all
+            [[Isolated-Web-Apps|IWA]] site data for that "https origin" even if
+            that site data is held within an embedded storage user agent
+        -  If we chose to clear the "https origin" data,
+            [[Isolated-Web-Apps|IWAs]] would need to prepare for the possibility
+            that embedded storage user agents may be removed outside of their
+            control, and this may be disruptive to the [[Isolated-Web-Apps|IWA]]
+            and introduce complexity of implementation
+        -  Supporting this in the browser user agent exposes browser vendors,
+            developers, and users to additional complexity, so we may choose not
+            to support this approach and instead leave this up to
+            [[Isolated-Web-Apps|IWA]] developers to implement
+        -  As a counter example to supporting clearing a single given "https
+            origin"'s embedded storage user agent, consider that to our
+            knowledge no operating system behaves that way
+            -  i.e. there's no central "clear browsing data" option which clears
+                storage for all installed browser engines, each application's
+                storage is treated as its own to manage
+    -  User wants to clear the site data for a given [[Isolated-Web-Apps|IWA]]'s
+        Controlled Frame-embedded storage user agent for a given "https origin"
+    -  User wants to clear the site data for a given [[Isolated-Web-Apps|IWA]]'s
+        Controlled Frame-embedded storage user agents for all "https origins"
+-  An [[Isolated-Web-Apps|IWA]] will need the ability to clear the storage user
+    agent's Controlled Frame-embedded storage user agent for a given "https
+    origin"
+
+<!-- ====================================================================== -->
+## Accessibility ## {#accessibility}
+<!-- ====================================================================== -->
+
+For Controlled Frame, we've identified the following accessibility
+considerations:
+
+-  Browser user agents' accessibility tools and APIs should have visibility into
+    Controlled Frame
+-  [[Isolated-Web-Apps|IWAs]] should expect to provide their own accessibility
+    tools for Controlled Frame content in order to properly integrate
+    accessibility features for some use cases (such as "browser content
+    redirection")
 
 <!-- ====================================================================== -->
 # Concepts # {#concepts}
