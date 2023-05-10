@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 3383f409d, updated Fri Apr 28 15:49:22 2023 -0700" name="generator">
   <link href="TBD" rel="canonical">
-  <meta content="3f86fc34e0bc9417a0873b366669fe98002a5b59" name="document-revision">
+  <meta content="8305919dd70d6ce34423cd90c73d01423bdfd8ca" name="document-revision">
 <style>/* style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -469,7 +469,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-05-09">9 May 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-05-10">10 May 2023</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -529,12 +529,25 @@ dfn > a.self-link::before      { content: "#"; }
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
      <ol class="toc">
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
+      <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
      </ol>
    </ol>
   </nav>
   <main>
    <h2 class="heading settled" data-level="1" id="introduction"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#introduction"></a></h2>
-   <p>Hello world!</p>
+   <p>This specification describes a content embedding API that satisfies some
+critical use cases for IWAs that <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element">iframe</a></code> does not support. This embedding
+environment should allow embedding all content without express permission from
+the embedded site, including content which <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element①">iframe</a></code> cannot embed, and provide
+embedding sites more control over that embedded content.</p>
+   <p>Since this is a particularly powerful API, its use and availability makes an app
+a target of various types of hacking. As a result, this API is limited to use in <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">Isolated Web Applications</a> (IWAs) which have addtional
+safeguards in place to protect users and developers.  IWAs are not a normal web
+application and can exist only at a special 'isolated-app:' scheme. This means
+by design that this API will not be available to normal web pages.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> This API is not intended to be a replacement or substitute for <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element②">iframe</a></code>.
+All <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element③">iframe</a></code> use cases are still valid and should continue to use <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element④">iframe</a></code>,
+including IWAs where possible.</p>
    <h2 class="heading settled" data-level="2" id="motivating-applications"><span class="secno">2. </span><span class="content">Motivating Applications</span><a class="self-link" href="#motivating-applications"></a></h2>
    <p>*This section is non-normative.*</p>
    <h3 class="heading settled" data-level="2.1" id="browser-content-redirection"><span class="secno">2.1. </span><span class="content">Latency-sensitive applications in virtualized sessions</span><a class="self-link" href="#browser-content-redirection"></a></h3>
@@ -552,9 +565,9 @@ this latency. This use case is also known as "browser content redirection."</p>
    <p>In a kiosk environment, applications must load content from third parties and
 display that content on screens within their applications. A teacher may trigger
 the navigation event, or it may be configured by an administrator such as a
-shopping mall manager. The content may prohibit embedding by <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element">iframe</a></code> through
+shopping mall manager. The content may prohibit embedding by <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element⑤">iframe</a></code> through
 the use of X-Frame-Options and CSP. An controlled frame, however, should be able
-to load all content, even content that prohibits embedding by <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element①">iframe</a></code>.</p>
+to load all content, even content that prohibits embedding by <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element⑥">iframe</a></code>.</p>
    <h3 class="heading settled" data-level="2.3" id="remote-content-control"><span class="secno">2.3. </span><span class="content">Remote display and manipulation of web content</span><a class="self-link" href="#remote-content-control"></a></h3>
    <p>In a kiosk environment, applications must ensure that content continues to
 display on screens and may need to interrupt content with their own supplied
@@ -625,6 +638,11 @@ that only pages to approved sites can be loaded within that controlled frame.</p
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
+  </dl>
+  <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
+  <dl>
+   <dt id="biblio-isolated-web-apps">[Isolated-Web-Apps]
+   <dd>Reilly Grant. <a href="https://github.com/WICG/isolated-web-apps/blob/main/README.md"><cite>Isolated Web Apps Explainer</cite></a>. URL: <a href="https://github.com/WICG/isolated-web-apps/blob/main/README.md">https://github.com/WICG/isolated-web-apps/blob/main/README.md</a>
   </dl>
 <script>/* script-dfn-panel */
 "use strict";
@@ -781,7 +799,7 @@ that only pages to approved sites can be loaded within that controlled frame.</p
 </script>
 <script>/* script-dfn-panel-json */
 window.dfnpanelData = {};
-window.dfnpanelData['87fcd40c'] = {"dfnID": "87fcd40c", "url": "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element", "dfnText": "iframe", "refSections": [{"refs": [{"id": "ref-for-the-iframe-element"}, {"id": "ref-for-the-iframe-element\u2460"}], "title": "2.2. Embedding third party web content without restriction"}], "external": true};
+window.dfnpanelData['87fcd40c'] = {"dfnID": "87fcd40c", "url": "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element", "dfnText": "iframe", "refSections": [{"refs": [{"id": "ref-for-the-iframe-element"}, {"id": "ref-for-the-iframe-element\u2460"}, {"id": "ref-for-the-iframe-element\u2461"}, {"id": "ref-for-the-iframe-element\u2462"}, {"id": "ref-for-the-iframe-element\u2463"}], "title": "1. Introduction"}, {"refs": [{"id": "ref-for-the-iframe-element\u2464"}, {"id": "ref-for-the-iframe-element\u2465"}], "title": "2.2. Embedding third party web content without restriction"}], "external": true};
 </script>
 <script>/* script-dom-helper */
 function query(sel) { return document.querySelector(sel); }
