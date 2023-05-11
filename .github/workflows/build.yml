@@ -17,3 +17,4 @@ jobs:
         DESTINATION: index.html
         GH_PAGES_BRANCH: gh-pages
         BUILD_FAIL_ON: warning
+     - uses: actions/deploy-pages@v2
