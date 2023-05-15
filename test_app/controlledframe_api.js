@@ -996,18 +996,30 @@ class ControlledFrameController {
 
     let createProperties = {
       checked: $('#context_menus_create_properties_checked_chk').checked,
-      contexts: contexts,
       enabled: $('#context_menus_create_properties_enabled_chk').checked,
-      id: $('#context_menus_create_properties_id_in').value,
-      parentId: $('#context_menus_create_properties_parent_id_in').value,
-      title: $('#context_menus_create_properties_title_in').value,
-      type: $('#context_menus_create_properties_type_in').value,
       onclick: info => {
         let infoJSON = JSON.stringify(info);
         Log.info(`context menu item clicked: ${infoJSON}`);
         $('#context_menus_on_click_result').innerText = infoJSON;
       },
     };
+
+    let id = $('#context_menus_create_properties_id_in').value;
+    if (id.length > 0) {
+      createProperties.id = id;
+    }
+    let parentId = $('#context_menus_create_properties_parent_id_in').value;
+    if (parentId.length > 0) {
+      createProperties.parentId = parentId;
+    }
+    let title = $('#context_menus_create_properties_title_in').value;
+    if (title.length > 0) {
+      createProperties.title = title;
+    }
+    let type = $('#context_menus_create_properties_type_in').value;
+    if (type.length > 0) {
+      createProperties.type = type;
+    }
 
     let documentUrlPatternsValue = $(
       '#context_menus_create_properties_document_url_patterns_in'
