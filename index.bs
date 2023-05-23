@@ -104,3 +104,100 @@ edit elements in embedded content through arbitrary script injection into the
 web content can ensure navigation cannot occur to blocked pages. The embedder
 can also use the Controlled Frame API to capture navigation events and ensure
 that only pages to approved sites can be loaded within that controlled frame.
+
+# Controlled Frame API # {#controlled-frame-api}
+
+<xmp class="idl">
+enum ContextType {
+    "all",
+    "page",
+    "frame",
+    "selection",
+    "link",
+    "editable",
+    "image",
+    "video",
+    "audio",
+};
+
+enum ItemType {
+    "normal",
+    "checkbox",
+    "radio",
+    "separator",
+};
+
+dictionary OnClickData {
+    boolean checked;
+    required boolean editable;
+    long frameId;
+    USVString frameUrl;
+    USVString linkUrl;
+    DOMString mediaType;
+    required (DOMString or long) menuItemId;
+    USVString pageUrl;
+    (DOMString or long) parentMenuId;
+    DOMString selectionText;
+    USVString srcUrl;
+    boolean wasChecked;
+};
+
+callback ContextMenusEventListener = undefined (OnClickData data);
+
+dictionary ContextMenusProperties {
+    boolean checked;
+    sequence<ContextType> context;
+    DOMString documentUrlPatterns;
+    boolean enabled;
+    DOMString parentId;
+    DOMString targetUrlPatterns;
+    DOMString title;
+    ItemType type;
+    ContextMenusEventListener onclick;
+};
+
+dictionary ContextMenusCreateProperties : ContextMenusProperties {
+    DOMString id;
+};
+
+callback ContextMenusCallback = undefined ();
+
+[Exposed=Window, SecureContext]
+interface ContextMenus {
+    // TODO: Define the `onShow` property.
+
+    // Returns the ID of the newly created menu item.
+    (DOMString or long) create(
+        ContextMenusCreateProperties properties,
+        ContextMenusCallback? callback);
+
+    undefined remove(
+        (DOMString or long) menuItemId,
+        ContextMenusCallback? callback);
+    undefined removeAll(ContextMenusCallback? callback);
+    undefined update(
+        (DOMString or long) id,
+        ContextMenusProperties properties,
+        ContextMenusCallback? callback);
+};
+
+[Exposed=Window, SecureContext]
+interface ControlledFrame : HTMLElement {
+    [HTMLConstructor] constructor();
+ 
+    [CEReactions] attribute USVString src;
+    [CEReactions] attribute DOMString name;
+    [CEReactions] attribute boolean allowfullscreen;
+    [CEReactions] attribute boolean allowscaling;
+    [CEReactions] attribute boolean allowtransparency;
+    [CEReactions] attribute boolean autosize;
+    [CEReactions] attribute DOMString maxheight;
+    [CEReactions] attribute DOMString maxwidth;
+    [CEReactions] attribute DOMString minheight;
+    [CEReactions] attribute DOMString minwidth;
+    attribute DOMString partition;
+
+    readonly attribute WindowProxy? contentWindow;
+    readonly attribute ContextMenus contextMenus;
+};
+</xmp>
