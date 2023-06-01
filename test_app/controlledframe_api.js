@@ -987,6 +987,12 @@ class ControlledFrameController {
       e.preventDefault();
   }
 
+  #setIfValid(object, keyName, keyValue) {
+    if (keyValue && keyValue.length > 0) {
+      object[keyName] = keyValue;
+    }
+  }
+
   #readContextMenusCreateProperties() {
     let contexts = new Array();
     for (const option of $('#context_menus_create_properties_contexts_in')
@@ -1004,21 +1010,10 @@ class ControlledFrameController {
       },
     };
 
-    let id = $('#context_menus_create_properties_id_in').value;
-    if (id.length > 0) {
-      createProperties.id = id;
-    }
-    let parentId = $('#context_menus_create_properties_parent_id_in').value;
-    if (parentId.length > 0) {
-      createProperties.parentId = parentId;
-    }
-    let title = $('#context_menus_create_properties_title_in').value;
-    if (title.length > 0) {
-      createProperties.title = title;
-    }
-    let type = $('#context_menus_create_properties_type_in').value;
-    if (type.length > 0) {
-      createProperties.type = type;
+    for (const keyName of ['id', 'parentId', 'title', 'type']) {
+      const keyValue =
+        $(`#context_menus_create_properties_${keyName}_in`).value;
+      this.#setIfValid(createProperties, keyName, keyValue);
     }
 
     let documentUrlPatternsValue = $(
