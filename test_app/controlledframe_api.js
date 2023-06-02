@@ -987,6 +987,12 @@ class ControlledFrameController {
       e.preventDefault();
   }
 
+  #setIfValid(object, keyName, keyValue) {
+    if (keyValue && keyValue.length > 0) {
+      object[keyName] = keyValue;
+    }
+  }
+
   #readContextMenusCreateProperties() {
     let contexts = new Array();
     for (const option of $('#context_menus_create_properties_contexts_in')
@@ -996,18 +1002,19 @@ class ControlledFrameController {
 
     let createProperties = {
       checked: $('#context_menus_create_properties_checked_chk').checked,
-      contexts: contexts,
       enabled: $('#context_menus_create_properties_enabled_chk').checked,
-      id: $('#context_menus_create_properties_id_in').value,
-      parentId: $('#context_menus_create_properties_parent_id_in').value,
-      title: $('#context_menus_create_properties_title_in').value,
-      type: $('#context_menus_create_properties_type_in').value,
       onclick: info => {
         let infoJSON = JSON.stringify(info);
         Log.info(`context menu item clicked: ${infoJSON}`);
         $('#context_menus_on_click_result').innerText = infoJSON;
       },
     };
+
+    for (const keyName of ['id', 'parentId', 'title', 'type']) {
+      const keyValue =
+        $(`#context_menus_create_properties_${keyName}_in`).value;
+      this.#setIfValid(createProperties, keyName, keyValue);
+    }
 
     let documentUrlPatternsValue = $(
       '#context_menus_create_properties_document_url_patterns_in'
