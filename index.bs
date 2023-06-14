@@ -147,6 +147,43 @@ can also use the Controlled Frame API to capture navigation events and ensure
 that only pages to approved sites can be loaded within that controlled frame.
 
 <!-- ====================================================================== -->
+# Concepts # {#concepts}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+# API # {#api}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Controlled Frame HTML Element ## {#html-elements}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+[Exposed=Window, SecureContext]
+interface ControlledFrame : HTMLElement {
+    [HTMLConstructor] constructor();
+
+    [CEReactions] attribute USVString src;
+    [CEReactions] attribute DOMString name;
+    [CEReactions] attribute boolean allowfullscreen;
+    [CEReactions] attribute boolean allowscaling;
+    [CEReactions] attribute boolean allowtransparency;
+    [CEReactions] attribute boolean autosize;
+    [CEReactions] attribute DOMString maxheight;
+    [CEReactions] attribute DOMString maxwidth;
+    [CEReactions] attribute DOMString minheight;
+    [CEReactions] attribute DOMString minwidth;
+    attribute DOMString partition;
+
+    readonly attribute WindowProxy? contentWindow;
+    readonly attribute ContextMenus contextMenus;
+};
+</xmp>
+
+If the "controlled-frame" feature is enabled for an IWA in its manifest, each
+IWA frame will have access to a ControlledFrame element.
+
+<!-- ====================================================================== -->
 # Controlled Frame API # {#controlled-frame-api}
 <!-- ====================================================================== -->
 
@@ -222,25 +259,5 @@ interface ContextMenus {
         (DOMString or long) id,
         ContextMenusProperties properties,
         ContextMenusCallback? callback);
-};
-
-[Exposed=Window, SecureContext]
-interface ControlledFrame : HTMLElement {
-    [HTMLConstructor] constructor();
- 
-    [CEReactions] attribute USVString src;
-    [CEReactions] attribute DOMString name;
-    [CEReactions] attribute boolean allowfullscreen;
-    [CEReactions] attribute boolean allowscaling;
-    [CEReactions] attribute boolean allowtransparency;
-    [CEReactions] attribute boolean autosize;
-    [CEReactions] attribute DOMString maxheight;
-    [CEReactions] attribute DOMString maxwidth;
-    [CEReactions] attribute DOMString minheight;
-    [CEReactions] attribute DOMString minwidth;
-    attribute DOMString partition;
-
-    readonly attribute WindowProxy? contentWindow;
-    readonly attribute ContextMenus contextMenus;
 };
 </xmp>
