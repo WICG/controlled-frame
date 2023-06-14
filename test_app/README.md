@@ -56,7 +56,21 @@ $CHROME --enable-features=IsolatedWebApps,IsolatedWebAppDevMode,IwaControlledFra
         --install-isolated-web-app-from-url=http://localhost:8000
 ```
 
-In Chrome/Chromium, you should see the test app in chrome://apps.
+**Optional:** Use the `--user-data-dir` flag to install the IWA in a separate
+Chrome profile. For example:
+
+```sh
+$CHROME --user-data-dir=$HOME/tmp \
+        --enable-features=IsolatedWebApps,IsolatedWebAppDevMode,IwaControlledFrame \
+        --install-isolated-web-app-from-url=http://localhost:8000
+```
+
+The user data directory can be cleared to start Chrome in a fresh profile.
+
+3. Launch the Controlled Frame test app
+
+In Chrome/Chromium, you should see the test app in chrome://apps. Click on it
+to launch the test app.
 
 **Note:** On subsequent launches of Chrome, omit the
 `--install-isolated-web-app-from-url` argument to avoid multiple test apps from
