@@ -15,6 +15,25 @@ Editor: Ovidio Ruiz-Henríquez 106543, Google LLC https://www.google.com, odejes
 Group: WebView-CG
 </pre>
 
+<style>
+.domintro::before {
+    content: 'For web developers (non-normative)';
+    text-transform: initial;
+}
+.domintro dt {
+    font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
+
+    padding-top: 0.5em;
+    padding-bottom: 1em;
+}
+.domintro dt a {
+    color: inherit; border-bottom-style: none;
+}
+.domintro dt code {
+    font-size: inherit;
+}
+</style>
+
 <pre class="biblio">
 {
   "isolated-web-apps": {
