@@ -15,6 +15,25 @@ Editor: Ovidio Ruiz-Henríquez 106543, Google LLC https://www.google.com, odejes
 Group: WebView-CG
 </pre>
 
+<style>
+.domintro::before {
+    content: 'For web developers (non-normative)';
+    text-transform: initial;
+}
+.domintro dt {
+    font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
+
+    padding-top: 0.5em;
+    padding-bottom: 1em;
+}
+.domintro dt a {
+    color: inherit; border-bottom-style: none;
+}
+.domintro dt code {
+    font-size: inherit;
+}
+</style>
+
 <pre class="biblio">
 {
   "isolated-web-apps": {
@@ -27,7 +46,9 @@ Group: WebView-CG
 }
 </pre>
 
+<!-- ====================================================================== -->
 # Introduction # {#introduction}
+<!-- ====================================================================== -->
 
 This specification describes a content embedding API that satisfies some
 critical use cases for IWAs that <{iframe}> does not support. This embedding
@@ -46,11 +67,21 @@ Note: This API is not intended to be a replacement or substitute for <{iframe}>.
 All <{iframe}> use cases are still valid and should continue to use <{iframe}>,
 including IWAs where possible.
 
+<!-- ====================================================================== -->
+# Usage Overview # {#usage-overview}
+<!-- ====================================================================== -->
+
+Lorem ipsum. Insert basic info and example here.
+
+<!-- ====================================================================== -->
 # Motivating Applications # {#motivating-applications}
+<!-- ====================================================================== -->
 
 *This section is non-normative.*
 
+<!-- ====================================================================== -->
 ## Latency-sensitive applications in virtualized sessions ## {#browser-content-redirection}
+<!-- ====================================================================== -->
 
 In virtualized environments, users typically have a local thin client that
 renders a full virtual desktop. The actual desktop execution environment will be
@@ -63,7 +94,9 @@ applications, the virtual desktop application can render the latency-sensitive
 content locally and overlay it on top of the rendered remote content to reduce
 this latency. This use case is also known as "browser content redirection."
 
+<!-- ====================================================================== -->
 ## Embedding third party web content without restriction ## {#no-embedding-prohibitions}
+<!-- ====================================================================== -->
 
 In a kiosk environment, applications must load content from third parties and
 display that content on screens within their applications. A teacher may trigger
@@ -72,7 +105,9 @@ shopping mall manager. The content may prohibit embedding by <{iframe}> through
 the use of X-Frame-Options and CSP. An controlled frame, however, should be able
 to load all content, even content that prohibits embedding by <{iframe}>.
 
+<!-- ====================================================================== -->
 ## Remote display and manipulation of web content ## {#remote-content-control}
+<!-- ====================================================================== -->
 
 In a kiosk environment, applications must ensure that content continues to
 display on screens and may need to interrupt content with their own supplied
@@ -81,14 +116,18 @@ administrator, and ideally can be managed remotely over the network. If content
 were to crash, for example, these applications should observe and respond to the
 crash by reloading the content in a fresh embedded view.
 
+<!-- ====================================================================== -->
 ## Clearing user content after each session ## {#clearing-session-data}
+<!-- ====================================================================== -->
 
 In some environments, someone only uses a single device for a brief time to
 complete their task, like ordering in a restaurant. When their task is complete,
 the embedder application should be able to clear all of the local user data
 associated with the task and then restart the embedded instance.
 
+<!-- ====================================================================== -->
 ## Monitor for idle sessions ## {#monitor-idle-sessions}
+<!-- ====================================================================== -->
 
 While users interact with embedded content, the user may not explicitly end
 their session. This content may assume the user is present when they have
@@ -96,7 +135,9 @@ actually finished or departed without completing the task. Embedder applications
 want to detect when users idle over their case's threshold and begin a fresh
 session.
 
+<!-- ====================================================================== -->
 ## Arbitrarily blocking navigations ## {#blocking-navigations}
+<!-- ====================================================================== -->
 
 While displaying embedded web content that's not authored by the embedder, pages
 may link to third party web content that's disallowed. Allowing the embedder to
@@ -105,7 +146,46 @@ web content can ensure navigation cannot occur to blocked pages. The embedder
 can also use the Controlled Frame API to capture navigation events and ensure
 that only pages to approved sites can be loaded within that controlled frame.
 
+<!-- ====================================================================== -->
+# Concepts # {#concepts}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+# API # {#api}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Controlled Frame HTML Element ## {#html-elements}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+[Exposed=Window, SecureContext]
+interface ControlledFrame : HTMLElement {
+    [HTMLConstructor] constructor();
+
+    [CEReactions] attribute USVString src;
+    [CEReactions] attribute DOMString name;
+    [CEReactions] attribute boolean allowfullscreen;
+    [CEReactions] attribute boolean allowscaling;
+    [CEReactions] attribute boolean allowtransparency;
+    [CEReactions] attribute boolean autosize;
+    [CEReactions] attribute DOMString maxheight;
+    [CEReactions] attribute DOMString maxwidth;
+    [CEReactions] attribute DOMString minheight;
+    [CEReactions] attribute DOMString minwidth;
+    attribute DOMString partition;
+
+    readonly attribute WindowProxy? contentWindow;
+    readonly attribute ContextMenus contextMenus;
+};
+</xmp>
+
+If the "controlled-frame" feature is enabled for an IWA in its manifest, each
+IWA frame will have access to a ControlledFrame element.
+
+<!-- ====================================================================== -->
 # Controlled Frame API # {#controlled-frame-api}
+<!-- ====================================================================== -->
 
 <xmp class="idl">
 enum ContextType {
@@ -179,25 +259,5 @@ interface ContextMenus {
         (DOMString or long) id,
         ContextMenusProperties properties,
         ContextMenusCallback? callback);
-};
-
-[Exposed=Window, SecureContext]
-interface ControlledFrame : HTMLElement {
-    [HTMLConstructor] constructor();
- 
-    [CEReactions] attribute USVString src;
-    [CEReactions] attribute DOMString name;
-    [CEReactions] attribute boolean allowfullscreen;
-    [CEReactions] attribute boolean allowscaling;
-    [CEReactions] attribute boolean allowtransparency;
-    [CEReactions] attribute boolean autosize;
-    [CEReactions] attribute DOMString maxheight;
-    [CEReactions] attribute DOMString maxwidth;
-    [CEReactions] attribute DOMString minheight;
-    [CEReactions] attribute DOMString minwidth;
-    attribute DOMString partition;
-
-    readonly attribute WindowProxy? contentWindow;
-    readonly attribute ContextMenus contextMenus;
 };
 </xmp>
