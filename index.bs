@@ -155,7 +155,7 @@ that only pages to approved sites can be loaded within that controlled frame.
 <!-- ====================================================================== -->
 
 <!-- ====================================================================== -->
-## Controlled Frame HTML Element ## {#html-elements}
+## Controlled Frame HTML Element ## {#html-element}
 <!-- ====================================================================== -->
 
 <xmp class="idl">
@@ -177,11 +177,58 @@ interface ControlledFrame : HTMLElement {
 
     readonly attribute WindowProxy? contentWindow;
     readonly attribute ContextMenus contextMenus;
+
+    // Navigation methods.
+    undefined back();
+    boolean canGoBack();
+    boolean canGoForward();
+    undefined forward();
+    undefined go();
+    undefined reload();
+    undefined stop();
+
+    // Scripting methods.
+    undefined addContentScripts();
+    undefined executeScript();
+    undefined insertCSS();
+    undefined removeContentScripts();
+
+    // Configuration methods.
+    undefined clearData();
+    undefined getAudioState();
+    undefined getZoom();
+    undefined isAudioMuted();
+    undefined setAudioMuted();
+    undefined setZoom();
+
+    // Capture methods.
+    undefined captureVisibleRegion();
+    undefined print();
 };
 </xmp>
 
 If the "controlled-frame" feature is enabled for an IWA in its manifest, each
 IWA frame will have access to a ControlledFrame element.
+
+<!-- ====================================================================== -->
+## Navigation methods ## {#api-nav}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Scripting methods ## {#api-scripting}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Configuration methods ## {#api-config}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Capture methods ## {#api-capture}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Event listener API ## {#api-event}
+<!-- ====================================================================== -->
 
 <!-- ====================================================================== -->
 # Controlled Frame API # {#controlled-frame-api}
