@@ -425,11 +425,11 @@ interface ControlledFrame : HTMLElement {
     readonly attribute ContextMenus contextMenus;
 
     // Navigation methods.
-    undefined back();
+    Promise<undefined> back();
     boolean canGoBack();
     boolean canGoForward();
-    undefined forward();
-    undefined go();
+    Promise<undefined> forward();
+    Promise<undefined> go(long relativeIndex);
     undefined reload();
     undefined stop();
 
@@ -459,6 +459,53 @@ IWA frame will have access to a ControlledFrame element.
 <!-- ====================================================================== -->
 ## Navigation methods ## {#api-nav}
 <!-- ====================================================================== -->
+
+<div class="domintro note">
+
+  : {{ControlledFrame/go()|go}}()
+
+  :: Reloads the current page.
+
+  : {{ControlledFrame/go()|go}}(<var>relativeIndex</var>)
+
+  :: Goes back or forward the specified number of steps in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the current
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a>.
+
+    A zero relative index will reload the current page.
+
+    If the relative index is out of range, does nothing.
+
+  : {{ControlledFrame/back()|back}}()
+
+  :: Goes back one step in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a> in the Controlled Frame.
+
+    If there is no previous page, does nothing.
+
+  : {{ControlledFrame/forward()|forward}}()
+
+  :: Goes forward one step in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a> in the Controlled Frame.
+
+    If there is no next page, does nothing.
+
+  : {{ControlledFrame/canGoBack()|canGoBack}}()
+
+  ::
+
+</div>
+
+The {{ControlledFrame/back()}} method, when invoked, MUST run the following
+steps:
 
 <!-- ====================================================================== -->
 ## Scripting methods ## {#api-scripting}
