@@ -426,35 +426,35 @@ class ControlledFrameController {
   // Method handlers
   // Content script related functions
   #readContentScriptDetails() {
-    return {
+    let contentScriptDetails = {
       all_frames: $('#content_script_details_all_frames_chk').checked,
-      css: {
-        code: $('#content_script_details_css_injection_items_code_in').value,
-        files: $(
-          '#content_script_details_css_injection_items_files_in'
-        ).value.split(','),
-      },
-      exclude_globs: $('#content_script_details_exclude_globs_in').value.split(
-        ','
-      ),
-      exclude_matches: $(
-        '#content_script_details_exclude_matches_in'
-      ).value.split(','),
-      include_globs: $('#content_script_details_include_globs_in').value.split(
-        ','
-      ),
-      js: {
-        code: $('#content_script_details_js_injection_items_code_in').value,
-        files: $(
-          '#content_script_details_js_injection_items_files_in'
-        ).value.split(','),
-      },
       match_about_blank: $('#content_script_details_match_about_blank_chk')
         .checked,
-      matches: $('#content_script_details_matches_in').value.split(','),
-      name: $('#content_script_details_name_in').value,
-      run_at: $('#content_script_details_run_at_in').value,
+      css: {},
+      js: {},
     };
+    // Set the string values that are split by commas.
+    for (const keyName of ['exclude_globs', 'exclude_matches', 'include_globs', 'matches']) {
+      const keyValue = $(`#content_script_details_${keyName}_in`).value;
+      this.#setIfValid(contentScriptDetails, keyName, keyValue, ',');
+    }
+    // Set the normal string values.
+    for (const keyName of ['name', 'run_at']) {
+      const keyValue = $(`#content_script_details_${keyName}_in`).value;
+      this.#setIfValid(contentScriptDetails, keyName, keyValue);
+    }
+    // Set the `css` and `js` properties.
+    for (const keyName of ['code', 'files']) {
+      const cssKeyValue =
+        $(`#content_script_details_css_injection_items_${keyName}_in`).value;
+      this.#setIfValid(contentScriptDetails.css, keyName, cssKeyValue,
+        keyName === 'files' ? ',' : null);
+      const jsKeyValue =
+        $(`#content_script_details_js_injection_items_${keyName}_in`).value;
+      this.#setIfValid(contentScriptDetails.js, keyName, jsKeyValue,
+        keyName === 'files' ? ',' : null);
+    }
+    return contentScriptDetails;
   }
 
   #refreshAddedContentScripts() {
@@ -472,7 +472,7 @@ class ControlledFrameController {
     let contentScriptList = new Array();
     contentScriptList.push(this.#readContentScriptDetails());
     this.controlledFrame.addContentScripts(contentScriptList);
-    addedContentScripts.push(contentScriptList);
+    this.#addedContentScripts.push(contentScriptList);
     Log.info('addContentScripts completed');
   }
 
@@ -987,10 +987,15 @@ class ControlledFrameController {
       e.preventDefault();
   }
 
-  #setIfValid(object, keyName, keyValue) {
-    if (keyValue && keyValue.length > 0) {
-      object[keyName] = keyValue;
+  #setIfValid(object, keyName, keyValue, splitDelimiter = null) {
+    if (!keyValue || !keyValue.length > 0) {
+      return;
     }
+    if (splitDelimiter) {
+      object[keyName] = keyValue.split(splitDelimiter);
+      return;
+    }
+    object[keyName] = keyValue;
   }
 
   #readContextMenusCreateProperties() {
