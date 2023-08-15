@@ -14,5 +14,10 @@
   "theme_color": "white",
   "background_color": "white",
   "isolated_storage": true,
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "permissions_policy": {
+    "cross-origin-isolated": [
+      "self"
+    ]
+  }
 }
