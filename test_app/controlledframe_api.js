@@ -263,10 +263,10 @@ class ControlledFrameController {
       return;
     }
 
-    this.controlledFrame.addEventListener(
-      'contextMenuShow',
-      this.#contextMenusOnShow.bind(this)
-    );
+    this.controlledFrame.contextMenus.onShow.addListener(
+      this.#contextMenusOnShow.bind(this));
+    this.controlledFrame.contextMenus.onClicked.addListener(
+      this.#contextMenusOnClicked.bind(this));
   }
 
   // Add event listeners for the web request related Controlled Frame API.
@@ -985,6 +985,11 @@ class ControlledFrameController {
     Log.evt('contextMenus.onShow fired');
     if ($('#context_menus_on_show_prevent_default_chk').checked)
       e.preventDefault();
+  }
+
+  #contextMenusOnClicked(e) {
+    Log.evt('contextMenus.onClicked fired');
+    Log.info(JSON.stringify(e));
   }
 
   #setIfValid(object, keyName, keyValue, splitDelimiter = null) {
