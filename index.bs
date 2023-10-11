@@ -500,12 +500,24 @@ IWA frame will have access to a ControlledFrame element.
 
   : {{ControlledFrame/canGoBack()|canGoBack}}()
 
-  ::
+  :: Returns true if the current
+     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
+     current session history entry</a> is not the first one in the navigation
+     history entry list. This means that there is a previous
+     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
+     session history entry</a> for this
+     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
+     navigable</a>.
+
+  : {{ControlledFrame/reload()|reload}}()
+
+  :: Reloads the current page.
+
+  : {{ControlledFrame/stop()|stop}}()
+
+  :: Cancels the document load.
 
 </div>
-
-The {{ControlledFrame/back()}} method, when invoked, MUST run the following
-steps:
 
 <!-- ====================================================================== -->
 ## Scripting methods ## {#api-scripting}
