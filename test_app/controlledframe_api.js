@@ -580,8 +580,12 @@ class ControlledFrameController {
   }
 
   #readInjectDetails() {
+    if ($('#inject_details_code_in').value.length > 0) {
+      return {
+        code: $('#inject_details_code_in').value,
+      }
+    }
     return {
-      code: $('#inject_details_code_in').value,
       file: $('#inject_details_file_in').value,
     };
   }
