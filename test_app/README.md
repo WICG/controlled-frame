@@ -60,7 +60,7 @@ Chrome profile. For example:
 
 ```sh
 $CHROME --user-data-dir=$HOME/tmp \
-        --enable-features=IsolatedWebApps,IsolatedWebAppDevMode \
+        --enable-features=IsolatedWebApps,IsolatedWebAppDevMode
 ```
 
 The user data directory can be cleared to start Chrome in a fresh profile.
