@@ -468,7 +468,7 @@ IWA frame will have access to a ControlledFrame element.
 
   : {{ControlledFrame/go()|go}}(<var>relativeIndex</var>)
 
-  :: Goes back or forward the specified number of steps in the overall
+  :: Goes back or forward <var>relativeIndex</var> number of steps in the overall
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
     session history entries </a> list for the current
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
