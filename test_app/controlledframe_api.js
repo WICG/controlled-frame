@@ -469,10 +469,9 @@ class ControlledFrameController {
       Log.warn('addContentScripts: API undefined');
       return;
     }
-    let contentScriptList = new Array();
-    contentScriptList.push(this.#readContentScriptDetails());
-    this.controlledFrame.addContentScripts(contentScriptList);
-    this.#addedContentScripts.push(contentScriptList);
+    let contentScriptDetails = this.#readContentScriptDetails();
+    this.controlledFrame.addContentScripts([contentScriptDetails]);
+    this.#addedContentScripts.push(contentScriptDetails);
     Log.info('addContentScripts completed');
   }
 
