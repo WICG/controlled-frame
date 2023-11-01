@@ -52,8 +52,7 @@ python3 -m iwa_http_server.py
 2. Execute Chrome with the following flags once.
 
 ```sh
-$CHROME --enable-features=IsolatedWebApps,IsolatedWebAppDevMode,IwaControlledFrame  \
-        --install-isolated-web-app-from-url=http://localhost:8000
+$CHROME --enable-features=IsolatedWebApps,IsolatedWebAppDevMode
 ```
 
 **Optional:** Use the `--user-data-dir` flag to install the IWA in a separate
@@ -61,17 +60,16 @@ Chrome profile. For example:
 
 ```sh
 $CHROME --user-data-dir=$HOME/tmp \
-        --enable-features=IsolatedWebApps,IsolatedWebAppDevMode,IwaControlledFrame \
-        --install-isolated-web-app-from-url=http://localhost:8000
+        --enable-features=IsolatedWebApps,IsolatedWebAppDevMode
 ```
 
 The user data directory can be cleared to start Chrome in a fresh profile.
 
-3. Launch the Controlled Frame test app
+3. Wait for Chrome to launch.
+
+4. Navigate to chrome://web-app-internals, install the app at http://localhost:8000
+
+5. Launch the Controlled Frame test app
 
 In Chrome/Chromium, you should see the test app in chrome://apps. Click on it
 to launch the test app.
-
-**Note:** On subsequent launches of Chrome, omit the
-`--install-isolated-web-app-from-url` argument to avoid multiple test apps from
-being installed.
