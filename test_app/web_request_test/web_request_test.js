@@ -265,7 +265,6 @@ export class WebRequestTest extends LitElement {
   }
 
   async #onAuthRequiredFired() {
-    // TODO: This event is not fired for some reason and navigation just hangs.
     this.controlledframe.request.onAuthRequired.addListener((details) => {
       this.resultsDiv.innerText =
         `onAuthRequired event was fired; challenger is \
@@ -318,7 +317,6 @@ export class WebRequestTest extends LitElement {
       this.resultsDiv.innerText += `Success: onHeadersReceived fired for \
         ${details.url} with ${headers}`;
     }, { urls: ['<all_urls>'] }, ['blocking']);
-    // TODO: Figure out why the event has null for |responseHeaders|.
     this.controlledframe.src = 'https://www.google.com';
   }
 
