@@ -543,7 +543,7 @@
 
           <!-- Content injection controls -->
           <div class="subcontrols">
-            <h4>Content Injection</h4>
+            <h4>Content Scripts: Content Injection</h4>
 
             <h5>ContentScriptDetails detail</h5>
             <label for="content_script_details_all_frames_chk">all_frames</label>
@@ -604,6 +604,10 @@ body {
             <label for="remove_content_scripts_in">removeContentScripts()</label>
             <input type="text" id="remove_content_scripts_in" value="myRule" />
             <button id="remove_content_scripts_btn">Remove</button>
+          </div>
+
+          <div class="subcontrols">
+            <h4>executeScript: Content Injection</h4>
 
             <h5>InjectDetails details</h5>
             <label for="inject_details_code_in">code</label>
@@ -614,16 +618,31 @@ body {
 })();
             </textarea>
 
-            <label for="inject_details_fils_in">file</label>
+            <label for="inject_details_file_in">file</label>
             <input type="text" id="inject_details_file_in" />
 
             <label for="execute_script_result">executeScript(<br> details)</label>
             <div id="execute_script_result"></div>
             <button id="execute_script_btn">Set</button>
+          </div>
 
-            <label for="insert_css_result">insertCSS(<br> details)</label>
-            <div id="insert_css_result"></div>
-            <button id="insert_css_btn">Set</button>
+          <div class="subcontrols">
+            <h4>insertCSS: Content Injection</h4>
+
+            <h5>InjectDetails details</h5>
+            <label for="insertcss_inject_details_code_in">code</label>
+            <textarea id="insertcss_inject_details_code_in">
+body {
+  background-color: red !important;
+}
+            </textarea>
+
+            <label for="insertcss_inject_details_file_in">file</label>
+            <input type="text" id="insertcss_inject_details_file_in" />
+
+            <label for="insertcss_result">insertCSS(<br> details)</label>
+            <div id="insertcss_result"></div>
+            <button id="insertcss_btn">Set</button>
           </div>
         </div>
       </div>

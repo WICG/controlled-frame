@@ -212,7 +212,7 @@ class ControlledFrameController {
       this.#getZoomMode.bind(this)
     );
     $('#go_btn').addEventListener('click', this.#go.bind(this));
-    $('#insert_css_btn').addEventListener('click', this.#insertCSS.bind(this));
+    $('#insertcss_btn').addEventListener('click', this.#insertCSS.bind(this));
     $('#is_audio_muted_btn').addEventListener(
       'click',
       this.#isAudioMuted.bind(this)
@@ -589,6 +589,17 @@ class ControlledFrameController {
     };
   }
 
+  #readInsertCSSInjectDetails() {
+    if ($('#insertcss_inject_details_code_in').value.length > 0) {
+      return {
+        code: $('#insertcss_inject_details_code_in').value,
+      }
+    }
+    return {
+      file: $('#insertcss_inject_details_file_in').value,
+    };
+  }
+
   #executeScript(e) {
     if (typeof this.controlledFrame.executeScript !== 'function') {
       Log.warn('executeScript: API undefined');
@@ -699,10 +710,10 @@ class ControlledFrameController {
       Log.warn('insertCSS: API undefined');
       return;
     }
-    let details = this.#readInjectDetails();
+    let details = this.#readInsertCSSInjectDetails();
     let callback = () => {
       Log.info('insertCSS completed');
-      $('#insert_css_result').innerText = 'Done';
+      $('#insertcss_result').innerText = 'Done';
     };
     this.controlledFrame.insertCSS(details, callback);
   }
