@@ -562,7 +562,7 @@
             <div class="checkbox"><input type="checkbox" id="content_script_details_match_about_blank_chk" /></div>
 
             <label for="content_script_details_matches_in">matches</label>
-            <input type="text" id="content_script_details_matches_in" value="https://google.com/*" />
+	    <input type="text" id="content_script_details_matches_in" value="<all_urls>" />
 
             <label for="content_script_details_name_in">name</label>
             <input type="text" id="content_script_details_name_in" value="myRule" />
@@ -578,7 +578,7 @@
             <label for="content_script_details_css_injection_items_code_in">code</label>
             <textarea id="content_script_details_css_injection_items_code_in">
 body {
-  background-color = 'red';
+  background-color: red !important;
 }
             </textarea>
 
