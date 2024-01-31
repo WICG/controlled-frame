@@ -526,8 +526,8 @@ IWA frame will have access to a ControlledFrame element.
 <xmp class="idl">
 // One of |code| or |file| must be specified but not both.
 dictionary InjectDetails {
-  DOMString? code;
-  DOMString? file;
+  DOMString code;
+  DOMString file;
 };
 
 dictionary InjectionItems {
@@ -542,16 +542,16 @@ enum RunAt {
 };
 
 dictionary ContentScriptDetails {
-  boolean? all_frames;
-  InjectionItems? css;
-  sequence<DOMString>? exclude_globs;
-  sequence<DOMString>? exclude_matches;
-  sequence<DOMString>? include_globs;
-  InjectionItems? js;
-  boolean? match_about_blank;
-  sequence<DOMString> matches;
-  DOMString name;
-  RunAt? run_at;
+  boolean all_frames;
+  InjectionItems css;
+  sequence<DOMString> exclude_globs;
+  sequence<DOMString> exclude_matches;
+  sequence<DOMString> include_globs;
+  InjectionItems js;
+  boolean match_about_blank;
+  required sequence<DOMString> matches;
+  required DOMString name;
+  RunAt run_at;
 };
 </xmp>
 
