@@ -440,12 +440,14 @@ interface ControlledFrame : HTMLElement {
     undefined removeContentScripts();
 
     // Configuration methods.
-    undefined clearData();
-    undefined getAudioState();
-    undefined getZoom();
-    undefined isAudioMuted();
-    undefined setAudioMuted();
-    undefined setZoom();
+    Promise<undefined> clearData(
+      optional ClearDataOptions options = {},
+      optional ClearDataTypeSet types = {});
+    Promise<boolean> getAudioState();
+    Promise<long> getZoom();
+    Promise<boolean> isAudioMuted();
+    undefined setAudioMuted(boolean mute);
+    Promise<undefined> setZoom(long zoomFactor);
 
     // Capture methods.
     undefined captureVisibleRegion();
@@ -526,6 +528,24 @@ IWA frame will have access to a ControlledFrame element.
 <!-- ====================================================================== -->
 ## Configuration methods ## {#api-config}
 <!-- ====================================================================== -->
+
+<xmp class="idl">
+dictionary ClearDataOptions {
+  long since;
+};
+
+dictionary ClearDataTypeSet {
+  boolean appcache;
+  boolean cache;
+  boolean cookies;
+  boolean fileSystems;
+  boolean indexedDB;
+  boolean localStorage;
+  boolean persistentCookies;
+  boolean sessionCookies;
+  boolean webSQL;
+};
+</xmp>
 
 <!-- ====================================================================== -->
 ## Capture methods ## {#api-capture}
