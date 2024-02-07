@@ -434,10 +434,10 @@ interface ControlledFrame : HTMLElement {
     undefined stop();
 
     // Scripting methods.
-    undefined addContentScripts();
-    undefined executeScript();
-    undefined insertCSS();
-    undefined removeContentScripts();
+    undefined addContentScripts(sequence<ContentScriptDetails> contentScriptList);
+    Promise<any> executeScript(optional InjectDetails details = {});
+    Promise<undefined> insertCSS(optional InjectDetails details = {});
+    undefined removeContentScripts(sequence<DOMString>? scriptNameList);
 
     // Configuration methods.
     undefined clearData();
@@ -522,6 +522,38 @@ IWA frame will have access to a ControlledFrame element.
 <!-- ====================================================================== -->
 ## Scripting methods ## {#api-scripting}
 <!-- ====================================================================== -->
+
+<xmp class="idl">
+// One of |code| or |file| must be specified but not both.
+dictionary InjectDetails {
+  DOMString code;
+  DOMString file;
+};
+
+dictionary InjectionItems {
+  DOMString code;
+  sequence<DOMString> files;
+};
+
+enum RunAt {
+  "document_start",
+  "document_end",
+  "document_idle",
+};
+
+dictionary ContentScriptDetails {
+  boolean all_frames;
+  InjectionItems css;
+  sequence<DOMString> exclude_globs;
+  sequence<DOMString> exclude_matches;
+  sequence<DOMString> include_globs;
+  InjectionItems js;
+  boolean match_about_blank;
+  required sequence<DOMString> matches;
+  required DOMString name;
+  RunAt run_at;
+};
+</xmp>
 
 <!-- ====================================================================== -->
 ## Configuration methods ## {#api-config}
