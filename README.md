@@ -18,7 +18,7 @@ Last updated: Jan 30, 2023
 
 ## Author's note: Work-in-progress specification available
 
-A work-in-progress Controlled Frame API specification is available at [https://chasephillips.github.io/controlled-frame/](https://chasephillips.github.io/controlled-frame/). The specification bikeshed source is available at [/index.bs](/index.bs). The specification is not intended to be authoritative over this explainer and is currently only available for reference.
+A work-in-progress Controlled Frame API specification is available at [https://wicg.github.io/controlled-frame/](https://wicg.github.io/controlled-frame/). The specification bikeshed source is available at [/index.bs](/index.bs). The specification is not intended to be authoritative over this explainer and is currently only available for reference.
 
 ## Introduction
 
