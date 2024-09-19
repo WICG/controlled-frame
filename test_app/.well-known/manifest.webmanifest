@@ -13,7 +13,6 @@
   "display": "fullscreen",
   "theme_color": "white",
   "background_color": "white",
-  "isolated_storage": true,
   "version": "1.0.1",
   "permissions_policy": {
     "controlled-frame": ["self"],
