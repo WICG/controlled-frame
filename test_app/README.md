@@ -3,14 +3,14 @@
 ## Setup
 
 This test app requires a binary of Chrome/Chromium that implements the
-\<controlledframe\> tag in Isolated Web Apps (IWAs), such as Chrome Dev
-114.0.5714.0.
+\<controlledframe\> tag in Isolated Web Apps (IWAs), such as a recent
+Chrome Dev.
 
-### Chrome Dev
+### Getting a copy of Chrome Dev
 
-Download
+On your platform of choice, download
 [Chrome Dev](https://www.google.com/chrome/dev/) and set an alias for the
-executable path.
+executable path. Per-platform instructions:
 
 #### MacOS
 
@@ -26,24 +26,17 @@ CHROME="C:\Program Files (x86)\Google\Chrome Dev\Application\chrome.exe"
 
 #### Linux
 
-Chrome Dev on Linux does not currently have Controlled Frame implemented yet,
-, so Chrome must be [built](#build-chrome).
-
-### Build Chrome
-
-Follow the
-[build instructions](https://www.chromium.org/developers/how-tos/get-the-code/).
-Once Chrome is built, set an alias for the executable path.
-
 ```sh
-CHROME="$HOME/chromium/src/out/Default/chrome"
+CHROME="/opt/google/chrome-unstable/chrome"
 ```
 
-## Run
+## Run Chrome with the right flags
 
-Perform the steps below to run the test app.
+Some of the features you'll be trying are still under development and only
+available with a particular configuration setting. Configure Chrome to prepare
+for running the demo 'test_app' application.
 
-1. Run the server script.
+1. Run the server script
 
 ```sh
 python3 -m iwa_http_server.py
@@ -65,11 +58,15 @@ $CHROME --user-data-dir=$HOME/tmp \
 
 The user data directory can be cleared to start Chrome in a fresh profile.
 
-3. Wait for Chrome to launch.
+3. Wait for Chrome to launch
 
-4. Navigate to chrome://web-app-internals, install the app at http://localhost:8000
+## Install the demo application
 
-5. Launch the Controlled Frame test app
+Perform the steps below to run the demo app.
 
-In Chrome/Chromium, you should see the test app in chrome://apps. Click on it
-to launch the test app.
+1. Navigate to chrome://web-app-internals, install the app at http://localhost:8000
+
+2. Launch the Controlled Frame test app
+
+In Chrome/Chromium, you should see the demo app in chrome://apps. Click on it
+to launch the IWA.
