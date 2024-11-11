@@ -5,7 +5,7 @@ import { ControlledFrameController } from './controlledframe_api.js';
  * Service worker
  */
 if ('serviceWorker' in navigator) {
-  const sanitized = ttPolicy.createScriptURL('/sw.js');
+  const sanitized = ttPolicy.createScriptURL('/src/sw.js');
   navigator.serviceWorker.register(sanitized).then(registration => {
     Log.info('Registered Service Worker');
     $('#update_sw_btn').onclick = () => {

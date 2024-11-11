@@ -1,4 +1,4 @@
-import { LitElement, css, html } from '../lit-all.min.js';
+import { LitElement, css, html } from 'lit';
 
 export class WebRequestTest extends LitElement {
   controlledframe;
