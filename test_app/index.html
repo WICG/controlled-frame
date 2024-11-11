@@ -373,13 +373,6 @@
 
             <label for="print_btn">print()</label>
             <button id="print_btn">Print</button>
-
-            <label for="get_process_id_result">getProcessId()</label>
-            <div id="get_process_id_result"></div>
-            <button id="get_process_id_btn">Get Process ID</button>
-
-            <label for="terminate_btn">terminate()</label>
-            <button id="terminate_btn">Terminate</button>
           </div>
 
           <!-- Capture Visible Region controls -->
@@ -429,33 +422,6 @@
             <button id="clear_data_btn">Clear Data</button>
           </div>
 
-          <!-- Find controls -->
-          <div class="subcontrols">
-            <h4>Find</h4>
-
-            <h5>FindOptions options</h5>
-            <label for="find_options_backward_in">backward</label>
-            <div class="checkbox"><input type="checkbox" id="find_options_backward_in" /></div>
-
-            <label for="find_options_match_case_in">matchCase</label>
-            <div class="checkbox"><input type="checkbox" id="find_options_match_case_in" /></div>
-
-            <label for="find_search_text_in">find(<br> searchText,<br> options)</label>
-            <input type="text" id="find_search_text_in" />
-            <button id="find_btn">Find</button>
-
-            <div id="find_result" class="hide"></div>
-            <button id="find_result_btn">Toggle Show/Hide</button>
-
-            <label for="stop_finding_in">stopFinding()</label>
-            <select id="stop_finding_in">
-              <option value="activate">activate</option>
-              <option value="clear">clear</option>
-              <option value="keep">keep</option>
-            </select>
-            <button id="stop_finding_btn">Stop Finding</button>
-          </div>
-
           <!-- Audio controls -->
           <div class="subcontrols">
             <h4>Audio</h4>
@@ -485,10 +451,6 @@
             <input type="number" id="set_zoom_in" value=1 />
             <button id="set_zoom_btn">Set</button>
 
-            <label for="get_zoom_mode_result">getZoomMode()</label>
-            <div id="get_zoom_mode_result"></div>
-            <button id="get_zoom_mode_btn">Get Zoom Mode</button>
-
             <label for="set_zoom_mode_in">setZoomMode()</label>
             <select id="set_zoom_mode_in">
               <option value="per-origin">per-origin</option>
@@ -498,37 +460,6 @@
             <button id="set_zoom_mode_btn">Set</button>
           </div>
 
-          <!-- Spatial Navigation Enabled controls -->
-          <div class="subcontrols">
-            <h4>Spatial Navigation</h4>
-
-            <label for="is_spatial_navigation_enabled_result">isSpatialNavigationEnabled()</label>
-            <div id="is_spatial_navigation_enabled_result"></div>
-            <button id="is_spatial_navigation_enabled_btn">Is Spatial Navigation Enabled</button>
-
-            <label for="set_spatial_navigation_enabled_chk">setSpatialNavigationEnabled()</label>
-            <div class="checkbox"><input type="checkbox" id="set_spatial_navigation_enabled_chk" /></div>
-            <button id="set_spatial_navigation_enabled_btn">Set</button>
-          </div>
-
-          <!-- Load Data With Base URL controls-->
-          <div class="subcontrols">
-            <h4>Load Data with Base URL</h4>
-
-            <label for="load_data_with_base_url_data_url_in">dataUrl</label>
-            <input type="text" id="load_data_with_base_url_data_url_in" />
-
-            <label for="load_data_with_base_url_base_url_in">baseUrl</label>
-            <input type="text" id="load_data_with_base_url_base_url_in" />
-
-            <label for="load_data_with_base_url_virtual_url_in">virtualUrl</label>
-            <input type="text" id="load_data_with_base_url_virtual_url_in" />
-
-            <label for="load_data_with_base_url_btn">loadDataWithBaseUrl(<br> dataUrl,<br> baseUrl,<br>
-              virtualUrl)</label>
-            <button id="load_data_with_base_url_btn">Load Data With Base URL</button>
-          </div>
-
           <!-- User Agent controls-->
           <div class="subcontrols">
             <h4>User Agent</h4>
@@ -536,9 +467,6 @@
             <label for="user_agent_in">getUserAgent()<br />setUserAgentOverride()</label>
             <input type="text" id="user_agent_in" />
             <button id="user_agent_btn">Set</button>
-
-            <label for="user_agent_chk">isUserAgentOverriden()</label>
-            <div class="checkbox"><input type="checkbox" id="user_agent_chk" /></div>
           </div>
 
           <!-- Content injection controls -->

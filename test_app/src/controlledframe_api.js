@@ -63,12 +63,8 @@ class ControlledFrameController {
     this.#canGoForward();
     this.#getUserAgent();
     this.#getAudioState();
-    this.#getProcessId();
     this.#getZoom();
-    this.#getZoomMode();
     this.#isAudioMuted();
-    this.#isSpatialNavigationEnabled();
-    this.#isUserAgentOverridden();
 
     // Set current time for ClearDataOptions
     let now = new Date();
@@ -196,34 +192,17 @@ class ControlledFrameController {
       'click',
       this.#executeScript.bind(this)
     );
-    $('#find_btn').addEventListener('click', this.#find.bind(this));
     $('#forward_btn').addEventListener('click', this.#forward.bind(this));
     $('#get_audio_state_btn').addEventListener(
       'click',
       this.#getAudioState.bind(this)
     );
-    $('#get_process_id_btn').addEventListener(
-      'click',
-      this.#getProcessId.bind(this)
-    );
     $('#get_zoom_btn').addEventListener('click', this.#getZoom.bind(this));
-    $('#get_zoom_mode_btn').addEventListener(
-      'click',
-      this.#getZoomMode.bind(this)
-    );
     $('#go_btn').addEventListener('click', this.#go.bind(this));
     $('#insertcss_btn').addEventListener('click', this.#insertCSS.bind(this));
     $('#is_audio_muted_btn').addEventListener(
       'click',
       this.#isAudioMuted.bind(this)
-    );
-    $('#is_spatial_navigation_enabled_btn').addEventListener(
-      'click',
-      this.#isSpatialNavigationEnabled.bind(this)
-    );
-    $('#load_data_with_base_url_btn').addEventListener(
-      'click',
-      this.#loadDataWithBaseUrl.bind(this)
     );
     $('#print_btn').addEventListener('click', this.#print.bind(this));
     $('#reload_btn').addEventListener('click', this.#reload.bind(this));
@@ -235,21 +214,12 @@ class ControlledFrameController {
       'click',
       this.#setAudioMuted.bind(this)
     );
-    $('#set_spatial_navigation_enabled_btn').addEventListener(
-      'click',
-      this.#setSpatialNavigationEnabled.bind(this)
-    );
     $('#set_zoom_btn').addEventListener('click', this.#setZoom.bind(this));
     $('#set_zoom_mode_btn').addEventListener(
       'click',
       this.#setZoomMode.bind(this)
     );
     $('#stop_btn').addEventListener('click', this.#stop.bind(this));
-    $('#stop_finding_btn').addEventListener(
-      'click',
-      this.#stopFinding.bind(this)
-    );
-    $('#terminate_btn').addEventListener('click', this.#terminate.bind(this));
     $('#user_agent_btn').addEventListener(
       'click',
       this.#setUserAgent.bind(this)
@@ -327,10 +297,6 @@ class ControlledFrameController {
     );
     this.controlledFrame.addEventListener('dialog', this.#ondialog.bind(this));
     this.controlledFrame.addEventListener('exit', this.#onexit.bind(this));
-    this.controlledFrame.addEventListener(
-      'findupdate',
-      this.#onfindupdate.bind(this)
-    );
     this.controlledFrame.addEventListener(
       'loadabort',
       this.#onloadabort.bind(this)
@@ -558,7 +524,7 @@ class ControlledFrameController {
     this.controlledFrame.captureVisibleRegion(imageDetails, handler);
   }
 
-  #clearData(e) {
+  async #clearData(e) {
     if (typeof this.controlledFrame.clearData !== 'function') {
       Log.warn('clearData: API undefined');
       return;
@@ -571,11 +537,9 @@ class ControlledFrameController {
       types[option.value] = option.selected;
       if (option.selected) typesForLogging.push(option.value);
     }
-    let callback = () => {
-      Log.info(`clearData finished for ${typesForLogging.join(', ')}`);
-    };
 
-    this.controlledFrame.clearData(options, types, callback);
+    await this.controlledFrame.clearData(options, types);
+    Log.info(`clearData finished for ${typesForLogging.join(', ')}`);
   }
 
   #readInjectDetails() {
@@ -600,75 +564,26 @@ class ControlledFrameController {
     };
   }
 
-  #executeScript(e) {
+  async #executeScript(e) {
     if (typeof this.controlledFrame.executeScript !== 'function') {
       Log.warn('executeScript: API undefined');
       return;
     }
     let details = this.#readInjectDetails();
-    let callback = result => {
-      let resultStr = JSON.stringify(result);
-      Log.info(`executeScript = ${resultStr}`);
-      $('#execute_script_result').innerText = resultStr;
-    };
-    this.controlledFrame.executeScript(details, callback);
+    const result = await this.controlledFrame.executeScript(details);
+    let resultStr = JSON.stringify(result);
+    Log.info(`executeScript = ${resultStr}`);
+    $('#execute_script_result').innerText = resultStr;
   }
 
-  #find(e) {
-    if (typeof this.controlledFrame.find !== 'function') {
-      Log.warn('find: API undefined');
-      return;
-    }
-
-    let searchText = $('#find_search_text_in').value;
-    let options = {
-      backward: $('#find_options_backward_in').checked,
-      matchCase: $('#find_options_match_case_in').checked,
-    };
-    let callback = results => {
-      let resultsStr = `
-  {
-    activeMatchOrdinal = ${results.activeMatchOrdinal}
-    cancelled = ${results.cancelled ? 'yes' : 'no'}
-    numberOfMatches = ${results.numberOfMatches}
-    selectionRect = {
-      height: ${results.selectionRect.height},
-      left: ${results.selectionRect.left},
-      top: ${results.selectionRect.top},
-      width: ${results.selectionRect.width},
-  }
-      `;
-      Log.info(`find = ${resultsStr}`);
-
-      let resultEl = $('#find_result');
-      resultEl.innerText = resultsStr;
-      resultEl.classList.remove('hide');
-      $('#find_result_btn').onclick = e => {
-        toggleHide(resultEl);
-      };
-    };
-    this.controlledFrame.find(searchText, options, callback);
-  }
-
-  #getAudioState(e) {
+  async #getAudioState(e) {
     if (typeof this.controlledFrame.getAudioState !== 'function') {
       Log.warn('getAudioState: API undefined');
       return;
     }
-    let callback = audible => {
-      Log.info(`getAudioState = ${audible}`);
-      $('#get_audio_state_chk').checked = audible;
-    };
-    this.controlledFrame.getAudioState(callback);
-  }
-
-  #getProcessId(e) {
-    if (typeof this.controlledFrame.getProcessId !== 'function') {
-      Log.warn('getProcessId: API undefined');
-      return;
-    }
-    let id = this.controlledFrame.getProcessId();
-    $('#get_process_id_result').innerText = id;
+    const audible = await this.controlledFrame.getAudioState();
+    Log.info(`getAudioState = ${audible}`);
+    $('#get_audio_state_chk').checked = audible;
   }
 
   #getUserAgent(e) {
@@ -681,87 +596,35 @@ class ControlledFrameController {
     Log.info(`userAgent = ${userAgent}`);
   }
 
-  #getZoom(e) {
+  async #getZoom(e) {
     if (typeof this.controlledFrame.getZoom !== 'function') {
       Log.warn('getZoom: API undefined');
       return;
     }
-    let callback = zoomFactor => {
-      Log.info(`getZoom = ${zoomFactor}`);
-      $('#get_zoom_result').innerText = zoomFactor;
-    };
-    this.controlledFrame.getZoom(callback);
+    const zoomFactor = await this.controlledFrame.getZoom();
+    Log.info(`getZoom = ${zoomFactor}`);
+    $('#get_zoom_result').innerText = zoomFactor;
   }
 
-  #getZoomMode(e) {
-    if (typeof this.controlledFrame.getZoomMode !== 'function') {
-      Log.warn('getZoomMode: API undefined');
-      return;
-    }
-    let callback = zoomMode => {
-      Log.info(`getZoomMode = ${zoomMode}`);
-      $('#get_zoom_mode_result').innerText = zoomMode;
-    };
-    this.controlledFrame.getZoomMode(callback);
-  }
-
-  #insertCSS(e) {
+  async #insertCSS(e) {
     if (typeof this.controlledFrame.insertCSS !== 'function') {
       Log.warn('insertCSS: API undefined');
       return;
     }
     let details = this.#readInsertCSSInjectDetails();
-    let callback = () => {
-      Log.info('insertCSS completed');
-      $('#insertcss_result').innerText = 'Done';
-    };
-    this.controlledFrame.insertCSS(details, callback);
+    await this.controlledFrame.insertCSS(details);
+    Log.info('insertCSS completed');
+    $('#insertcss_result').innerText = 'Done';
   }
 
-  #isAudioMuted(e) {
+  async #isAudioMuted(e) {
     if (typeof this.controlledFrame.isAudioMuted !== 'function') {
       Log.warn('isAudioMuted: API undefined');
       return;
     }
-    let callback = muted => {
-      Log.info(`isAudioMuted = ${muted}`);
-      $('#is_audio_muted_chk').checked = muted;
-    };
-    this.controlledFrame.isAudioMuted(callback);
-  }
-
-  #isSpatialNavigationEnabled(e) {
-    if (typeof this.controlledFrame.isSpatialNavigationEnabled !== 'function') {
-      Log.warn('isSpatialNavigationEnabled: API undefined');
-      return;
-    }
-    let callback = enabled => {
-      Log.info(`isSpatialNavigationEnabled = ${enabled}`);
-      $('#is_spatial_navigation_enabled_result').innerText = enabled;
-    };
-    this.controlledFrame.isSpatialNavigationEnabled(callback);
-  }
-
-  #isUserAgentOverridden(e) {
-    if (typeof this.controlledFrame.isUserAgentOverridden !== 'function') {
-      Log.warn('isUserAgentOverridden: API undefined');
-      return;
-    }
-    let overridden = this.controlledFrame.isUserAgentOverridden();
-    $('#user_agent_chk').checked = overridden;
-    Log.info(`isUserAgentOverridden = ${overridden}`);
-  }
-
-  #loadDataWithBaseUrl(e) {
-    if (typeof this.controlledFrame.loadDataWithBaseUrl !== 'function') {
-      Log.warn('loadDataWithBaseUrl: API undefined');
-      return;
-    }
-    let dataUrl = $('#load_data_with_base_url_data_url_in').value;
-    let baseUrl = $('#load_data_with_base_url_base_url_in').value;
-    let virtualUrl = $('#load_data_with_base_url_virtual_url_in').value;
-    this.controlledFrame.loadDataWithBaseUrl(dataUrl, baseUrl, virtualUrl);
-    Log.info('loadDataWithBaseUrl completed');
+    const muted = await this.controlledFrame.isAudioMuted();
+    Log.info(`isAudioMuted = ${muted}`);
+    $('#is_audio_muted_chk').checked = muted;
   }
 
   #print(e) {
@@ -811,19 +674,6 @@ class ControlledFrameController {
     this.#isAudioMuted();
   }
 
-  #setSpatialNavigationEnabled(e) {
-    if (
-      typeof this.controlledFrame.setSpatialNavigationEnabled !== 'function'
-    ) {
-      Log.warn('setSpatialNavigationEnabled: API undefined');
-      return;
-    }
-    let enabled = $('#set_spatial_navigation_enabled_chk').checked;
-    this.controlledFrame.setSpatialNavigationEnabled(enabled);
-    Log.info(`setSpatialNavigationEnabled(${enabled}) completed`);
-    this.RefreshState();
-  }
-
   #setUserAgent(e) {
     if (typeof this.controlledFrame.setUserAgentOverride !== 'function') {
       Log.warn(`setUserAgentOverride: API undefined`);
@@ -836,30 +686,26 @@ class ControlledFrameController {
     this.RefreshState();
   }
 
-  #setZoom(e) {
+  async #setZoom(e) {
     if (typeof this.controlledFrame.setZoom !== 'function') {
       Log.warn('setZoom: API undefined');
       return;
     }
     let zoomFactor = parseFloat($('#set_zoom_in').value);
-    let callback = () => {
-      Log.info(`setZoom(${zoomFactor}) completed`);
-      this.RefreshState();
-    };
-    this.controlledFrame.setZoom(zoomFactor, callback);
+    await this.controlledFrame.setZoom(zoomFactor);
+    Log.info(`setZoom(${zoomFactor}) completed`);
+    this.RefreshState();
   }
 
-  #setZoomMode(e) {
+  async #setZoomMode(e) {
     if (typeof this.controlledFrame.setZoomMode !== 'function') {
       Log.warn('setZoomMode: API undefined');
       return;
     }
     let zoomMode = $('#set_zoom_mode_in').value;
-    let callback = () => {
-      Log.info(`setZoomMode(${zoomMode}) completed`);
-      this.RefreshState();
-    };
-    this.controlledFrame.setZoomMode(zoomMode, callback);
+    await this.controlledFrame.setZoomMode(zoomMode);
+    Log.info(`setZoomMode(${zoomMode}) completed`);
+    this.RefreshState();
   }
 
   #stop(e) {
@@ -869,25 +715,6 @@ class ControlledFrameController {
     }
     this.controlledFrame.stop();
     Log.info('stop completed');
-  }
-
-  #stopFinding(e) {
-    if (typeof this.controlledFrame.stopFinding !== 'function') {
-      Log.warn('stopFinding: API undefined');
-      return;
-    }
-    let action = $('#stop_finding_in').value;
-    this.controlledFrame.stopFinding(action);
-    Log.info(`stopFinding(${action}) completed`);
-  }
-
-  #terminate(e) {
-    if (typeof this.controlledFrame.terminate !== 'function') {
-      Log.warn('terminate: API undefined');
-      return;
-    }
-    this.controlledFrame.terminate();
-    Log.info('terminate completed');
   }
 
   /**
@@ -918,14 +745,6 @@ class ControlledFrameController {
   #onexit(e) {
     Log.evt('exit fired');
     Log.info(`processID = ${e.processID}, reason = ${e.reason}`);
-  }
-
-  #onfindupdate(e) {
-    Log.evt('findupdate fired');
-    Log.info(`searchText = ${e.searchText}, numberOfMatches = ${e.numberOfMatches}, activeMatchOrdinal = ${activeMatchOrdinal}, selectionRect = {height: ${e.selectionRect.height},
-        left: ${e.selectionRect.left}, top: ${e.selectionRect.top},
-        width: ${e.selectionRect.width}}, canceled = ${e.canceled},
-        finalUpdate = ${e.finalUpdate}`);
   }
 
   #onloadabort(e) {
