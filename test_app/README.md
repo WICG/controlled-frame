@@ -36,13 +36,19 @@ Some of the features you'll be trying are still under development and only
 available with a particular configuration setting. Configure Chrome to prepare
 for running the demo 'test_app' application.
 
-1. Run the server script
+1. Install JS dependencies
 
 ```sh
-python3 -m iwa_http_server.py
+pnpm install
 ```
 
-2. Execute Chrome with the following flags once.
+2. Run the server
+
+```sh
+pnpm run dev
+```
+
+3. Execute Chrome with the following flags once.
 
 ```sh
 $CHROME --enable-features=IsolatedWebApps,IsolatedWebAppDevMode,ControlledFrame
@@ -58,13 +64,13 @@ $CHROME --user-data-dir=$HOME/tmp \
 
 The user data directory can be cleared to start Chrome in a fresh profile.
 
-3. Wait for Chrome to launch
+4. Wait for Chrome to launch
 
 ## Install the demo application
 
 Perform the steps below to run the demo app.
 
-1. Navigate to chrome://web-app-internals, install the app at http://localhost:8000
+1. Navigate to chrome://web-app-internals, install the app at http://localhost:5193
 
 2. Launch the Controlled Frame test app
 

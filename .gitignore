@@ -1,1 +1,15 @@
+logs
+*.log
+pnpm-debug.log*
+
+node_modules
+dist
+certs
+.env
+
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Compiled specification
 /index.html
