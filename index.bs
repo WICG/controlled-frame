@@ -12,7 +12,7 @@ Level: 1
 Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@google.com
 Editor: Ovidio Ruiz-Henríquez 106543, Google LLC https://www.google.com, odejesush@google.com
 
-Group: WebView-CG
+Group: WICG
 Markup Shorthands: markdown yes
 </pre>
 
