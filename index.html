@@ -1,14 +1,12 @@
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Controlled Frame API</title>
-  <meta content="w3c/CG-DRAFT" name="w3c-status">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 6270e4735, updated Tue Aug 6 12:12:30 2024 -0700" name="generator">
+  <meta content="Bikeshed version 742f3d674, updated Mon Nov 4 14:56:54 2024 -0800" name="generator">
   <link href="TBD" rel="canonical">
-  <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="eea1ba374f553c0b973d3c143b77efb4df399b37" name="revision">
+  <meta content="6728165a8d7c3acc102c55bb6dc7d1e073fbda84" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -714,23 +712,21 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-09-23">23 September 2024</time></p>
-   <details open>
-    <summary>More details about this document</summary>
-    <div data-fill-with="spec-metadata">
-     <dl>
-      <dt>This version:
-      <dd><a class="u-url" href="TBD">TBD</a>
-      <dt>Issue Tracking:
-      <dd><a href="https://github.com/chasephillips/controlled-frame/issues/">GitHub</a>
-      <dt class="editor">Editors:
-      <dd class="editor p-author h-card vcard" data-editor-id="115880"><a class="p-name fn u-email email" href="mailto:cmp@google.com">Chase Phillips</a> (<a class="p-org org" href="https://google.com">Google LLC</a>)
-      <dd class="editor p-author h-card vcard" data-editor-id="106543"><a class="p-name fn u-email email" href="mailto:odejesush@google.com">Ovidio Ruiz-Henríquez</a> (<a class="p-org org" href="https://www.google.com">Google LLC</a>)
-     </dl>
-    </div>
-   </details>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-11-20">20 November 2024</time></p>
+   <div data-fill-with="spec-metadata">
+    <dl>
+     <dt>This version:
+     <dd><a class="u-url" href="TBD">TBD</a>
+     <dt>Issue Tracking:
+     <dd><a href="https://github.com/chasephillips/controlled-frame/issues/">GitHub</a>
+     <dt class="editor">Editors:
+     <dd class="editor p-author h-card vcard" data-editor-id="115880"><a class="p-name fn u-email email" href="mailto:cmp@google.com">Chase Phillips</a> (<a class="p-org org" href="https://google.com">Google LLC</a>)
+     <dd class="editor p-author h-card vcard" data-editor-id="106543"><a class="p-name fn u-email email" href="mailto:odejesush@google.com">Ovidio Ruiz-Henríquez</a> (<a class="p-org org" href="https://www.google.com">Google LLC</a>)
+    </dl>
+   </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2024 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2024 the Contributors to the Controlled Frame API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -740,8 +736,15 @@ within the context of an Isolated Web Application (IWA). The embedded
 content is a new top-level browsing context within and controlled by the
 embedder.</p>
   </div>
-  <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
+  <div data-fill-with="at-risk"></div>
+  <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
+   <p> This specification was published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a>.
+  It is not a W3C Standard nor is it on the W3C Standards Track.
+
+  Please note that under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a> there is a limited opt-out and other conditions apply.
+
+  Learn more about <a href="http://www.w3.org/community/">W3C Community and Business Groups</a>. </p>
    <p></p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -2441,51 +2444,53 @@ function genLinkingSyntaxes(dfn) {
 "use strict";
 {
 let refsData = {
-"#callbackdef-contextmenuscallback": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusCallback","type":"callback","url":"#callbackdef-contextmenuscallback"},
-"#callbackdef-contextmenuseventlistener": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusEventListener","type":"callback","url":"#callbackdef-contextmenuseventlistener"},
-"#contextmenus": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenus","type":"interface","url":"#contextmenus"},
-"#dictdef-cleardataoptions": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ClearDataOptions","type":"dictionary","url":"#dictdef-cleardataoptions"},
-"#dictdef-cleardatatypeset": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ClearDataTypeSet","type":"dictionary","url":"#dictdef-cleardatatypeset"},
-"#dictdef-contentscriptdetails": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContentScriptDetails","type":"dictionary","url":"#dictdef-contentscriptdetails"},
-"#dictdef-contextmenuscreateproperties": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusCreateProperties","type":"dictionary","url":"#dictdef-contextmenuscreateproperties"},
-"#dictdef-contextmenusproperties": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusProperties","type":"dictionary","url":"#dictdef-contextmenusproperties"},
-"#dictdef-injectdetails": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"InjectDetails","type":"dictionary","url":"#dictdef-injectdetails"},
-"#dictdef-injectionitems": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"InjectionItems","type":"dictionary","url":"#dictdef-injectionitems"},
-"#dictdef-onclickdata": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"OnClickData","type":"dictionary","url":"#dictdef-onclickdata"},
-"#dom-controlledframe-back": {"export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"back()","type":"method","url":"#dom-controlledframe-back"},
-"#dom-controlledframe-cangoback": {"export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"canGoBack()","type":"method","url":"#dom-controlledframe-cangoback"},
-"#dom-controlledframe-forward": {"export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"forward()","type":"method","url":"#dom-controlledframe-forward"},
-"#dom-controlledframe-go": {"export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"go(relativeIndex)","type":"method","url":"#dom-controlledframe-go"},
-"#dom-controlledframe-reload": {"export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"reload()","type":"method","url":"#dom-controlledframe-reload"},
-"#dom-controlledframe-stop": {"export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"stop()","type":"method","url":"#dom-controlledframe-stop"},
-"#enumdef-contexttype": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextType","type":"enum","url":"#enumdef-contexttype"},
-"#enumdef-itemtype": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ItemType","type":"enum","url":"#enumdef-itemtype"},
-"#enumdef-runat": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"RunAt","type":"enum","url":"#enumdef-runat"},
-"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"CEReactions","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions"},
-"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLConstructor","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor"},
-"https://html.spec.whatwg.org/multipage/dom.html#htmlelement": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLElement","type":"interface","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlelement"},
-"https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"iframe","type":"element","url":"https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element"},
-"https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"WindowProxy","type":"interface","url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy"},
-"https://webidl.spec.whatwg.org/#Exposed": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
-"https://webidl.spec.whatwg.org/#SecureContext": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecureContext","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SecureContext"},
-"https://webidl.spec.whatwg.org/#idl-DOMString": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
-"https://webidl.spec.whatwg.org/#idl-USVString": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"USVString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-USVString"},
-"https://webidl.spec.whatwg.org/#idl-any": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"any","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-any"},
-"https://webidl.spec.whatwg.org/#idl-boolean": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"boolean","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-boolean"},
-"https://webidl.spec.whatwg.org/#idl-long": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"long","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-long"},
-"https://webidl.spec.whatwg.org/#idl-promise": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Promise","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-promise"},
-"https://webidl.spec.whatwg.org/#idl-sequence": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"sequence","type":"dfn","url":"https://webidl.spec.whatwg.org/#idl-sequence"},
-"https://webidl.spec.whatwg.org/#idl-undefined": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"undefined","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-undefined"},
+"#callbackdef-contextmenuscallback": {"displayText":"ContextMenusCallback","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusCallback","type":"callback","url":"#callbackdef-contextmenuscallback"},
+"#callbackdef-contextmenuseventlistener": {"displayText":"ContextMenusEventListener","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusEventListener","type":"callback","url":"#callbackdef-contextmenuseventlistener"},
+"#contextmenus": {"displayText":"ContextMenus","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenus","type":"interface","url":"#contextmenus"},
+"#dictdef-cleardataoptions": {"displayText":"ClearDataOptions","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ClearDataOptions","type":"dictionary","url":"#dictdef-cleardataoptions"},
+"#dictdef-cleardatatypeset": {"displayText":"ClearDataTypeSet","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ClearDataTypeSet","type":"dictionary","url":"#dictdef-cleardatatypeset"},
+"#dictdef-contentscriptdetails": {"displayText":"ContentScriptDetails","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContentScriptDetails","type":"dictionary","url":"#dictdef-contentscriptdetails"},
+"#dictdef-contextmenuscreateproperties": {"displayText":"ContextMenusCreateProperties","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusCreateProperties","type":"dictionary","url":"#dictdef-contextmenuscreateproperties"},
+"#dictdef-contextmenusproperties": {"displayText":"ContextMenusProperties","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusProperties","type":"dictionary","url":"#dictdef-contextmenusproperties"},
+"#dictdef-injectdetails": {"displayText":"InjectDetails","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"InjectDetails","type":"dictionary","url":"#dictdef-injectdetails"},
+"#dictdef-injectionitems": {"displayText":"InjectionItems","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"InjectionItems","type":"dictionary","url":"#dictdef-injectionitems"},
+"#dictdef-onclickdata": {"displayText":"OnClickData","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"OnClickData","type":"dictionary","url":"#dictdef-onclickdata"},
+"#dom-controlledframe-back": {"displayText":"back()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"back()","type":"method","url":"#dom-controlledframe-back"},
+"#dom-controlledframe-cangoback": {"displayText":"canGoBack()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"canGoBack()","type":"method","url":"#dom-controlledframe-cangoback"},
+"#dom-controlledframe-forward": {"displayText":"forward()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"forward()","type":"method","url":"#dom-controlledframe-forward"},
+"#dom-controlledframe-go": {"displayText":"go(relativeIndex)","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"go(relativeIndex)","type":"method","url":"#dom-controlledframe-go"},
+"#dom-controlledframe-reload": {"displayText":"reload()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"reload()","type":"method","url":"#dom-controlledframe-reload"},
+"#dom-controlledframe-stop": {"displayText":"stop()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"stop()","type":"method","url":"#dom-controlledframe-stop"},
+"#enumdef-contexttype": {"displayText":"ContextType","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextType","type":"enum","url":"#enumdef-contexttype"},
+"#enumdef-itemtype": {"displayText":"ItemType","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ItemType","type":"enum","url":"#enumdef-itemtype"},
+"#enumdef-runat": {"displayText":"RunAt","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"RunAt","type":"enum","url":"#enumdef-runat"},
+"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions": {"displayText":"CEReactions","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"CEReactions","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions"},
+"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor": {"displayText":"HTMLConstructor","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLConstructor","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor"},
+"https://html.spec.whatwg.org/multipage/dom.html#htmlelement": {"displayText":"HTMLElement","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLElement","type":"interface","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlelement"},
+"https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element": {"displayText":"iframe","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"iframe","type":"element","url":"https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element"},
+"https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy": {"displayText":"WindowProxy","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"WindowProxy","type":"interface","url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy"},
+"https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
+"https://webidl.spec.whatwg.org/#SecureContext": {"displayText":"SecureContext","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecureContext","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SecureContext"},
+"https://webidl.spec.whatwg.org/#idl-DOMString": {"displayText":"DOMString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
+"https://webidl.spec.whatwg.org/#idl-USVString": {"displayText":"USVString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"USVString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-USVString"},
+"https://webidl.spec.whatwg.org/#idl-any": {"displayText":"any","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"any","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-any"},
+"https://webidl.spec.whatwg.org/#idl-boolean": {"displayText":"boolean","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"boolean","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-boolean"},
+"https://webidl.spec.whatwg.org/#idl-long": {"displayText":"long","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"long","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-long"},
+"https://webidl.spec.whatwg.org/#idl-promise": {"displayText":"Promise","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Promise","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-promise"},
+"https://webidl.spec.whatwg.org/#idl-sequence": {"displayText":"sequence","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"sequence","type":"dfn","url":"https://webidl.spec.whatwg.org/#idl-sequence"},
+"https://webidl.spec.whatwg.org/#idl-undefined": {"displayText":"undefined","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"undefined","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-undefined"},
 };
 
 function mkRefHint(link, ref) {
     const linkText = link.textContent;
     let dfnTextElements = '';
-    if (ref.text != linkText) {
+    if (ref.displayText.toLowerCase() != linkText.toLowerCase()) {
+        // Give the original term if it's being displayed in a different way.
+        // But allow casing differences, they're insignificant.
         dfnTextElements =
             mk.li({},
                 mk.b({}, "Term: "),
-                mk.span({}, ref.text)
+                mk.span({}, ref.displayText)
             );
     }
     const forList = ref.for_;
