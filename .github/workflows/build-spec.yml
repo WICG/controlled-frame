@@ -1,12 +1,14 @@
-name: Build
+name: Build specification
+
 on:
   pull_request: {}
   push:
     branches:
     - main
+
 jobs:
   build:
-    name: Build
+    name: Build specification
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

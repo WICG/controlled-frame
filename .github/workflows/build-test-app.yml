@@ -1,0 +1,59 @@
+name: Build and release test_app
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - test_app/**
+  workflow_dispatch:
+
+jobs:
+  test-build:
+    name: Build and release test_app
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup PNPM
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'pnpm'
+        cache-dependency-path: pnpm-lock.yaml
+    - name: Install dependencies
+      working-directory: ./test_app
+      run: pnpm install
+    - name: Tag
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v6.2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        tag_prefix: 'test-app-v'
+        default_bump: minor
+    - name: Get all tags
+      uses: octokit/request-action@v2.x
+      id: get_latest_release
+      with:
+        route: GET /repos/${{ github.repository }}/git/matching-refs/tags
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build
+      working-directory: ./test_app
+      run: pnpm bump-version && pnpm build
+      env:
+        KEY: ${{ secrets.KEY }}
+        KEY_PASSPHRASE: ${{ secrets.KEY_PASSPHRASE }}
+        VERSION: ${{ steps.tag_version.outputs.new_tag }}
+        TAGS: ${{ steps.get_latest_release.outputs.data }}
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ steps.tag_version.outputs.new_tag }}
+        name: Release ${{ steps.tag_version.outputs.new_tag }}
+        body: ${{ steps.tag_version.outputs.changelog }}
+        artifacts: './dist/controlled-frame-test-app.swbn,./controlled-frame-test-app-update.json'
