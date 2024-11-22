@@ -21,8 +21,8 @@ jobs:
         version: 8
     - name: Setup Node
       uses: actions/setup-node@v4
-      working-directory: ./test_app
       with:
+        working-directory: ./test_app
         node-version: 20
         cache: 'pnpm'
         cache-dependency-path: pnpm-lock.yaml
