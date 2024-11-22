@@ -1,8 +1,8 @@
 import fs from 'fs';
 
 const tagPrefix = 'test-app-v';
-const version = process.env?.VERSION;
 
+let version = process.env?.VERSION;
 if (version) {
   version = version.replace(tagPrefix, '');
 } else {
@@ -24,15 +24,16 @@ let versions;
 
 try {
   versions = JSON.parse(process.env.TAGS)
-    .filter((tag) => tag.startsWith(tagPrefix))
+    .filter((tag) => tag.ref.includes(tagPrefix))
     .map((tag) => {
-      const v = tag.ref.replace(tagPrefix, '');
+      const v = tag.ref.replace(`refs/tags/${tagPrefix}`, '');
       return {
         version: v,
         src: `https://github.com/WICG/controlled-frame/releases/download/${tagPrefix}${v}/controlled-frame-test-app.swbn`,
       };
     });
 } catch (e) {
+  console.error(e);
   throw new Error('No tags');
 }
 

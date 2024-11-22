@@ -13,9 +13,13 @@
   "display": "fullscreen",
   "theme_color": "white",
   "background_color": "white",
-  "version": "1.0.1",
+  "version": "0.1.1",
   "permissions_policy": {
-    "controlled-frame": ["self"],
-    "cross-origin-isolated": ["self"]
+    "controlled-frame": [
+      "self"
+    ],
+    "cross-origin-isolated": [
+      "self"
+    ]
   }
 }
