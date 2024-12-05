@@ -9,26 +9,7 @@ Chrome Dev.
 ### Getting a copy of Chrome Dev
 
 On your platform of choice, download
-[Chrome Dev](https://www.google.com/chrome/dev/) and set an alias for the
-executable path. Per-platform instructions:
-
-#### MacOS
-
-```sh
-CHROME="/Applications/Google Chrome Dev.app/Contents/MacOS/Google Chrome Dev"
-```
-
-#### Windows
-
-```sh
-CHROME="C:\Program Files (x86)\Google\Chrome Dev\Application\chrome.exe"
-```
-
-#### Linux
-
-```sh
-CHROME="/opt/google/chrome-unstable/chrome"
-```
+[Chrome Dev](https://www.google.com/chrome/dev/).
 
 ## Run Chrome with the right flags
 
@@ -36,6 +17,26 @@ Some of the features you'll be trying are still under development and only
 available with a particular configuration setting. Configure Chrome to prepare
 for running the demo 'test_app' application.
 
+Navigate to chrome://flags, and enable the following Experiments:
+  1. enable-isolated-web-apps
+  1. enable-isolated-web-app-dev-mode
+  1. enable-controlled-frame
+
+## Install the demo application
+### Pre-built
+
+Navigate to chrome://web-app-internals, and enter the following URL into the
+"Install IWA from Update Manifest" field:
+```
+https://github.com/WICG/controlled-frame/releases/latest/download/controlled-frame-test-app-update.json
+```
+
+Alternatively, download the latest release
+[here](https://github.com/WICG/controlled-frame/releases/latest/download/controlled-frame-test-app.swbn).
+Navigate to chrome://web-app-internals, click the button next to the "Install IWA from Signed Web Bundle"
+label, and select the downloaded swbn file.
+
+### From source
 1. Install JS dependencies
 
 ```sh
@@ -48,31 +49,13 @@ pnpm install
 pnpm run dev
 ```
 
-3. Execute Chrome with the following flags once.
-
-```sh
-$CHROME --enable-features=IsolatedWebApps,IsolatedWebAppDevMode,ControlledFrame
+3. Navigate to chrome://web-app-internals, and enter the following URL into the
+"Install IWA via Dev Mode Proxy" field:
+```
+http://localhost:5193
 ```
 
-**Optional:** Use the `--user-data-dir` flag to install the IWA in a separate
-Chrome profile. For example:
-
-```sh
-$CHROME --user-data-dir=$HOME/tmp \
-        --enable-features=IsolatedWebApps,IsolatedWebAppDevMode,ControlledFrame
-```
-
-The user data directory can be cleared to start Chrome in a fresh profile.
-
-4. Wait for Chrome to launch
-
-## Install the demo application
-
-Perform the steps below to run the demo app.
-
-1. Navigate to chrome://web-app-internals, install the app at http://localhost:5193
-
-2. Launch the Controlled Frame test app
+4. Launch the Controlled Frame test app
 
 In Chrome/Chromium, you should see the demo app in chrome://apps. Click on it
 to launch the IWA.
