@@ -10,7 +10,7 @@ ED: TBD
 Shortname: controlled-frame
 Level: 1
 Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@google.com
-Editor: Ovidio Ruiz-Henríquez 106543, Google LLC https://www.google.com, odejesush@google.com
+Editor: Robbie McElrath 139758, Google LLC https://google.com, rmcelrath@chromium.org
 
 Group: WICG
 Markup Shorthands: markdown yes
@@ -665,3 +665,9 @@ interface ContextMenus {
         ContextMenusCallback? callback);
 };
 </xmp>
+
+# Acknowledgements # {#acknowledgements}
+
+The following people contributed to the development of this document.
+
+* <a href="https://github.com/odejesush">Ovidio Ruiz-Henríquez</a>
