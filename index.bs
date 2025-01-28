@@ -76,6 +76,12 @@ All <{iframe}> use cases are still valid and should continue to use <{iframe}>,
 including IWAs where possible.
 
 <!-- ====================================================================== -->
+<h2 id=the-controlledframe-element>The <dfn element export>controlledframe</dfn> element</h2>
+<!-- ====================================================================== -->
+
+Lorem ipsum. Insert basic info and example here.
+
+<!-- ====================================================================== -->
 # Usage Overview # {#usage-overview}
 <!-- ====================================================================== -->
 
