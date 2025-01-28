@@ -630,7 +630,7 @@ enum ExtraInfoSpec {
 [Exposed=Window, SecureContext]
 interface WebRequestEvent {
   undefined addListener(WebRequestEventListener listener,
-                        optional RequestFilter filter,
+                        optional RequestFilter filter = {},
                         optional sequence<ExtraInfoSpec> extraInfoSpec);
   boolean hasListener(WebRequestEventListener listener);
   boolean hasListeners();
