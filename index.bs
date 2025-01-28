@@ -627,10 +627,11 @@ enum ExtraInfoSpec {
   "responseHeaders",
 };
 
+[Exposed=Window, SecureContext]
 interface WebRequestEvent {
   undefined addListener(WebRequestEventListener listener,
-                        RequestFilter? filter,
-                        sequence<ExtraInfoSpec>? extraInfoSpec);
+                        optional RequestFilter filter,
+                        optional sequence<ExtraInfoSpec> extraInfoSpec);
   boolean hasListener(WebRequestEventListener listener);
   boolean hasListeners();
   undefined removeListener(WebRequestEventListener listener);
@@ -748,6 +749,7 @@ dictionary WebRequestErrorOccurredDetails : WebRequestEventDetails {
 
 callback HandlerBehaviorChangedCallback = undefined ();
 
+[Exposed=Window, SecureContext]
 interface WebRequest {
   readonly attribute WebRequestEvent onBeforeRequest;
   readonly attribute WebRequestEvent onBeforeSendHeaders;
@@ -759,7 +761,7 @@ interface WebRequest {
   readonly attribute WebRequestEvent onCompleted;
   readonly attribute WebRequestEvent onErrorOccurred;
 
-  undefined handlerBehaviorChanged(HandlerBehaviorChangedCallback? callback);
+  undefined handlerBehaviorChanged(optional HandlerBehaviorChangedCallback callback);
 };
 </xmp>
 
