@@ -615,7 +615,7 @@ callback interface WebRequestEventListener {
 
 dictionary RequestFilter {
   sequence<ResourceType> types;
-  USVString[] urls;
+  sequence<USVString> urls;
   long windowId;
 };
 
@@ -630,7 +630,7 @@ enum ExtraInfoSpec {
 interface WebRequestEvent {
   undefined addListener(WebRequestEventListener listener,
                         RequestFilter? filter,
-                        ExtraInfoSpec[]? extraInfoSpec);
+                        sequence<ExtraInfoSpec>? extraInfoSpec);
   boolean hasListener(WebRequestEventListener listener);
   boolean hasListeners();
   undefined removeListener(WebRequestEventListener listener);
@@ -639,7 +639,7 @@ interface WebRequestEvent {
 dictionary HttpHeader {
   required DOMString name;
   DOMString value;
-  byte[] binaryValue;
+  sequence<byte> binaryValue;
 };
 
 dictionary WebRequestAuthCredentials {
@@ -651,8 +651,8 @@ dictionary BlockingResponse {
   WebRequestAuthCredentials authCredentials;
   boolean cancel;
   USVString redirectUrl;
-  HttpHeader[] requestHeaders;
-  HttpHeader[] responseHeaders;
+  sequence<HttpHeader> requestHeaders;
+  sequence<HttpHeader> responseHeaders;
 };
 
 enum DocumentLifecycle {
@@ -686,7 +686,7 @@ dictionary WebRequestEventDetails {
 dictionary WebRequestEventResponseDetails : WebRequestEventDetails {
   required long statusCode;
   required DOMString statusLine;
-  HttpHeader[] responseHeaders;
+  sequence<HttpHeader> responseHeaders;
 };
 
 dictionary UploadData {
@@ -696,7 +696,7 @@ dictionary UploadData {
 dictionary RequestBody {
   DOMString error;
   any formData;
-  UploadData[] raw;
+  sequence<UploadData> raw;
 };
 
 dictionary WebRequestBeforeRequestDetails : WebRequestEventDetails {
@@ -704,11 +704,11 @@ dictionary WebRequestBeforeRequestDetails : WebRequestEventDetails {
 };
 
 dictionary WebRequestBeforeSendHeadersDetails : WebRequestEventDetails {
-  HttpHeader[] requestHeaders;
+  sequence<HttpHeader> requestHeaders;
 };
 
 dictionary WebRequestSendHeadersDetails : WebRequestEventDetails {
-  HttpHeader[] requestHeaders;
+  sequence<HttpHeader> requestHeaders;
 };
 
 dictionary WebRequestHeadersReceivedDetails : WebRequestEventResponseDetails {};
