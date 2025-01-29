@@ -4,9 +4,9 @@ Abstract: This document defines an API for embedding arbitrary web content only
     within the context of an Isolated Web Application (IWA). The embedded
     content is a new top-level browsing context within and controlled by the
     embedder.
-Repository: chasephillips/controlled-frame
+Repository: WICG/controlled-frame
+URL: https://wicg.github.io/fenced-frame/
 Status: w3c/CG-DRAFT
-ED: TBD
 Shortname: controlled-frame
 Level: 1
 Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@google.com
@@ -114,7 +114,6 @@ of Controlled Frame.
  <dd>[=Global attributes=]</dd>
  <dd><code>[=width=]</code> — Horizontal dimension</dd>
  <dd><code>[=height=]</code> — Vertical dimension</dd>
- <dd><code><{fencedframe/allow}></code> — [=Permissions policy=] to be applied to the <{fencedframe}>'s contents</dd>
  <dt>[=Accessibility considerations=]:</dt>
  <dd><p class=XXX>TODO</p></dd>
  <dt>[=DOM interface=]:</dt>
