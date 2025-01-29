@@ -588,6 +588,184 @@ dictionary ClearDataTypeSet {
 <!-- ====================================================================== -->
 
 <!-- ====================================================================== -->
+## Web Request API ## {#api-web-request}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+enum ResourceType {
+  "main_frame",
+  "sub_frame",
+  "stylesheet",
+  "script",
+  "image",
+  "font",
+  "object",
+  "xmlhttprequest",
+  "ping",
+  "csp_report",
+  "media",
+  "websocket",
+  "webbundle",
+  "other",
+};
+
+callback interface WebRequestEventListener {
+  BlockingResponse? handleEvent(WebRequestEventDetails details);
+};
+
+dictionary RequestFilter {
+  sequence<ResourceType> types;
+  sequence<USVString> urls;
+  long windowId;
+};
+
+enum ExtraInfoSpec {
+  "asyncBlocking",
+  "blocking",
+  "extraHeaders",
+  "requestHeaders",
+  "responseHeaders",
+};
+
+[Exposed=Window, SecureContext]
+interface WebRequestEvent {
+  undefined addListener(WebRequestEventListener listener,
+                        optional RequestFilter filter = {},
+                        optional sequence<ExtraInfoSpec> extraInfoSpec);
+  boolean hasListener(WebRequestEventListener listener);
+  boolean hasListeners();
+  undefined removeListener(WebRequestEventListener listener);
+};
+
+dictionary HttpHeader {
+  required DOMString name;
+  DOMString value;
+  sequence<byte> binaryValue;
+};
+
+dictionary WebRequestAuthCredentials {
+  required DOMString username;
+  required DOMString password;
+};
+
+dictionary BlockingResponse {
+  WebRequestAuthCredentials authCredentials;
+  boolean cancel;
+  USVString redirectUrl;
+  sequence<HttpHeader> requestHeaders;
+  sequence<HttpHeader> responseHeaders;
+};
+
+enum DocumentLifecycle {
+  "prerender",
+  "active",
+  "cached",
+  "pending_deletion",
+};
+
+enum FrameType {
+  "outermost_frame",
+  "fenced_frame",
+  "sub_frame",
+};
+
+dictionary WebRequestEventDetails {
+  DOMString documentId;
+  DocumentLifecycle documentLifecycle;
+  required long frameId;
+  FrameType frameType;
+  USVString initiator;
+  required DOMString method;
+  DOMString parentDocumentId;
+  required long parentFrameId;
+  required DOMString requestId;
+  required long timeStamp;
+  required ResourceType type;
+  required USVString url;
+};
+
+dictionary WebRequestEventResponseDetails : WebRequestEventDetails {
+  required long statusCode;
+  required DOMString statusLine;
+  sequence<HttpHeader> responseHeaders;
+};
+
+dictionary UploadData {
+  ArrayBuffer bytes;
+  DOMString file;
+};
+dictionary RequestBody {
+  DOMString error;
+  any formData;
+  sequence<UploadData> raw;
+};
+
+dictionary WebRequestBeforeRequestDetails : WebRequestEventDetails {
+  RequestBody requestBody;
+};
+
+dictionary WebRequestBeforeSendHeadersDetails : WebRequestEventDetails {
+  sequence<HttpHeader> requestHeaders;
+};
+
+dictionary WebRequestSendHeadersDetails : WebRequestEventDetails {
+  sequence<HttpHeader> requestHeaders;
+};
+
+dictionary WebRequestHeadersReceivedDetails : WebRequestEventResponseDetails {};
+
+dictionary AuthChallenger {
+  DOMString host;
+  long port;
+};
+dictionary WebRequestAuthRequiredDetails : WebRequestEventResponseDetails {
+  required AuthChallenger challenger;
+  required boolean isProxy;
+  required DOMString scheme;
+  DOMString realm;
+};
+
+dictionary WebRequestBeforeRedirectDetails : WebRequestEventResponseDetails {
+  required boolean fromCache;
+  DOMString ip;
+  required USVString redirectUrl;
+};
+
+dictionary WebRequestResponseStartedDetails : WebRequestEventResponseDetails {
+  required boolean fromCache;
+  DOMString ip;
+};
+
+dictionary WebRequestCompletedDetails : WebRequestEventResponseDetails {
+  required boolean fromCache;
+  DOMString ip;
+};
+
+dictionary WebRequestErrorOccurredDetails : WebRequestEventDetails {
+  required DOMString error;
+  required boolean fromCache;
+  DOMString ip;
+};
+
+callback HandlerBehaviorChangedCallback = undefined ();
+
+[Exposed=Window, SecureContext]
+interface WebRequest {
+  readonly attribute WebRequestEvent onBeforeRequest;
+  readonly attribute WebRequestEvent onBeforeSendHeaders;
+  readonly attribute WebRequestEvent onSendHeaders;
+  readonly attribute WebRequestEvent onHeadersReceived;
+  readonly attribute WebRequestEvent onAuthRequired;
+  readonly attribute WebRequestEvent onBeforeRedirect;
+  readonly attribute WebRequestEvent onResponseStarted;
+  readonly attribute WebRequestEvent onCompleted;
+  readonly attribute WebRequestEvent onErrorOccurred;
+
+  undefined handlerBehaviorChanged(optional HandlerBehaviorChangedCallback callback);
+};
+</xmp>
+
+<!-- ====================================================================== -->
 # Controlled Frame API # {#controlled-frame-api}
 <!-- ====================================================================== -->
 
