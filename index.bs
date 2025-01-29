@@ -54,6 +54,13 @@ Markup Shorthands: markdown yes
 }
 </pre>
 
+<pre class="anchors">
+spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
+    type: dfn
+        urlPrefix: dom.html
+            text: represents; url: represents
+</pre>
+
 <!-- ====================================================================== -->
 # Introduction # {#introduction}
 <!-- ====================================================================== -->
@@ -88,7 +95,7 @@ of Controlled Frame.
 <h2 id=the-controlledframe-element>The <dfn element export>controlledframe</dfn> element</h2>
 <!-- ====================================================================== -->
 
-Lorem ipsum. Insert basic info and example here.
+The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
 
 <!-- ====================================================================== -->
 # Usage Overview # {#usage-overview}
