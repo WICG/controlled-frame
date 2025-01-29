@@ -58,7 +58,17 @@ Markup Shorthands: markdown yes
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
         urlPrefix: dom.html
+            text: contexts in which this element can be used; url: concept-element-contexts
+            text: content model; url: concept-element-content-model
+            text: nothing; url: concept-content-nothing
+            text: content attributes; url: concept-element-attributes
+            text: global attributes; url: global-attributes
+            text: dom interface; url: concept-element-dom
             text: represents; url: represents
+            text: accessibility considerations; url: concept-element-accessibility-considerations
+        urlPrefix: embedder-content-other.html
+            text: width; url: attr-dim-width
+            text: height; url: attr-dim-height
 </pre>
 
 <!-- ====================================================================== -->
@@ -94,6 +104,73 @@ of Controlled Frame.
 <!-- ====================================================================== -->
 <h2 id=the-controlledframe-element>The <dfn element export>controlledframe</dfn> element</h2>
 <!-- ====================================================================== -->
+
+<dl class="element">
+ <dt>[=Contexts in which this element can be used=]:</dt>
+ <dd>Where [=embedded content=] is expected.</dd>
+ <dt>[=Content model=]:</dt>
+ <dd>[=Nothing=].</dd>
+ <dt>[=Content attributes=]:</dt>
+ <dd>[=Global attributes=]</dd>
+ <dd><code>[=width=]</code> — Horizontal dimension</dd>
+ <dd><code>[=height=]</code> — Vertical dimension</dd>
+ <dd><code><{fencedframe/allow}></code> — [=Permissions policy=] to be applied to the <{fencedframe}>'s contents</dd>
+ <dt>[=Accessibility considerations=]:</dt>
+ <dd><p class=XXX>TODO</p></dd>
+ <dt>[=DOM interface=]:</dt>
+ <dd>
+<xmp class=idl>
+[Exposed=Window, SecureContext]
+interface HTMLControlledFrame : HTMLElement {
+    [HTMLConstructor] constructor();
+
+    [CEReactions] attribute USVString src;
+    [CEReactions] attribute DOMString name;
+    [CEReactions] attribute boolean allowfullscreen;
+    [CEReactions] attribute boolean allowscaling;
+    [CEReactions] attribute boolean allowtransparency;
+    [CEReactions] attribute boolean autosize;
+    [CEReactions] attribute DOMString maxheight;
+    [CEReactions] attribute DOMString maxwidth;
+    [CEReactions] attribute DOMString minheight;
+    [CEReactions] attribute DOMString minwidth;
+    attribute DOMString partition;
+
+    readonly attribute WindowProxy? contentWindow;
+    readonly attribute ContextMenus contextMenus;
+
+    // Navigation methods.
+    Promise<undefined> back();
+    boolean canGoBack();
+    boolean canGoForward();
+    Promise<undefined> forward();
+    Promise<undefined> go(long relativeIndex);
+    undefined reload();
+    undefined stop();
+
+    // Scripting methods.
+    undefined addContentScripts(sequence<ContentScriptDetails> contentScriptList);
+    Promise<any> executeScript(optional InjectDetails details = {});
+    Promise<undefined> insertCSS(optional InjectDetails details = {});
+    undefined removeContentScripts(sequence<DOMString>? scriptNameList);
+
+    // Configuration methods.
+    Promise<undefined> clearData(
+      optional ClearDataOptions options = {},
+      optional ClearDataTypeSet types = {});
+    Promise<boolean> getAudioState();
+    Promise<long> getZoom();
+    Promise<boolean> isAudioMuted();
+    undefined setAudioMuted(boolean mute);
+    Promise<undefined> setZoom(long zoomFactor);
+
+    // Capture methods.
+    undefined captureVisibleRegion();
+    undefined print();
+};
+</xmp>
+</dd>
+</dl>
 
 The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
 
@@ -422,61 +499,6 @@ considerations:
 # API # {#api}
 <!-- ====================================================================== -->
 
-<!-- ====================================================================== -->
-## Controlled Frame HTML Element ## {#html-element}
-<!-- ====================================================================== -->
-
-<xmp class="idl">
-[Exposed=Window, SecureContext]
-interface ControlledFrame : HTMLElement {
-    [HTMLConstructor] constructor();
-
-    [CEReactions] attribute USVString src;
-    [CEReactions] attribute DOMString name;
-    [CEReactions] attribute boolean allowfullscreen;
-    [CEReactions] attribute boolean allowscaling;
-    [CEReactions] attribute boolean allowtransparency;
-    [CEReactions] attribute boolean autosize;
-    [CEReactions] attribute DOMString maxheight;
-    [CEReactions] attribute DOMString maxwidth;
-    [CEReactions] attribute DOMString minheight;
-    [CEReactions] attribute DOMString minwidth;
-    attribute DOMString partition;
-
-    readonly attribute WindowProxy? contentWindow;
-    readonly attribute ContextMenus contextMenus;
-
-    // Navigation methods.
-    Promise<undefined> back();
-    boolean canGoBack();
-    boolean canGoForward();
-    Promise<undefined> forward();
-    Promise<undefined> go(long relativeIndex);
-    undefined reload();
-    undefined stop();
-
-    // Scripting methods.
-    undefined addContentScripts(sequence<ContentScriptDetails> contentScriptList);
-    Promise<any> executeScript(optional InjectDetails details = {});
-    Promise<undefined> insertCSS(optional InjectDetails details = {});
-    undefined removeContentScripts(sequence<DOMString>? scriptNameList);
-
-    // Configuration methods.
-    Promise<undefined> clearData(
-      optional ClearDataOptions options = {},
-      optional ClearDataTypeSet types = {});
-    Promise<boolean> getAudioState();
-    Promise<long> getZoom();
-    Promise<boolean> isAudioMuted();
-    undefined setAudioMuted(boolean mute);
-    Promise<undefined> setZoom(long zoomFactor);
-
-    // Capture methods.
-    undefined captureVisibleRegion();
-    undefined print();
-};
-</xmp>
-
 If the "controlled-frame" feature is enabled for an IWA in its manifest, each
 IWA frame will have access to a ControlledFrame element.
 
@@ -486,11 +508,11 @@ IWA frame will have access to a ControlledFrame element.
 
 <div class="domintro note">
 
-  : {{ControlledFrame/go()|go}}()
+  : {{HTMLControlledFrame/go()|go}}()
 
   :: Reloads the current page.
 
-  : {{ControlledFrame/go()|go}}(<var>relativeIndex</var>)
+  : {{HTMLControlledFrame/go()|go}}(<var>relativeIndex</var>)
 
   :: Goes back or forward <var>relativeIndex</var> number of steps in the overall
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
@@ -502,7 +524,7 @@ IWA frame will have access to a ControlledFrame element.
 
     If the relative index is out of range, does nothing.
 
-  : {{ControlledFrame/back()|back}}()
+  : {{HTMLControlledFrame/back()|back}}()
 
   :: Goes back one step in the overall
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
@@ -512,7 +534,7 @@ IWA frame will have access to a ControlledFrame element.
 
     If there is no previous page, does nothing.
 
-  : {{ControlledFrame/forward()|forward}}()
+  : {{HTMLControlledFrame/forward()|forward}}()
 
   :: Goes forward one step in the overall
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
@@ -522,7 +544,7 @@ IWA frame will have access to a ControlledFrame element.
 
     If there is no next page, does nothing.
 
-  : {{ControlledFrame/canGoBack()|canGoBack}}()
+  : {{HTMLControlledFrame/canGoBack()|canGoBack}}()
 
   :: Returns true if the current
      <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
@@ -533,11 +555,11 @@ IWA frame will have access to a ControlledFrame element.
      <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
      navigable</a>.
 
-  : {{ControlledFrame/reload()|reload}}()
+  : {{HTMLControlledFrame/reload()|reload}}()
 
   :: Reloads the current page.
 
-  : {{ControlledFrame/stop()|stop}}()
+  : {{HTMLControlledFrame/stop()|stop}}()
 
   :: Cancels the document load.
 
