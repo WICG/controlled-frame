@@ -76,6 +76,15 @@ All <{iframe}> use cases are still valid and should continue to use <{iframe}>,
 including IWAs where possible.
 
 <!-- ====================================================================== -->
+<h2 id=based-on-fencedframe-spec>The Fenced Frame spec</h2>
+<!-- ====================================================================== -->
+
+For convenience, the Controlled Frame specification assumes that the Fenced
+Frame specification is in place. There are concepts in that specification, such
+as top-level traversibles, that are broadly useful to refer to in the context
+of Controlled Frame.
+
+<!-- ====================================================================== -->
 <h2 id=the-controlledframe-element>The <dfn element export>controlledframe</dfn> element</h2>
 <!-- ====================================================================== -->
 
