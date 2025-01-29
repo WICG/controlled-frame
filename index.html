@@ -4,9 +4,9 @@
   <title>Controlled Frame API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
+  <meta content="Bikeshed version c67c745b1, updated Fri Jan 17 14:27:28 2025 -0800" name="generator">
   <link href="TBD" rel="canonical">
-  <meta content="c10e65032e9dd91300392527185f0a87abdaea6c" name="revision">
+  <meta content="334d32bad56be19533a83da2491c04f175c8c16b" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -712,7 +712,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-01-08">8 January 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-01-29">29 January 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -780,6 +780,7 @@ embedder.</p>
       <li><a href="#api-config"><span class="secno">6.4</span> <span class="content">Configuration methods</span></a>
       <li><a href="#api-capture"><span class="secno">6.5</span> <span class="content">Capture methods</span></a>
       <li><a href="#api-event"><span class="secno">6.6</span> <span class="content">Event listener API</span></a>
+      <li><a href="#api-web-request"><span class="secno">6.7</span> <span class="content">Web Request API</span></a>
      </ol>
     <li><a href="#controlled-frame-api"><span class="secno">7</span> <span class="content">Controlled Frame API</span></a>
     <li><a href="#acknowledgements"><span class="secno">8</span> <span class="content">Acknowledgements</span></a>
@@ -1059,18 +1060,18 @@ Frame storage user agents, the following cases will be considered:</p>
 associated embedded storage user agents will also be cleared</p>
        <ul>
         <li data-md>
-         <p>This is because if the <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>'s data is cleared,
+         <p>This is because if the <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>’s data is cleared,
 the app will no longer have any context for the associated embedded
 storage user agents and therefore will no longer be used or useful
 to the user or organization</p>
         <li data-md>
-         <p>As a result, we expect that clearing an <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>'s
+         <p>As a result, we expect that clearing an <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>’s
 site data will require clearing all of the associated embedded
 storage user agents</p>
        </ul>
       <li data-md>
        <p>A user may want to clear all site data for a given "https origin", even
-if that origin is stored within an <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>'s embedded
+if that origin is stored within an <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>’s embedded
 storage user agent</p>
        <ul>
         <li data-md>
@@ -1096,10 +1097,10 @@ storage is treated as its own to manage</p>
          </ul>
        </ul>
       <li data-md>
-       <p>User wants to clear the site data for a given <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>'s
+       <p>User wants to clear the site data for a given <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>’s
 Controlled Frame-embedded storage user agent for a given "https origin"</p>
       <li data-md>
-       <p>User wants to clear the site data for a given <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>'s
+       <p>User wants to clear the site data for a given <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>’s
 Controlled Frame-embedded storage user agents for all "https origins"</p>
      </ul>
     <li data-md>
@@ -1255,6 +1256,179 @@ IWA frame will have access to a ControlledFrame element.</p>
 </pre>
    <h3 class="heading settled" data-level="6.5" id="api-capture"><span class="secno">6.5. </span><span class="content">Capture methods</span><a class="self-link" href="#api-capture"></a></h3>
    <h3 class="heading settled" data-level="6.6" id="api-event"><span class="secno">6.6. </span><span class="content">Event listener API</span><a class="self-link" href="#api-event"></a></h3>
+   <h3 class="heading settled" data-level="6.7" id="api-web-request"><span class="secno">6.7. </span><span class="content">Web Request API</span><a class="self-link" href="#api-web-request"></a></h3>
+<pre class="idl highlight def"><c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-resourcetype"><code><c- g>ResourceType</c-></code></dfn> {
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-main_frame"><code><c- s>"main_frame"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-sub_frame"><code><c- s>"sub_frame"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-stylesheet"><code><c- s>"stylesheet"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-script"><code><c- s>"script"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-image"><code><c- s>"image"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-font"><code><c- s>"font"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-object"><code><c- s>"object"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-xmlhttprequest"><code><c- s>"xmlhttprequest"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-ping"><code><c- s>"ping"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-csp_report"><code><c- s>"csp_report"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-media"><code><c- s>"media"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-websocket"><code><c- s>"websocket"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-webbundle"><code><c- s>"webbundle"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-other"><code><c- s>"other"</c-></code></dfn>,
+};
+
+<c- b>callback</c-> <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-webrequesteventlistener"><code><c- g>WebRequestEventListener</c-></code></dfn> {
+  <a data-link-type="idl-name" href="#dictdef-blockingresponse" id="ref-for-dictdef-blockingresponse"><c- n>BlockingResponse</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventListener" data-dfn-type="method" data-export data-lt="handleEvent(details)" id="dom-webrequesteventlistener-handleevent"><code><c- g>handleEvent</c-></code></dfn>(<a data-link-type="idl-name" href="#dictdef-webrequesteventdetails" id="ref-for-dictdef-webrequesteventdetails"><c- n>WebRequestEventDetails</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventListener/handleEvent(details)" data-dfn-type="argument" data-export id="dom-webrequesteventlistener-handleevent-details-details"><code><c- g>details</c-></code></dfn>);
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-requestfilter"><code><c- g>RequestFilter</c-></code></dfn> {
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence⑦"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-resourcetype" id="ref-for-enumdef-resourcetype"><c- n>ResourceType</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="RequestFilter" data-dfn-type="dict-member" data-export data-type="sequence<ResourceType>" id="dom-requestfilter-types"><code><c- g>types</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence⑧"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString①"><c- b>USVString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="RequestFilter" data-dfn-type="dict-member" data-export data-type="sequence<USVString>" id="dom-requestfilter-urls"><code><c- g>urls</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long④"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="RequestFilter" data-dfn-type="dict-member" data-export data-type="long" id="dom-requestfilter-windowid"><code><c- g>windowId</c-></code></dfn>;
+};
+
+<c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-extrainfospec"><code><c- g>ExtraInfoSpec</c-></code></dfn> {
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ExtraInfoSpec" data-dfn-type="enum-value" data-export id="dom-extrainfospec-asyncblocking"><code><c- s>"asyncBlocking"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ExtraInfoSpec" data-dfn-type="enum-value" data-export id="dom-extrainfospec-blocking"><code><c- s>"blocking"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ExtraInfoSpec" data-dfn-type="enum-value" data-export id="dom-extrainfospec-extraheaders"><code><c- s>"extraHeaders"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ExtraInfoSpec" data-dfn-type="enum-value" data-export id="dom-extrainfospec-requestheaders"><code><c- s>"requestHeaders"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="ExtraInfoSpec" data-dfn-type="enum-value" data-export id="dom-extrainfospec-responseheaders"><code><c- s>"responseHeaders"</c-></code></dfn>,
+};
+
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext①"><c- g>SecureContext</c-></a>]
+<c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="webrequestevent"><code><c- g>WebRequestEvent</c-></code></dfn> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①③"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent" data-dfn-type="method" data-export data-lt="addListener(listener, filter, extraInfoSpec)|addListener(listener, filter)|addListener(listener)" id="dom-webrequestevent-addlistener"><code><c- g>addListener</c-></code></dfn>(<a data-link-type="idl-name" href="#callbackdef-webrequesteventlistener" id="ref-for-callbackdef-webrequesteventlistener"><c- n>WebRequestEventListener</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent/addListener(listener, filter, extraInfoSpec), WebRequestEvent/addListener(listener, filter), WebRequestEvent/addListener(listener)" data-dfn-type="argument" data-export id="dom-webrequestevent-addlistener-listener-filter-extrainfospec-listener"><code><c- g>listener</c-></code></dfn>,
+                        <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-requestfilter" id="ref-for-dictdef-requestfilter"><c- n>RequestFilter</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent/addListener(listener, filter, extraInfoSpec), WebRequestEvent/addListener(listener, filter), WebRequestEvent/addListener(listener)" data-dfn-type="argument" data-export id="dom-webrequestevent-addlistener-listener-filter-extrainfospec-filter"><code><c- g>filter</c-></code></dfn> = {},
+                        <c- b>optional</c-> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence⑨"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-extrainfospec" id="ref-for-enumdef-extrainfospec"><c- n>ExtraInfoSpec</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent/addListener(listener, filter, extraInfoSpec), WebRequestEvent/addListener(listener, filter), WebRequestEvent/addListener(listener)" data-dfn-type="argument" data-export id="dom-webrequestevent-addlistener-listener-filter-extrainfospec-extrainfospec"><code><c- g>extraInfoSpec</c-></code></dfn>);
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②⓪"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent" data-dfn-type="method" data-export data-lt="hasListener(listener)" id="dom-webrequestevent-haslistener"><code><c- g>hasListener</c-></code></dfn>(<a data-link-type="idl-name" href="#callbackdef-webrequesteventlistener" id="ref-for-callbackdef-webrequesteventlistener①"><c- n>WebRequestEventListener</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent/hasListener(listener)" data-dfn-type="argument" data-export id="dom-webrequestevent-haslistener-listener-listener"><code><c- g>listener</c-></code></dfn>);
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②①"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent" data-dfn-type="method" data-export data-lt="hasListeners()" id="dom-webrequestevent-haslisteners"><code><c- g>hasListeners</c-></code></dfn>();
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①④"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent" data-dfn-type="method" data-export data-lt="removeListener(listener)" id="dom-webrequestevent-removelistener"><code><c- g>removeListener</c-></code></dfn>(<a data-link-type="idl-name" href="#callbackdef-webrequesteventlistener" id="ref-for-callbackdef-webrequesteventlistener②"><c- n>WebRequestEventListener</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent/removeListener(listener)" data-dfn-type="argument" data-export id="dom-webrequestevent-removelistener-listener-listener"><code><c- g>listener</c-></code></dfn>);
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-httpheader"><code><c- g>HttpHeader</c-></code></dfn> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑥"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="HttpHeader" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-httpheader-name"><code><c- g>name</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑦"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="HttpHeader" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-httpheader-value"><code><c- g>value</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①⓪"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-byte" id="ref-for-idl-byte"><c- b>byte</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="HttpHeader" data-dfn-type="dict-member" data-export data-type="sequence<byte>" id="dom-httpheader-binaryvalue"><code><c- g>binaryValue</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestauthcredentials"><code><c- g>WebRequestAuthCredentials</c-></code></dfn> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑧"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestAuthCredentials" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequestauthcredentials-username"><code><c- g>username</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑨"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestAuthCredentials" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequestauthcredentials-password"><code><c- g>password</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-blockingresponse"><code><c- g>BlockingResponse</c-></code></dfn> {
+  <a data-link-type="idl-name" href="#dictdef-webrequestauthcredentials" id="ref-for-dictdef-webrequestauthcredentials"><c- n>WebRequestAuthCredentials</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="BlockingResponse" data-dfn-type="dict-member" data-export data-type="WebRequestAuthCredentials" id="dom-blockingresponse-authcredentials"><code><c- g>authCredentials</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②②"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="BlockingResponse" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-blockingresponse-cancel"><code><c- g>cancel</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString②"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="BlockingResponse" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-blockingresponse-redirecturl"><code><c- g>redirectUrl</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①①"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader" id="ref-for-dictdef-httpheader"><c- n>HttpHeader</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="BlockingResponse" data-dfn-type="dict-member" data-export data-type="sequence<HttpHeader>" id="dom-blockingresponse-requestheaders"><code><c- g>requestHeaders</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①②"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader" id="ref-for-dictdef-httpheader①"><c- n>HttpHeader</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="BlockingResponse" data-dfn-type="dict-member" data-export data-type="sequence<HttpHeader>" id="dom-blockingresponse-responseheaders"><code><c- g>responseHeaders</c-></code></dfn>;
+};
+
+<c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-documentlifecycle"><code><c- g>DocumentLifecycle</c-></code></dfn> {
+  <dfn class="dfn-paneled idl-code" data-dfn-for="DocumentLifecycle" data-dfn-type="enum-value" data-export id="dom-documentlifecycle-prerender"><code><c- s>"prerender"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="DocumentLifecycle" data-dfn-type="enum-value" data-export id="dom-documentlifecycle-active"><code><c- s>"active"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="DocumentLifecycle" data-dfn-type="enum-value" data-export id="dom-documentlifecycle-cached"><code><c- s>"cached"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="DocumentLifecycle" data-dfn-type="enum-value" data-export id="dom-documentlifecycle-pending_deletion"><code><c- s>"pending_deletion"</c-></code></dfn>,
+};
+
+<c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-frametype"><code><c- g>FrameType</c-></code></dfn> {
+  <dfn class="dfn-paneled idl-code" data-dfn-for="FrameType" data-dfn-type="enum-value" data-export id="dom-frametype-outermost_frame"><code><c- s>"outermost_frame"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="FrameType" data-dfn-type="enum-value" data-export id="dom-frametype-fenced_frame"><code><c- s>"fenced_frame"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="FrameType" data-dfn-type="enum-value" data-export id="dom-frametype-sub_frame"><code><c- s>"sub_frame"</c-></code></dfn>,
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequesteventdetails"><code><c- g>WebRequestEventDetails</c-></code></dfn> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⓪"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequesteventdetails-documentid"><code><c- g>documentId</c-></code></dfn>;
+  <a data-link-type="idl-name" href="#enumdef-documentlifecycle" id="ref-for-enumdef-documentlifecycle"><c- n>DocumentLifecycle</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="DocumentLifecycle" id="dom-webrequesteventdetails-documentlifecycle"><code><c- g>documentLifecycle</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑤"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="long" id="dom-webrequesteventdetails-frameid"><code><c- g>frameId</c-></code></dfn>;
+  <a data-link-type="idl-name" href="#enumdef-frametype" id="ref-for-enumdef-frametype"><c- n>FrameType</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="FrameType" id="dom-webrequesteventdetails-frametype"><code><c- g>frameType</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString③"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-webrequesteventdetails-initiator"><code><c- g>initiator</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②①"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequesteventdetails-method"><code><c- g>method</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②②"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequesteventdetails-parentdocumentid"><code><c- g>parentDocumentId</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑥"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="long" id="dom-webrequesteventdetails-parentframeid"><code><c- g>parentFrameId</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②③"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequesteventdetails-requestid"><code><c- g>requestId</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑦"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="long" id="dom-webrequesteventdetails-timestamp"><code><c- g>timeStamp</c-></code></dfn>;
+  <c- b>required</c-> <a data-link-type="idl-name" href="#enumdef-resourcetype" id="ref-for-enumdef-resourcetype①"><c- n>ResourceType</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="ResourceType" id="dom-webrequesteventdetails-type"><code><c- g>type</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString④"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventDetails" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-webrequesteventdetails-url"><code><c- g>url</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequesteventresponsedetails"><code><c- g>WebRequestEventResponseDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails" id="ref-for-dictdef-webrequesteventdetails①"><c- n>WebRequestEventDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑧"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventResponseDetails" data-dfn-type="dict-member" data-export data-type="long" id="dom-webrequesteventresponsedetails-statuscode"><code><c- g>statusCode</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②④"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventResponseDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequesteventresponsedetails-statusline"><code><c- g>statusLine</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①③"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader" id="ref-for-dictdef-httpheader②"><c- n>HttpHeader</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEventResponseDetails" data-dfn-type="dict-member" data-export data-type="sequence<HttpHeader>" id="dom-webrequesteventresponsedetails-responseheaders"><code><c- g>responseHeaders</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-uploaddata"><code><c- g>UploadData</c-></code></dfn> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-ArrayBuffer" id="ref-for-idl-ArrayBuffer"><c- b>ArrayBuffer</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="UploadData" data-dfn-type="dict-member" data-export data-type="ArrayBuffer" id="dom-uploaddata-bytes"><code><c- g>bytes</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑤"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="UploadData" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-uploaddata-file"><code><c- g>file</c-></code></dfn>;
+};
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-requestbody"><code><c- g>RequestBody</c-></code></dfn> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑥"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="RequestBody" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-requestbody-error"><code><c- g>error</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-any" id="ref-for-idl-any①"><c- b>any</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="RequestBody" data-dfn-type="dict-member" data-export data-type="any" id="dom-requestbody-formdata"><code><c- g>formData</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①④"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-uploaddata" id="ref-for-dictdef-uploaddata"><c- n>UploadData</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="RequestBody" data-dfn-type="dict-member" data-export data-type="sequence<UploadData>" id="dom-requestbody-raw"><code><c- g>raw</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestbeforerequestdetails"><code><c- g>WebRequestBeforeRequestDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails" id="ref-for-dictdef-webrequesteventdetails②"><c- n>WebRequestEventDetails</c-></a> {
+  <a data-link-type="idl-name" href="#dictdef-requestbody" id="ref-for-dictdef-requestbody"><c- n>RequestBody</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestBeforeRequestDetails" data-dfn-type="dict-member" data-export data-type="RequestBody" id="dom-webrequestbeforerequestdetails-requestbody"><code><c- g>requestBody</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestbeforesendheadersdetails"><code><c- g>WebRequestBeforeSendHeadersDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails" id="ref-for-dictdef-webrequesteventdetails③"><c- n>WebRequestEventDetails</c-></a> {
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①⑤"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader" id="ref-for-dictdef-httpheader③"><c- n>HttpHeader</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestBeforeSendHeadersDetails" data-dfn-type="dict-member" data-export data-type="sequence<HttpHeader>" id="dom-webrequestbeforesendheadersdetails-requestheaders"><code><c- g>requestHeaders</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestsendheadersdetails"><code><c- g>WebRequestSendHeadersDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails" id="ref-for-dictdef-webrequesteventdetails④"><c- n>WebRequestEventDetails</c-></a> {
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①⑥"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader" id="ref-for-dictdef-httpheader④"><c- n>HttpHeader</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestSendHeadersDetails" data-dfn-type="dict-member" data-export data-type="sequence<HttpHeader>" id="dom-webrequestsendheadersdetails-requestheaders"><code><c- g>requestHeaders</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestheadersreceiveddetails"><code><c- g>WebRequestHeadersReceivedDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails" id="ref-for-dictdef-webrequesteventresponsedetails"><c- n>WebRequestEventResponseDetails</c-></a> {};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-authchallenger"><code><c- g>AuthChallenger</c-></code></dfn> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑦"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="AuthChallenger" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-authchallenger-host"><code><c- g>host</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑨"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="AuthChallenger" data-dfn-type="dict-member" data-export data-type="long" id="dom-authchallenger-port"><code><c- g>port</c-></code></dfn>;
+};
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestauthrequireddetails"><code><c- g>WebRequestAuthRequiredDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails" id="ref-for-dictdef-webrequesteventresponsedetails①"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a data-link-type="idl-name" href="#dictdef-authchallenger" id="ref-for-dictdef-authchallenger"><c- n>AuthChallenger</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestAuthRequiredDetails" data-dfn-type="dict-member" data-export data-type="AuthChallenger" id="dom-webrequestauthrequireddetails-challenger"><code><c- g>challenger</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②③"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestAuthRequiredDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-webrequestauthrequireddetails-isproxy"><code><c- g>isProxy</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑧"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestAuthRequiredDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequestauthrequireddetails-scheme"><code><c- g>scheme</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑨"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestAuthRequiredDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequestauthrequireddetails-realm"><code><c- g>realm</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestbeforeredirectdetails"><code><c- g>WebRequestBeforeRedirectDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails" id="ref-for-dictdef-webrequesteventresponsedetails②"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②④"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestBeforeRedirectDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-webrequestbeforeredirectdetails-fromcache"><code><c- g>fromCache</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③⓪"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestBeforeRedirectDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequestbeforeredirectdetails-ip"><code><c- g>ip</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString⑤"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestBeforeRedirectDetails" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-webrequestbeforeredirectdetails-redirecturl"><code><c- g>redirectUrl</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestresponsestarteddetails"><code><c- g>WebRequestResponseStartedDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails" id="ref-for-dictdef-webrequesteventresponsedetails③"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②⑤"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestResponseStartedDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-webrequestresponsestarteddetails-fromcache"><code><c- g>fromCache</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③①"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestResponseStartedDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequestresponsestarteddetails-ip"><code><c- g>ip</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequestcompleteddetails"><code><c- g>WebRequestCompletedDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails" id="ref-for-dictdef-webrequesteventresponsedetails④"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②⑥"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestCompletedDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-webrequestcompleteddetails-fromcache"><code><c- g>fromCache</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③②"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestCompletedDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequestcompleteddetails-ip"><code><c- g>ip</c-></code></dfn>;
+};
+
+<c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-webrequesterroroccurreddetails"><code><c- g>WebRequestErrorOccurredDetails</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails" id="ref-for-dictdef-webrequesteventdetails⑤"><c- n>WebRequestEventDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③③"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestErrorOccurredDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequesterroroccurreddetails-error"><code><c- g>error</c-></code></dfn>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②⑦"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestErrorOccurredDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-webrequesterroroccurreddetails-fromcache"><code><c- g>fromCache</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③④"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestErrorOccurredDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-webrequesterroroccurreddetails-ip"><code><c- g>ip</c-></code></dfn>;
+};
+
+<c- b>callback</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-handlerbehaviorchangedcallback"><code><c- g>HandlerBehaviorChangedCallback</c-></code></dfn> = <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑤"><c- b>undefined</c-></a> ();
+
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext②"><c- g>SecureContext</c-></a>]
+<c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="webrequest"><code><c- g>WebRequest</c-></code></dfn> {
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforerequest"><code><c- g>onBeforeRequest</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforesendheaders"><code><c- g>onBeforeSendHeaders</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent②"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onsendheaders"><code><c- g>onSendHeaders</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent③"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onheadersreceived"><code><c- g>onHeadersReceived</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent④"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onauthrequired"><code><c- g>onAuthRequired</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑤"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforeredirect"><code><c- g>onBeforeRedirect</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑥"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onresponsestarted"><code><c- g>onResponseStarted</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑦"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-oncompleted"><code><c- g>onCompleted</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑧"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onerroroccurred"><code><c- g>onErrorOccurred</c-></code></dfn>;
+
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑥"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="method" data-export data-lt="handlerBehaviorChanged(callback)|handlerBehaviorChanged()" id="dom-webrequest-handlerbehaviorchanged"><code><c- g>handlerBehaviorChanged</c-></code></dfn>(<c- b>optional</c-> <a data-link-type="idl-name" href="#callbackdef-handlerbehaviorchangedcallback" id="ref-for-callbackdef-handlerbehaviorchangedcallback"><c- n>HandlerBehaviorChangedCallback</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest/handlerBehaviorChanged(callback), WebRequest/handlerBehaviorChanged()" data-dfn-type="argument" data-export id="dom-webrequest-handlerbehaviorchanged-callback-callback"><code><c- g>callback</c-></code></dfn>);
+};
+</pre>
    <h2 class="heading settled" data-level="7" id="controlled-frame-api"><span class="secno">7. </span><span class="content">Controlled Frame API</span><a class="self-link" href="#controlled-frame-api"></a></h2>
 <pre class="idl highlight def"><c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-contexttype"><code><c- g>ContextType</c-></code></dfn> {
     <dfn class="dfn-paneled idl-code" data-dfn-for="ContextType" data-dfn-type="enum-value" data-export id="dom-contexttype-all"><code><c- s>"all"</c-></code></dfn>,
@@ -1276,55 +1450,55 @@ IWA frame will have access to a ControlledFrame element.</p>
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-onclickdata"><code><c- g>OnClickData</c-></code></dfn> {
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②⓪"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-onclickdata-checked"><code><c- g>checked</c-></code></dfn>;
-    <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②①"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-onclickdata-editable"><code><c- g>editable</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long④"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="long" id="dom-onclickdata-frameid"><code><c- g>frameId</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString①"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-frameurl"><code><c- g>frameUrl</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString②"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-linkurl"><code><c- g>linkUrl</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑥"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-onclickdata-mediatype"><code><c- g>mediaType</c-></code></dfn>;
-    <c- b>required</c-> (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑦"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑤"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="(DOMString or long)" id="dom-onclickdata-menuitemid"><code><c- g>menuItemId</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString③"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-pageurl"><code><c- g>pageUrl</c-></code></dfn>;
-    (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑧"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑥"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="(DOMString or long)" id="dom-onclickdata-parentmenuid"><code><c- g>parentMenuId</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑨"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-onclickdata-selectiontext"><code><c- g>selectionText</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString④"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-srcurl"><code><c- g>srcUrl</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②②"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-onclickdata-waschecked"><code><c- g>wasChecked</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②⑧"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-onclickdata-checked"><code><c- g>checked</c-></code></dfn>;
+    <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②⑨"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-onclickdata-editable"><code><c- g>editable</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long①⓪"><c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="long" id="dom-onclickdata-frameid"><code><c- g>frameId</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString⑥"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-frameurl"><code><c- g>frameUrl</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString⑦"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-linkurl"><code><c- g>linkUrl</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③⑤"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-onclickdata-mediatype"><code><c- g>mediaType</c-></code></dfn>;
+    <c- b>required</c-> (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③⑥"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long①①"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="(DOMString or long)" id="dom-onclickdata-menuitemid"><code><c- g>menuItemId</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString⑧"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-pageurl"><code><c- g>pageUrl</c-></code></dfn>;
+    (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③⑦"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long①②"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="(DOMString or long)" id="dom-onclickdata-parentmenuid"><code><c- g>parentMenuId</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③⑧"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-onclickdata-selectiontext"><code><c- g>selectionText</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString⑨"><c- b>USVString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="USVString" id="dom-onclickdata-srcurl"><code><c- g>srcUrl</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean③⓪"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="OnClickData" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-onclickdata-waschecked"><code><c- g>wasChecked</c-></code></dfn>;
 };
 
-<c- b>callback</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-contextmenuseventlistener"><code><c- g>ContextMenusEventListener</c-></code></dfn> = <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①③"><c- b>undefined</c-></a> (<a data-link-type="idl-name" href="#dictdef-onclickdata" id="ref-for-dictdef-onclickdata"><c- n>OnClickData</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusEventListener" data-dfn-type="argument" data-export id="dom-contextmenuseventlistener-data"><code><c- g>data</c-></code></dfn>);
+<c- b>callback</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-contextmenuseventlistener"><code><c- g>ContextMenusEventListener</c-></code></dfn> = <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑦"><c- b>undefined</c-></a> (<a data-link-type="idl-name" href="#dictdef-onclickdata" id="ref-for-dictdef-onclickdata"><c- n>OnClickData</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusEventListener" data-dfn-type="argument" data-export id="dom-contextmenuseventlistener-data"><code><c- g>data</c-></code></dfn>);
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-contextmenusproperties"><code><c- g>ContextMenusProperties</c-></code></dfn> {
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②③"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contextmenusproperties-checked"><code><c- g>checked</c-></code></dfn>;
-    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence⑦"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-contexttype" id="ref-for-enumdef-contexttype"><c- n>ContextType</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="sequence<ContextType>" id="dom-contextmenusproperties-context"><code><c- g>context</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⓪"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-documenturlpatterns"><code><c- g>documentUrlPatterns</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②④"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contextmenusproperties-enabled"><code><c- g>enabled</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②①"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-parentid"><code><c- g>parentId</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②②"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-targeturlpatterns"><code><c- g>targetUrlPatterns</c-></code></dfn>;
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②③"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-title"><code><c- g>title</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean③①"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contextmenusproperties-checked"><code><c- g>checked</c-></code></dfn>;
+    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①⑦"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-contexttype" id="ref-for-enumdef-contexttype"><c- n>ContextType</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="sequence<ContextType>" id="dom-contextmenusproperties-context"><code><c- g>context</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③⑨"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-documenturlpatterns"><code><c- g>documentUrlPatterns</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean③②"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contextmenusproperties-enabled"><code><c- g>enabled</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④⓪"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-parentid"><code><c- g>parentId</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④①"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-targeturlpatterns"><code><c- g>targetUrlPatterns</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④②"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenusproperties-title"><code><c- g>title</c-></code></dfn>;
     <a data-link-type="idl-name" href="#enumdef-itemtype" id="ref-for-enumdef-itemtype"><c- n>ItemType</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="ItemType" id="dom-contextmenusproperties-type"><code><c- g>type</c-></code></dfn>;
     <a data-link-type="idl-name" href="#callbackdef-contextmenuseventlistener" id="ref-for-callbackdef-contextmenuseventlistener"><c- n>ContextMenusEventListener</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="ContextMenusEventListener" id="dom-contextmenusproperties-onclick"><code><c- g>onclick</c-></code></dfn>;
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-contextmenuscreateproperties"><code><c- g>ContextMenusCreateProperties</c-></code></dfn> : <a data-link-type="idl-name" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties"><c- n>ContextMenusProperties</c-></a> {
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②④"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusCreateProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenuscreateproperties-id"><code><c- g>id</c-></code></dfn>;
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④③"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusCreateProperties" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contextmenuscreateproperties-id"><code><c- g>id</c-></code></dfn>;
 };
 
-<c- b>callback</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-contextmenuscallback"><code><c- g>ContextMenusCallback</c-></code></dfn> = <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①④"><c- b>undefined</c-></a> ();
+<c- b>callback</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-contextmenuscallback"><code><c- g>ContextMenusCallback</c-></code></dfn> = <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑧"><c- b>undefined</c-></a> ();
 
-[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext①"><c- g>SecureContext</c-></a>]
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed③"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext③"><c- g>SecureContext</c-></a>]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="contextmenus"><code><c- g>ContextMenus</c-></code></dfn> {
     // TODO: Define the `onShow` property.
 
     // Returns the ID of the newly created menu item.
-    (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑤"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑦"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="create(properties, callback)" id="dom-contextmenus-create"><code><c- g>create</c-></code></dfn>(
+    (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④④"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long①③"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="create(properties, callback)" id="dom-contextmenus-create"><code><c- g>create</c-></code></dfn>(
         <a data-link-type="idl-name" href="#dictdef-contextmenuscreateproperties" id="ref-for-dictdef-contextmenuscreateproperties"><c- n>ContextMenusCreateProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/create(properties, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-create-properties-callback-properties"><code><c- g>properties</c-></code></dfn>,
         <a data-link-type="idl-name" href="#callbackdef-contextmenuscallback" id="ref-for-callbackdef-contextmenuscallback"><c- n>ContextMenusCallback</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/create(properties, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-create-properties-callback-callback"><code><c- g>callback</c-></code></dfn>);
 
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑤"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="remove(menuItemId, callback)" id="dom-contextmenus-remove"><code><c- g>remove</c-></code></dfn>(
-        (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑥"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑧"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/remove(menuItemId, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-remove-menuitemid-callback-menuitemid"><code><c- g>menuItemId</c-></code></dfn>,
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑨"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="remove(menuItemId, callback)" id="dom-contextmenus-remove"><code><c- g>remove</c-></code></dfn>(
+        (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④⑤"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long①④"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/remove(menuItemId, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-remove-menuitemid-callback-menuitemid"><code><c- g>menuItemId</c-></code></dfn>,
         <a data-link-type="idl-name" href="#callbackdef-contextmenuscallback" id="ref-for-callbackdef-contextmenuscallback①"><c- n>ContextMenusCallback</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/remove(menuItemId, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-remove-menuitemid-callback-callback"><code><c- g>callback</c-></code></dfn>);
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑥"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="removeAll(callback)" id="dom-contextmenus-removeall"><code><c- g>removeAll</c-></code></dfn>(<a data-link-type="idl-name" href="#callbackdef-contextmenuscallback" id="ref-for-callbackdef-contextmenuscallback②"><c- n>ContextMenusCallback</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/removeAll(callback)" data-dfn-type="argument" data-export id="dom-contextmenus-removeall-callback-callback"><code><c- g>callback</c-></code></dfn>);
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①⑦"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="update(id, properties, callback)" id="dom-contextmenus-update"><code><c- g>update</c-></code></dfn>(
-        (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②⑦"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑨"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-callback-id"><code><c- g>id</c-></code></dfn>,
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⓪"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="removeAll(callback)" id="dom-contextmenus-removeall"><code><c- g>removeAll</c-></code></dfn>(<a data-link-type="idl-name" href="#callbackdef-contextmenuscallback" id="ref-for-callbackdef-contextmenuscallback②"><c- n>ContextMenusCallback</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/removeAll(callback)" data-dfn-type="argument" data-export id="dom-contextmenus-removeall-callback-callback"><code><c- g>callback</c-></code></dfn>);
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②①"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="update(id, properties, callback)" id="dom-contextmenus-update"><code><c- g>update</c-></code></dfn>(
+        (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④⑥"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long①⑤"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-callback-id"><code><c- g>id</c-></code></dfn>,
         <a data-link-type="idl-name" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties①"><c- n>ContextMenusProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-callback-properties"><code><c- g>properties</c-></code></dfn>,
         <a data-link-type="idl-name" href="#callbackdef-contextmenuscallback" id="ref-for-callbackdef-contextmenuscallback③"><c- n>ContextMenusCallback</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties, callback)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-callback-callback"><code><c- g>callback</c-></code></dfn>);
 };
@@ -1367,20 +1541,34 @@ IWA frame will have access to a ControlledFrame element.</p>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
+   <li><a href="#dom-documentlifecycle-active">"active"</a><span>, in § 6.7</span>
    <li><a href="#dom-controlledframe-addcontentscripts">addContentScripts(contentScriptList)</a><span>, in § 6.1</span>
+   <li><a href="#dom-webrequestevent-addlistener">addListener(listener)</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequestevent-addlistener">addListener(listener, filter)</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequestevent-addlistener">addListener(listener, filter, extraInfoSpec)</a><span>, in § 6.7</span>
    <li><a href="#dom-contexttype-all">"all"</a><span>, in § 7</span>
    <li><a href="#dom-contentscriptdetails-all_frames">all_frames</a><span>, in § 6.3</span>
    <li><a href="#dom-controlledframe-allowfullscreen">allowfullscreen</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-allowscaling">allowscaling</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-allowtransparency">allowtransparency</a><span>, in § 6.1</span>
    <li><a href="#dom-cleardatatypeset-appcache">appcache</a><span>, in § 6.4</span>
+   <li><a href="#dom-extrainfospec-asyncblocking">"asyncBlocking"</a><span>, in § 6.7</span>
    <li><a href="#dom-contexttype-audio">"audio"</a><span>, in § 7</span>
+   <li><a href="#dictdef-authchallenger">AuthChallenger</a><span>, in § 6.7</span>
+   <li><a href="#dom-blockingresponse-authcredentials">authCredentials</a><span>, in § 6.7</span>
    <li><a href="#dom-controlledframe-autosize">autosize</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-back">back()</a><span>, in § 6.1</span>
+   <li><a href="#dom-httpheader-binaryvalue">binaryValue</a><span>, in § 6.7</span>
+   <li><a href="#dom-extrainfospec-blocking">"blocking"</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-blockingresponse">BlockingResponse</a><span>, in § 6.7</span>
+   <li><a href="#dom-uploaddata-bytes">bytes</a><span>, in § 6.7</span>
    <li><a href="#dom-cleardatatypeset-cache">cache</a><span>, in § 6.4</span>
+   <li><a href="#dom-documentlifecycle-cached">"cached"</a><span>, in § 6.7</span>
+   <li><a href="#dom-blockingresponse-cancel">cancel</a><span>, in § 6.7</span>
    <li><a href="#dom-controlledframe-cangoback">canGoBack()</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-cangoforward">canGoForward()</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-capturevisibleregion">captureVisibleRegion()</a><span>, in § 6.1</span>
+   <li><a href="#dom-webrequestauthrequireddetails-challenger">challenger</a><span>, in § 6.7</span>
    <li><a href="#dom-itemtype-checkbox">"checkbox"</a><span>, in § 7</span>
    <li>
     checked
@@ -1414,48 +1602,109 @@ IWA frame will have access to a ControlledFrame element.</p>
    <li><a href="#dom-controlledframe-controlledframe">ControlledFrame()</a><span>, in § 6.1</span>
    <li><a href="#dom-cleardatatypeset-cookies">cookies</a><span>, in § 6.4</span>
    <li><a href="#dom-contextmenus-create">create(properties, callback)</a><span>, in § 7</span>
+   <li><a href="#dom-resourcetype-csp_report">"csp_report"</a><span>, in § 6.7</span>
    <li><a href="#dom-contentscriptdetails-css">css</a><span>, in § 6.3</span>
    <li><a href="#dom-runat-document_end">"document_end"</a><span>, in § 6.3</span>
+   <li><a href="#dom-webrequesteventdetails-documentid">documentId</a><span>, in § 6.7</span>
    <li><a href="#dom-runat-document_idle">"document_idle"</a><span>, in § 6.3</span>
+   <li><a href="#enumdef-documentlifecycle">DocumentLifecycle</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequesteventdetails-documentlifecycle">documentLifecycle</a><span>, in § 6.7</span>
    <li><a href="#dom-runat-document_start">"document_start"</a><span>, in § 6.3</span>
    <li><a href="#dom-contextmenusproperties-documenturlpatterns">documentUrlPatterns</a><span>, in § 7</span>
    <li><a href="#dom-contexttype-editable">"editable"</a><span>, in § 7</span>
    <li><a href="#dom-onclickdata-editable">editable</a><span>, in § 7</span>
    <li><a href="#dom-contextmenusproperties-enabled">enabled</a><span>, in § 7</span>
+   <li>
+    error
+    <ul>
+     <li><a href="#dom-requestbody-error">dict-member for RequestBody</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequesterroroccurreddetails-error">dict-member for WebRequestErrorOccurredDetails</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-contentscriptdetails-exclude_globs">exclude_globs</a><span>, in § 6.3</span>
    <li><a href="#dom-contentscriptdetails-exclude_matches">exclude_matches</a><span>, in § 6.3</span>
    <li><a href="#dom-controlledframe-executescript">executeScript()</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-executescript">executeScript(details)</a><span>, in § 6.1</span>
-   <li><a href="#dom-injectdetails-file">file</a><span>, in § 6.3</span>
+   <li><a href="#dom-extrainfospec-extraheaders">"extraHeaders"</a><span>, in § 6.7</span>
+   <li><a href="#enumdef-extrainfospec">ExtraInfoSpec</a><span>, in § 6.7</span>
+   <li><a href="#dom-frametype-fenced_frame">"fenced_frame"</a><span>, in § 6.7</span>
+   <li>
+    file
+    <ul>
+     <li><a href="#dom-injectdetails-file">dict-member for InjectDetails</a><span>, in § 6.3</span>
+     <li><a href="#dom-uploaddata-file">dict-member for UploadData</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-injectionitems-files">files</a><span>, in § 6.3</span>
    <li><a href="#dom-cleardatatypeset-filesystems">fileSystems</a><span>, in § 6.4</span>
+   <li><a href="#dom-resourcetype-font">"font"</a><span>, in § 6.7</span>
+   <li><a href="#dom-requestbody-formdata">formData</a><span>, in § 6.7</span>
    <li><a href="#dom-controlledframe-forward">forward()</a><span>, in § 6.1</span>
    <li><a href="#dom-contexttype-frame">"frame"</a><span>, in § 7</span>
-   <li><a href="#dom-onclickdata-frameid">frameId</a><span>, in § 7</span>
+   <li>
+    frameId
+    <ul>
+     <li><a href="#dom-onclickdata-frameid">dict-member for OnClickData</a><span>, in § 7</span>
+     <li><a href="#dom-webrequesteventdetails-frameid">dict-member for WebRequestEventDetails</a><span>, in § 6.7</span>
+    </ul>
+   <li><a href="#enumdef-frametype">FrameType</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequesteventdetails-frametype">frameType</a><span>, in § 6.7</span>
    <li><a href="#dom-onclickdata-frameurl">frameUrl</a><span>, in § 7</span>
+   <li>
+    fromCache
+    <ul>
+     <li><a href="#dom-webrequestbeforeredirectdetails-fromcache">dict-member for WebRequestBeforeRedirectDetails</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequestcompleteddetails-fromcache">dict-member for WebRequestCompletedDetails</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequesterroroccurreddetails-fromcache">dict-member for WebRequestErrorOccurredDetails</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequestresponsestarteddetails-fromcache">dict-member for WebRequestResponseStartedDetails</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-controlledframe-getaudiostate">getAudioState()</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-getzoom">getZoom()</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-go">go(relativeIndex)</a><span>, in § 6.1</span>
+   <li><a href="#dom-webrequesteventlistener-handleevent">handleEvent(details)</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-handlerbehaviorchanged">handlerBehaviorChanged()</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-handlerbehaviorchanged">handlerBehaviorChanged(callback)</a><span>, in § 6.7</span>
+   <li><a href="#callbackdef-handlerbehaviorchangedcallback">HandlerBehaviorChangedCallback</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequestevent-haslistener">hasListener(listener)</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequestevent-haslisteners">hasListeners()</a><span>, in § 6.7</span>
+   <li><a href="#dom-authchallenger-host">host</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-httpheader">HttpHeader</a><span>, in § 6.7</span>
    <li><a href="#dom-contextmenuscreateproperties-id">id</a><span>, in § 7</span>
-   <li><a href="#dom-contexttype-image">"image"</a><span>, in § 7</span>
+   <li>
+    "image"
+    <ul>
+     <li><a href="#dom-contexttype-image">enum-value for ContextType</a><span>, in § 7</span>
+     <li><a href="#dom-resourcetype-image">enum-value for ResourceType</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-contentscriptdetails-include_globs">include_globs</a><span>, in § 6.3</span>
    <li><a href="#dom-cleardatatypeset-indexeddb">indexedDB</a><span>, in § 6.4</span>
+   <li><a href="#dom-webrequesteventdetails-initiator">initiator</a><span>, in § 6.7</span>
    <li><a href="#dictdef-injectdetails">InjectDetails</a><span>, in § 6.3</span>
    <li><a href="#dictdef-injectionitems">InjectionItems</a><span>, in § 6.3</span>
    <li><a href="#dom-controlledframe-insertcss">insertCSS()</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-insertcss">insertCSS(details)</a><span>, in § 6.1</span>
+   <li>
+    ip
+    <ul>
+     <li><a href="#dom-webrequestbeforeredirectdetails-ip">dict-member for WebRequestBeforeRedirectDetails</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequestcompleteddetails-ip">dict-member for WebRequestCompletedDetails</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequesterroroccurreddetails-ip">dict-member for WebRequestErrorOccurredDetails</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequestresponsestarteddetails-ip">dict-member for WebRequestResponseStartedDetails</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-controlledframe-isaudiomuted">isAudioMuted()</a><span>, in § 6.1</span>
+   <li><a href="#dom-webrequestauthrequireddetails-isproxy">isProxy</a><span>, in § 6.7</span>
    <li><a href="#enumdef-itemtype">ItemType</a><span>, in § 7</span>
    <li><a href="#dom-contentscriptdetails-js">js</a><span>, in § 6.3</span>
    <li><a href="#dom-contexttype-link">"link"</a><span>, in § 7</span>
    <li><a href="#dom-onclickdata-linkurl">linkUrl</a><span>, in § 7</span>
    <li><a href="#dom-cleardatatypeset-localstorage">localStorage</a><span>, in § 6.4</span>
+   <li><a href="#dom-resourcetype-main_frame">"main_frame"</a><span>, in § 6.7</span>
    <li><a href="#dom-contentscriptdetails-match_about_blank">match_about_blank</a><span>, in § 6.3</span>
    <li><a href="#dom-contentscriptdetails-matches">matches</a><span>, in § 6.3</span>
    <li><a href="#dom-controlledframe-maxheight">maxheight</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-maxwidth">maxwidth</a><span>, in § 6.1</span>
+   <li><a href="#dom-resourcetype-media">"media"</a><span>, in § 6.7</span>
    <li><a href="#dom-onclickdata-mediatype">mediaType</a><span>, in § 7</span>
    <li><a href="#dom-onclickdata-menuitemid">menuItemId</a><span>, in § 7</span>
+   <li><a href="#dom-webrequesteventdetails-method">method</a><span>, in § 6.7</span>
    <li><a href="#dom-controlledframe-minheight">minheight</a><span>, in § 6.1</span>
    <li><a href="#dom-controlledframe-minwidth">minwidth</a><span>, in § 6.1</span>
    <li>
@@ -1463,24 +1712,75 @@ IWA frame will have access to a ControlledFrame element.</p>
     <ul>
      <li><a href="#dom-controlledframe-name">attribute for ControlledFrame</a><span>, in § 6.1</span>
      <li><a href="#dom-contentscriptdetails-name">dict-member for ContentScriptDetails</a><span>, in § 6.3</span>
+     <li><a href="#dom-httpheader-name">dict-member for HttpHeader</a><span>, in § 6.7</span>
     </ul>
    <li><a href="#dom-itemtype-normal">"normal"</a><span>, in § 7</span>
+   <li><a href="#dom-resourcetype-object">"object"</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onauthrequired">onAuthRequired</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onbeforeredirect">onBeforeRedirect</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onbeforerequest">onBeforeRequest</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onbeforesendheaders">onBeforeSendHeaders</a><span>, in § 6.7</span>
    <li><a href="#dom-contextmenusproperties-onclick">onclick</a><span>, in § 7</span>
    <li><a href="#dictdef-onclickdata">OnClickData</a><span>, in § 7</span>
+   <li><a href="#dom-webrequest-oncompleted">onCompleted</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onerroroccurred">onErrorOccurred</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onheadersreceived">onHeadersReceived</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onresponsestarted">onResponseStarted</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequest-onsendheaders">onSendHeaders</a><span>, in § 6.7</span>
+   <li><a href="#dom-resourcetype-other">"other"</a><span>, in § 6.7</span>
+   <li><a href="#dom-frametype-outermost_frame">"outermost_frame"</a><span>, in § 6.7</span>
    <li><a href="#dom-contexttype-page">"page"</a><span>, in § 7</span>
    <li><a href="#dom-onclickdata-pageurl">pageUrl</a><span>, in § 7</span>
+   <li><a href="#dom-webrequesteventdetails-parentdocumentid">parentDocumentId</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequesteventdetails-parentframeid">parentFrameId</a><span>, in § 6.7</span>
    <li><a href="#dom-contextmenusproperties-parentid">parentId</a><span>, in § 7</span>
    <li><a href="#dom-onclickdata-parentmenuid">parentMenuId</a><span>, in § 7</span>
    <li><a href="#dom-controlledframe-partition">partition</a><span>, in § 6.1</span>
+   <li><a href="#dom-webrequestauthcredentials-password">password</a><span>, in § 6.7</span>
+   <li><a href="#dom-documentlifecycle-pending_deletion">"pending_deletion"</a><span>, in § 6.7</span>
    <li><a href="#dom-cleardatatypeset-persistentcookies">persistentCookies</a><span>, in § 6.4</span>
+   <li><a href="#dom-resourcetype-ping">"ping"</a><span>, in § 6.7</span>
+   <li><a href="#dom-authchallenger-port">port</a><span>, in § 6.7</span>
+   <li><a href="#dom-documentlifecycle-prerender">"prerender"</a><span>, in § 6.7</span>
    <li><a href="#dom-controlledframe-print">print()</a><span>, in § 6.1</span>
    <li><a href="#dom-itemtype-radio">"radio"</a><span>, in § 7</span>
+   <li><a href="#dom-requestbody-raw">raw</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequestauthrequireddetails-realm">realm</a><span>, in § 6.7</span>
+   <li>
+    redirectUrl
+    <ul>
+     <li><a href="#dom-blockingresponse-redirecturl">dict-member for BlockingResponse</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequestbeforeredirectdetails-redirecturl">dict-member for WebRequestBeforeRedirectDetails</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-controlledframe-reload">reload()</a><span>, in § 6.1</span>
    <li><a href="#dom-contextmenus-removeall">removeAll(callback)</a><span>, in § 7</span>
    <li><a href="#dom-controlledframe-removecontentscripts">removeContentScripts(scriptNameList)</a><span>, in § 6.1</span>
+   <li><a href="#dom-webrequestevent-removelistener">removeListener(listener)</a><span>, in § 6.7</span>
    <li><a href="#dom-contextmenus-remove">remove(menuItemId, callback)</a><span>, in § 7</span>
+   <li><a href="#dictdef-requestbody">RequestBody</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequestbeforerequestdetails-requestbody">requestBody</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-requestfilter">RequestFilter</a><span>, in § 6.7</span>
+   <li><a href="#dom-extrainfospec-requestheaders">"requestHeaders"</a><span>, in § 6.7</span>
+   <li>
+    requestHeaders
+    <ul>
+     <li><a href="#dom-blockingresponse-requestheaders">dict-member for BlockingResponse</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequestbeforesendheadersdetails-requestheaders">dict-member for WebRequestBeforeSendHeadersDetails</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequestsendheadersdetails-requestheaders">dict-member for WebRequestSendHeadersDetails</a><span>, in § 6.7</span>
+    </ul>
+   <li><a href="#dom-webrequesteventdetails-requestid">requestId</a><span>, in § 6.7</span>
+   <li><a href="#enumdef-resourcetype">ResourceType</a><span>, in § 6.7</span>
+   <li><a href="#dom-extrainfospec-responseheaders">"responseHeaders"</a><span>, in § 6.7</span>
+   <li>
+    responseHeaders
+    <ul>
+     <li><a href="#dom-blockingresponse-responseheaders">dict-member for BlockingResponse</a><span>, in § 6.7</span>
+     <li><a href="#dom-webrequesteventresponsedetails-responseheaders">dict-member for WebRequestEventResponseDetails</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-contentscriptdetails-run_at">run_at</a><span>, in § 6.3</span>
    <li><a href="#enumdef-runat">RunAt</a><span>, in § 6.3</span>
+   <li><a href="#dom-webrequestauthrequireddetails-scheme">scheme</a><span>, in § 6.7</span>
+   <li><a href="#dom-resourcetype-script">"script"</a><span>, in § 6.7</span>
    <li><a href="#dom-contexttype-selection">"selection"</a><span>, in § 7</span>
    <li><a href="#dom-onclickdata-selectiontext">selectionText</a><span>, in § 7</span>
    <li><a href="#dom-itemtype-separator">"separator"</a><span>, in § 7</span>
@@ -1490,14 +1790,54 @@ IWA frame will have access to a ControlledFrame element.</p>
    <li><a href="#dom-cleardataoptions-since">since</a><span>, in § 6.4</span>
    <li><a href="#dom-controlledframe-src">src</a><span>, in § 6.1</span>
    <li><a href="#dom-onclickdata-srcurl">srcUrl</a><span>, in § 7</span>
+   <li><a href="#dom-webrequesteventresponsedetails-statuscode">statusCode</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequesteventresponsedetails-statusline">statusLine</a><span>, in § 6.7</span>
    <li><a href="#dom-controlledframe-stop">stop()</a><span>, in § 6.1</span>
+   <li><a href="#dom-resourcetype-stylesheet">"stylesheet"</a><span>, in § 6.7</span>
+   <li>
+    "sub_frame"
+    <ul>
+     <li><a href="#dom-frametype-sub_frame">enum-value for FrameType</a><span>, in § 6.7</span>
+     <li><a href="#dom-resourcetype-sub_frame">enum-value for ResourceType</a><span>, in § 6.7</span>
+    </ul>
    <li><a href="#dom-contextmenusproperties-targeturlpatterns">targetUrlPatterns</a><span>, in § 7</span>
+   <li><a href="#dom-webrequesteventdetails-timestamp">timeStamp</a><span>, in § 6.7</span>
    <li><a href="#dom-contextmenusproperties-title">title</a><span>, in § 7</span>
-   <li><a href="#dom-contextmenusproperties-type">type</a><span>, in § 7</span>
+   <li>
+    type
+    <ul>
+     <li><a href="#dom-contextmenusproperties-type">dict-member for ContextMenusProperties</a><span>, in § 7</span>
+     <li><a href="#dom-webrequesteventdetails-type">dict-member for WebRequestEventDetails</a><span>, in § 6.7</span>
+    </ul>
+   <li><a href="#dom-requestfilter-types">types</a><span>, in § 6.7</span>
    <li><a href="#dom-contextmenus-update">update(id, properties, callback)</a><span>, in § 7</span>
+   <li><a href="#dictdef-uploaddata">UploadData</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequesteventdetails-url">url</a><span>, in § 6.7</span>
+   <li><a href="#dom-requestfilter-urls">urls</a><span>, in § 6.7</span>
+   <li><a href="#dom-webrequestauthcredentials-username">username</a><span>, in § 6.7</span>
+   <li><a href="#dom-httpheader-value">value</a><span>, in § 6.7</span>
    <li><a href="#dom-contexttype-video">"video"</a><span>, in § 7</span>
    <li><a href="#dom-onclickdata-waschecked">wasChecked</a><span>, in § 7</span>
+   <li><a href="#dom-resourcetype-webbundle">"webbundle"</a><span>, in § 6.7</span>
+   <li><a href="#webrequest">WebRequest</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestauthcredentials">WebRequestAuthCredentials</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestauthrequireddetails">WebRequestAuthRequiredDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestbeforeredirectdetails">WebRequestBeforeRedirectDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestbeforerequestdetails">WebRequestBeforeRequestDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestbeforesendheadersdetails">WebRequestBeforeSendHeadersDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestcompleteddetails">WebRequestCompletedDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequesterroroccurreddetails">WebRequestErrorOccurredDetails</a><span>, in § 6.7</span>
+   <li><a href="#webrequestevent">WebRequestEvent</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequesteventdetails">WebRequestEventDetails</a><span>, in § 6.7</span>
+   <li><a href="#callbackdef-webrequesteventlistener">WebRequestEventListener</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequesteventresponsedetails">WebRequestEventResponseDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestheadersreceiveddetails">WebRequestHeadersReceivedDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestresponsestarteddetails">WebRequestResponseStartedDetails</a><span>, in § 6.7</span>
+   <li><a href="#dictdef-webrequestsendheadersdetails">WebRequestSendHeadersDetails</a><span>, in § 6.7</span>
+   <li><a href="#dom-resourcetype-websocket">"websocket"</a><span>, in § 6.7</span>
    <li><a href="#dom-cleardatatypeset-websql">webSQL</a><span>, in § 6.4</span>
+   <li><a href="#dom-requestfilter-windowid">windowId</a><span>, in § 6.7</span>
+   <li><a href="#dom-resourcetype-xmlhttprequest">"xmlhttprequest"</a><span>, in § 6.7</span>
   </ul>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
@@ -1513,6 +1853,7 @@ IWA frame will have access to a ControlledFrame element.</p>
    <li>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="2f8afbfe">ArrayBuffer</span>
      <li><span class="dfn-paneled" id="8855a9aa">DOMString</span>
      <li><span class="dfn-paneled" id="889e932f">Exposed</span>
      <li><span class="dfn-paneled" id="bdbd19d1">Promise</span>
@@ -1520,6 +1861,7 @@ IWA frame will have access to a ControlledFrame element.</p>
      <li><span class="dfn-paneled" id="b0d7f3c3">USVString</span>
      <li><span class="dfn-paneled" id="6c6b1005">any</span>
      <li><span class="dfn-paneled" id="5372cca8">boolean</span>
+     <li><span class="dfn-paneled" id="f4813f78">byte</span>
      <li><span class="dfn-paneled" id="f8de33a3">long</span>
      <li><span class="dfn-paneled" id="9cce47fd">sequence</span>
      <li><span class="dfn-paneled" id="5f90bbfb">undefined</span>
@@ -1640,6 +1982,178 @@ IWA frame will have access to a ControlledFrame element.</p>
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-cleardatatypeset-persistentcookies"><code><c- g>persistentCookies</c-></code></a>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-cleardatatypeset-sessioncookies"><code><c- g>sessionCookies</c-></code></a>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-cleardatatypeset-websql"><code><c- g>webSQL</c-></code></a>;
+};
+
+<c- b>enum</c-> <a href="#enumdef-resourcetype"><code><c- g>ResourceType</c-></code></a> {
+  <a href="#dom-resourcetype-main_frame"><code><c- s>"main_frame"</c-></code></a>,
+  <a href="#dom-resourcetype-sub_frame"><code><c- s>"sub_frame"</c-></code></a>,
+  <a href="#dom-resourcetype-stylesheet"><code><c- s>"stylesheet"</c-></code></a>,
+  <a href="#dom-resourcetype-script"><code><c- s>"script"</c-></code></a>,
+  <a href="#dom-resourcetype-image"><code><c- s>"image"</c-></code></a>,
+  <a href="#dom-resourcetype-font"><code><c- s>"font"</c-></code></a>,
+  <a href="#dom-resourcetype-object"><code><c- s>"object"</c-></code></a>,
+  <a href="#dom-resourcetype-xmlhttprequest"><code><c- s>"xmlhttprequest"</c-></code></a>,
+  <a href="#dom-resourcetype-ping"><code><c- s>"ping"</c-></code></a>,
+  <a href="#dom-resourcetype-csp_report"><code><c- s>"csp_report"</c-></code></a>,
+  <a href="#dom-resourcetype-media"><code><c- s>"media"</c-></code></a>,
+  <a href="#dom-resourcetype-websocket"><code><c- s>"websocket"</c-></code></a>,
+  <a href="#dom-resourcetype-webbundle"><code><c- s>"webbundle"</c-></code></a>,
+  <a href="#dom-resourcetype-other"><code><c- s>"other"</c-></code></a>,
+};
+
+<c- b>callback</c-> <c- b>interface</c-> <a href="#callbackdef-webrequesteventlistener"><code><c- g>WebRequestEventListener</c-></code></a> {
+  <a data-link-type="idl-name" href="#dictdef-blockingresponse"><c- n>BlockingResponse</c-></a>? <a href="#dom-webrequesteventlistener-handleevent"><code><c- g>handleEvent</c-></code></a>(<a data-link-type="idl-name" href="#dictdef-webrequesteventdetails"><c- n>WebRequestEventDetails</c-></a> <a href="#dom-webrequesteventlistener-handleevent-details-details"><code><c- g>details</c-></code></a>);
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-requestfilter"><code><c- g>RequestFilter</c-></code></a> {
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-resourcetype"><c- n>ResourceType</c-></a>> <a data-type="sequence<ResourceType>" href="#dom-requestfilter-types"><code><c- g>types</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString"><c- b>USVString</c-></a>> <a data-type="sequence<USVString>" href="#dom-requestfilter-urls"><code><c- g>urls</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long"><c- b>long</c-></a> <a data-type="long" href="#dom-requestfilter-windowid"><code><c- g>windowId</c-></code></a>;
+};
+
+<c- b>enum</c-> <a href="#enumdef-extrainfospec"><code><c- g>ExtraInfoSpec</c-></code></a> {
+  <a href="#dom-extrainfospec-asyncblocking"><code><c- s>"asyncBlocking"</c-></code></a>,
+  <a href="#dom-extrainfospec-blocking"><code><c- s>"blocking"</c-></code></a>,
+  <a href="#dom-extrainfospec-extraheaders"><code><c- s>"extraHeaders"</c-></code></a>,
+  <a href="#dom-extrainfospec-requestheaders"><code><c- s>"requestHeaders"</c-></code></a>,
+  <a href="#dom-extrainfospec-responseheaders"><code><c- s>"responseHeaders"</c-></code></a>,
+};
+
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
+<c- b>interface</c-> <a href="#webrequestevent"><code><c- g>WebRequestEvent</c-></code></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined"><c- b>undefined</c-></a> <a href="#dom-webrequestevent-addlistener"><code><c- g>addListener</c-></code></a>(<a data-link-type="idl-name" href="#callbackdef-webrequesteventlistener"><c- n>WebRequestEventListener</c-></a> <a href="#dom-webrequestevent-addlistener-listener-filter-extrainfospec-listener"><code><c- g>listener</c-></code></a>,
+                        <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-requestfilter"><c- n>RequestFilter</c-></a> <a href="#dom-webrequestevent-addlistener-listener-filter-extrainfospec-filter"><code><c- g>filter</c-></code></a> = {},
+                        <c- b>optional</c-> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-extrainfospec"><c- n>ExtraInfoSpec</c-></a>> <a href="#dom-webrequestevent-addlistener-listener-filter-extrainfospec-extrainfospec"><code><c- g>extraInfoSpec</c-></code></a>);
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a href="#dom-webrequestevent-haslistener"><code><c- g>hasListener</c-></code></a>(<a data-link-type="idl-name" href="#callbackdef-webrequesteventlistener"><c- n>WebRequestEventListener</c-></a> <a href="#dom-webrequestevent-haslistener-listener-listener"><code><c- g>listener</c-></code></a>);
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a href="#dom-webrequestevent-haslisteners"><code><c- g>hasListeners</c-></code></a>();
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined"><c- b>undefined</c-></a> <a href="#dom-webrequestevent-removelistener"><code><c- g>removeListener</c-></code></a>(<a data-link-type="idl-name" href="#callbackdef-webrequesteventlistener"><c- n>WebRequestEventListener</c-></a> <a href="#dom-webrequestevent-removelistener-listener-listener"><code><c- g>listener</c-></code></a>);
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-httpheader"><code><c- g>HttpHeader</c-></code></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-httpheader-name"><code><c- g>name</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-httpheader-value"><code><c- g>value</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-byte"><c- b>byte</c-></a>> <a data-type="sequence<byte>" href="#dom-httpheader-binaryvalue"><code><c- g>binaryValue</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestauthcredentials"><code><c- g>WebRequestAuthCredentials</c-></code></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequestauthcredentials-username"><code><c- g>username</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequestauthcredentials-password"><code><c- g>password</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-blockingresponse"><code><c- g>BlockingResponse</c-></code></a> {
+  <a data-link-type="idl-name" href="#dictdef-webrequestauthcredentials"><c- n>WebRequestAuthCredentials</c-></a> <a data-type="WebRequestAuthCredentials" href="#dom-blockingresponse-authcredentials"><code><c- g>authCredentials</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-blockingresponse-cancel"><code><c- g>cancel</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString"><c- b>USVString</c-></a> <a data-type="USVString" href="#dom-blockingresponse-redirecturl"><code><c- g>redirectUrl</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader"><c- n>HttpHeader</c-></a>> <a data-type="sequence<HttpHeader>" href="#dom-blockingresponse-requestheaders"><code><c- g>requestHeaders</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader"><c- n>HttpHeader</c-></a>> <a data-type="sequence<HttpHeader>" href="#dom-blockingresponse-responseheaders"><code><c- g>responseHeaders</c-></code></a>;
+};
+
+<c- b>enum</c-> <a href="#enumdef-documentlifecycle"><code><c- g>DocumentLifecycle</c-></code></a> {
+  <a href="#dom-documentlifecycle-prerender"><code><c- s>"prerender"</c-></code></a>,
+  <a href="#dom-documentlifecycle-active"><code><c- s>"active"</c-></code></a>,
+  <a href="#dom-documentlifecycle-cached"><code><c- s>"cached"</c-></code></a>,
+  <a href="#dom-documentlifecycle-pending_deletion"><code><c- s>"pending_deletion"</c-></code></a>,
+};
+
+<c- b>enum</c-> <a href="#enumdef-frametype"><code><c- g>FrameType</c-></code></a> {
+  <a href="#dom-frametype-outermost_frame"><code><c- s>"outermost_frame"</c-></code></a>,
+  <a href="#dom-frametype-fenced_frame"><code><c- s>"fenced_frame"</c-></code></a>,
+  <a href="#dom-frametype-sub_frame"><code><c- s>"sub_frame"</c-></code></a>,
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequesteventdetails"><code><c- g>WebRequestEventDetails</c-></code></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequesteventdetails-documentid"><code><c- g>documentId</c-></code></a>;
+  <a data-link-type="idl-name" href="#enumdef-documentlifecycle"><c- n>DocumentLifecycle</c-></a> <a data-type="DocumentLifecycle" href="#dom-webrequesteventdetails-documentlifecycle"><code><c- g>documentLifecycle</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long"><c- b>long</c-></a> <a data-type="long" href="#dom-webrequesteventdetails-frameid"><code><c- g>frameId</c-></code></a>;
+  <a data-link-type="idl-name" href="#enumdef-frametype"><c- n>FrameType</c-></a> <a data-type="FrameType" href="#dom-webrequesteventdetails-frametype"><code><c- g>frameType</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString"><c- b>USVString</c-></a> <a data-type="USVString" href="#dom-webrequesteventdetails-initiator"><code><c- g>initiator</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequesteventdetails-method"><code><c- g>method</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequesteventdetails-parentdocumentid"><code><c- g>parentDocumentId</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long"><c- b>long</c-></a> <a data-type="long" href="#dom-webrequesteventdetails-parentframeid"><code><c- g>parentFrameId</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequesteventdetails-requestid"><code><c- g>requestId</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long"><c- b>long</c-></a> <a data-type="long" href="#dom-webrequesteventdetails-timestamp"><code><c- g>timeStamp</c-></code></a>;
+  <c- b>required</c-> <a data-link-type="idl-name" href="#enumdef-resourcetype"><c- n>ResourceType</c-></a> <a data-type="ResourceType" href="#dom-webrequesteventdetails-type"><code><c- g>type</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString"><c- b>USVString</c-></a> <a data-type="USVString" href="#dom-webrequesteventdetails-url"><code><c- g>url</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequesteventresponsedetails"><code><c- g>WebRequestEventResponseDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails"><c- n>WebRequestEventDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long"><c- b>long</c-></a> <a data-type="long" href="#dom-webrequesteventresponsedetails-statuscode"><code><c- g>statusCode</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequesteventresponsedetails-statusline"><code><c- g>statusLine</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader"><c- n>HttpHeader</c-></a>> <a data-type="sequence<HttpHeader>" href="#dom-webrequesteventresponsedetails-responseheaders"><code><c- g>responseHeaders</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-uploaddata"><code><c- g>UploadData</c-></code></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-ArrayBuffer"><c- b>ArrayBuffer</c-></a> <a data-type="ArrayBuffer" href="#dom-uploaddata-bytes"><code><c- g>bytes</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-uploaddata-file"><code><c- g>file</c-></code></a>;
+};
+<c- b>dictionary</c-> <a href="#dictdef-requestbody"><code><c- g>RequestBody</c-></code></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-requestbody-error"><code><c- g>error</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-any"><c- b>any</c-></a> <a data-type="any" href="#dom-requestbody-formdata"><code><c- g>formData</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-uploaddata"><c- n>UploadData</c-></a>> <a data-type="sequence<UploadData>" href="#dom-requestbody-raw"><code><c- g>raw</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestbeforerequestdetails"><code><c- g>WebRequestBeforeRequestDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails"><c- n>WebRequestEventDetails</c-></a> {
+  <a data-link-type="idl-name" href="#dictdef-requestbody"><c- n>RequestBody</c-></a> <a data-type="RequestBody" href="#dom-webrequestbeforerequestdetails-requestbody"><code><c- g>requestBody</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestbeforesendheadersdetails"><code><c- g>WebRequestBeforeSendHeadersDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails"><c- n>WebRequestEventDetails</c-></a> {
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader"><c- n>HttpHeader</c-></a>> <a data-type="sequence<HttpHeader>" href="#dom-webrequestbeforesendheadersdetails-requestheaders"><code><c- g>requestHeaders</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestsendheadersdetails"><code><c- g>WebRequestSendHeadersDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails"><c- n>WebRequestEventDetails</c-></a> {
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#dictdef-httpheader"><c- n>HttpHeader</c-></a>> <a data-type="sequence<HttpHeader>" href="#dom-webrequestsendheadersdetails-requestheaders"><code><c- g>requestHeaders</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestheadersreceiveddetails"><code><c- g>WebRequestHeadersReceivedDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails"><c- n>WebRequestEventResponseDetails</c-></a> {};
+
+<c- b>dictionary</c-> <a href="#dictdef-authchallenger"><code><c- g>AuthChallenger</c-></code></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-authchallenger-host"><code><c- g>host</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long"><c- b>long</c-></a> <a data-type="long" href="#dom-authchallenger-port"><code><c- g>port</c-></code></a>;
+};
+<c- b>dictionary</c-> <a href="#dictdef-webrequestauthrequireddetails"><code><c- g>WebRequestAuthRequiredDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a data-link-type="idl-name" href="#dictdef-authchallenger"><c- n>AuthChallenger</c-></a> <a data-type="AuthChallenger" href="#dom-webrequestauthrequireddetails-challenger"><code><c- g>challenger</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-webrequestauthrequireddetails-isproxy"><code><c- g>isProxy</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequestauthrequireddetails-scheme"><code><c- g>scheme</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequestauthrequireddetails-realm"><code><c- g>realm</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestbeforeredirectdetails"><code><c- g>WebRequestBeforeRedirectDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-webrequestbeforeredirectdetails-fromcache"><code><c- g>fromCache</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequestbeforeredirectdetails-ip"><code><c- g>ip</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString"><c- b>USVString</c-></a> <a data-type="USVString" href="#dom-webrequestbeforeredirectdetails-redirecturl"><code><c- g>redirectUrl</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestresponsestarteddetails"><code><c- g>WebRequestResponseStartedDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-webrequestresponsestarteddetails-fromcache"><code><c- g>fromCache</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequestresponsestarteddetails-ip"><code><c- g>ip</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequestcompleteddetails"><code><c- g>WebRequestCompletedDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventresponsedetails"><c- n>WebRequestEventResponseDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-webrequestcompleteddetails-fromcache"><code><c- g>fromCache</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequestcompleteddetails-ip"><code><c- g>ip</c-></code></a>;
+};
+
+<c- b>dictionary</c-> <a href="#dictdef-webrequesterroroccurreddetails"><code><c- g>WebRequestErrorOccurredDetails</c-></code></a> : <a data-link-type="idl-name" href="#dictdef-webrequesteventdetails"><c- n>WebRequestEventDetails</c-></a> {
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequesterroroccurreddetails-error"><code><c- g>error</c-></code></a>;
+  <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-webrequesterroroccurreddetails-fromcache"><code><c- g>fromCache</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-webrequesterroroccurreddetails-ip"><code><c- g>ip</c-></code></a>;
+};
+
+<c- b>callback</c-> <a href="#callbackdef-handlerbehaviorchangedcallback"><code><c- g>HandlerBehaviorChangedCallback</c-></code></a> = <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined"><c- b>undefined</c-></a> ();
+
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
+<c- b>interface</c-> <a href="#webrequest"><code><c- g>WebRequest</c-></code></a> {
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onbeforerequest"><code><c- g>onBeforeRequest</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onbeforesendheaders"><code><c- g>onBeforeSendHeaders</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onsendheaders"><code><c- g>onSendHeaders</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onheadersreceived"><code><c- g>onHeadersReceived</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onauthrequired"><code><c- g>onAuthRequired</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onbeforeredirect"><code><c- g>onBeforeRedirect</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onresponsestarted"><code><c- g>onResponseStarted</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-oncompleted"><code><c- g>onCompleted</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent"><c- n>WebRequestEvent</c-></a> <a data-readonly data-type="WebRequestEvent" href="#dom-webrequest-onerroroccurred"><code><c- g>onErrorOccurred</c-></code></a>;
+
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined"><c- b>undefined</c-></a> <a href="#dom-webrequest-handlerbehaviorchanged"><code><c- g>handlerBehaviorChanged</c-></code></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#callbackdef-handlerbehaviorchangedcallback"><c- n>HandlerBehaviorChangedCallback</c-></a> <a href="#dom-webrequest-handlerbehaviorchanged-callback-callback"><code><c- g>callback</c-></code></a>);
 };
 
 <c- b>enum</c-> <a href="#enumdef-contexttype"><code><c- g>ContextType</c-></code></a> {
@@ -1916,32 +2430,60 @@ function parseHTML(markup) {
 "use strict";
 {
 let dfnPanelData = {
+"2f8afbfe": {"dfnID":"2f8afbfe","dfnText":"ArrayBuffer","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-ArrayBuffer"}],"title":"6.7. Web Request API"}],"url":"https://webidl.spec.whatwg.org/#idl-ArrayBuffer"},
 "402ed79d": {"dfnID":"402ed79d","dfnText":"CEReactions","external":true,"refSections":[{"refs":[{"id":"ref-for-cereactions"},{"id":"ref-for-cereactions\u2460"},{"id":"ref-for-cereactions\u2461"},{"id":"ref-for-cereactions\u2462"},{"id":"ref-for-cereactions\u2463"},{"id":"ref-for-cereactions\u2464"},{"id":"ref-for-cereactions\u2465"},{"id":"ref-for-cereactions\u2466"},{"id":"ref-for-cereactions\u2467"},{"id":"ref-for-cereactions\u2468"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions"},
-"5372cca8": {"dfnID":"5372cca8","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-boolean"},{"id":"ref-for-idl-boolean\u2460"},{"id":"ref-for-idl-boolean\u2461"},{"id":"ref-for-idl-boolean\u2462"},{"id":"ref-for-idl-boolean\u2463"},{"id":"ref-for-idl-boolean\u2464"},{"id":"ref-for-idl-boolean\u2465"},{"id":"ref-for-idl-boolean\u2466"},{"id":"ref-for-idl-boolean\u2467"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-boolean\u2468"},{"id":"ref-for-idl-boolean\u2460\u24ea"}],"title":"6.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-boolean\u2460\u2460"},{"id":"ref-for-idl-boolean\u2460\u2461"},{"id":"ref-for-idl-boolean\u2460\u2462"},{"id":"ref-for-idl-boolean\u2460\u2463"},{"id":"ref-for-idl-boolean\u2460\u2464"},{"id":"ref-for-idl-boolean\u2460\u2465"},{"id":"ref-for-idl-boolean\u2460\u2466"},{"id":"ref-for-idl-boolean\u2460\u2467"},{"id":"ref-for-idl-boolean\u2460\u2468"}],"title":"6.4. Configuration methods"},{"refs":[{"id":"ref-for-idl-boolean\u2461\u24ea"},{"id":"ref-for-idl-boolean\u2461\u2460"},{"id":"ref-for-idl-boolean\u2461\u2461"},{"id":"ref-for-idl-boolean\u2461\u2462"},{"id":"ref-for-idl-boolean\u2461\u2463"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-boolean"},
-"5f90bbfb": {"dfnID":"5f90bbfb","dfnText":"undefined","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-undefined"},{"id":"ref-for-idl-undefined\u2460"},{"id":"ref-for-idl-undefined\u2461"},{"id":"ref-for-idl-undefined\u2462"},{"id":"ref-for-idl-undefined\u2463"},{"id":"ref-for-idl-undefined\u2464"},{"id":"ref-for-idl-undefined\u2465"},{"id":"ref-for-idl-undefined\u2466"},{"id":"ref-for-idl-undefined\u2467"},{"id":"ref-for-idl-undefined\u2468"},{"id":"ref-for-idl-undefined\u2460\u24ea"},{"id":"ref-for-idl-undefined\u2460\u2460"},{"id":"ref-for-idl-undefined\u2460\u2461"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-undefined\u2460\u2462"},{"id":"ref-for-idl-undefined\u2460\u2463"},{"id":"ref-for-idl-undefined\u2460\u2464"},{"id":"ref-for-idl-undefined\u2460\u2465"},{"id":"ref-for-idl-undefined\u2460\u2466"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-undefined"},
-"6c6b1005": {"dfnID":"6c6b1005","dfnText":"any","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-any"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"https://webidl.spec.whatwg.org/#idl-any"},
+"5372cca8": {"dfnID":"5372cca8","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-boolean"},{"id":"ref-for-idl-boolean\u2460"},{"id":"ref-for-idl-boolean\u2461"},{"id":"ref-for-idl-boolean\u2462"},{"id":"ref-for-idl-boolean\u2463"},{"id":"ref-for-idl-boolean\u2464"},{"id":"ref-for-idl-boolean\u2465"},{"id":"ref-for-idl-boolean\u2466"},{"id":"ref-for-idl-boolean\u2467"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-boolean\u2468"},{"id":"ref-for-idl-boolean\u2460\u24ea"}],"title":"6.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-boolean\u2460\u2460"},{"id":"ref-for-idl-boolean\u2460\u2461"},{"id":"ref-for-idl-boolean\u2460\u2462"},{"id":"ref-for-idl-boolean\u2460\u2463"},{"id":"ref-for-idl-boolean\u2460\u2464"},{"id":"ref-for-idl-boolean\u2460\u2465"},{"id":"ref-for-idl-boolean\u2460\u2466"},{"id":"ref-for-idl-boolean\u2460\u2467"},{"id":"ref-for-idl-boolean\u2460\u2468"}],"title":"6.4. Configuration methods"},{"refs":[{"id":"ref-for-idl-boolean\u2461\u24ea"},{"id":"ref-for-idl-boolean\u2461\u2460"},{"id":"ref-for-idl-boolean\u2461\u2461"},{"id":"ref-for-idl-boolean\u2461\u2462"},{"id":"ref-for-idl-boolean\u2461\u2463"},{"id":"ref-for-idl-boolean\u2461\u2464"},{"id":"ref-for-idl-boolean\u2461\u2465"},{"id":"ref-for-idl-boolean\u2461\u2466"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-idl-boolean\u2461\u2467"},{"id":"ref-for-idl-boolean\u2461\u2468"},{"id":"ref-for-idl-boolean\u2462\u24ea"},{"id":"ref-for-idl-boolean\u2462\u2460"},{"id":"ref-for-idl-boolean\u2462\u2461"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-boolean"},
+"5f90bbfb": {"dfnID":"5f90bbfb","dfnText":"undefined","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-undefined"},{"id":"ref-for-idl-undefined\u2460"},{"id":"ref-for-idl-undefined\u2461"},{"id":"ref-for-idl-undefined\u2462"},{"id":"ref-for-idl-undefined\u2463"},{"id":"ref-for-idl-undefined\u2464"},{"id":"ref-for-idl-undefined\u2465"},{"id":"ref-for-idl-undefined\u2466"},{"id":"ref-for-idl-undefined\u2467"},{"id":"ref-for-idl-undefined\u2468"},{"id":"ref-for-idl-undefined\u2460\u24ea"},{"id":"ref-for-idl-undefined\u2460\u2460"},{"id":"ref-for-idl-undefined\u2460\u2461"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-undefined\u2460\u2462"},{"id":"ref-for-idl-undefined\u2460\u2463"},{"id":"ref-for-idl-undefined\u2460\u2464"},{"id":"ref-for-idl-undefined\u2460\u2465"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-idl-undefined\u2460\u2466"},{"id":"ref-for-idl-undefined\u2460\u2467"},{"id":"ref-for-idl-undefined\u2460\u2468"},{"id":"ref-for-idl-undefined\u2461\u24ea"},{"id":"ref-for-idl-undefined\u2461\u2460"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-undefined"},
+"6c6b1005": {"dfnID":"6c6b1005","dfnText":"any","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-any"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-any\u2460"}],"title":"6.7. Web Request API"}],"url":"https://webidl.spec.whatwg.org/#idl-any"},
 "87fcd40c": {"dfnID":"87fcd40c","dfnText":"iframe","external":true,"refSections":[{"refs":[{"id":"ref-for-the-iframe-element"},{"id":"ref-for-the-iframe-element\u2460"},{"id":"ref-for-the-iframe-element\u2461"},{"id":"ref-for-the-iframe-element\u2462"},{"id":"ref-for-the-iframe-element\u2463"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-the-iframe-element\u2464"},{"id":"ref-for-the-iframe-element\u2465"}],"title":"3.2. Embedding third party web content without restriction"}],"url":"https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element"},
-"8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"},{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-DOMString\u2466"},{"id":"ref-for-idl-DOMString\u2467"},{"id":"ref-for-idl-DOMString\u2468"},{"id":"ref-for-idl-DOMString\u2460\u24ea"},{"id":"ref-for-idl-DOMString\u2460\u2460"},{"id":"ref-for-idl-DOMString\u2460\u2461"},{"id":"ref-for-idl-DOMString\u2460\u2462"},{"id":"ref-for-idl-DOMString\u2460\u2463"},{"id":"ref-for-idl-DOMString\u2460\u2464"}],"title":"6.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-DOMString\u2460\u2465"},{"id":"ref-for-idl-DOMString\u2460\u2466"},{"id":"ref-for-idl-DOMString\u2460\u2467"},{"id":"ref-for-idl-DOMString\u2460\u2468"},{"id":"ref-for-idl-DOMString\u2461\u24ea"},{"id":"ref-for-idl-DOMString\u2461\u2460"},{"id":"ref-for-idl-DOMString\u2461\u2461"},{"id":"ref-for-idl-DOMString\u2461\u2462"},{"id":"ref-for-idl-DOMString\u2461\u2463"},{"id":"ref-for-idl-DOMString\u2461\u2464"},{"id":"ref-for-idl-DOMString\u2461\u2465"},{"id":"ref-for-idl-DOMString\u2461\u2466"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
-"889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-Exposed\u2460"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
+"8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"},{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-DOMString\u2466"},{"id":"ref-for-idl-DOMString\u2467"},{"id":"ref-for-idl-DOMString\u2468"},{"id":"ref-for-idl-DOMString\u2460\u24ea"},{"id":"ref-for-idl-DOMString\u2460\u2460"},{"id":"ref-for-idl-DOMString\u2460\u2461"},{"id":"ref-for-idl-DOMString\u2460\u2462"},{"id":"ref-for-idl-DOMString\u2460\u2463"},{"id":"ref-for-idl-DOMString\u2460\u2464"}],"title":"6.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-DOMString\u2460\u2465"},{"id":"ref-for-idl-DOMString\u2460\u2466"},{"id":"ref-for-idl-DOMString\u2460\u2467"},{"id":"ref-for-idl-DOMString\u2460\u2468"},{"id":"ref-for-idl-DOMString\u2461\u24ea"},{"id":"ref-for-idl-DOMString\u2461\u2460"},{"id":"ref-for-idl-DOMString\u2461\u2461"},{"id":"ref-for-idl-DOMString\u2461\u2462"},{"id":"ref-for-idl-DOMString\u2461\u2463"},{"id":"ref-for-idl-DOMString\u2461\u2464"},{"id":"ref-for-idl-DOMString\u2461\u2465"},{"id":"ref-for-idl-DOMString\u2461\u2466"},{"id":"ref-for-idl-DOMString\u2461\u2467"},{"id":"ref-for-idl-DOMString\u2461\u2468"},{"id":"ref-for-idl-DOMString\u2462\u24ea"},{"id":"ref-for-idl-DOMString\u2462\u2460"},{"id":"ref-for-idl-DOMString\u2462\u2461"},{"id":"ref-for-idl-DOMString\u2462\u2462"},{"id":"ref-for-idl-DOMString\u2462\u2463"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-idl-DOMString\u2462\u2464"},{"id":"ref-for-idl-DOMString\u2462\u2465"},{"id":"ref-for-idl-DOMString\u2462\u2466"},{"id":"ref-for-idl-DOMString\u2462\u2467"},{"id":"ref-for-idl-DOMString\u2462\u2468"},{"id":"ref-for-idl-DOMString\u2463\u24ea"},{"id":"ref-for-idl-DOMString\u2463\u2460"},{"id":"ref-for-idl-DOMString\u2463\u2461"},{"id":"ref-for-idl-DOMString\u2463\u2462"},{"id":"ref-for-idl-DOMString\u2463\u2463"},{"id":"ref-for-idl-DOMString\u2463\u2464"},{"id":"ref-for-idl-DOMString\u2463\u2465"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
+"889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-Exposed\u2460"},{"id":"ref-for-Exposed\u2461"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-Exposed\u2462"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
 "94039a0c": {"dfnID":"94039a0c","dfnText":"WindowProxy","external":true,"refSections":[{"refs":[{"id":"ref-for-windowproxy"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy"},
 "973aaf8e": {"dfnID":"973aaf8e","dfnText":"HTMLConstructor","external":true,"refSections":[{"refs":[{"id":"ref-for-htmlconstructor"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor"},
-"9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-sequence\u2461"},{"id":"ref-for-idl-sequence\u2462"},{"id":"ref-for-idl-sequence\u2463"},{"id":"ref-for-idl-sequence\u2464"},{"id":"ref-for-idl-sequence\u2465"}],"title":"6.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-sequence\u2466"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
+"9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-sequence\u2461"},{"id":"ref-for-idl-sequence\u2462"},{"id":"ref-for-idl-sequence\u2463"},{"id":"ref-for-idl-sequence\u2464"},{"id":"ref-for-idl-sequence\u2465"}],"title":"6.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-sequence\u2466"},{"id":"ref-for-idl-sequence\u2467"},{"id":"ref-for-idl-sequence\u2468"},{"id":"ref-for-idl-sequence\u2460\u24ea"},{"id":"ref-for-idl-sequence\u2460\u2460"},{"id":"ref-for-idl-sequence\u2460\u2461"},{"id":"ref-for-idl-sequence\u2460\u2462"},{"id":"ref-for-idl-sequence\u2460\u2463"},{"id":"ref-for-idl-sequence\u2460\u2464"},{"id":"ref-for-idl-sequence\u2460\u2465"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-idl-sequence\u2460\u2466"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
 "b08d0bb2": {"dfnID":"b08d0bb2","dfnText":"HTMLElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmlelement"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#htmlelement"},
-"b0d7f3c3": {"dfnID":"b0d7f3c3","dfnText":"USVString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-USVString"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-USVString\u2460"},{"id":"ref-for-idl-USVString\u2461"},{"id":"ref-for-idl-USVString\u2462"},{"id":"ref-for-idl-USVString\u2463"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-USVString"},
-"b75bb3bd": {"dfnID":"b75bb3bd","dfnText":"SecureContext","external":true,"refSections":[{"refs":[{"id":"ref-for-SecureContext"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-SecureContext\u2460"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#SecureContext"},
+"b0d7f3c3": {"dfnID":"b0d7f3c3","dfnText":"USVString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-USVString"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-USVString\u2460"},{"id":"ref-for-idl-USVString\u2461"},{"id":"ref-for-idl-USVString\u2462"},{"id":"ref-for-idl-USVString\u2463"},{"id":"ref-for-idl-USVString\u2464"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-idl-USVString\u2465"},{"id":"ref-for-idl-USVString\u2466"},{"id":"ref-for-idl-USVString\u2467"},{"id":"ref-for-idl-USVString\u2468"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-USVString"},
+"b75bb3bd": {"dfnID":"b75bb3bd","dfnText":"SecureContext","external":true,"refSections":[{"refs":[{"id":"ref-for-SecureContext"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-SecureContext\u2460"},{"id":"ref-for-SecureContext\u2461"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-SecureContext\u2462"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#SecureContext"},
 "bdbd19d1": {"dfnID":"bdbd19d1","dfnText":"Promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise"},{"id":"ref-for-idl-promise\u2460"},{"id":"ref-for-idl-promise\u2461"},{"id":"ref-for-idl-promise\u2462"},{"id":"ref-for-idl-promise\u2463"},{"id":"ref-for-idl-promise\u2464"},{"id":"ref-for-idl-promise\u2465"},{"id":"ref-for-idl-promise\u2466"},{"id":"ref-for-idl-promise\u2467"},{"id":"ref-for-idl-promise\u2468"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"https://webidl.spec.whatwg.org/#idl-promise"},
 "callbackdef-contextmenuscallback": {"dfnID":"callbackdef-contextmenuscallback","dfnText":"ContextMenusCallback","external":false,"refSections":[{"refs":[{"id":"ref-for-callbackdef-contextmenuscallback"},{"id":"ref-for-callbackdef-contextmenuscallback\u2460"},{"id":"ref-for-callbackdef-contextmenuscallback\u2461"},{"id":"ref-for-callbackdef-contextmenuscallback\u2462"}],"title":"7. Controlled Frame API"}],"url":"#callbackdef-contextmenuscallback"},
 "callbackdef-contextmenuseventlistener": {"dfnID":"callbackdef-contextmenuseventlistener","dfnText":"ContextMenusEventListener","external":false,"refSections":[{"refs":[{"id":"ref-for-callbackdef-contextmenuseventlistener"}],"title":"7. Controlled Frame API"}],"url":"#callbackdef-contextmenuseventlistener"},
+"callbackdef-handlerbehaviorchangedcallback": {"dfnID":"callbackdef-handlerbehaviorchangedcallback","dfnText":"HandlerBehaviorChangedCallback","external":false,"refSections":[{"refs":[{"id":"ref-for-callbackdef-handlerbehaviorchangedcallback"}],"title":"6.7. Web Request API"}],"url":"#callbackdef-handlerbehaviorchangedcallback"},
+"callbackdef-webrequesteventlistener": {"dfnID":"callbackdef-webrequesteventlistener","dfnText":"WebRequestEventListener","external":false,"refSections":[{"refs":[{"id":"ref-for-callbackdef-webrequesteventlistener"},{"id":"ref-for-callbackdef-webrequesteventlistener\u2460"},{"id":"ref-for-callbackdef-webrequesteventlistener\u2461"}],"title":"6.7. Web Request API"}],"url":"#callbackdef-webrequesteventlistener"},
 "contextmenus": {"dfnID":"contextmenus","dfnText":"ContextMenus","external":false,"refSections":[{"refs":[{"id":"ref-for-contextmenus"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"#contextmenus"},
 "controlledframe": {"dfnID":"controlledframe","dfnText":"ControlledFrame","external":false,"refSections":[],"url":"#controlledframe"},
+"dictdef-authchallenger": {"dfnID":"dictdef-authchallenger","dfnText":"AuthChallenger","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-authchallenger"}],"title":"6.7. Web Request API"}],"url":"#dictdef-authchallenger"},
+"dictdef-blockingresponse": {"dfnID":"dictdef-blockingresponse","dfnText":"BlockingResponse","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-blockingresponse"}],"title":"6.7. Web Request API"}],"url":"#dictdef-blockingresponse"},
 "dictdef-cleardataoptions": {"dfnID":"dictdef-cleardataoptions","dfnText":"ClearDataOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-cleardataoptions"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"#dictdef-cleardataoptions"},
 "dictdef-cleardatatypeset": {"dfnID":"dictdef-cleardatatypeset","dfnText":"ClearDataTypeSet","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-cleardatatypeset"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"#dictdef-cleardatatypeset"},
 "dictdef-contentscriptdetails": {"dfnID":"dictdef-contentscriptdetails","dfnText":"ContentScriptDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-contentscriptdetails"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"#dictdef-contentscriptdetails"},
 "dictdef-contextmenuscreateproperties": {"dfnID":"dictdef-contextmenuscreateproperties","dfnText":"ContextMenusCreateProperties","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-contextmenuscreateproperties"}],"title":"7. Controlled Frame API"}],"url":"#dictdef-contextmenuscreateproperties"},
 "dictdef-contextmenusproperties": {"dfnID":"dictdef-contextmenusproperties","dfnText":"ContextMenusProperties","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-contextmenusproperties"},{"id":"ref-for-dictdef-contextmenusproperties\u2460"}],"title":"7. Controlled Frame API"}],"url":"#dictdef-contextmenusproperties"},
+"dictdef-httpheader": {"dfnID":"dictdef-httpheader","dfnText":"HttpHeader","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-httpheader"},{"id":"ref-for-dictdef-httpheader\u2460"},{"id":"ref-for-dictdef-httpheader\u2461"},{"id":"ref-for-dictdef-httpheader\u2462"},{"id":"ref-for-dictdef-httpheader\u2463"}],"title":"6.7. Web Request API"}],"url":"#dictdef-httpheader"},
 "dictdef-injectdetails": {"dfnID":"dictdef-injectdetails","dfnText":"InjectDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-injectdetails"},{"id":"ref-for-dictdef-injectdetails\u2460"}],"title":"6.1. Controlled Frame HTML Element"}],"url":"#dictdef-injectdetails"},
 "dictdef-injectionitems": {"dfnID":"dictdef-injectionitems","dfnText":"InjectionItems","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-injectionitems"},{"id":"ref-for-dictdef-injectionitems\u2460"}],"title":"6.3. Scripting methods"}],"url":"#dictdef-injectionitems"},
 "dictdef-onclickdata": {"dfnID":"dictdef-onclickdata","dfnText":"OnClickData","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-onclickdata"}],"title":"7. Controlled Frame API"}],"url":"#dictdef-onclickdata"},
+"dictdef-requestbody": {"dfnID":"dictdef-requestbody","dfnText":"RequestBody","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-requestbody"}],"title":"6.7. Web Request API"}],"url":"#dictdef-requestbody"},
+"dictdef-requestfilter": {"dfnID":"dictdef-requestfilter","dfnText":"RequestFilter","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-requestfilter"}],"title":"6.7. Web Request API"}],"url":"#dictdef-requestfilter"},
+"dictdef-uploaddata": {"dfnID":"dictdef-uploaddata","dfnText":"UploadData","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-uploaddata"}],"title":"6.7. Web Request API"}],"url":"#dictdef-uploaddata"},
+"dictdef-webrequestauthcredentials": {"dfnID":"dictdef-webrequestauthcredentials","dfnText":"WebRequestAuthCredentials","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-webrequestauthcredentials"}],"title":"6.7. Web Request API"}],"url":"#dictdef-webrequestauthcredentials"},
+"dictdef-webrequestauthrequireddetails": {"dfnID":"dictdef-webrequestauthrequireddetails","dfnText":"WebRequestAuthRequiredDetails","external":false,"refSections":[],"url":"#dictdef-webrequestauthrequireddetails"},
+"dictdef-webrequestbeforeredirectdetails": {"dfnID":"dictdef-webrequestbeforeredirectdetails","dfnText":"WebRequestBeforeRedirectDetails","external":false,"refSections":[],"url":"#dictdef-webrequestbeforeredirectdetails"},
+"dictdef-webrequestbeforerequestdetails": {"dfnID":"dictdef-webrequestbeforerequestdetails","dfnText":"WebRequestBeforeRequestDetails","external":false,"refSections":[],"url":"#dictdef-webrequestbeforerequestdetails"},
+"dictdef-webrequestbeforesendheadersdetails": {"dfnID":"dictdef-webrequestbeforesendheadersdetails","dfnText":"WebRequestBeforeSendHeadersDetails","external":false,"refSections":[],"url":"#dictdef-webrequestbeforesendheadersdetails"},
+"dictdef-webrequestcompleteddetails": {"dfnID":"dictdef-webrequestcompleteddetails","dfnText":"WebRequestCompletedDetails","external":false,"refSections":[],"url":"#dictdef-webrequestcompleteddetails"},
+"dictdef-webrequesterroroccurreddetails": {"dfnID":"dictdef-webrequesterroroccurreddetails","dfnText":"WebRequestErrorOccurredDetails","external":false,"refSections":[],"url":"#dictdef-webrequesterroroccurreddetails"},
+"dictdef-webrequesteventdetails": {"dfnID":"dictdef-webrequesteventdetails","dfnText":"WebRequestEventDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-webrequesteventdetails"},{"id":"ref-for-dictdef-webrequesteventdetails\u2460"},{"id":"ref-for-dictdef-webrequesteventdetails\u2461"},{"id":"ref-for-dictdef-webrequesteventdetails\u2462"},{"id":"ref-for-dictdef-webrequesteventdetails\u2463"},{"id":"ref-for-dictdef-webrequesteventdetails\u2464"}],"title":"6.7. Web Request API"}],"url":"#dictdef-webrequesteventdetails"},
+"dictdef-webrequesteventresponsedetails": {"dfnID":"dictdef-webrequesteventresponsedetails","dfnText":"WebRequestEventResponseDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-webrequesteventresponsedetails"},{"id":"ref-for-dictdef-webrequesteventresponsedetails\u2460"},{"id":"ref-for-dictdef-webrequesteventresponsedetails\u2461"},{"id":"ref-for-dictdef-webrequesteventresponsedetails\u2462"},{"id":"ref-for-dictdef-webrequesteventresponsedetails\u2463"}],"title":"6.7. Web Request API"}],"url":"#dictdef-webrequesteventresponsedetails"},
+"dictdef-webrequestheadersreceiveddetails": {"dfnID":"dictdef-webrequestheadersreceiveddetails","dfnText":"WebRequestHeadersReceivedDetails","external":false,"refSections":[],"url":"#dictdef-webrequestheadersreceiveddetails"},
+"dictdef-webrequestresponsestarteddetails": {"dfnID":"dictdef-webrequestresponsestarteddetails","dfnText":"WebRequestResponseStartedDetails","external":false,"refSections":[],"url":"#dictdef-webrequestresponsestarteddetails"},
+"dictdef-webrequestsendheadersdetails": {"dfnID":"dictdef-webrequestsendheadersdetails","dfnText":"WebRequestSendHeadersDetails","external":false,"refSections":[],"url":"#dictdef-webrequestsendheadersdetails"},
+"dom-authchallenger-host": {"dfnID":"dom-authchallenger-host","dfnText":"host","external":false,"refSections":[],"url":"#dom-authchallenger-host"},
+"dom-authchallenger-port": {"dfnID":"dom-authchallenger-port","dfnText":"port","external":false,"refSections":[],"url":"#dom-authchallenger-port"},
+"dom-blockingresponse-authcredentials": {"dfnID":"dom-blockingresponse-authcredentials","dfnText":"authCredentials","external":false,"refSections":[],"url":"#dom-blockingresponse-authcredentials"},
+"dom-blockingresponse-cancel": {"dfnID":"dom-blockingresponse-cancel","dfnText":"cancel","external":false,"refSections":[],"url":"#dom-blockingresponse-cancel"},
+"dom-blockingresponse-redirecturl": {"dfnID":"dom-blockingresponse-redirecturl","dfnText":"redirectUrl","external":false,"refSections":[],"url":"#dom-blockingresponse-redirecturl"},
+"dom-blockingresponse-requestheaders": {"dfnID":"dom-blockingresponse-requestheaders","dfnText":"requestHeaders","external":false,"refSections":[],"url":"#dom-blockingresponse-requestheaders"},
+"dom-blockingresponse-responseheaders": {"dfnID":"dom-blockingresponse-responseheaders","dfnText":"responseHeaders","external":false,"refSections":[],"url":"#dom-blockingresponse-responseheaders"},
 "dom-cleardataoptions-since": {"dfnID":"dom-cleardataoptions-since","dfnText":"since","external":false,"refSections":[],"url":"#dom-cleardataoptions-since"},
 "dom-cleardatatypeset-appcache": {"dfnID":"dom-cleardatatypeset-appcache","dfnText":"appcache","external":false,"refSections":[],"url":"#dom-cleardatatypeset-appcache"},
 "dom-cleardatatypeset-cache": {"dfnID":"dom-cleardatatypeset-cache","dfnText":"cache","external":false,"refSections":[],"url":"#dom-cleardatatypeset-cache"},
@@ -2036,6 +2578,21 @@ let dfnPanelData = {
 "dom-controlledframe-setzoom-zoomfactor-zoomfactor": {"dfnID":"dom-controlledframe-setzoom-zoomfactor-zoomfactor","dfnText":"zoomFactor","external":false,"refSections":[],"url":"#dom-controlledframe-setzoom-zoomfactor-zoomfactor"},
 "dom-controlledframe-src": {"dfnID":"dom-controlledframe-src","dfnText":"src","external":false,"refSections":[],"url":"#dom-controlledframe-src"},
 "dom-controlledframe-stop": {"dfnID":"dom-controlledframe-stop","dfnText":"stop","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-controlledframe-stop"}],"title":"6.2. Navigation methods"}],"url":"#dom-controlledframe-stop"},
+"dom-documentlifecycle-active": {"dfnID":"dom-documentlifecycle-active","dfnText":"\"active\"","external":false,"refSections":[],"url":"#dom-documentlifecycle-active"},
+"dom-documentlifecycle-cached": {"dfnID":"dom-documentlifecycle-cached","dfnText":"\"cached\"","external":false,"refSections":[],"url":"#dom-documentlifecycle-cached"},
+"dom-documentlifecycle-pending_deletion": {"dfnID":"dom-documentlifecycle-pending_deletion","dfnText":"\"pending_deletion\"","external":false,"refSections":[],"url":"#dom-documentlifecycle-pending_deletion"},
+"dom-documentlifecycle-prerender": {"dfnID":"dom-documentlifecycle-prerender","dfnText":"\"prerender\"","external":false,"refSections":[],"url":"#dom-documentlifecycle-prerender"},
+"dom-extrainfospec-asyncblocking": {"dfnID":"dom-extrainfospec-asyncblocking","dfnText":"\"asyncBlocking\"","external":false,"refSections":[],"url":"#dom-extrainfospec-asyncblocking"},
+"dom-extrainfospec-blocking": {"dfnID":"dom-extrainfospec-blocking","dfnText":"\"blocking\"","external":false,"refSections":[],"url":"#dom-extrainfospec-blocking"},
+"dom-extrainfospec-extraheaders": {"dfnID":"dom-extrainfospec-extraheaders","dfnText":"\"extraHeaders\"","external":false,"refSections":[],"url":"#dom-extrainfospec-extraheaders"},
+"dom-extrainfospec-requestheaders": {"dfnID":"dom-extrainfospec-requestheaders","dfnText":"\"requestHeaders\"","external":false,"refSections":[],"url":"#dom-extrainfospec-requestheaders"},
+"dom-extrainfospec-responseheaders": {"dfnID":"dom-extrainfospec-responseheaders","dfnText":"\"responseHeaders\"","external":false,"refSections":[],"url":"#dom-extrainfospec-responseheaders"},
+"dom-frametype-fenced_frame": {"dfnID":"dom-frametype-fenced_frame","dfnText":"\"fenced_frame\"","external":false,"refSections":[],"url":"#dom-frametype-fenced_frame"},
+"dom-frametype-outermost_frame": {"dfnID":"dom-frametype-outermost_frame","dfnText":"\"outermost_frame\"","external":false,"refSections":[],"url":"#dom-frametype-outermost_frame"},
+"dom-frametype-sub_frame": {"dfnID":"dom-frametype-sub_frame","dfnText":"\"sub_frame\"","external":false,"refSections":[],"url":"#dom-frametype-sub_frame"},
+"dom-httpheader-binaryvalue": {"dfnID":"dom-httpheader-binaryvalue","dfnText":"binaryValue","external":false,"refSections":[],"url":"#dom-httpheader-binaryvalue"},
+"dom-httpheader-name": {"dfnID":"dom-httpheader-name","dfnText":"name","external":false,"refSections":[],"url":"#dom-httpheader-name"},
+"dom-httpheader-value": {"dfnID":"dom-httpheader-value","dfnText":"value","external":false,"refSections":[],"url":"#dom-httpheader-value"},
 "dom-injectdetails-code": {"dfnID":"dom-injectdetails-code","dfnText":"code","external":false,"refSections":[],"url":"#dom-injectdetails-code"},
 "dom-injectdetails-file": {"dfnID":"dom-injectdetails-file","dfnText":"file","external":false,"refSections":[],"url":"#dom-injectdetails-file"},
 "dom-injectionitems-code": {"dfnID":"dom-injectionitems-code","dfnText":"code","external":false,"refSections":[],"url":"#dom-injectionitems-code"},
@@ -2056,13 +2613,98 @@ let dfnPanelData = {
 "dom-onclickdata-selectiontext": {"dfnID":"dom-onclickdata-selectiontext","dfnText":"selectionText","external":false,"refSections":[],"url":"#dom-onclickdata-selectiontext"},
 "dom-onclickdata-srcurl": {"dfnID":"dom-onclickdata-srcurl","dfnText":"srcUrl","external":false,"refSections":[],"url":"#dom-onclickdata-srcurl"},
 "dom-onclickdata-waschecked": {"dfnID":"dom-onclickdata-waschecked","dfnText":"wasChecked","external":false,"refSections":[],"url":"#dom-onclickdata-waschecked"},
+"dom-requestbody-error": {"dfnID":"dom-requestbody-error","dfnText":"error","external":false,"refSections":[],"url":"#dom-requestbody-error"},
+"dom-requestbody-formdata": {"dfnID":"dom-requestbody-formdata","dfnText":"formData","external":false,"refSections":[],"url":"#dom-requestbody-formdata"},
+"dom-requestbody-raw": {"dfnID":"dom-requestbody-raw","dfnText":"raw","external":false,"refSections":[],"url":"#dom-requestbody-raw"},
+"dom-requestfilter-types": {"dfnID":"dom-requestfilter-types","dfnText":"types","external":false,"refSections":[],"url":"#dom-requestfilter-types"},
+"dom-requestfilter-urls": {"dfnID":"dom-requestfilter-urls","dfnText":"urls","external":false,"refSections":[],"url":"#dom-requestfilter-urls"},
+"dom-requestfilter-windowid": {"dfnID":"dom-requestfilter-windowid","dfnText":"windowId","external":false,"refSections":[],"url":"#dom-requestfilter-windowid"},
+"dom-resourcetype-csp_report": {"dfnID":"dom-resourcetype-csp_report","dfnText":"\"csp_report\"","external":false,"refSections":[],"url":"#dom-resourcetype-csp_report"},
+"dom-resourcetype-font": {"dfnID":"dom-resourcetype-font","dfnText":"\"font\"","external":false,"refSections":[],"url":"#dom-resourcetype-font"},
+"dom-resourcetype-image": {"dfnID":"dom-resourcetype-image","dfnText":"\"image\"","external":false,"refSections":[],"url":"#dom-resourcetype-image"},
+"dom-resourcetype-main_frame": {"dfnID":"dom-resourcetype-main_frame","dfnText":"\"main_frame\"","external":false,"refSections":[],"url":"#dom-resourcetype-main_frame"},
+"dom-resourcetype-media": {"dfnID":"dom-resourcetype-media","dfnText":"\"media\"","external":false,"refSections":[],"url":"#dom-resourcetype-media"},
+"dom-resourcetype-object": {"dfnID":"dom-resourcetype-object","dfnText":"\"object\"","external":false,"refSections":[],"url":"#dom-resourcetype-object"},
+"dom-resourcetype-other": {"dfnID":"dom-resourcetype-other","dfnText":"\"other\"","external":false,"refSections":[],"url":"#dom-resourcetype-other"},
+"dom-resourcetype-ping": {"dfnID":"dom-resourcetype-ping","dfnText":"\"ping\"","external":false,"refSections":[],"url":"#dom-resourcetype-ping"},
+"dom-resourcetype-script": {"dfnID":"dom-resourcetype-script","dfnText":"\"script\"","external":false,"refSections":[],"url":"#dom-resourcetype-script"},
+"dom-resourcetype-stylesheet": {"dfnID":"dom-resourcetype-stylesheet","dfnText":"\"stylesheet\"","external":false,"refSections":[],"url":"#dom-resourcetype-stylesheet"},
+"dom-resourcetype-sub_frame": {"dfnID":"dom-resourcetype-sub_frame","dfnText":"\"sub_frame\"","external":false,"refSections":[],"url":"#dom-resourcetype-sub_frame"},
+"dom-resourcetype-webbundle": {"dfnID":"dom-resourcetype-webbundle","dfnText":"\"webbundle\"","external":false,"refSections":[],"url":"#dom-resourcetype-webbundle"},
+"dom-resourcetype-websocket": {"dfnID":"dom-resourcetype-websocket","dfnText":"\"websocket\"","external":false,"refSections":[],"url":"#dom-resourcetype-websocket"},
+"dom-resourcetype-xmlhttprequest": {"dfnID":"dom-resourcetype-xmlhttprequest","dfnText":"\"xmlhttprequest\"","external":false,"refSections":[],"url":"#dom-resourcetype-xmlhttprequest"},
 "dom-runat-document_end": {"dfnID":"dom-runat-document_end","dfnText":"\"document_end\"","external":false,"refSections":[],"url":"#dom-runat-document_end"},
 "dom-runat-document_idle": {"dfnID":"dom-runat-document_idle","dfnText":"\"document_idle\"","external":false,"refSections":[],"url":"#dom-runat-document_idle"},
 "dom-runat-document_start": {"dfnID":"dom-runat-document_start","dfnText":"\"document_start\"","external":false,"refSections":[],"url":"#dom-runat-document_start"},
+"dom-uploaddata-bytes": {"dfnID":"dom-uploaddata-bytes","dfnText":"bytes","external":false,"refSections":[],"url":"#dom-uploaddata-bytes"},
+"dom-uploaddata-file": {"dfnID":"dom-uploaddata-file","dfnText":"file","external":false,"refSections":[],"url":"#dom-uploaddata-file"},
+"dom-webrequest-handlerbehaviorchanged": {"dfnID":"dom-webrequest-handlerbehaviorchanged","dfnText":"handlerBehaviorChanged","external":false,"refSections":[],"url":"#dom-webrequest-handlerbehaviorchanged"},
+"dom-webrequest-handlerbehaviorchanged-callback-callback": {"dfnID":"dom-webrequest-handlerbehaviorchanged-callback-callback","dfnText":"callback","external":false,"refSections":[],"url":"#dom-webrequest-handlerbehaviorchanged-callback-callback"},
+"dom-webrequest-onauthrequired": {"dfnID":"dom-webrequest-onauthrequired","dfnText":"onAuthRequired","external":false,"refSections":[],"url":"#dom-webrequest-onauthrequired"},
+"dom-webrequest-onbeforeredirect": {"dfnID":"dom-webrequest-onbeforeredirect","dfnText":"onBeforeRedirect","external":false,"refSections":[],"url":"#dom-webrequest-onbeforeredirect"},
+"dom-webrequest-onbeforerequest": {"dfnID":"dom-webrequest-onbeforerequest","dfnText":"onBeforeRequest","external":false,"refSections":[],"url":"#dom-webrequest-onbeforerequest"},
+"dom-webrequest-onbeforesendheaders": {"dfnID":"dom-webrequest-onbeforesendheaders","dfnText":"onBeforeSendHeaders","external":false,"refSections":[],"url":"#dom-webrequest-onbeforesendheaders"},
+"dom-webrequest-oncompleted": {"dfnID":"dom-webrequest-oncompleted","dfnText":"onCompleted","external":false,"refSections":[],"url":"#dom-webrequest-oncompleted"},
+"dom-webrequest-onerroroccurred": {"dfnID":"dom-webrequest-onerroroccurred","dfnText":"onErrorOccurred","external":false,"refSections":[],"url":"#dom-webrequest-onerroroccurred"},
+"dom-webrequest-onheadersreceived": {"dfnID":"dom-webrequest-onheadersreceived","dfnText":"onHeadersReceived","external":false,"refSections":[],"url":"#dom-webrequest-onheadersreceived"},
+"dom-webrequest-onresponsestarted": {"dfnID":"dom-webrequest-onresponsestarted","dfnText":"onResponseStarted","external":false,"refSections":[],"url":"#dom-webrequest-onresponsestarted"},
+"dom-webrequest-onsendheaders": {"dfnID":"dom-webrequest-onsendheaders","dfnText":"onSendHeaders","external":false,"refSections":[],"url":"#dom-webrequest-onsendheaders"},
+"dom-webrequestauthcredentials-password": {"dfnID":"dom-webrequestauthcredentials-password","dfnText":"password","external":false,"refSections":[],"url":"#dom-webrequestauthcredentials-password"},
+"dom-webrequestauthcredentials-username": {"dfnID":"dom-webrequestauthcredentials-username","dfnText":"username","external":false,"refSections":[],"url":"#dom-webrequestauthcredentials-username"},
+"dom-webrequestauthrequireddetails-challenger": {"dfnID":"dom-webrequestauthrequireddetails-challenger","dfnText":"challenger","external":false,"refSections":[],"url":"#dom-webrequestauthrequireddetails-challenger"},
+"dom-webrequestauthrequireddetails-isproxy": {"dfnID":"dom-webrequestauthrequireddetails-isproxy","dfnText":"isProxy","external":false,"refSections":[],"url":"#dom-webrequestauthrequireddetails-isproxy"},
+"dom-webrequestauthrequireddetails-realm": {"dfnID":"dom-webrequestauthrequireddetails-realm","dfnText":"realm","external":false,"refSections":[],"url":"#dom-webrequestauthrequireddetails-realm"},
+"dom-webrequestauthrequireddetails-scheme": {"dfnID":"dom-webrequestauthrequireddetails-scheme","dfnText":"scheme","external":false,"refSections":[],"url":"#dom-webrequestauthrequireddetails-scheme"},
+"dom-webrequestbeforeredirectdetails-fromcache": {"dfnID":"dom-webrequestbeforeredirectdetails-fromcache","dfnText":"fromCache","external":false,"refSections":[],"url":"#dom-webrequestbeforeredirectdetails-fromcache"},
+"dom-webrequestbeforeredirectdetails-ip": {"dfnID":"dom-webrequestbeforeredirectdetails-ip","dfnText":"ip","external":false,"refSections":[],"url":"#dom-webrequestbeforeredirectdetails-ip"},
+"dom-webrequestbeforeredirectdetails-redirecturl": {"dfnID":"dom-webrequestbeforeredirectdetails-redirecturl","dfnText":"redirectUrl","external":false,"refSections":[],"url":"#dom-webrequestbeforeredirectdetails-redirecturl"},
+"dom-webrequestbeforerequestdetails-requestbody": {"dfnID":"dom-webrequestbeforerequestdetails-requestbody","dfnText":"requestBody","external":false,"refSections":[],"url":"#dom-webrequestbeforerequestdetails-requestbody"},
+"dom-webrequestbeforesendheadersdetails-requestheaders": {"dfnID":"dom-webrequestbeforesendheadersdetails-requestheaders","dfnText":"requestHeaders","external":false,"refSections":[],"url":"#dom-webrequestbeforesendheadersdetails-requestheaders"},
+"dom-webrequestcompleteddetails-fromcache": {"dfnID":"dom-webrequestcompleteddetails-fromcache","dfnText":"fromCache","external":false,"refSections":[],"url":"#dom-webrequestcompleteddetails-fromcache"},
+"dom-webrequestcompleteddetails-ip": {"dfnID":"dom-webrequestcompleteddetails-ip","dfnText":"ip","external":false,"refSections":[],"url":"#dom-webrequestcompleteddetails-ip"},
+"dom-webrequesterroroccurreddetails-error": {"dfnID":"dom-webrequesterroroccurreddetails-error","dfnText":"error","external":false,"refSections":[],"url":"#dom-webrequesterroroccurreddetails-error"},
+"dom-webrequesterroroccurreddetails-fromcache": {"dfnID":"dom-webrequesterroroccurreddetails-fromcache","dfnText":"fromCache","external":false,"refSections":[],"url":"#dom-webrequesterroroccurreddetails-fromcache"},
+"dom-webrequesterroroccurreddetails-ip": {"dfnID":"dom-webrequesterroroccurreddetails-ip","dfnText":"ip","external":false,"refSections":[],"url":"#dom-webrequesterroroccurreddetails-ip"},
+"dom-webrequestevent-addlistener": {"dfnID":"dom-webrequestevent-addlistener","dfnText":"addListener","external":false,"refSections":[],"url":"#dom-webrequestevent-addlistener"},
+"dom-webrequestevent-addlistener-listener-filter-extrainfospec-extrainfospec": {"dfnID":"dom-webrequestevent-addlistener-listener-filter-extrainfospec-extrainfospec","dfnText":"extraInfoSpec","external":false,"refSections":[],"url":"#dom-webrequestevent-addlistener-listener-filter-extrainfospec-extrainfospec"},
+"dom-webrequestevent-addlistener-listener-filter-extrainfospec-filter": {"dfnID":"dom-webrequestevent-addlistener-listener-filter-extrainfospec-filter","dfnText":"filter","external":false,"refSections":[],"url":"#dom-webrequestevent-addlistener-listener-filter-extrainfospec-filter"},
+"dom-webrequestevent-addlistener-listener-filter-extrainfospec-listener": {"dfnID":"dom-webrequestevent-addlistener-listener-filter-extrainfospec-listener","dfnText":"listener","external":false,"refSections":[],"url":"#dom-webrequestevent-addlistener-listener-filter-extrainfospec-listener"},
+"dom-webrequestevent-haslistener": {"dfnID":"dom-webrequestevent-haslistener","dfnText":"hasListener","external":false,"refSections":[],"url":"#dom-webrequestevent-haslistener"},
+"dom-webrequestevent-haslistener-listener-listener": {"dfnID":"dom-webrequestevent-haslistener-listener-listener","dfnText":"listener","external":false,"refSections":[],"url":"#dom-webrequestevent-haslistener-listener-listener"},
+"dom-webrequestevent-haslisteners": {"dfnID":"dom-webrequestevent-haslisteners","dfnText":"hasListeners","external":false,"refSections":[],"url":"#dom-webrequestevent-haslisteners"},
+"dom-webrequestevent-removelistener": {"dfnID":"dom-webrequestevent-removelistener","dfnText":"removeListener","external":false,"refSections":[],"url":"#dom-webrequestevent-removelistener"},
+"dom-webrequestevent-removelistener-listener-listener": {"dfnID":"dom-webrequestevent-removelistener-listener-listener","dfnText":"listener","external":false,"refSections":[],"url":"#dom-webrequestevent-removelistener-listener-listener"},
+"dom-webrequesteventdetails-documentid": {"dfnID":"dom-webrequesteventdetails-documentid","dfnText":"documentId","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-documentid"},
+"dom-webrequesteventdetails-documentlifecycle": {"dfnID":"dom-webrequesteventdetails-documentlifecycle","dfnText":"documentLifecycle","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-documentlifecycle"},
+"dom-webrequesteventdetails-frameid": {"dfnID":"dom-webrequesteventdetails-frameid","dfnText":"frameId","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-frameid"},
+"dom-webrequesteventdetails-frametype": {"dfnID":"dom-webrequesteventdetails-frametype","dfnText":"frameType","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-frametype"},
+"dom-webrequesteventdetails-initiator": {"dfnID":"dom-webrequesteventdetails-initiator","dfnText":"initiator","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-initiator"},
+"dom-webrequesteventdetails-method": {"dfnID":"dom-webrequesteventdetails-method","dfnText":"method","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-method"},
+"dom-webrequesteventdetails-parentdocumentid": {"dfnID":"dom-webrequesteventdetails-parentdocumentid","dfnText":"parentDocumentId","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-parentdocumentid"},
+"dom-webrequesteventdetails-parentframeid": {"dfnID":"dom-webrequesteventdetails-parentframeid","dfnText":"parentFrameId","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-parentframeid"},
+"dom-webrequesteventdetails-requestid": {"dfnID":"dom-webrequesteventdetails-requestid","dfnText":"requestId","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-requestid"},
+"dom-webrequesteventdetails-timestamp": {"dfnID":"dom-webrequesteventdetails-timestamp","dfnText":"timeStamp","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-timestamp"},
+"dom-webrequesteventdetails-type": {"dfnID":"dom-webrequesteventdetails-type","dfnText":"type","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-type"},
+"dom-webrequesteventdetails-url": {"dfnID":"dom-webrequesteventdetails-url","dfnText":"url","external":false,"refSections":[],"url":"#dom-webrequesteventdetails-url"},
+"dom-webrequesteventlistener-handleevent": {"dfnID":"dom-webrequesteventlistener-handleevent","dfnText":"handleEvent","external":false,"refSections":[],"url":"#dom-webrequesteventlistener-handleevent"},
+"dom-webrequesteventlistener-handleevent-details-details": {"dfnID":"dom-webrequesteventlistener-handleevent-details-details","dfnText":"details","external":false,"refSections":[],"url":"#dom-webrequesteventlistener-handleevent-details-details"},
+"dom-webrequesteventresponsedetails-responseheaders": {"dfnID":"dom-webrequesteventresponsedetails-responseheaders","dfnText":"responseHeaders","external":false,"refSections":[],"url":"#dom-webrequesteventresponsedetails-responseheaders"},
+"dom-webrequesteventresponsedetails-statuscode": {"dfnID":"dom-webrequesteventresponsedetails-statuscode","dfnText":"statusCode","external":false,"refSections":[],"url":"#dom-webrequesteventresponsedetails-statuscode"},
+"dom-webrequesteventresponsedetails-statusline": {"dfnID":"dom-webrequesteventresponsedetails-statusline","dfnText":"statusLine","external":false,"refSections":[],"url":"#dom-webrequesteventresponsedetails-statusline"},
+"dom-webrequestresponsestarteddetails-fromcache": {"dfnID":"dom-webrequestresponsestarteddetails-fromcache","dfnText":"fromCache","external":false,"refSections":[],"url":"#dom-webrequestresponsestarteddetails-fromcache"},
+"dom-webrequestresponsestarteddetails-ip": {"dfnID":"dom-webrequestresponsestarteddetails-ip","dfnText":"ip","external":false,"refSections":[],"url":"#dom-webrequestresponsestarteddetails-ip"},
+"dom-webrequestsendheadersdetails-requestheaders": {"dfnID":"dom-webrequestsendheadersdetails-requestheaders","dfnText":"requestHeaders","external":false,"refSections":[],"url":"#dom-webrequestsendheadersdetails-requestheaders"},
 "enumdef-contexttype": {"dfnID":"enumdef-contexttype","dfnText":"ContextType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-contexttype"}],"title":"7. Controlled Frame API"}],"url":"#enumdef-contexttype"},
+"enumdef-documentlifecycle": {"dfnID":"enumdef-documentlifecycle","dfnText":"DocumentLifecycle","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-documentlifecycle"}],"title":"6.7. Web Request API"}],"url":"#enumdef-documentlifecycle"},
+"enumdef-extrainfospec": {"dfnID":"enumdef-extrainfospec","dfnText":"ExtraInfoSpec","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-extrainfospec"}],"title":"6.7. Web Request API"}],"url":"#enumdef-extrainfospec"},
+"enumdef-frametype": {"dfnID":"enumdef-frametype","dfnText":"FrameType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-frametype"}],"title":"6.7. Web Request API"}],"url":"#enumdef-frametype"},
 "enumdef-itemtype": {"dfnID":"enumdef-itemtype","dfnText":"ItemType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-itemtype"}],"title":"7. Controlled Frame API"}],"url":"#enumdef-itemtype"},
+"enumdef-resourcetype": {"dfnID":"enumdef-resourcetype","dfnText":"ResourceType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-resourcetype"},{"id":"ref-for-enumdef-resourcetype\u2460"}],"title":"6.7. Web Request API"}],"url":"#enumdef-resourcetype"},
 "enumdef-runat": {"dfnID":"enumdef-runat","dfnText":"RunAt","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-runat"}],"title":"6.3. Scripting methods"}],"url":"#enumdef-runat"},
-"f8de33a3": {"dfnID":"f8de33a3","dfnText":"long","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-long"},{"id":"ref-for-idl-long\u2460"},{"id":"ref-for-idl-long\u2461"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-long\u2462"}],"title":"6.4. Configuration methods"},{"refs":[{"id":"ref-for-idl-long\u2463"},{"id":"ref-for-idl-long\u2464"},{"id":"ref-for-idl-long\u2465"},{"id":"ref-for-idl-long\u2466"},{"id":"ref-for-idl-long\u2467"},{"id":"ref-for-idl-long\u2468"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-long"},
+"f4813f78": {"dfnID":"f4813f78","dfnText":"byte","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-byte"}],"title":"6.7. Web Request API"}],"url":"https://webidl.spec.whatwg.org/#idl-byte"},
+"f8de33a3": {"dfnID":"f8de33a3","dfnText":"long","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-long"},{"id":"ref-for-idl-long\u2460"},{"id":"ref-for-idl-long\u2461"}],"title":"6.1. Controlled Frame HTML Element"},{"refs":[{"id":"ref-for-idl-long\u2462"}],"title":"6.4. Configuration methods"},{"refs":[{"id":"ref-for-idl-long\u2463"},{"id":"ref-for-idl-long\u2464"},{"id":"ref-for-idl-long\u2465"},{"id":"ref-for-idl-long\u2466"},{"id":"ref-for-idl-long\u2467"},{"id":"ref-for-idl-long\u2468"}],"title":"6.7. Web Request API"},{"refs":[{"id":"ref-for-idl-long\u2460\u24ea"},{"id":"ref-for-idl-long\u2460\u2460"},{"id":"ref-for-idl-long\u2460\u2461"},{"id":"ref-for-idl-long\u2460\u2462"},{"id":"ref-for-idl-long\u2460\u2463"},{"id":"ref-for-idl-long\u2460\u2464"}],"title":"7. Controlled Frame API"}],"url":"https://webidl.spec.whatwg.org/#idl-long"},
+"webrequest": {"dfnID":"webrequest","dfnText":"WebRequest","external":false,"refSections":[],"url":"#webrequest"},
+"webrequestevent": {"dfnID":"webrequestevent","dfnText":"WebRequestEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestevent"},{"id":"ref-for-webrequestevent\u2460"},{"id":"ref-for-webrequestevent\u2461"},{"id":"ref-for-webrequestevent\u2462"},{"id":"ref-for-webrequestevent\u2463"},{"id":"ref-for-webrequestevent\u2464"},{"id":"ref-for-webrequestevent\u2465"},{"id":"ref-for-webrequestevent\u2466"},{"id":"ref-for-webrequestevent\u2467"}],"title":"6.7. Web Request API"}],"url":"#webrequestevent"},
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -2453,15 +3095,26 @@ function genLinkingSyntaxes(dfn) {
 let refsData = {
 "#callbackdef-contextmenuscallback": {"displayText":"ContextMenusCallback","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusCallback","type":"callback","url":"#callbackdef-contextmenuscallback"},
 "#callbackdef-contextmenuseventlistener": {"displayText":"ContextMenusEventListener","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusEventListener","type":"callback","url":"#callbackdef-contextmenuseventlistener"},
+"#callbackdef-handlerbehaviorchangedcallback": {"displayText":"HandlerBehaviorChangedCallback","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"HandlerBehaviorChangedCallback","type":"callback","url":"#callbackdef-handlerbehaviorchangedcallback"},
+"#callbackdef-webrequesteventlistener": {"displayText":"WebRequestEventListener","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"WebRequestEventListener","type":"callback","url":"#callbackdef-webrequesteventlistener"},
 "#contextmenus": {"displayText":"ContextMenus","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenus","type":"interface","url":"#contextmenus"},
+"#dictdef-authchallenger": {"displayText":"AuthChallenger","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"AuthChallenger","type":"dictionary","url":"#dictdef-authchallenger"},
+"#dictdef-blockingresponse": {"displayText":"BlockingResponse","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"BlockingResponse","type":"dictionary","url":"#dictdef-blockingresponse"},
 "#dictdef-cleardataoptions": {"displayText":"ClearDataOptions","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ClearDataOptions","type":"dictionary","url":"#dictdef-cleardataoptions"},
 "#dictdef-cleardatatypeset": {"displayText":"ClearDataTypeSet","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ClearDataTypeSet","type":"dictionary","url":"#dictdef-cleardatatypeset"},
 "#dictdef-contentscriptdetails": {"displayText":"ContentScriptDetails","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContentScriptDetails","type":"dictionary","url":"#dictdef-contentscriptdetails"},
 "#dictdef-contextmenuscreateproperties": {"displayText":"ContextMenusCreateProperties","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusCreateProperties","type":"dictionary","url":"#dictdef-contextmenuscreateproperties"},
 "#dictdef-contextmenusproperties": {"displayText":"ContextMenusProperties","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextMenusProperties","type":"dictionary","url":"#dictdef-contextmenusproperties"},
+"#dictdef-httpheader": {"displayText":"HttpHeader","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"HttpHeader","type":"dictionary","url":"#dictdef-httpheader"},
 "#dictdef-injectdetails": {"displayText":"InjectDetails","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"InjectDetails","type":"dictionary","url":"#dictdef-injectdetails"},
 "#dictdef-injectionitems": {"displayText":"InjectionItems","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"InjectionItems","type":"dictionary","url":"#dictdef-injectionitems"},
 "#dictdef-onclickdata": {"displayText":"OnClickData","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"OnClickData","type":"dictionary","url":"#dictdef-onclickdata"},
+"#dictdef-requestbody": {"displayText":"RequestBody","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"RequestBody","type":"dictionary","url":"#dictdef-requestbody"},
+"#dictdef-requestfilter": {"displayText":"RequestFilter","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"RequestFilter","type":"dictionary","url":"#dictdef-requestfilter"},
+"#dictdef-uploaddata": {"displayText":"UploadData","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"UploadData","type":"dictionary","url":"#dictdef-uploaddata"},
+"#dictdef-webrequestauthcredentials": {"displayText":"WebRequestAuthCredentials","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"WebRequestAuthCredentials","type":"dictionary","url":"#dictdef-webrequestauthcredentials"},
+"#dictdef-webrequesteventdetails": {"displayText":"WebRequestEventDetails","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"WebRequestEventDetails","type":"dictionary","url":"#dictdef-webrequesteventdetails"},
+"#dictdef-webrequesteventresponsedetails": {"displayText":"WebRequestEventResponseDetails","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"WebRequestEventResponseDetails","type":"dictionary","url":"#dictdef-webrequesteventresponsedetails"},
 "#dom-controlledframe-back": {"displayText":"back()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"back()","type":"method","url":"#dom-controlledframe-back"},
 "#dom-controlledframe-cangoback": {"displayText":"canGoBack()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"canGoBack()","type":"method","url":"#dom-controlledframe-cangoback"},
 "#dom-controlledframe-forward": {"displayText":"forward()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"forward()","type":"method","url":"#dom-controlledframe-forward"},
@@ -2469,8 +3122,13 @@ let refsData = {
 "#dom-controlledframe-reload": {"displayText":"reload()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"reload()","type":"method","url":"#dom-controlledframe-reload"},
 "#dom-controlledframe-stop": {"displayText":"stop()","export":true,"for_":["ControlledFrame"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"stop()","type":"method","url":"#dom-controlledframe-stop"},
 "#enumdef-contexttype": {"displayText":"ContextType","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ContextType","type":"enum","url":"#enumdef-contexttype"},
+"#enumdef-documentlifecycle": {"displayText":"DocumentLifecycle","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"DocumentLifecycle","type":"enum","url":"#enumdef-documentlifecycle"},
+"#enumdef-extrainfospec": {"displayText":"ExtraInfoSpec","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ExtraInfoSpec","type":"enum","url":"#enumdef-extrainfospec"},
+"#enumdef-frametype": {"displayText":"FrameType","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"FrameType","type":"enum","url":"#enumdef-frametype"},
 "#enumdef-itemtype": {"displayText":"ItemType","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ItemType","type":"enum","url":"#enumdef-itemtype"},
+"#enumdef-resourcetype": {"displayText":"ResourceType","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"ResourceType","type":"enum","url":"#enumdef-resourcetype"},
 "#enumdef-runat": {"displayText":"RunAt","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"RunAt","type":"enum","url":"#enumdef-runat"},
+"#webrequestevent": {"displayText":"WebRequestEvent","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"WebRequestEvent","type":"interface","url":"#webrequestevent"},
 "https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions": {"displayText":"CEReactions","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"CEReactions","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions"},
 "https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor": {"displayText":"HTMLConstructor","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLConstructor","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor"},
 "https://html.spec.whatwg.org/multipage/dom.html#htmlelement": {"displayText":"HTMLElement","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLElement","type":"interface","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlelement"},
@@ -2478,10 +3136,12 @@ let refsData = {
 "https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy": {"displayText":"WindowProxy","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"WindowProxy","type":"interface","url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy"},
 "https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
 "https://webidl.spec.whatwg.org/#SecureContext": {"displayText":"SecureContext","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecureContext","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SecureContext"},
+"https://webidl.spec.whatwg.org/#idl-ArrayBuffer": {"displayText":"ArrayBuffer","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"ArrayBuffer","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-ArrayBuffer"},
 "https://webidl.spec.whatwg.org/#idl-DOMString": {"displayText":"DOMString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "https://webidl.spec.whatwg.org/#idl-USVString": {"displayText":"USVString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"USVString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-USVString"},
 "https://webidl.spec.whatwg.org/#idl-any": {"displayText":"any","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"any","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-any"},
 "https://webidl.spec.whatwg.org/#idl-boolean": {"displayText":"boolean","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"boolean","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-boolean"},
+"https://webidl.spec.whatwg.org/#idl-byte": {"displayText":"byte","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"byte","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-byte"},
 "https://webidl.spec.whatwg.org/#idl-long": {"displayText":"long","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"long","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-long"},
 "https://webidl.spec.whatwg.org/#idl-promise": {"displayText":"Promise","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Promise","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-promise"},
 "https://webidl.spec.whatwg.org/#idl-sequence": {"displayText":"sequence","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"sequence","type":"dfn","url":"https://webidl.spec.whatwg.org/#idl-sequence"},
