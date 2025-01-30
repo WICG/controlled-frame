@@ -98,8 +98,8 @@ including IWAs where possible.
 
 For convenience, the Controlled Frame specification assumes that the Fenced
 Frame specification is in place. There are concepts introduced in the Fenced
-Frame specification, such as top-level traversibles, that are broadly useful
-to refer to in the context of Controlled Frame.
+Frame specification, such as nested top-level traversibles, that are broadly
+useful to refer to in the context of Controlled Frame.
 
 The Fenced Frame specification achieves defining these concepts via monkey
 patching some specifications, such as HTML. We will also require monkey
