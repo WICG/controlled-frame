@@ -177,7 +177,7 @@ interface HTMLControlledFrame : HTMLElement {
 
 The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
 
-The Controlled Frame element is exposed to any [=document=] with the
+The Controlled Frame element is exposed to any {{Document}} with the
 "controlled-frame" [=policy-controlled feature=] whose
 [=environment settings object=] is an [=isolated context=].
 
