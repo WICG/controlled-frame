@@ -4,9 +4,9 @@ Abstract: This document defines an API for embedding arbitrary web content only
     within the context of an Isolated Web Application (IWA). The embedded
     content is a new top-level browsing context within and controlled by the
     embedder.
-Repository: chasephillips/controlled-frame
+Repository: WICG/controlled-frame
+URL: https://wicg.github.io/fenced-frame/
 Status: w3c/CG-DRAFT
-ED: TBD
 Shortname: controlled-frame
 Level: 1
 Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@google.com
@@ -54,6 +54,23 @@ Markup Shorthands: markdown yes
 }
 </pre>
 
+<pre class="anchors">
+spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
+    type: dfn
+        urlPrefix: dom.html
+            text: contexts in which this element can be used; url: concept-element-contexts
+            text: content model; url: concept-element-content-model
+            text: nothing; url: concept-content-nothing
+            text: content attributes; url: concept-element-attributes
+            text: global attributes; url: global-attributes
+            text: dom interface; url: concept-element-dom
+            text: represents; url: represents
+            text: accessibility considerations; url: concept-element-accessibility-considerations
+        urlPrefix: embedder-content-other.html
+            text: width; url: attr-dim-width
+            text: height; url: attr-dim-height
+</pre>
+
 <!-- ====================================================================== -->
 # Introduction # {#introduction}
 <!-- ====================================================================== -->
@@ -74,6 +91,497 @@ by design that this API will not be available to normal web pages.
 Note: This API is not intended to be a replacement or substitute for <{iframe}>.
 All <{iframe}> use cases are still valid and should continue to use <{iframe}>,
 including IWAs where possible.
+
+<!-- ====================================================================== -->
+<h2 id=based-on-fencedframe-spec>The Fenced Frame specification</h2>
+<!-- ====================================================================== -->
+
+For convenience, the Controlled Frame specification assumes that the Fenced
+Frame specification is in place. There are concepts introduced in the Fenced
+Frame specification, such as nested top-level traversibles, that are broadly
+useful to refer to in the context of Controlled Frame.
+
+The Fenced Frame specification achieves defining these concepts via monkey
+patching some specifications, such as HTML. We will also require monkey
+patching specifications for some parts of this Controlled Frame specification.
+
+<!-- ====================================================================== -->
+<h2 id=the-controlledframe-element>The <dfn element export>controlledframe</dfn> element</h2>
+<!-- ====================================================================== -->
+
+<dl class="element">
+ <dt>[=Contexts in which this element can be used=]:</dt>
+ <dd>Where [=embedded content=] is expected.</dd>
+ <dt>[=Content model=]:</dt>
+ <dd>[=Nothing=].</dd>
+ <dt>[=Content attributes=]:</dt>
+ <dd>[=Global attributes=]</dd>
+ <dd><code>[=width=]</code> — Horizontal dimension</dd>
+ <dd><code>[=height=]</code> — Vertical dimension</dd>
+ <dt>[=Accessibility considerations=]:</dt>
+ <dd><p class=XXX>TODO</p></dd>
+ <dt>[=DOM interface=]:</dt>
+ <dd>
+<xmp class=idl>
+[Exposed=Window, IsolatedContext]
+interface HTMLControlledFrame : HTMLElement {
+    [HTMLConstructor] constructor();
+
+    [CEReactions] attribute USVString src;
+    [CEReactions] attribute DOMString name;
+    [CEReactions] attribute boolean allowfullscreen;
+    [CEReactions] attribute boolean allowscaling;
+    [CEReactions] attribute boolean allowtransparency;
+    [CEReactions] attribute boolean autosize;
+    [CEReactions] attribute DOMString maxheight;
+    [CEReactions] attribute DOMString maxwidth;
+    [CEReactions] attribute DOMString minheight;
+    [CEReactions] attribute DOMString minwidth;
+    attribute DOMString partition;
+
+    readonly attribute WindowProxy? contentWindow;
+    readonly attribute ContextMenus contextMenus;
+
+    // Navigation methods.
+    Promise<undefined> back();
+    boolean canGoBack();
+    boolean canGoForward();
+    Promise<undefined> forward();
+    Promise<undefined> go(long relativeIndex);
+    undefined reload();
+    undefined stop();
+
+    // Scripting methods.
+    undefined addContentScripts(sequence<ContentScriptDetails> contentScriptList);
+    Promise<any> executeScript(optional InjectDetails details = {});
+    Promise<undefined> insertCSS(optional InjectDetails details = {});
+    undefined removeContentScripts(sequence<DOMString>? scriptNameList);
+
+    // Configuration methods.
+    Promise<undefined> clearData(
+      optional ClearDataOptions options = {},
+      optional ClearDataTypeSet types = {});
+    Promise<boolean> getAudioState();
+    Promise<long> getZoom();
+    Promise<boolean> isAudioMuted();
+    undefined setAudioMuted(boolean mute);
+    Promise<undefined> setZoom(long zoomFactor);
+
+    // Capture methods.
+    undefined captureVisibleRegion();
+    undefined print();
+};
+</xmp>
+</dd>
+</dl>
+
+The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
+
+The Controlled Frame element is exposed to any {{Document}} with the
+"controlled-frame" [=policy-controlled feature=] whose
+[=environment settings object=] is an [=isolated context=].
+
+<!-- ====================================================================== -->
+## Navigation methods ## {#api-nav}
+<!-- ====================================================================== -->
+
+<div class="domintro note">
+
+  : {{HTMLControlledFrame/go()|go}}()
+
+  :: Reloads the current page.
+
+  : {{HTMLControlledFrame/go()|go}}(<var>relativeIndex</var>)
+
+  :: Goes back or forward <var>relativeIndex</var> number of steps in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the current
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a>.
+
+    A zero relative index will reload the current page.
+
+    If the relative index is out of range, does nothing.
+
+  : {{HTMLControlledFrame/back()|back}}()
+
+  :: Goes back one step in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a> in the Controlled Frame.
+
+    If there is no previous page, does nothing.
+
+  : {{HTMLControlledFrame/forward()|forward}}()
+
+  :: Goes forward one step in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a> in the Controlled Frame.
+
+    If there is no next page, does nothing.
+
+  : {{HTMLControlledFrame/canGoBack()|canGoBack}}()
+
+  :: Returns true if the current
+     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
+     current session history entry</a> is not the first one in the navigation
+     history entry list. This means that there is a previous
+     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
+     session history entry</a> for this
+     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
+     navigable</a>.
+
+  : {{HTMLControlledFrame/reload()|reload}}()
+
+  :: Reloads the current page.
+
+  : {{HTMLControlledFrame/stop()|stop}}()
+
+  :: Cancels the document load.
+
+</div>
+
+<!-- ====================================================================== -->
+## Scripting methods ## {#api-scripting}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+// One of |code| or |file| must be specified but not both.
+dictionary InjectDetails {
+  DOMString code;
+  DOMString file;
+};
+
+dictionary InjectionItems {
+  DOMString code;
+  sequence<DOMString> files;
+};
+
+enum RunAt {
+  "document_start",
+  "document_end",
+  "document_idle",
+};
+
+dictionary ContentScriptDetails {
+  boolean all_frames;
+  InjectionItems css;
+  sequence<DOMString> exclude_globs;
+  sequence<DOMString> exclude_matches;
+  sequence<DOMString> include_globs;
+  InjectionItems js;
+  boolean match_about_blank;
+  required sequence<DOMString> matches;
+  required DOMString name;
+  RunAt run_at;
+};
+</xmp>
+
+<!-- ====================================================================== -->
+## Configuration methods ## {#api-config}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+dictionary ClearDataOptions {
+  long since;
+};
+
+dictionary ClearDataTypeSet {
+  boolean appcache;
+  boolean cache;
+  boolean cookies;
+  boolean fileSystems;
+  boolean indexedDB;
+  boolean localStorage;
+  boolean persistentCookies;
+  boolean sessionCookies;
+  boolean webSQL;
+};
+</xmp>
+
+<!-- ====================================================================== -->
+## Capture methods ## {#api-capture}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Event listener API ## {#api-event}
+<!-- ====================================================================== -->
+
+<!-- ====================================================================== -->
+## Integration with other specifications ## {#api-integration-with-other-specifications}
+<!-- ====================================================================== -->
+
+This specification will make some modifications to specifications to accommodate
+the needs of Controlled Frame.
+
+<!-- ====================================================================== -->
+### Monkey Patch for X ### {#api-monkey-patch-for-x}
+<!-- ====================================================================== -->
+
+The X algorithm will need to include... The step that defines Y should be
+modified as follows:
+
+...
+
+<!-- ====================================================================== -->
+# Web Request API # {#api-web-request}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+enum ResourceType {
+  "main_frame",
+  "sub_frame",
+  "stylesheet",
+  "script",
+  "image",
+  "font",
+  "object",
+  "xmlhttprequest",
+  "ping",
+  "csp_report",
+  "media",
+  "websocket",
+  "webbundle",
+  "other",
+};
+
+callback interface WebRequestEventListener {
+  BlockingResponse? handleEvent(WebRequestEventDetails details);
+};
+
+dictionary RequestFilter {
+  sequence<ResourceType> types;
+  sequence<USVString> urls;
+  long windowId;
+};
+
+enum ExtraInfoSpec {
+  "asyncBlocking",
+  "blocking",
+  "extraHeaders",
+  "requestHeaders",
+  "responseHeaders",
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestEvent {
+  undefined addListener(WebRequestEventListener listener,
+                        optional RequestFilter filter = {},
+                        optional sequence<ExtraInfoSpec> extraInfoSpec);
+  boolean hasListener(WebRequestEventListener listener);
+  boolean hasListeners();
+  undefined removeListener(WebRequestEventListener listener);
+};
+
+dictionary HttpHeader {
+  required DOMString name;
+  DOMString value;
+  sequence<byte> binaryValue;
+};
+
+dictionary WebRequestAuthCredentials {
+  required DOMString username;
+  required DOMString password;
+};
+
+dictionary BlockingResponse {
+  WebRequestAuthCredentials authCredentials;
+  boolean cancel;
+  USVString redirectUrl;
+  sequence<HttpHeader> requestHeaders;
+  sequence<HttpHeader> responseHeaders;
+};
+
+enum DocumentLifecycle {
+  "prerender",
+  "active",
+  "cached",
+  "pending_deletion",
+};
+
+enum FrameType {
+  "outermost_frame",
+  "fenced_frame",
+  "sub_frame",
+};
+
+dictionary WebRequestEventDetails {
+  DOMString documentId;
+  DocumentLifecycle documentLifecycle;
+  required long frameId;
+  FrameType frameType;
+  USVString initiator;
+  required DOMString method;
+  DOMString parentDocumentId;
+  required long parentFrameId;
+  required DOMString requestId;
+  required long timeStamp;
+  required ResourceType type;
+  required USVString url;
+};
+
+dictionary WebRequestEventResponseDetails : WebRequestEventDetails {
+  required long statusCode;
+  required DOMString statusLine;
+  sequence<HttpHeader> responseHeaders;
+};
+
+dictionary UploadData {
+  ArrayBuffer bytes;
+  DOMString file;
+};
+dictionary RequestBody {
+  DOMString error;
+  any formData;
+  sequence<UploadData> raw;
+};
+
+dictionary WebRequestBeforeRequestDetails : WebRequestEventDetails {
+  RequestBody requestBody;
+};
+
+dictionary WebRequestBeforeSendHeadersDetails : WebRequestEventDetails {
+  sequence<HttpHeader> requestHeaders;
+};
+
+dictionary WebRequestSendHeadersDetails : WebRequestEventDetails {
+  sequence<HttpHeader> requestHeaders;
+};
+
+dictionary WebRequestHeadersReceivedDetails : WebRequestEventResponseDetails {};
+
+dictionary AuthChallenger {
+  DOMString host;
+  long port;
+};
+dictionary WebRequestAuthRequiredDetails : WebRequestEventResponseDetails {
+  required AuthChallenger challenger;
+  required boolean isProxy;
+  required DOMString scheme;
+  DOMString realm;
+};
+
+dictionary WebRequestBeforeRedirectDetails : WebRequestEventResponseDetails {
+  required boolean fromCache;
+  DOMString ip;
+  required USVString redirectUrl;
+};
+
+dictionary WebRequestResponseStartedDetails : WebRequestEventResponseDetails {
+  required boolean fromCache;
+  DOMString ip;
+};
+
+dictionary WebRequestCompletedDetails : WebRequestEventResponseDetails {
+  required boolean fromCache;
+  DOMString ip;
+};
+
+dictionary WebRequestErrorOccurredDetails : WebRequestEventDetails {
+  required DOMString error;
+  required boolean fromCache;
+  DOMString ip;
+};
+
+callback HandlerBehaviorChangedCallback = undefined ();
+
+[Exposed=Window, IsolatedContext]
+interface WebRequest {
+  readonly attribute WebRequestEvent onBeforeRequest;
+  readonly attribute WebRequestEvent onBeforeSendHeaders;
+  readonly attribute WebRequestEvent onSendHeaders;
+  readonly attribute WebRequestEvent onHeadersReceived;
+  readonly attribute WebRequestEvent onAuthRequired;
+  readonly attribute WebRequestEvent onBeforeRedirect;
+  readonly attribute WebRequestEvent onResponseStarted;
+  readonly attribute WebRequestEvent onCompleted;
+  readonly attribute WebRequestEvent onErrorOccurred;
+
+  undefined handlerBehaviorChanged(optional HandlerBehaviorChangedCallback callback);
+};
+</xmp>
+
+<!-- ====================================================================== -->
+# Context Menus API # {#api-context-menus}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+enum ContextType {
+    "all",
+    "page",
+    "frame",
+    "selection",
+    "link",
+    "editable",
+    "image",
+    "video",
+    "audio",
+};
+
+enum ItemType {
+    "normal",
+    "checkbox",
+    "radio",
+    "separator",
+};
+
+dictionary OnClickData {
+    boolean checked;
+    required boolean editable;
+    long frameId;
+    USVString frameUrl;
+    USVString linkUrl;
+    DOMString mediaType;
+    required (DOMString or long) menuItemId;
+    USVString pageUrl;
+    (DOMString or long) parentMenuId;
+    DOMString selectionText;
+    USVString srcUrl;
+    boolean wasChecked;
+};
+
+callback ContextMenusEventListener = undefined (OnClickData data);
+
+dictionary ContextMenusProperties {
+    boolean checked;
+    sequence<ContextType> context;
+    DOMString documentUrlPatterns;
+    boolean enabled;
+    DOMString parentId;
+    DOMString targetUrlPatterns;
+    DOMString title;
+    ItemType type;
+    ContextMenusEventListener onclick;
+};
+
+dictionary ContextMenusCreateProperties : ContextMenusProperties {
+    DOMString id;
+};
+
+callback ContextMenusCallback = undefined ();
+
+[Exposed=Window, IsolatedContext]
+interface ContextMenus {
+    // TODO: Define the `onShow` property.
+
+    // Returns the ID of the newly created menu item.
+    (DOMString or long) create(
+        ContextMenusCreateProperties properties,
+        ContextMenusCallback? callback);
+
+    undefined remove(
+        (DOMString or long) menuItemId,
+        ContextMenusCallback? callback);
+    undefined removeAll(ContextMenusCallback? callback);
+    undefined update(
+        (DOMString or long) id,
+        ContextMenusProperties properties,
+        ContextMenusCallback? callback);
+};
+</xmp>
 
 <!-- ====================================================================== -->
 # Usage Overview # {#usage-overview}
@@ -199,7 +707,7 @@ Planned mitigation:
 <b>An [[Isolated-Web-Apps|IWA]] may embed another [[Isolated-Web-Apps|IWA]] (or
 itself) via Controlled Frame to manipulate our [[Isolated-Web-Apps|IWA]]
 policies somehow (e.g. an Controlled Frame embedded [[Isolated-Web-Apps|IWA]]
-may detect it's being embedded due to the absence of the "controlledframe"
+may detect it's being embedded due to the absence of the "controlled-frame"
 policy-controlled feature).</b>
 
 Planned mitigation:
@@ -215,20 +723,15 @@ attempt to embed content.
 
 Planned mitigation:
 
--  Only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
-    child navigables that have been granted the "controlledframe"
-    policy-controlled feature will be allowed access to the Controlled Frame
-    element.
--  Same-origin child navigables without the "controlledframe"
-    policy-controlled feature will not be allowed to use a Controlled Frame
-    element (to be confirmed, see note below)
--  Cross-origin iframes to [[Isolated-Web-Apps|IWAs]] can use the "allow"
-    attribute to disable Controlled Frame
--  Cross-origin iframes to non-[[Isolated-Web-Apps|IWAs]] will not have
-    access to the "controlledframe" policy-controlled feature, and so will not
-    be allowed to use a Controlled Frame element
--  See the "Embedder Policies Using the "controlledframe" Feature" section
-    above for more details
+-  [[Isolated-Web-Apps|IWA]] APIs can never be delegated to cross-origin, so it
+    will not be possible for any nested top-level navigable to access an
+    [[Isolated-Web-Apps|IWA]].
+-  Secondly, only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
+    child navigables that have been granted the "controlled-frame"
+    policy-controlled feature will have the Controlled Frame element available.
+-  Same-origin child navigables without the "controlled-frame"
+    policy-controlled feature will not be provided a Controlled Frame element.
+    Their inner same-origin nested navigables will always not have it available.
 
 <b>An IWA may attempt to embed content from non-https schemes, such as 'http:'
 or 'isolated-app:'</b>
@@ -247,16 +750,23 @@ Planned mitigation:
     embedder's process
 
 <b>Controlled Frame for a given "https origin" could interact or interfere with
-the user's own storage user agent data for that https origin</b>
+the user's own storage data for that https origin</b>
 
 Planned mitigation:
 
--  Controlled Frame will always store data in a separate storage user agent
-    that's apart from the default storage user agent
+-  We're adding a Partition concept. Every Partition is a tuple of
+    StorageKey and a separate object key.
+-  Let there be a default partition with key=0 that stores
+    "non-[[Isolated-Web-Apps|IWA]]" window
+    and tab usage.
+-  Controlled Frame will always store data in a certain StorageKey which is
+    apart from the default partition.
 -  Data written to by a given "https origin" while the user accesses that
     origin via an [[Isolated-Web-Apps|IWA]] Controlled Frame will be isolated
-    from the user's storage user agent that backs "normal" window and tab usage,
-    and vice versa
+    from the default partition.
+-  All usage will be separated between [[Isolated-Web-Apps|IWA]] and each
+    partition will be fully isolated from each other and from default
+    usage outside of [[Isolated-Web-Apps|IWA]].
 
 <b>Malicious Controlled Frame could overwrite embedder's stored data</b>
 
@@ -391,458 +901,6 @@ considerations:
     tools for Controlled Frame content in order to properly integrate
     accessibility features for some use cases (such as "browser content
     redirection")
-
-<!-- ====================================================================== -->
-# Concepts # {#concepts}
-<!-- ====================================================================== -->
-
-<!-- ====================================================================== -->
-# API # {#api}
-<!-- ====================================================================== -->
-
-<!-- ====================================================================== -->
-## Controlled Frame HTML Element ## {#html-element}
-<!-- ====================================================================== -->
-
-<xmp class="idl">
-[Exposed=Window, SecureContext]
-interface ControlledFrame : HTMLElement {
-    [HTMLConstructor] constructor();
-
-    [CEReactions] attribute USVString src;
-    [CEReactions] attribute DOMString name;
-    [CEReactions] attribute boolean allowfullscreen;
-    [CEReactions] attribute boolean allowscaling;
-    [CEReactions] attribute boolean allowtransparency;
-    [CEReactions] attribute boolean autosize;
-    [CEReactions] attribute DOMString maxheight;
-    [CEReactions] attribute DOMString maxwidth;
-    [CEReactions] attribute DOMString minheight;
-    [CEReactions] attribute DOMString minwidth;
-    attribute DOMString partition;
-
-    readonly attribute WindowProxy? contentWindow;
-    readonly attribute ContextMenus contextMenus;
-
-    // Navigation methods.
-    Promise<undefined> back();
-    boolean canGoBack();
-    boolean canGoForward();
-    Promise<undefined> forward();
-    Promise<undefined> go(long relativeIndex);
-    undefined reload();
-    undefined stop();
-
-    // Scripting methods.
-    undefined addContentScripts(sequence<ContentScriptDetails> contentScriptList);
-    Promise<any> executeScript(optional InjectDetails details = {});
-    Promise<undefined> insertCSS(optional InjectDetails details = {});
-    undefined removeContentScripts(sequence<DOMString>? scriptNameList);
-
-    // Configuration methods.
-    Promise<undefined> clearData(
-      optional ClearDataOptions options = {},
-      optional ClearDataTypeSet types = {});
-    Promise<boolean> getAudioState();
-    Promise<long> getZoom();
-    Promise<boolean> isAudioMuted();
-    undefined setAudioMuted(boolean mute);
-    Promise<undefined> setZoom(long zoomFactor);
-
-    // Capture methods.
-    undefined captureVisibleRegion();
-    undefined print();
-};
-</xmp>
-
-If the "controlled-frame" feature is enabled for an IWA in its manifest, each
-IWA frame will have access to a ControlledFrame element.
-
-<!-- ====================================================================== -->
-## Navigation methods ## {#api-nav}
-<!-- ====================================================================== -->
-
-<div class="domintro note">
-
-  : {{ControlledFrame/go()|go}}()
-
-  :: Reloads the current page.
-
-  : {{ControlledFrame/go()|go}}(<var>relativeIndex</var>)
-
-  :: Goes back or forward <var>relativeIndex</var> number of steps in the overall
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
-    session history entries </a> list for the current
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
-    traversable navigable</a>.
-
-    A zero relative index will reload the current page.
-
-    If the relative index is out of range, does nothing.
-
-  : {{ControlledFrame/back()|back}}()
-
-  :: Goes back one step in the overall
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
-    session history entries </a> list for the
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
-    traversable navigable</a> in the Controlled Frame.
-
-    If there is no previous page, does nothing.
-
-  : {{ControlledFrame/forward()|forward}}()
-
-  :: Goes forward one step in the overall
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
-    session history entries </a> list for the
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
-    traversable navigable</a> in the Controlled Frame.
-
-    If there is no next page, does nothing.
-
-  : {{ControlledFrame/canGoBack()|canGoBack}}()
-
-  :: Returns true if the current
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
-     current session history entry</a> is not the first one in the navigation
-     history entry list. This means that there is a previous
-     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
-     session history entry</a> for this
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
-     navigable</a>.
-
-  : {{ControlledFrame/reload()|reload}}()
-
-  :: Reloads the current page.
-
-  : {{ControlledFrame/stop()|stop}}()
-
-  :: Cancels the document load.
-
-</div>
-
-<!-- ====================================================================== -->
-## Scripting methods ## {#api-scripting}
-<!-- ====================================================================== -->
-
-<xmp class="idl">
-// One of |code| or |file| must be specified but not both.
-dictionary InjectDetails {
-  DOMString code;
-  DOMString file;
-};
-
-dictionary InjectionItems {
-  DOMString code;
-  sequence<DOMString> files;
-};
-
-enum RunAt {
-  "document_start",
-  "document_end",
-  "document_idle",
-};
-
-dictionary ContentScriptDetails {
-  boolean all_frames;
-  InjectionItems css;
-  sequence<DOMString> exclude_globs;
-  sequence<DOMString> exclude_matches;
-  sequence<DOMString> include_globs;
-  InjectionItems js;
-  boolean match_about_blank;
-  required sequence<DOMString> matches;
-  required DOMString name;
-  RunAt run_at;
-};
-</xmp>
-
-<!-- ====================================================================== -->
-## Configuration methods ## {#api-config}
-<!-- ====================================================================== -->
-
-<xmp class="idl">
-dictionary ClearDataOptions {
-  long since;
-};
-
-dictionary ClearDataTypeSet {
-  boolean appcache;
-  boolean cache;
-  boolean cookies;
-  boolean fileSystems;
-  boolean indexedDB;
-  boolean localStorage;
-  boolean persistentCookies;
-  boolean sessionCookies;
-  boolean webSQL;
-};
-</xmp>
-
-<!-- ====================================================================== -->
-## Capture methods ## {#api-capture}
-<!-- ====================================================================== -->
-
-<!-- ====================================================================== -->
-## Event listener API ## {#api-event}
-<!-- ====================================================================== -->
-
-<!-- ====================================================================== -->
-## Web Request API ## {#api-web-request}
-<!-- ====================================================================== -->
-
-<xmp class="idl">
-enum ResourceType {
-  "main_frame",
-  "sub_frame",
-  "stylesheet",
-  "script",
-  "image",
-  "font",
-  "object",
-  "xmlhttprequest",
-  "ping",
-  "csp_report",
-  "media",
-  "websocket",
-  "webbundle",
-  "other",
-};
-
-callback interface WebRequestEventListener {
-  BlockingResponse? handleEvent(WebRequestEventDetails details);
-};
-
-dictionary RequestFilter {
-  sequence<ResourceType> types;
-  sequence<USVString> urls;
-  long windowId;
-};
-
-enum ExtraInfoSpec {
-  "asyncBlocking",
-  "blocking",
-  "extraHeaders",
-  "requestHeaders",
-  "responseHeaders",
-};
-
-[Exposed=Window, SecureContext]
-interface WebRequestEvent {
-  undefined addListener(WebRequestEventListener listener,
-                        optional RequestFilter filter = {},
-                        optional sequence<ExtraInfoSpec> extraInfoSpec);
-  boolean hasListener(WebRequestEventListener listener);
-  boolean hasListeners();
-  undefined removeListener(WebRequestEventListener listener);
-};
-
-dictionary HttpHeader {
-  required DOMString name;
-  DOMString value;
-  sequence<byte> binaryValue;
-};
-
-dictionary WebRequestAuthCredentials {
-  required DOMString username;
-  required DOMString password;
-};
-
-dictionary BlockingResponse {
-  WebRequestAuthCredentials authCredentials;
-  boolean cancel;
-  USVString redirectUrl;
-  sequence<HttpHeader> requestHeaders;
-  sequence<HttpHeader> responseHeaders;
-};
-
-enum DocumentLifecycle {
-  "prerender",
-  "active",
-  "cached",
-  "pending_deletion",
-};
-
-enum FrameType {
-  "outermost_frame",
-  "fenced_frame",
-  "sub_frame",
-};
-
-dictionary WebRequestEventDetails {
-  DOMString documentId;
-  DocumentLifecycle documentLifecycle;
-  required long frameId;
-  FrameType frameType;
-  USVString initiator;
-  required DOMString method;
-  DOMString parentDocumentId;
-  required long parentFrameId;
-  required DOMString requestId;
-  required long timeStamp;
-  required ResourceType type;
-  required USVString url;
-};
-
-dictionary WebRequestEventResponseDetails : WebRequestEventDetails {
-  required long statusCode;
-  required DOMString statusLine;
-  sequence<HttpHeader> responseHeaders;
-};
-
-dictionary UploadData {
-  ArrayBuffer bytes;
-  DOMString file;
-};
-dictionary RequestBody {
-  DOMString error;
-  any formData;
-  sequence<UploadData> raw;
-};
-
-dictionary WebRequestBeforeRequestDetails : WebRequestEventDetails {
-  RequestBody requestBody;
-};
-
-dictionary WebRequestBeforeSendHeadersDetails : WebRequestEventDetails {
-  sequence<HttpHeader> requestHeaders;
-};
-
-dictionary WebRequestSendHeadersDetails : WebRequestEventDetails {
-  sequence<HttpHeader> requestHeaders;
-};
-
-dictionary WebRequestHeadersReceivedDetails : WebRequestEventResponseDetails {};
-
-dictionary AuthChallenger {
-  DOMString host;
-  long port;
-};
-dictionary WebRequestAuthRequiredDetails : WebRequestEventResponseDetails {
-  required AuthChallenger challenger;
-  required boolean isProxy;
-  required DOMString scheme;
-  DOMString realm;
-};
-
-dictionary WebRequestBeforeRedirectDetails : WebRequestEventResponseDetails {
-  required boolean fromCache;
-  DOMString ip;
-  required USVString redirectUrl;
-};
-
-dictionary WebRequestResponseStartedDetails : WebRequestEventResponseDetails {
-  required boolean fromCache;
-  DOMString ip;
-};
-
-dictionary WebRequestCompletedDetails : WebRequestEventResponseDetails {
-  required boolean fromCache;
-  DOMString ip;
-};
-
-dictionary WebRequestErrorOccurredDetails : WebRequestEventDetails {
-  required DOMString error;
-  required boolean fromCache;
-  DOMString ip;
-};
-
-callback HandlerBehaviorChangedCallback = undefined ();
-
-[Exposed=Window, SecureContext]
-interface WebRequest {
-  readonly attribute WebRequestEvent onBeforeRequest;
-  readonly attribute WebRequestEvent onBeforeSendHeaders;
-  readonly attribute WebRequestEvent onSendHeaders;
-  readonly attribute WebRequestEvent onHeadersReceived;
-  readonly attribute WebRequestEvent onAuthRequired;
-  readonly attribute WebRequestEvent onBeforeRedirect;
-  readonly attribute WebRequestEvent onResponseStarted;
-  readonly attribute WebRequestEvent onCompleted;
-  readonly attribute WebRequestEvent onErrorOccurred;
-
-  undefined handlerBehaviorChanged(optional HandlerBehaviorChangedCallback callback);
-};
-</xmp>
-
-<!-- ====================================================================== -->
-# Controlled Frame API # {#controlled-frame-api}
-<!-- ====================================================================== -->
-
-<xmp class="idl">
-enum ContextType {
-    "all",
-    "page",
-    "frame",
-    "selection",
-    "link",
-    "editable",
-    "image",
-    "video",
-    "audio",
-};
-
-enum ItemType {
-    "normal",
-    "checkbox",
-    "radio",
-    "separator",
-};
-
-dictionary OnClickData {
-    boolean checked;
-    required boolean editable;
-    long frameId;
-    USVString frameUrl;
-    USVString linkUrl;
-    DOMString mediaType;
-    required (DOMString or long) menuItemId;
-    USVString pageUrl;
-    (DOMString or long) parentMenuId;
-    DOMString selectionText;
-    USVString srcUrl;
-    boolean wasChecked;
-};
-
-callback ContextMenusEventListener = undefined (OnClickData data);
-
-dictionary ContextMenusProperties {
-    boolean checked;
-    sequence<ContextType> context;
-    DOMString documentUrlPatterns;
-    boolean enabled;
-    DOMString parentId;
-    DOMString targetUrlPatterns;
-    DOMString title;
-    ItemType type;
-    ContextMenusEventListener onclick;
-};
-
-dictionary ContextMenusCreateProperties : ContextMenusProperties {
-    DOMString id;
-};
-
-callback ContextMenusCallback = undefined ();
-
-[Exposed=Window, SecureContext]
-interface ContextMenus {
-    // TODO: Define the `onShow` property.
-
-    // Returns the ID of the newly created menu item.
-    (DOMString or long) create(
-        ContextMenusCreateProperties properties,
-        ContextMenusCallback? callback);
-
-    undefined remove(
-        (DOMString or long) menuItemId,
-        ContextMenusCallback? callback);
-    undefined removeAll(ContextMenusCallback? callback);
-    undefined update(
-        (DOMString or long) id,
-        ContextMenusProperties properties,
-        ContextMenusCallback? callback);
-};
-</xmp>
 
 # Acknowledgements # {#acknowledgements}
 
