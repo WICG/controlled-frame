@@ -750,16 +750,23 @@ Planned mitigation:
     embedder's process
 
 <b>Controlled Frame for a given "https origin" could interact or interfere with
-the user's own storage user agent data for that https origin</b>
+the user's own storage data for that https origin</b>
 
 Planned mitigation:
 
--  Controlled Frame will always store data in a separate storage user agent
-    that's apart from the default storage user agent
+-  We're adding a Partition concept. Every Partition is a tuple of
+    StorageKey and a separate object key.
+-  Let there be a default partition with key=0 that stores
+    "non-[[Isolated-Web-Apps|IWA]]" window
+    and tab usage.
+-  Controlled Frame will always store data in a certain StorageKey which is
+    apart from the default partition.
 -  Data written to by a given "https origin" while the user accesses that
     origin via an [[Isolated-Web-Apps|IWA]] Controlled Frame will be isolated
-    from the user's storage user agent that backs "normal" window and tab usage,
-    and vice versa
+    from the default partition.
+-  All usage will be separated between [[Isolated-Web-Apps|IWA]] and each
+    partition will be fully isolated from each other and from default
+    usage outside of [[Isolated-Web-Apps|IWA]].
 
 <b>Malicious Controlled Frame could overwrite embedder's stored data</b>
 
