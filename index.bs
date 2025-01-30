@@ -177,8 +177,9 @@ interface HTMLControlledFrame : HTMLElement {
 
 The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
 
-If the [=policy-controlled feature=] is enabled for an IWA in its manifest, each
-IWA frame will have access to a ControlledFrame element.
+The Controlled Frame element is exposed to any [=document=] with the
+"controlled-frame" [=policy-controlled feature=] whose
+[=environment settings object=] is an [=isolated context=].
 
 <!-- ====================================================================== -->
 ## Navigation methods ## {#api-nav}
