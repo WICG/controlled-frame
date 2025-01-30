@@ -707,7 +707,7 @@ Planned mitigation:
 <b>An [[Isolated-Web-Apps|IWA]] may embed another [[Isolated-Web-Apps|IWA]] (or
 itself) via Controlled Frame to manipulate our [[Isolated-Web-Apps|IWA]]
 policies somehow (e.g. an Controlled Frame embedded [[Isolated-Web-Apps|IWA]]
-may detect it's being embedded due to the absence of the "controlledframe"
+may detect it's being embedded due to the absence of the "controlled-frame"
 policy-controlled feature).</b>
 
 Planned mitigation:
@@ -723,20 +723,15 @@ attempt to embed content.
 
 Planned mitigation:
 
--  Only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
-    child navigables that have been granted the "controlledframe"
-    policy-controlled feature will be allowed access to the Controlled Frame
-    element.
--  Same-origin child navigables without the "controlledframe"
-    policy-controlled feature will not be allowed to use a Controlled Frame
-    element (to be confirmed, see note below)
--  Cross-origin iframes to [[Isolated-Web-Apps|IWAs]] can use the "allow"
-    attribute to disable Controlled Frame
--  Cross-origin iframes to non-[[Isolated-Web-Apps|IWAs]] will not have
-    access to the "controlledframe" policy-controlled feature, and so will not
-    be allowed to use a Controlled Frame element
--  See the "Embedder Policies Using the "controlledframe" Feature" section
-    above for more details
+-  [[Isolated-Web-Apps|IWA]] APIs can never be delegated to cross-origin, so it
+    will not be possible for any nested top-level navigable to access an
+    [[Isolated-Web-Apps|IWA]].
+-  Secondly, only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
+    child navigables that have been granted the "controlled-frame"
+    policy-controlled feature will have the Controlled Frame element available.
+-  Same-origin child navigables without the "controlled-frame"
+    policy-controlled feature will not be provided a Controlled Frame element.
+    Their inner same-origin nested navigables will always not have it available.
 
 <b>An IWA may attempt to embed content from non-https schemes, such as 'http:'
 or 'isolated-app:'</b>
