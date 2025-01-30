@@ -310,7 +310,23 @@ dictionary ClearDataTypeSet {
 <!-- ====================================================================== -->
 
 <!-- ====================================================================== -->
-## Web Request API ## {#api-web-request}
+## Integration with other specifications ## {#api-integration-with-other-specifications}
+<!-- ====================================================================== -->
+
+This specification will make some modifications to specifications to accommodate
+the needs of Controlled Frame.
+
+<!-- ====================================================================== -->
+### Monkey Patch for X ### {#api-monkey-patch-for-x}
+<!-- ====================================================================== -->
+
+The X algorithm will need to include... The step that defines Y should be
+modified as follows:
+
+...
+
+<!-- ====================================================================== -->
+# Web Request API # {#api-web-request}
 <!-- ====================================================================== -->
 
 <xmp class="idl">
@@ -488,7 +504,7 @@ interface WebRequest {
 </xmp>
 
 <!-- ====================================================================== -->
-## Context Menus API ## {#api-context-menus}
+# Context Menus API # {#api-context-menus}
 <!-- ====================================================================== -->
 
 <xmp class="idl">
