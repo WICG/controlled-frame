@@ -5,7 +5,7 @@ Abstract: This document defines an API for embedding arbitrary web content only
     content is a new top-level browsing context within and controlled by the
     embedder.
 Repository: WICG/controlled-frame
-URL: https://wicg.github.io/fenced-frame/
+URL: https://wicg.github.io/controlled-frame/
 Status: w3c/CG-DRAFT
 Shortname: controlled-frame
 Level: 1
@@ -124,7 +124,7 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd>
 <xmp class=idl>
 [Exposed=Window, IsolatedContext]
-interface HTMLControlledFrame : HTMLElement {
+interface HTMLControlledFrameElement : HTMLElement {
     [HTMLConstructor] constructor();
 
     [CEReactions] attribute USVString src;
@@ -133,10 +133,10 @@ interface HTMLControlledFrame : HTMLElement {
     [CEReactions] attribute boolean allowscaling;
     [CEReactions] attribute boolean allowtransparency;
     [CEReactions] attribute boolean autosize;
-    [CEReactions] attribute DOMString maxheight;
-    [CEReactions] attribute DOMString maxwidth;
-    [CEReactions] attribute DOMString minheight;
-    [CEReactions] attribute DOMString minwidth;
+    [CEReactions] attribute DOMString maxHeight;
+    [CEReactions] attribute DOMString maxWidth;
+    [CEReactions] attribute DOMString minHeight;
+    [CEReactions] attribute DOMString minWidth;
     attribute DOMString partition;
 
     readonly attribute WindowProxy? contentWindow;
@@ -187,11 +187,11 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 <div class="domintro note">
 
-  : {{HTMLControlledFrame/go()|go}}()
+  : {{HTMLControlledFrameElement/go()|go}}()
 
   :: Reloads the current page.
 
-  : {{HTMLControlledFrame/go()|go}}(<var>relativeIndex</var>)
+  : {{HTMLControlledFrameElement/go()|go}}(<var>relativeIndex</var>)
 
   :: Goes back or forward <var>relativeIndex</var> number of steps in the overall
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
@@ -203,7 +203,7 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
     If the relative index is out of range, does nothing.
 
-  : {{HTMLControlledFrame/back()|back}}()
+  : {{HTMLControlledFrameElement/back()|back}}()
 
   :: Goes back one step in the overall
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
@@ -213,7 +213,7 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
     If there is no previous page, does nothing.
 
-  : {{HTMLControlledFrame/forward()|forward}}()
+  : {{HTMLControlledFrameElement/forward()|forward}}()
 
   :: Goes forward one step in the overall
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
@@ -223,7 +223,7 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
     If there is no next page, does nothing.
 
-  : {{HTMLControlledFrame/canGoBack()|canGoBack}}()
+  : {{HTMLControlledFrameElement/canGoBack()|canGoBack}}()
 
   :: Returns true if the current
      <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
@@ -234,11 +234,11 @@ The Controlled Frame element is exposed to any {{Document}} with the
      <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
      navigable</a>.
 
-  : {{HTMLControlledFrame/reload()|reload}}()
+  : {{HTMLControlledFrameElement/reload()|reload}}()
 
   :: Reloads the current page.
 
-  : {{HTMLControlledFrame/stop()|stop}}()
+  : {{HTMLControlledFrameElement/stop()|stop}}()
 
   :: Cancels the document load.
 
