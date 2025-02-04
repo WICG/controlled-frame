@@ -182,10 +182,10 @@ interface HTMLControlledFrameElement : HTMLElement {
     undefined stop();
 
     // Scripting methods.
-    undefined addContentScripts(sequence<ContentScriptDetails> contentScriptList);
+    Promise<undefined> addContentScripts(sequence<ContentScriptDetails> contentScriptList);
     Promise<any> executeScript(optional InjectDetails details = {});
     Promise<undefined> insertCSS(optional InjectDetails details = {});
-    undefined removeContentScripts(sequence<DOMString>? scriptNameList);
+    Promise<undefined> removeContentScripts(sequence<DOMString>? scriptNameList);
 
     // Configuration methods.
     Promise<undefined> clearData(
