@@ -102,6 +102,16 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     type: dfn
         urlPrefix: /
             text: main fetch; url: main-fetch
+spec: infra; urlPrefix: https://infra.spec.whatwg.org
+    type: dfn
+        text: empty; for: map; url: map-is-empty
+spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
+    type: dfn
+        text: Web IDL Standard; url: introduction
+        text: async iterator; url: idl-async-iterable
+        text: promise; url: idl-promise
+        text: promise rejected; url: a-promise-rejected-with
+        text: promise resolved; url: a-promise-resolved-with
 </pre>
 
 <pre class=link-defaults>
@@ -330,6 +340,94 @@ dictionary ContentScriptDetails {
   RunAt run_at;
 };
 </xmp>
+
+<div algorithm>
+  To <dfn>validate css injection detail</dfn>, given an {{/object}}
+  |injectionDetail|, run the following steps:
+
+  1. If |injectionDetail| is not a [=dictionary=], return false.
+  1. If |injectionDetail| is [=map/empty=], return false.
+  1. TODO
+
+</div>
+
+<div algorithm>
+  To <dfn>validate js injection detail</dfn>, given an {{/object}}
+  |injectionDetail|, run the following steps:
+
+  1. If |injectionDetail| is not a [=dictionary=], return false.
+  1. If |injectionDetail| is [=map/empty=], return false.
+  1. TODO
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>addContentScripts(sequence<ContentScriptDetails> |contentScriptList|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. Create a list of content scripts to fetch.
+  1. Return a promise to resolve when the content script injection completes.
+  1. [=map/iterate|For each=] |contentScriptDetail| in |contentScriptList|:
+      1. If |contentScriptDetail| has field "css":
+          1. Let |contentScriptDetailCss| be |contentScriptDetail["css"]|.
+      1. If |contentScriptDetail| has field "js":
+          1. Let |contentScriptDetailJs| be |contentScriptDetail["js"]|.
+      1. If both |contentScriptDetailCss| and |contentScriptDetailJs| are set,
+         [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
+      1. If |contentScriptDetailCss| is set:
+          1. If the result of running [=validate css injection detail=] with
+             |contentScriptDetailCss| is false, [=reject=] |resultPromise| with
+             a {{TypeError}} and abort these steps.
+      1. If |contentScriptDetailJs| is set:
+          1. If the result of running [=validate js injection detail=] with
+             |contentScriptDetailJs| is false, [=reject=] |resultPromise| with
+             a {{TypeError}} and abort these steps.
+      1. Fetch the script from the network and store it in the sequence of
+         content.
+      1. Modify the loader to auto-inject the script using the sequence of
+         content.
+  1. If an error occurred while fetching or storing the content scripts for
+     load, reject the promise.
+  1. Otherwise, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>executeScript(optional InjectDetails details)</dfn>
+  method steps are:
+
+  1. If both code and file is set, reject the promise with an error.
+  1. If file is set, fetch the file and store its contents in X.
+  1. In the embedded content, execute the script X.
+  1. Resolve the promise successfully.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>insertCSS(optional InjectDetails details)</dfn>
+  method steps are:
+
+  1. If both code and file is set, reject the promise with an error.
+  1. If file is set, fetch the file and store its contents in X.
+  1. In the embedded content, insert the stylesheet content X.
+  1. Resolve the promise successfully.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>removeContentScripts(sequence<DOMString> scriptNameList)</dfn>
+  method steps are:
+
+  1. For each item in `scriptNameList`
+  1. Return a promise to resolve when the content script removal completes.
+  1. For each item of type {{DOMString}} in `scriptNameList` named `x`:
+      1. Find the loader for `x`. If it doesn't exist, then skip it.
+      1. Remove the loader.
+  1. If there was an error, reject the promise with the error result.
+  1. Resolve the promise.
+
+</div>
 
 <!-- ====================================================================== -->
 ## Configuration methods ## {#api-config}
