@@ -543,43 +543,52 @@ dictionary OnClickData {
     boolean wasChecked;
 };
 
-callback ContextMenusEventListener = undefined (OnClickData data);
+callback OnClickedCallback = undefined (OnClickData Info);
+callback OnShowCallback = undefined ();
+
+[Exposed=Window, IsolatedContext]
+interface OnShow {
+    undefined addListener(OnShowCallback callback);
+    undefined removeListener(OnShowCallback callback);
+    boolean hasListener(OnShowCallback callback);
+    boolean hasListeners();
+    undefined dispatch();
+};
+
+[Exposed=Window, IsolatedContext]
+interface OnClicked {
+    undefined addListener(OnClickedCallback callback);
+    undefined removeListener(OnClickedCallback callback);
+    boolean hasListener(OnClickedCallback callback);
+    boolean hasListeners();
+    undefined dispatch();
+};
 
 dictionary ContextMenusProperties {
     boolean checked;
     sequence<ContextType> context;
-    DOMString documentUrlPatterns;
+    USVString documentUrlPatterns;
     boolean enabled;
-    DOMString parentId;
-    DOMString targetUrlPatterns;
+    (DOMString or long) parentId;
+    USVString targetUrlPatterns;
     DOMString title;
     ItemType type;
-    ContextMenusEventListener onclick;
+    OnClickedCallback onclick;
 };
 
 dictionary ContextMenusCreateProperties : ContextMenusProperties {
-    DOMString id;
+    required DOMString id;
 };
-
-callback ContextMenusCallback = undefined ();
 
 [Exposed=Window, IsolatedContext]
 interface ContextMenus {
-    // TODO: Define the `onShow` property.
+    attribute OnClicked onClicked;
+    attribute OnShow onShow;
 
-    // Returns the ID of the newly created menu item.
-    (DOMString or long) create(
-        ContextMenusCreateProperties properties,
-        ContextMenusCallback? callback);
-
-    undefined remove(
-        (DOMString or long) menuItemId,
-        ContextMenusCallback? callback);
-    undefined removeAll(ContextMenusCallback? callback);
-    undefined update(
-        (DOMString or long) id,
-        ContextMenusProperties properties,
-        ContextMenusCallback? callback);
+    Promise<undefined> create(ContextMenusCreateProperties properties);
+    Promise<undefined> remove(DOMString menuItemId);
+    Promise<undefined> removeAll();
+    Promise<undefined> update(DOMString id, optional ContextMenusProperties properties);
 };
 </xmp>
 
