@@ -567,10 +567,10 @@ interface OnClicked {
 dictionary ContextMenusProperties {
     boolean checked;
     sequence<ContextType> context;
-    USVString documentUrlPatterns;
+    sequence<USVString> documentUrlPatterns;
     boolean enabled;
     (DOMString or long) parentId;
-    USVString targetUrlPatterns;
+    sequence<USVString> targetUrlPatterns;
     DOMString title;
     ItemType type;
     OnClickedCallback onclick;
