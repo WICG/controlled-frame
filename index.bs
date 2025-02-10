@@ -603,6 +603,100 @@ dictionary ClearDataTypeSet {
 };
 </xmp>
 
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>clearData(optional ClearDataOptions |options| = {}, optional ClearDataTypeSet |types| = {})</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |clearSince| be 0. This will represent to clear all items.
+  1. If |options|["since"] is set:
+      1. Let |clearSince| be |options|["since"].
+  1. If |types|["appcache"] is set:
+      1. Clear the partition's appcache items with a matching |clearSince|.
+  1. If |types|["cache"] is set:
+      1. Clear the partition's cache items with a matching |clearSince|.
+  1. If |types|["cookies"] is set:
+      1. Clear the partition's cookie items with a matching |clearSince|.
+  1. If |types|["fileSystems"] is set:
+      1. Clear the partition's fileSystem items with a matching |clearSince|.
+  1. If |types|["indexedDB"] is set:
+      1. Clear the partition's indexedDB items with a matching |clearSince|.
+  1. If |types|["localStorage"] is set:
+      1. Clear the partition's localStorage items with a matching |clearSince|.
+  1. If |types|["persistentCookies"] is set:
+      1. Clear the partition's persistentCookies items with a matching |clearSince|.
+  1. If |types|["sessionCookies"] is set:
+      1. Clear the partition's sessionCookies items with a matching |clearSince|.
+  1. If |types|["webSQL"] is set:
+      1. Clear the partition's webSQL items with a matching |clearSince|.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>getAudioState()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |muteState| be the current audio mute state of embedded content.
+  1. Then, [=resolve=] |resultPromise| with |muteState|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>getZoom()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |zoomFactor| be the current zoom setting for the embedded content.
+  1. Then, [=resolve=] |resultPromise| with |zoomFactor|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>isAudioMuted()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false, [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |muteState| be the current audio mute state for embedded content.
+  1. Then, [=resolve=] |resultPromise| with |muteState|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>setAudioMuted(boolean |mute|)</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     return false.
+  1. Change the audio mute state for embedded content to match |mute| state.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>setZoom(long |zoomFactor|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Change  the zoom for the embedded content to be |zoomFactor|.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
 <!-- ====================================================================== -->
 ## Capture methods ## {#api-capture}
 <!-- ====================================================================== -->
