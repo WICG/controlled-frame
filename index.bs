@@ -179,8 +179,11 @@ patching specifications for some parts of this Controlled Frame specification.
  <dt>[=Content attributes=]:</dt>
  <dd>[=Global attributes=]</dd>
  <dd><code>[=src=]</code> — Content source URL to embed</dd>
- <dd><code>[=width=]</code> — Horizontal dimension</dd>
- <dd><code>[=height=]</code> — Vertical dimension</dd>
+ <dd><code>partition</code> — Partition name to hold data related to this content</dd>
+ <dt>Properties</dt>
+ <dd><code>contentWindow</code> — Embedded content window DOM accessor</dd>
+ <dd><code>contextMenus</code> — Context menus accessor</dd>
+ <dd><code>request</code> — WebRequest accessor</dd>
  <dt>[=Accessibility considerations=]:</dt>
  <dd><p class=XXX>Screen readers should be able to traverse into
  the embedded content similar to how a reader can traverse into iframes and
@@ -193,15 +196,6 @@ interface HTMLControlledFrameElement : HTMLElement {
     [HTMLConstructor] constructor();
 
     [CEReactions] attribute USVString src;
-    [CEReactions] attribute DOMString name;
-    [CEReactions] attribute boolean allowfullscreen;
-    [CEReactions] attribute boolean allowscaling;
-    [CEReactions] attribute boolean allowtransparency;
-    [CEReactions] attribute boolean autosize;
-    [CEReactions] attribute DOMString maxHeight;
-    [CEReactions] attribute DOMString maxWidth;
-    [CEReactions] attribute DOMString minHeight;
-    [CEReactions] attribute DOMString minWidth;
     attribute DOMString partition;
 
     readonly attribute WindowProxy? contentWindow;
