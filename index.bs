@@ -92,7 +92,9 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: dom interface; url: concept-element-dom
             text: represents; url: represents
             text: accessibility considerations; url: concept-element-accessibility-considerations
-        urlPrefix: embedder-content-other.html
+        urlPrefix: embedded-content.html
+            text: src; url: attr-source-src
+        urlPrefix: embedded-content-other.html
             text: width; url: attr-dim-width
             text: height; url: attr-dim-height
         urlPrefix: nav-history-apis.html
@@ -176,6 +178,7 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd>[=Nothing=].</dd>
  <dt>[=Content attributes=]:</dt>
  <dd>[=Global attributes=]</dd>
+ <dd><code>[=src=]</code> — Content source URL to embed</dd>
  <dd><code>[=width=]</code> — Horizontal dimension</dd>
  <dd><code>[=height=]</code> — Vertical dimension</dd>
  <dt>[=Accessibility considerations=]:</dt>
