@@ -242,6 +242,17 @@ The Controlled Frame element is exposed to any {{Document}} with the
 "controlled-frame" [=policy-controlled feature=] whose
 [=environment settings object=] is an [=isolated context=].
 
+<div algorithm>
+  To <dfn>validate embedded content</dfn>, run the following steps:
+
+  1. If an embedded context is missing, return false.
+  1. If an embedded context is present:
+      1. If the parent of the embedded context is not the current frame,
+         return false.
+  1. Return true.
+
+</div>
+
 <!-- ====================================================================== -->
 ## Navigation methods ## {#api-nav}
 <!-- ====================================================================== -->
@@ -342,17 +353,6 @@ dictionary ContentScriptDetails {
 </xmp>
 
 <div algorithm>
-  To <dfn>validate embedded content</dfn>, run the following steps:
-
-  1. If an embedded context is missing, return false.
-  1. If an embedded context is present:
-      1. If the parent of the embedded context is not the current frame,
-         return false.
-  1. Return true.
-
-</div>
-
-<div algorithm>
   To <dfn>validate css injection detail</dfn>, given an {{/object}}
   |injectionDetail|, run the following steps:
 
@@ -377,6 +377,9 @@ dictionary ContentScriptDetails {
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
   1. Create a list of content scripts to fetch.
   1. Return a promise to resolve when the content script injection completes.
   1. [=map/iterate|For each=] |contentScriptDetail| in |contentScriptList|:
@@ -435,6 +438,9 @@ dictionary ContentScriptDetails {
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
   1. If |details| has field "code":
       1. Let |detailsCode| be |details|["code"].
   1. If |details| has field "file":
@@ -460,6 +466,9 @@ dictionary ContentScriptDetails {
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
   1. For each item of type {{DOMString}} in |scriptNameList| named |scriptName|:
       1. Find the loader for |scriptName|. If it doesn't exist, then skip it.
       1. Attempt to remove the loader associated with |scriptName|.
