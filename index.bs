@@ -229,7 +229,7 @@ interface HTMLControlledFrameElement : HTMLElement {
     Promise<undefined> setZoom(long zoomFactor);
 
     // Capture methods.
-    undefined captureVisibleRegion();
+    Promise<undefined> captureVisibleRegion(optional ImageDetails options = {});
     undefined print();
 };
 </xmp>
@@ -606,6 +606,52 @@ dictionary ClearDataTypeSet {
 <!-- ====================================================================== -->
 ## Capture methods ## {#api-capture}
 <!-- ====================================================================== -->
+
+<xmp class="idl">
+// One of |code| or |file| must be specified but not both.
+dictionary ImageDetails {
+  DOMString format;
+  DOMString quality;
+};
+</xmp>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>captureVisibleRegion(optional ImageDetails |options| = {})</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |optionsFormat| be "JPEG" by default.
+  1. Let |optionsQuality| be 100 by default.
+  1. If |options| has field "format":
+      1. Let |optionsFormat| be |options|["format"].
+  1. If |optionsFormat| is an unrecognized format,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If |options| has field "quality":
+      1. Let |optionsQuality| be |options|["quality"].
+  1. If |optionsQuality| is not an integer and is not between 0 and 100
+     inclusive,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Create an image in format `optionsFormat` at quality `optionsQuality`
+     showing the visible region of
+     embedded content.
+  1. Then, [=resolve=] |resultPromise| containing the image data.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>print()</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     abort these steps.
+  1. Initiate the browser print page feature for embedded content.
+
+</div>
 
 <!-- ====================================================================== -->
 ## Event listener API ## {#api-event}
