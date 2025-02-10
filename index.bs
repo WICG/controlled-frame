@@ -379,7 +379,7 @@ The Controlled Frame element is exposed to any {{Document}} with the
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>go(long |relativeIndex|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>go(|relativeIndex|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
@@ -474,7 +474,7 @@ dictionary ContentScriptDetails {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>addContentScripts(sequence<ContentScriptDetails> |contentScriptList|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>addContentScripts(|contentScriptList|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
@@ -509,7 +509,7 @@ dictionary ContentScriptDetails {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>executeScript(optional InjectDetails |details|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>executeScript(optional |details|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
@@ -535,7 +535,7 @@ dictionary ContentScriptDetails {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>insertCSS(optional InjectDetails |details|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>insertCSS(optional |details|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
@@ -563,7 +563,7 @@ dictionary ContentScriptDetails {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>removeContentScripts(sequence<DOMString> |scriptNameList|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>removeContentScripts(|scriptNameList|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
@@ -603,7 +603,7 @@ dictionary ClearDataTypeSet {
 </xmp>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>clearData(optional ClearDataOptions |options| = {}, optional ClearDataTypeSet |types| = {})</dfn>
+  The <dfn method for=HTMLControlledFrameElement>clearData(optional |options|, optional |types|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
@@ -674,7 +674,7 @@ dictionary ClearDataTypeSet {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>setAudioMuted(boolean |mute|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>setAudioMuted(|mute|)</dfn>
   method steps are:
 
   1. If the result of running [=validate embedded content=] is false,
@@ -684,7 +684,7 @@ dictionary ClearDataTypeSet {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>setZoom(long |zoomFactor|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
@@ -709,7 +709,7 @@ dictionary ImageDetails {
 </xmp>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>captureVisibleRegion(optional ImageDetails |options| = {})</dfn>
+  The <dfn method for=HTMLControlledFrameElement>captureVisibleRegion(optional |options|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
