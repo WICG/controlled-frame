@@ -342,12 +342,23 @@ dictionary ContentScriptDetails {
 </xmp>
 
 <div algorithm>
+  To <dfn>validate embedded content</dfn>, run the following steps:
+
+  1. If an embedded context is missing, return false.
+  1. If an embedded context is present:
+      1. If the parent of the embedded context is not the current frame,
+         return false.
+  1. Return true.
+
+</div>
+
+<div algorithm>
   To <dfn>validate css injection detail</dfn>, given an {{/object}}
   |injectionDetail|, run the following steps:
 
   1. If |injectionDetail| is not a [=dictionary=], return false.
   1. If |injectionDetail| is [=map/empty=], return false.
-  1. TODO
+  1. Return true.
 
 </div>
 
@@ -357,7 +368,7 @@ dictionary ContentScriptDetails {
 
   1. If |injectionDetail| is not a [=dictionary=], return false.
   1. If |injectionDetail| is [=map/empty=], return false.
-  1. TODO
+  1. Return true.
 
 </div>
 
@@ -370,9 +381,9 @@ dictionary ContentScriptDetails {
   1. Return a promise to resolve when the content script injection completes.
   1. [=map/iterate|For each=] |contentScriptDetail| in |contentScriptList|:
       1. If |contentScriptDetail| has field "css":
-          1. Let |contentScriptDetailCss| be |contentScriptDetail["css"]|.
+          1. Let |contentScriptDetailCss| be |contentScriptDetail|["css"].
       1. If |contentScriptDetail| has field "js":
-          1. Let |contentScriptDetailJs| be |contentScriptDetail["js"]|.
+          1. Let |contentScriptDetailJs| be |contentScriptDetail|["js"].
       1. If both |contentScriptDetailCss| and |contentScriptDetailJs| are set,
          [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
       1. If |contentScriptDetailCss| is set:
@@ -394,38 +405,68 @@ dictionary ContentScriptDetails {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>executeScript(optional InjectDetails details)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>executeScript(optional InjectDetails |details|)</dfn>
   method steps are:
 
-  1. If both code and file is set, reject the promise with an error.
-  1. If file is set, fetch the file and store its contents in X.
-  1. In the embedded content, execute the script X.
-  1. Resolve the promise successfully.
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If |details| has field "code":
+      1. Let |detailsCode| be |details|["code"].
+  1. If |details| has field "file":
+      1. Let |detailsFile| be |details|["file"].
+  1. If both |detailsCode| and |detailsFile| are set,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If |detailsFile| is set:
+      1. Fetch file located at |detailsFile|.
+      1. If file is not fetched successful,
+         [=reject=] |resultPromise| with
+          a {{TypeError}} and abort these steps.
+      1. Store the result of fetching file in |detailsCode|.
+  1. In the embedded content, execute the script |detailsCode|.
+  1. Then, [=resolve=] |resultPromise|.
 
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>insertCSS(optional InjectDetails details)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>insertCSS(optional InjectDetails |details|)</dfn>
   method steps are:
 
-  1. If both code and file is set, reject the promise with an error.
-  1. If file is set, fetch the file and store its contents in X.
-  1. In the embedded content, insert the stylesheet content X.
+  1. Let |resultPromise| be a new [=promise=].
+  1. If |details| has field "code":
+      1. Let |detailsCode| be |details|["code"].
+  1. If |details| has field "file":
+      1. Let |detailsFile| be |details|["file"].
+  1. If both |detailsCode| and |detailsFile| are set,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+      an error.
+  1. If |detailsFile| is set:
+      1. Fetch file located at |detailsFile|.
+      1. If file is not fetched successful,
+         [=reject=] |resultPromise| with
+          a {{TypeError}} and abort these steps.
+      1. Store the result of fetching file in |detailsCode|.
+  1. In the embedded content, insert the stylesheet content |detailsCode|.
   1. Resolve the promise successfully.
+  1. Then, [=resolve=] |resultPromise|.
 
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>removeContentScripts(sequence<DOMString> scriptNameList)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>removeContentScripts(sequence<DOMString> |scriptNameList|)</dfn>
   method steps are:
 
-  1. For each item in `scriptNameList`
-  1. Return a promise to resolve when the content script removal completes.
-  1. For each item of type {{DOMString}} in `scriptNameList` named `x`:
-      1. Find the loader for `x`. If it doesn't exist, then skip it.
-      1. Remove the loader.
-  1. If there was an error, reject the promise with the error result.
-  1. Resolve the promise.
+  1. Let |resultPromise| be a new [=promise=].
+  1. For each item of type {{DOMString}} in |scriptNameList| named |scriptName|:
+      1. Find the loader for |scriptName|. If it doesn't exist, then skip it.
+      1. Attempt to remove the loader associated with |scriptName|.
+         If an error is encountered,
+         [=reject=] |resultPromise| with
+           a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
 
 </div>
 
