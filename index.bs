@@ -179,7 +179,9 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd><code>[=width=]</code> — Horizontal dimension</dd>
  <dd><code>[=height=]</code> — Vertical dimension</dd>
  <dt>[=Accessibility considerations=]:</dt>
- <dd><p class=XXX>TODO</p></dd>
+ <dd><p class=XXX>Screen readers should be able to traverse into
+ the embedded content similar to how a reader can traverse into iframes and
+ other related embedded content.</p></dd>
  <dt>[=DOM interface=]:</dt>
  <dd>
 <xmp class=idl>
