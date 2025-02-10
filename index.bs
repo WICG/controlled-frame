@@ -316,6 +316,108 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 </div>
 
+<div algorithm>
+  To <dfn>navigate embedded content to state</dfn>, given an {{/object}}
+  |state|, run the following steps:
+
+  1. If |state| is not an integer, return false.
+  1. Attempt to navigate the embedded content by |state| history items. If
+     an error is encountered, return false.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>back()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If the result of running [=navigate embedded content to state=] with
+     "-1" is false, [=reject=] |resultPromise| with
+     a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>canGoBack()</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     return false.
+  1. If embedded content is already at its first history state, return false.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>canGoForward()</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     return false.
+  1. If embedded content is already at its last history state, return false.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>forward()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If the result of running [=navigate embedded content to state=] with
+     "1" is false, [=reject=] |resultPromise| with
+     a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>go(long |relativeIndex|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If the result of running [=navigate embedded content to state=] with
+     |relativeIndex| is false, [=reject=] |resultPromise| with
+     a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>reload()</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     return false.
+  1. Reload embedded content for its top-level page.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>stop()</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     return false.
+  1. If embedded content is not currently loading a navigation, abort these
+     steps.
+  1. Stop the current navigation in embedded content.
+  1. Return true.
+
+</div>
+
 <!-- ====================================================================== -->
 ## Scripting methods ## {#api-scripting}
 <!-- ====================================================================== -->
