@@ -568,9 +568,9 @@ Each {{WebRequestEvent}} has:
 
   1. Call {{WebRequestEvent/removeListener}} with |listener|.
 
-  1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
+  1. Let |eventName| be [=this=]'s [=WebRequestEvent/eventName=].
 
-  1. Let |handler config| be a new [=WebRequest handler config=] with the
+  1. Let |handlerConfig| be a new [=WebRequest handler config=] with the
       following [=struct/items=]:
 
       : [=WebRequest handler config/handler=]
@@ -581,124 +581,124 @@ Each {{WebRequestEvent}} has:
 
   1. Let |specSet| be a [=set=] containing the items in |extraInfoSpec|.
 
-  1. If |event name| equals "beforeRequest", then:
+  1. If |eventName| equals "beforeRequest", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
           "requestBody", "extraHeaders" », then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "blocking", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
           [=WebRequest handler config/blocking=] to true.
 
-      1. If |specSet| [=set/contains=] "requestBody", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "requestBody", then set |handlerConfig|'s
           [=WebRequest handler config/requestsBody=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "beforeSendHeaders", then:
+  1. Otherwise, if |eventName| equals "beforeSendHeaders", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
           "requestHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "blocking", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
           [=WebRequest handler config/blocking=] to true.
 
-      1. If |specSet| [=set/contains=] "requestHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "requestHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsHeaders=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "sendHeaders", then:
+  1. Otherwise, if |eventName| equals "sendHeaders", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] « "requestHeaders",
           "extraHeaders" », then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "requestHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "requestHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsHeaders=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "headersReceived", then:
+  1. Otherwise, if |eventName| equals "headersReceived", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
           "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "blocking", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
           [=WebRequest handler config/blocking=] to true.
 
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsHeaders=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "authRequired", then:
+  1. Otherwise, if |eventName| equals "authRequired", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] « "asyncBlocking",
           "blocking", "responseHeaders", "extraHeaders" », then [=throw=]
           a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "asyncBlocking", then set |handler
-          config|'s [=WebRequest handler config/asyncBlocking=] to true.
+      1. If |specSet| [=set/contains=] "asyncBlocking", then set |handlerConfig|
+          [=WebRequest handler config/asyncBlocking=] to true.
 
-      1. If |specSet| [=set/contains=] "blocking", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
           [=WebRequest handler config/blocking=] to true.
 
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsHeaders=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "beforeRedirect", then:
+  1. Otherwise, if |eventName| equals "beforeRedirect", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] «
           "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsHeaders=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "responseStarted", then:
+  1. Otherwise, if |eventName| equals "responseStarted", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] «
           "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsHeaders=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "completed", then:
+  1. Otherwise, if |eventName| equals "completed", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] «
           "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsHeaders=] to true.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
-  1. Otherwise, if |event name| equals "errorOccurred", then:
+  1. Otherwise, if |eventName| equals "errorOccurred", then:
 
       1. If |specSet| is not a [=set/subset=] of the [=set=] « "extraHeaders" »,
           then [=throw=] a {{TypeError}}.
 
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handler config|'s
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
           [=WebRequest handler config/requestsAllHeaders=] to true.
 
   1. Otherwise, [=throw=] a {{TypeError}}.
 
-  1. Let |handler map| be the [=WebRequest/handler map=] of [=this=]'s
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
       [=WebRequestEvent/webRequest=].
 
-  1. [=list/Append=] |handler config| to |handler map|[|event name|].
+  1. [=list/Append=] |handlerConfig| to |handlerMap|[|eventName|].
 
 </div>
 
@@ -706,14 +706,14 @@ Each {{WebRequestEvent}} has:
   The <dfn method for=WebRequestEvent>hasListener(|listener|)</dfn>
   method steps are:
 
-  1. Let |handler map| be the [=WebRequest/handler map=] of [=this=]'s
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
       [=WebRequestEvent/webRequest=].
 
   1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
 
-  1. For each |handler config| in |handler map|[|event name|]:
+  1. For each |handlerConfig| in |handlerMap|[|event name|]:
 
-      1. If |handler config|'s [=WebRequest handler config/handler=] equals
+      1. If |handlerConfig|'s [=WebRequest handler config/handler=] equals
           |listener|, return true.
 
   1. Return false.
@@ -723,12 +723,12 @@ Each {{WebRequestEvent}} has:
 <div algorithm>
   The <dfn method for=WebRequestEvent>hasListeners()</dfn> method steps are:
 
-  1. Let |handler map| be the [=WebRequest/handler map=] of [=this=]'s
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
       [=WebRequestEvent/webRequest=].
 
   1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
 
-  1. If |handler map|[|event name|] is
+  1. If |handlerMap|[|event name|] is
       [=list/empty=], return false, otherwise return true.
 
 </div>
@@ -737,14 +737,14 @@ Each {{WebRequestEvent}} has:
   The <dfn method for=WebRequestEvent>removeListener(|listener|)</dfn>
   method steps are:
 
-  1. Let |handler map| be the [=WebRequest/handler map=] of [=this=]'s
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
       [=WebRequestEvent/webRequest=].
 
   1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
 
-  1. Let |handler configs| be |handler map|[|event name|].
+  1. Let |handlerConfigs| be |handlerMap|[|event name|].
 
-  1. [=list/Remove=] all items from |handler configs| whose
+  1. [=list/Remove=] all items from |handlerConfigs| whose
       [=WebRequest handler config/handler=] equals |listener|.
 
 </div>
@@ -771,7 +771,7 @@ Each {{WebRequestEvent}} has:
 
       1. If |request|'s [=request/body=] is not null, then:
 
-          1. Let |request_body| be a new {{RequestBody}}.
+          1. Let |requestBody| be a new {{RequestBody}}.
 
           1. Let |body| be |request|'s [=request/body=].
 
@@ -782,12 +782,12 @@ Each {{WebRequestEvent}} has:
               : [=byte sequence=]
               :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
                   equal to the serialized |body|'s [=body/source=] to
-                  |request_body|'s {{RequestBody/raw}}.
+                  |requestBody|'s {{RequestBody/raw}}.
 
               : {{Blob}}
               :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
                   equal to the serialized |body|'s [=body/source=] to
-                  |request_body|'s {{RequestBody/raw}}.
+                  |requestBody|'s {{RequestBody/raw}}.
 
               : {{FormData}}
               ::  1. Let |formData| be a new {{/object}}.
@@ -800,7 +800,7 @@ Each {{WebRequestEvent}} has:
                       : {{File}}
                       :: [=list/Append=] a new {{UploadData}} with
                           {{UploadData/file}} equal to |entry|[1]'s
-                          {{File/name}} to |request_body|'s
+                          {{File/name}} to |requestBody|'s
                           {{RequestBody/raw}}.
 
                       : {{USVString}}
@@ -815,7 +815,7 @@ Each {{WebRequestEvent}} has:
                   1. Set |details|'s {{RequestBody/formData}} to |formData|.
 
           1. Set |details|'s {{WebRequestBeforeRequestDetails/requestBody}}
-              to |request_body|.
+              to |requestBody|.
 
       1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
           then:
@@ -839,11 +839,11 @@ Each {{WebRequestEvent}} has:
   To <dfn>create a {{WebRequestEventDetails}} object</dfn> given a [=request=]
   |request|, run the following steps:
 
-  1. Let |environment settings object| be |request|'s [=request/client=].
+  1. Let |environmentSettingsObject| be |request|'s [=request/client=].
 
-  1. Let |crossOriginIsolatedCapability| be |environment settings object|'s
+  1. Let |crossOriginIsolatedCapability| be |environmentSettingsObject|'s
       [=environment settings object/cross-origin isolated capability=], or
-      false if |environment settings object| is null.
+      false if |environmentSettingsObject| is null.
 
   1. Let |details| be a new {{WebRequestEventDetails}} with the following
       fields:
@@ -875,16 +875,16 @@ Each {{WebRequestEvent}} has:
       : {{WebRequestEventDetails/parentFrameId}}
       :: -1
 
-  1. If |environment settings object|'s [=environment settings object/global object=]
+  1. If |environmentSettingsObject|'s [=environment settings object/global object=]
       is a {{Window}} object, then:
 
-      1. Let |window| be |environment settings object|'s
+      1. Let |window| be |environmentSettingsObject|'s
           [=environment settings object/global object=].
 
       1. Update the following fields of |details|:
 
           : {{WebRequestEventDetails/documentId}}
-          :: |environment settings object|'s [=environment/id=].
+          :: |environmentSettingsObject|'s [=environment/id=].
 
           : {{WebRequestEventDetails/documentLifecycle}}
           :: <span class=XXX>It's unclear if {{DocumentLifecycle}} values map
@@ -1076,12 +1076,12 @@ Each {{WebRequestEvent}} has:
 
     1. Let |valid handlers| be an empty [=list=].
 
-    1. Let |handler map| be |controlled frame|'s
+    1. Let |handlerMap| be |controlled frame|'s
         {{HTMLControlledFrameElement/webRequest}}'s [=WebRequest/handler map=].
 
-    1. For each |handler config| in |handler map|[|event name|]:
+    1. For each |handlerConfig| in |handlerMap|[|event name|]:
 
-        1. Let |filter| be |handler config|'s [=WebRequest handler config/filter=]
+        1. Let |filter| be |handlerConfig|'s [=WebRequest handler config/filter=]
 
         1. Let |types| be |filter|[{{RequestFilter/types}}].
 
@@ -1099,7 +1099,7 @@ Each {{WebRequestEvent}} has:
             1. If |request|'s [=request/URL=] [=matches a URL pattern=] given
                 |url pattern|, set |is valid url| to true.
 
-        1. [=list/Append=] |handler config| to |valid handlers|.
+        1. [=list/Append=] |handlerConfig| to |valid handlers|.
 
     1. Return |valid handlers|.
 
