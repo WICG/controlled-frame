@@ -378,6 +378,28 @@ modified as follows:
 ...
 
 <!-- ====================================================================== -->
+### Monkey Patches to HTML ### {#monkey-patches-to-html}
+<!-- ====================================================================== -->
+
+Each [=/navigable=] has:
+ * A <dfn for=navigable>frameId</dfn> integer, initially 0.
+ * A <dfn for=navigable>next frameId</dfn> integer, initially 1.
+
+The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
+and an optional [=/navigable=]-or-null |parent| (default null) is
+monkeypatched as follows:
+
+ 5. Set |navigable|'s [=navigable/parent=] to |parent|.
+
+ 6. <ins>If |parent| is not null (|navigable| is not a
+    [=top-level traversable=]), then:</ins>
+
+    1. <ins>Set |navigable|'s [=navigable/frameId=] to |parent|'s
+        [=navigable/next frameId=].</ins>
+
+    1. <ins>Increment |parent|'s [=navigable/next frameId=].</ins>
+
+<!-- ====================================================================== -->
 # Web Request API # {#api-web-request}
 <!-- ====================================================================== -->
 
@@ -1106,26 +1128,6 @@ Each {{WebRequestEvent}} has:
   </div>
 
 ## Monkey Patches ## {#api-web-request-monkey}
-
-### HTML ### {#api-web-request-monkey-html}
-
-Each [=/navigable=] has:
- * A <dfn for=navigable>frameId</dfn> integer, initially 0.
- * A <dfn for=navigable>next frameId</dfn> integer, initially 1.
-
-The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
-and an optional [=/navigable=]-or-null |parent| (default null) is
-monkeypatched as follows:
-
- 5. Set |navigable|'s [=navigable/parent=] to |parent|.
-
- 6. <ins>If |parent| is not null (|navigable| is not a
-    [=top-level traversable=]), then:</ins>
-
-    1. <ins>Set |navigable|'s [=navigable/frameId=] to |parent|'s
-        [=navigable/next frameId=].</ins>
-
-    1. <ins>Increment |parent|'s [=navigable/next frameId=].</ins>
 
 ### Fetch ### {#api-web-request-monkey-fetch}
 
