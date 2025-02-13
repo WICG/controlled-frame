@@ -85,13 +85,6 @@ export class WebRequestTest extends LitElement {
   constructor() {
     super();
     this.testNameToInfo.set(
-      'foo',
-      {
-        description:
-          'onBeforeRequest: Checks that onBeforeRequest is called',
-        function: this.#onBeforeRequestFoo.bind(this)
-      });
-    this.testNameToInfo.set(
       'onBeforeRequestCancel',
       {
         description:
@@ -250,36 +243,9 @@ export class WebRequestTest extends LitElement {
     }
   }
 
-  async #onBeforeRequestFoo() {
-    console.log('added listener');
-    this.controlledframe.request.onBeforeRequest.addListener((details) => {
-      console.log('onBeforeRequest', details);
-      //return { cancel: true };
-    }, { urls: ['<all_urls>'] }, ['blocking']);
-    console.log('navigating frame');
-    // await this.navigateFrame('https://www.chrome.com');
-    console.log('calling fetch');
-    await this.controlledframe.executeScript({code: `
-        (async () => {
-          console.log('running test');
-          const img = document.createElement('img');
-          img.src = 'https://developer.mozilla.org/static/media/mdn_contributor.14a24dcfda486f000754.png';
-          img.setAttribute('crossorigin', '');
-          document.body.appendChild(img);
-
-          // fetch('https://mdn.org');
-          // fetch('https://www.google.com');
-          console.log('ran test');
-        })();
-      `});
-    console.log('fetched');
-    
-  }
-
   async #onBeforeRequestCancelsNavigation() {
     this.controlledframe.request.onBeforeRequest.addListener(() => {
-      console.log('onBeforeRequestCancelsNavigation');
-      return { cancel: true, hello: 'world' };
+      return { cancel: true };
     }, { urls: ['https://www.chromium.org/*'] }, ['blocking']);
     this.#expectNavigationToBeCanceled();
   }
