@@ -488,19 +488,16 @@ dictionary ContentScriptDetails {
   1. If the result of running [=validate embedded content=] is false,
      [=reject=] |resultPromise| with
       a {{TypeError}} and abort these steps.
-  1. Return a promise to resolve when the content script injection completes.
   1. [=map/iterate|For each=] |contentScriptDetail| in |contentScriptList|:
       1. If |contentScriptDetail| has field "css":
           1. [=map/iterate|For each=] |cssInjectionItem| in
              |contentScriptDetail|["css"]:
-              1. Fetch the item and add it to the loader.
               1. If the result of running [=fetch an injection item=] with
                  |cssInjectionItem| and |type| "css" is false, [=reject=]
                  |resultPromise| with a {{TypeError}} and abort these steps.
       1. If |contentScriptDetail| has field "js":
           1. [=map/iterate|For each=] |jsInjectionItem| in
              |contentScriptDetail|["js"]:
-              1. Fetch the item and add it to the loader.
               1. If the result of running [=fetch an injection item=] with
                  |jsInjectionItem| and |type| "js" is false, [=reject=]
                  |resultPromise| with a {{TypeError}} and abort these steps.
@@ -525,7 +522,7 @@ dictionary ContentScriptDetails {
       a {{TypeError}} and abort these steps.
   1. If |detailsFile| is set:
       1. Fetch file located at |detailsFile|.
-      1. If file is not fetched successful,
+      1. If file is not fetched successfully,
          [=reject=] |resultPromise| with
           a {{TypeError}} and abort these steps.
       1. Store the result of fetching file in |detailsCode|.
@@ -552,7 +549,7 @@ dictionary ContentScriptDetails {
       an error.
   1. If |detailsFile| is set:
       1. Fetch file located at |detailsFile|.
-      1. If file is not fetched successful,
+      1. If file is not fetched successfully,
          [=reject=] |resultPromise| with
           a {{TypeError}} and abort these steps.
       1. Store the result of fetching file in |detailsCode|.
