@@ -191,7 +191,7 @@ interface HTMLControlledFrameElement : HTMLElement {
 
     readonly attribute WindowProxy? contentWindow;
     readonly attribute ContextMenus contextMenus;
-    readonly attribute WebRequest webRequest;
+    readonly attribute WebRequest request;
 
     // Navigation methods.
     Promise<undefined> back();
@@ -1099,7 +1099,7 @@ Each {{WebRequestEvent}} has:
     1. Let |valid handlers| be an empty [=list=].
 
     1. Let |handlerMap| be |controlled frame|'s
-        {{HTMLControlledFrameElement/webRequest}}'s [=WebRequest/handler map=].
+        {{HTMLControlledFrameElement/request}}'s [=WebRequest/handler map=].
 
     1. For each |handlerConfig| in |handlerMap|[|event name|]:
 
