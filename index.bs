@@ -242,12 +242,15 @@ The Controlled Frame element is exposed to any {{Document}} with the
 [=environment settings object=] is an [=isolated context=].
 
 <div algorithm>
-  To <dfn>validate embedded content</dfn>, run the following steps:
+  To <dfn>validate embedded content</dfn> with an embedded [=/navigable=]
+  |embeddedContent|, run the following steps:
 
-  1. If an embedded context is missing, return false.
-  1. If an embedded context is present:
-      1. If the parent of the embedded context is not the current frame,
-         return false.
+  1. If |embeddedContent| does not have an [=navigable/embedderParent=], return
+     false.
+  1. If |embeddedContent|'s [=navigable/embedderParent=] is not valid, return
+     false.
+  1. If |embeddedContent|'s [=navigable/embedderParent=] is not the current
+     [=/navigable=], return false.
   1. Return true.
 
 </div>
@@ -327,12 +330,12 @@ The Controlled Frame element is exposed to any {{Document}} with the
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>back()</dfn>
-  method steps are:
+  The <dfn method for=HTMLControlledFrameElement>back()</dfn> method steps for
+  an |embeddedContent| are:
 
   1. Let |resultPromise| be a new [=promise=].
-  1. If the result of running [=validate embedded content=] is false,
-     [=reject=] |resultPromise| with
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
       a {{TypeError}} and abort these steps.
   1. If the result of running [=navigate embedded content to state=] with
      "-1" is false, [=reject=] |resultPromise| with
@@ -343,10 +346,10 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>canGoBack()</dfn>
-  method steps are:
+  method steps for an |embeddedContent| are:
 
-  1. If the result of running [=validate embedded content=] is false,
-     return false.
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
   1. If embedded content is already at its first history state, return false.
   1. Return true.
 
@@ -354,10 +357,10 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>canGoForward()</dfn>
-  method steps are:
+  method steps for an |embeddedContent| are:
 
-  1. If the result of running [=validate embedded content=] is false,
-     return false.
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
   1. If embedded content is already at its last history state, return false.
   1. Return true.
 
@@ -365,11 +368,11 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>forward()</dfn>
-  method steps are:
+  method steps for an |embeddedContent| are:
 
   1. Let |resultPromise| be a new [=promise=].
-  1. If the result of running [=validate embedded content=] is false,
-     [=reject=] |resultPromise| with
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
       a {{TypeError}} and abort these steps.
   1. If the result of running [=navigate embedded content to state=] with
      "1" is false, [=reject=] |resultPromise| with
@@ -380,11 +383,11 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>go(|relativeIndex|)</dfn>
-  method steps are:
+  method steps for an |embeddedContent| are:
 
   1. Let |resultPromise| be a new [=promise=].
-  1. If the result of running [=validate embedded content=] is false,
-     [=reject=] |resultPromise| with
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
       a {{TypeError}} and abort these steps.
   1. If the result of running [=navigate embedded content to state=] with
      |relativeIndex| is false, [=reject=] |resultPromise| with
@@ -395,10 +398,10 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>reload()</dfn>
-  method steps are:
+  method steps for an |embeddedContent| are:
 
-  1. If the result of running [=validate embedded content=] is false,
-     return false.
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
   1. Reload embedded content for its top-level page.
   1. Return true.
 
@@ -406,10 +409,10 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>stop()</dfn>
-  method steps are:
+  method steps for an |embeddedContent| are:
 
-  1. If the result of running [=validate embedded content=] is false,
-     return false.
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
   1. If embedded content is not currently loading a navigation, abort these
      steps.
   1. Stop the current navigation in embedded content.
@@ -761,6 +764,7 @@ the needs of Controlled Frame.
 Each [=/navigable=] has:
  * A <dfn for=navigable>frameId</dfn> integer, initially 0.
  * A <dfn for=navigable>next frameId</dfn> integer, initially 1.
+ * An <dfn for=navigable>embedderParent</dfn>, a [=/navigable=] or null.
 
 The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
 and an optional [=/navigable=]-or-null |parent| (default null) is
@@ -768,7 +772,11 @@ monkeypatched as follows:
 
  5. Set |navigable|'s [=navigable/parent=] to |parent|.
 
- 6. <ins>If |parent| is not null (|navigable| is not a
+ 6. <ins>If this [=/navigable=] has been created via a Controlled Frame
+    embedder, then set |embedderParent| to the embedder [=/navigable=].
+    Otherwise, set |embedderParent| to null.</ins>
+
+ 7. <ins>If |parent| is not null (|navigable| is not a
     [=top-level traversable=]), then:</ins>
 
     1. <ins>Set |navigable|'s [=navigable/frameId=] to |parent|'s
