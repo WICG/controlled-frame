@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 97a1608be, updated Mon Feb 3 16:09:34 2025 -0800" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="38c0477f28d16a748e2d13f3af9e1b88c58c56e1" name="revision">
+  <meta content="6ccb85f34292a682f59d49c6a1408a00c76d43ff" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -940,7 +940,7 @@ patching specifications for some parts of this Controlled Frame specification.</
 
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy" id="ref-for-windowproxy"><c- n>WindowProxy</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="attribute" data-export data-readonly data-type="WindowProxy?" id="dom-htmlcontrolledframeelement-contentwindow"><code><c- g>contentWindow</c-></code></dfn>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#contextmenus" id="ref-for-contextmenus"><c- n>ContextMenus</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="attribute" data-export data-readonly data-type="ContextMenus" id="dom-htmlcontrolledframeelement-contextmenus"><code><c- g>contextMenus</c-></code></dfn>;
-    <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequest" id="ref-for-webrequest"><c- n>WebRequest</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="attribute" data-export data-readonly data-type="WebRequest" id="dom-htmlcontrolledframeelement-webrequest"><code><c- g>webRequest</c-></code></dfn>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequest" id="ref-for-webrequest"><c- n>WebRequest</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="attribute" data-export data-readonly data-type="WebRequest" id="dom-htmlcontrolledframeelement-request"><code><c- g>request</c-></code></dfn>;
 
     // Navigation methods.
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined"><c- b>undefined</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export data-lt="back()" id="dom-htmlcontrolledframeelement-back"><code><c- g>back</c-></code></dfn>();
@@ -1676,7 +1676,7 @@ a not-yet-defined <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-
      <li data-md>
       <p>Let <var>valid handlers</var> be an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list④">list</a>.</p>
      <li data-md>
-      <p>Let <var>handlerMap</var> be <var>controlled frame</var>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-webrequest" id="ref-for-dom-htmlcontrolledframeelement-webrequest">webRequest</a></code>’s <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map④">handler map</a>.</p>
+      <p>Let <var>handlerMap</var> be <var>controlled frame</var>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-request" id="ref-for-dom-htmlcontrolledframeelement-request">request</a></code>’s <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map④">handler map</a>.</p>
      <li data-md>
       <p>For each <var>handlerConfig</var> in <var>handlerMap</var>[<var>event name</var>]:</p>
       <ol>
@@ -2380,6 +2380,7 @@ redirection")</p>
    <li><a href="#dom-htmlcontrolledframeelement-removecontentscripts">removeContentScripts(scriptNameList)</a><span>, in § 3</span>
    <li><a href="#dom-webrequestevent-removelistener">removeListener(listener)</a><span>, in § 4</span>
    <li><a href="#dom-contextmenus-remove">remove(menuItemId, callback)</a><span>, in § 5</span>
+   <li><a href="#dom-htmlcontrolledframeelement-request">request</a><span>, in § 3</span>
    <li><a href="#dictdef-requestbody">RequestBody</a><span>, in § 4</span>
    <li><a href="#dom-webrequestbeforerequestdetails-requestbody">requestBody</a><span>, in § 4</span>
    <li><a href="#dictdef-requestfilter">RequestFilter</a><span>, in § 4</span>
@@ -2451,12 +2452,7 @@ redirection")</p>
    <li><a href="#dom-onclickdata-waschecked">wasChecked</a><span>, in § 5</span>
    <li><a href="#dom-resourcetype-webbundle">"webbundle"</a><span>, in § 4</span>
    <li><a href="#webrequest">WebRequest</a><span>, in § 4</span>
-   <li>
-    webRequest
-    <ul>
-     <li><a href="#dom-htmlcontrolledframeelement-webrequest">attribute for HTMLControlledFrameElement</a><span>, in § 3</span>
-     <li><a href="#webrequestevent-webrequest">dfn for WebRequestEvent</a><span>, in § 4</span>
-    </ul>
+   <li><a href="#webrequestevent-webrequest">webRequest</a><span>, in § 4</span>
    <li><a href="#dictdef-webrequestauthcredentials">WebRequestAuthCredentials</a><span>, in § 4</span>
    <li><a href="#dictdef-webrequestauthrequireddetails">WebRequestAuthRequiredDetails</a><span>, in § 4</span>
    <li><a href="#dictdef-webrequestbeforeredirectdetails">WebRequestBeforeRedirectDetails</a><span>, in § 4</span>
@@ -2672,7 +2668,7 @@ redirection")</p>
 
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#windowproxy"><c- n>WindowProxy</c-></a>? <a data-readonly data-type="WindowProxy?" href="#dom-htmlcontrolledframeelement-contentwindow"><code><c- g>contentWindow</c-></code></a>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#contextmenus"><c- n>ContextMenus</c-></a> <a data-readonly data-type="ContextMenus" href="#dom-htmlcontrolledframeelement-contextmenus"><code><c- g>contextMenus</c-></code></a>;
-    <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequest"><c- n>WebRequest</c-></a> <a data-readonly data-type="WebRequest" href="#dom-htmlcontrolledframeelement-webrequest"><code><c- g>webRequest</c-></code></a>;
+    <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequest"><c- n>WebRequest</c-></a> <a data-readonly data-type="WebRequest" href="#dom-htmlcontrolledframeelement-request"><code><c- g>request</c-></code></a>;
 
     // Navigation methods.
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined"><c- b>undefined</c-></a>> <a href="#dom-htmlcontrolledframeelement-back"><code><c- g>back</c-></code></a>();
@@ -3415,13 +3411,13 @@ let dfnPanelData = {
 "dom-htmlcontrolledframeelement-reload": {"dfnID":"dom-htmlcontrolledframeelement-reload","dfnText":"reload","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-reload"}],"title":"3.1. Navigation methods"}],"url":"#dom-htmlcontrolledframeelement-reload"},
 "dom-htmlcontrolledframeelement-removecontentscripts": {"dfnID":"dom-htmlcontrolledframeelement-removecontentscripts","dfnText":"removeContentScripts","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-removecontentscripts"},
 "dom-htmlcontrolledframeelement-removecontentscripts-scriptnamelist-scriptnamelist": {"dfnID":"dom-htmlcontrolledframeelement-removecontentscripts-scriptnamelist-scriptnamelist","dfnText":"scriptNameList","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-removecontentscripts-scriptnamelist-scriptnamelist"},
+"dom-htmlcontrolledframeelement-request": {"dfnID":"dom-htmlcontrolledframeelement-request","dfnText":"request","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-request"}],"title":"4.1. WebRequest handler config"}],"url":"#dom-htmlcontrolledframeelement-request"},
 "dom-htmlcontrolledframeelement-setaudiomuted": {"dfnID":"dom-htmlcontrolledframeelement-setaudiomuted","dfnText":"setAudioMuted","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-setaudiomuted"},
 "dom-htmlcontrolledframeelement-setaudiomuted-mute-mute": {"dfnID":"dom-htmlcontrolledframeelement-setaudiomuted-mute-mute","dfnText":"mute","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-setaudiomuted-mute-mute"},
 "dom-htmlcontrolledframeelement-setzoom": {"dfnID":"dom-htmlcontrolledframeelement-setzoom","dfnText":"setZoom","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-setzoom"},
 "dom-htmlcontrolledframeelement-setzoom-zoomfactor-zoomfactor": {"dfnID":"dom-htmlcontrolledframeelement-setzoom-zoomfactor-zoomfactor","dfnText":"zoomFactor","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-setzoom-zoomfactor-zoomfactor"},
 "dom-htmlcontrolledframeelement-src": {"dfnID":"dom-htmlcontrolledframeelement-src","dfnText":"src","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-src"},
 "dom-htmlcontrolledframeelement-stop": {"dfnID":"dom-htmlcontrolledframeelement-stop","dfnText":"stop","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-stop"}],"title":"3.1. Navigation methods"}],"url":"#dom-htmlcontrolledframeelement-stop"},
-"dom-htmlcontrolledframeelement-webrequest": {"dfnID":"dom-htmlcontrolledframeelement-webrequest","dfnText":"webRequest","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-webrequest"}],"title":"4.1. WebRequest handler config"}],"url":"#dom-htmlcontrolledframeelement-webrequest"},
 "dom-httpheader-binaryvalue": {"dfnID":"dom-httpheader-binaryvalue","dfnText":"binaryValue","external":false,"refSections":[],"url":"#dom-httpheader-binaryvalue"},
 "dom-httpheader-name": {"dfnID":"dom-httpheader-name","dfnText":"name","external":false,"refSections":[],"url":"#dom-httpheader-name"},
 "dom-httpheader-value": {"dfnID":"dom-httpheader-value","dfnText":"value","external":false,"refSections":[],"url":"#dom-httpheader-value"},
@@ -3984,8 +3980,8 @@ let refsData = {
 "#dom-htmlcontrolledframeelement-forward": {"displayText":"forward()","export":true,"for_":["HTMLControlledFrameElement"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"forward()","type":"method","url":"#dom-htmlcontrolledframeelement-forward"},
 "#dom-htmlcontrolledframeelement-go": {"displayText":"go(relativeIndex)","export":true,"for_":["HTMLControlledFrameElement"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"go(relativeIndex)","type":"method","url":"#dom-htmlcontrolledframeelement-go"},
 "#dom-htmlcontrolledframeelement-reload": {"displayText":"reload()","export":true,"for_":["HTMLControlledFrameElement"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"reload()","type":"method","url":"#dom-htmlcontrolledframeelement-reload"},
+"#dom-htmlcontrolledframeelement-request": {"displayText":"request","export":true,"for_":["HTMLControlledFrameElement"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"request","type":"attribute","url":"#dom-htmlcontrolledframeelement-request"},
 "#dom-htmlcontrolledframeelement-stop": {"displayText":"stop()","export":true,"for_":["HTMLControlledFrameElement"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"stop()","type":"method","url":"#dom-htmlcontrolledframeelement-stop"},
-"#dom-htmlcontrolledframeelement-webrequest": {"displayText":"webRequest","export":true,"for_":["HTMLControlledFrameElement"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"webRequest","type":"attribute","url":"#dom-htmlcontrolledframeelement-webrequest"},
 "#dom-requestbody-formdata": {"displayText":"formData","export":true,"for_":["RequestBody"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"formData","type":"dict-member","url":"#dom-requestbody-formdata"},
 "#dom-requestbody-raw": {"displayText":"raw","export":true,"for_":["RequestBody"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"raw","type":"dict-member","url":"#dom-requestbody-raw"},
 "#dom-requestfilter-types": {"displayText":"types","export":true,"for_":["RequestFilter"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"types","type":"dict-member","url":"#dom-requestfilter-types"},
