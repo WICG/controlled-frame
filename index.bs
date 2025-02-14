@@ -33,6 +33,29 @@ Markup Shorthands: markdown yes
 .domintro dt code {
     font-size: inherit;
 }
+
+/* Put nice boxes around each algorithm. */
+[data-algorithm]:not(.heading) {
+  padding: .5em;
+  border: thin solid #ddd; border-radius: .5em;
+  margin: .5em calc(-0.5em - 1px);
+}
+[data-algorithm]:not(.heading) > :first-child {
+  margin-top: 0;
+}
+[data-algorithm]:not(.heading) > :last-child {
+  margin-bottom: 0;
+}
+[data-algorithm] [data-algorithm] {
+  margin: 1em 0;
+}
+
+/* .XXX from https://resources.whatwg.org/standard.css */
+.XXX {
+  color: #D50606;
+  background: white;
+  border: solid #D50606;
+}
 </style>
 
 <pre class="biblio">
@@ -57,6 +80,9 @@ Markup Shorthands: markdown yes
 <pre class="anchors">
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
+        urlPrefix: document-sequences.html
+            text: navigable; for: /; url: navigable
+            text: initialize the navigable; url: initialize-the-navigable
         urlPrefix: dom.html
             text: contexts in which this element can be used; url: concept-element-contexts
             text: content model; url: concept-element-content-model
@@ -69,6 +95,30 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: embedder-content-other.html
             text: width; url: attr-dim-width
             text: height; url: attr-dim-height
+        urlPrefix: nav-history-apis.html
+            text: navigable; for: window; url: window-navigable
+
+spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
+    type: dfn
+        urlPrefix: /
+            text: main fetch; url: main-fetch
+</pre>
+
+<pre class=link-defaults>
+spec:fetch; type:dfn; for:/; text:header list
+spec:fetch; type:dfn; for:/; text:request
+spec:fetch; type:dfn; for:/; text:response
+spec:html; type:dfn; for:/; text:top-level traversable
+spec:infra; type:dfn; for:/; text:set
+spec:infra; type:dfn; text:list
+spec:webidl; type:dfn; text:attribute
+</pre>
+
+<pre class=link-defaults>
+spec:fetch; type:dfn; for:/; text:request
+spec:infra; type:dfn; text:list
+spec:infra; type:dfn; for:/; text:set
+spec:webidl; type:dfn; text:attribute
 </pre>
 
 <!-- ====================================================================== -->
@@ -141,6 +191,7 @@ interface HTMLControlledFrameElement : HTMLElement {
 
     readonly attribute WindowProxy? contentWindow;
     readonly attribute ContextMenus contextMenus;
+    readonly attribute WebRequest webRequest;
 
     // Navigation methods.
     Promise<undefined> back();
@@ -327,6 +378,28 @@ modified as follows:
 ...
 
 <!-- ====================================================================== -->
+### Monkey Patches to HTML ### {#monkey-patches-to-html}
+<!-- ====================================================================== -->
+
+Each [=/navigable=] has:
+ * A <dfn for=navigable>frameId</dfn> integer, initially 0.
+ * A <dfn for=navigable>next frameId</dfn> integer, initially 1.
+
+The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
+and an optional [=/navigable=]-or-null |parent| (default null) is
+monkeypatched as follows:
+
+ 5. Set |navigable|'s [=navigable/parent=] to |parent|.
+
+ 6. <ins>If |parent| is not null (|navigable| is not a
+    [=top-level traversable=]), then:</ins>
+
+    1. <ins>Set |navigable|'s [=navigable/frameId=] to |parent|'s
+        [=navigable/next frameId=].</ins>
+
+    1. <ins>Increment |parent|'s [=navigable/next frameId=].</ins>
+
+<!-- ====================================================================== -->
 # Web Request API # {#api-web-request}
 <!-- ====================================================================== -->
 
@@ -355,7 +428,6 @@ callback interface WebRequestEventListener {
 dictionary RequestFilter {
   sequence<ResourceType> types;
   sequence<USVString> urls;
-  long windowId;
 };
 
 enum ExtraInfoSpec {
@@ -374,12 +446,6 @@ interface WebRequestEvent {
   boolean hasListener(WebRequestEventListener listener);
   boolean hasListeners();
   undefined removeListener(WebRequestEventListener listener);
-};
-
-dictionary HttpHeader {
-  required DOMString name;
-  DOMString value;
-  sequence<byte> binaryValue;
 };
 
 dictionary WebRequestAuthCredentials {
@@ -423,12 +489,6 @@ dictionary WebRequestEventDetails {
   required USVString url;
 };
 
-dictionary WebRequestEventResponseDetails : WebRequestEventDetails {
-  required long statusCode;
-  required DOMString statusLine;
-  sequence<HttpHeader> responseHeaders;
-};
-
 dictionary UploadData {
   ArrayBuffer bytes;
   DOMString file;
@@ -443,6 +503,12 @@ dictionary WebRequestBeforeRequestDetails : WebRequestEventDetails {
   RequestBody requestBody;
 };
 
+dictionary HttpHeader {
+  required DOMString name;
+  DOMString value;
+  sequence<byte> binaryValue;
+};
+
 dictionary WebRequestBeforeSendHeadersDetails : WebRequestEventDetails {
   sequence<HttpHeader> requestHeaders;
 };
@@ -451,35 +517,39 @@ dictionary WebRequestSendHeadersDetails : WebRequestEventDetails {
   sequence<HttpHeader> requestHeaders;
 };
 
-dictionary WebRequestHeadersReceivedDetails : WebRequestEventResponseDetails {};
+dictionary WebRequestResponseEventDetails : WebRequestEventDetails {
+  required long statusCode;
+  required DOMString statusLine;
+  sequence<HttpHeader> responseHeaders;
+};
+
+dictionary WebRequestHeadersReceivedDetails : WebRequestResponseEventDetails {};
 
 dictionary AuthChallenger {
   DOMString host;
   long port;
 };
-dictionary WebRequestAuthRequiredDetails : WebRequestEventResponseDetails {
+dictionary WebRequestAuthRequiredDetails : WebRequestResponseEventDetails {
   required AuthChallenger challenger;
   required boolean isProxy;
   required DOMString scheme;
   DOMString realm;
 };
 
-dictionary WebRequestBeforeRedirectDetails : WebRequestEventResponseDetails {
+dictionary WebRequestResponseWithIpEventDetails : WebRequestResponseEventDetails {
   required boolean fromCache;
   DOMString ip;
+};
+
+dictionary WebRequestBeforeRedirectDetails : WebRequestResponseWithIpEventDetails {
   required USVString redirectUrl;
 };
 
-dictionary WebRequestResponseStartedDetails : WebRequestEventResponseDetails {
-  required boolean fromCache;
-  DOMString ip;
-};
+dictionary WebRequestResponseStartedDetails : WebRequestResponseWithIpEventDetails {};
 
-dictionary WebRequestCompletedDetails : WebRequestEventResponseDetails {
-  required boolean fromCache;
-  DOMString ip;
-};
+dictionary WebRequestCompletedDetails : WebRequestResponseWithIpEventDetails {};
 
+// TODO: is this the right base type?
 dictionary WebRequestErrorOccurredDetails : WebRequestEventDetails {
   required DOMString error;
   required boolean fromCache;
@@ -503,6 +573,591 @@ interface WebRequest {
   undefined handlerBehaviorChanged(optional HandlerBehaviorChangedCallback callback);
 };
 </xmp>
+
+Each {{WebRequest}} has a <dfn for=WebRequest>handler map</dfn>, which is a
+[=map=] whose [=map/keys=] are [=strings=] and whose [=map/values=] are
+[=lists=] of [=WebRequest handler configs=].
+
+Each {{WebRequestEvent}} has:
+
+ * An <dfn for=WebRequestEvent>eventName</dfn>, a [=string=].
+ * A <dfn for=WebRequestEvent>webRequest</dfn>, a {{WebRequest}} instance that
+    it is a member of.
+
+<div algorithm>
+  The <dfn method for=WebRequestEvent>addListener(|listener|, |filter|,
+  |extraInfoSpec|)</dfn> method steps are:
+
+  1. Call {{WebRequestEvent/removeListener}} with |listener|.
+
+  1. Let |eventName| be [=this=]'s [=WebRequestEvent/eventName=].
+
+  1. Let |handlerConfig| be a new [=WebRequest handler config=] with the
+      following [=struct/items=]:
+
+      : [=WebRequest handler config/handler=]
+      :: |listener|
+
+      : [=WebRequest handler config/filter=]
+      :: |filter|
+
+  1. Let |specSet| be a [=set=] containing the items in |extraInfoSpec|.
+
+  1. If |eventName| equals "beforeRequest", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
+          "requestBody", "extraHeaders" », then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
+          [=WebRequest handler config/blocking=] to true.
+
+      1. If |specSet| [=set/contains=] "requestBody", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsBody=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "beforeSendHeaders", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
+          "requestHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
+          [=WebRequest handler config/blocking=] to true.
+
+      1. If |specSet| [=set/contains=] "requestHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsHeaders=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "sendHeaders", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] « "requestHeaders",
+          "extraHeaders" », then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "requestHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsHeaders=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "headersReceived", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
+          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
+          [=WebRequest handler config/blocking=] to true.
+
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsHeaders=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "authRequired", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] « "asyncBlocking",
+          "blocking", "responseHeaders", "extraHeaders" », then [=throw=]
+          a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "asyncBlocking", then set |handlerConfig|
+          [=WebRequest handler config/asyncBlocking=] to true.
+
+      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
+          [=WebRequest handler config/blocking=] to true.
+
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsHeaders=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "beforeRedirect", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] «
+          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsHeaders=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "responseStarted", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] «
+          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsHeaders=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "completed", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] «
+          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsHeaders=] to true.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, if |eventName| equals "errorOccurred", then:
+
+      1. If |specSet| is not a [=set/subset=] of the [=set=] « "extraHeaders" »,
+          then [=throw=] a {{TypeError}}.
+
+      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
+          [=WebRequest handler config/requestsAllHeaders=] to true.
+
+  1. Otherwise, [=throw=] a {{TypeError}}.
+
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
+      [=WebRequestEvent/webRequest=].
+
+  1. [=list/Append=] |handlerConfig| to |handlerMap|[|eventName|].
+
+</div>
+
+<div algorithm>
+  The <dfn method for=WebRequestEvent>hasListener(|listener|)</dfn>
+  method steps are:
+
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
+      [=WebRequestEvent/webRequest=].
+
+  1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
+
+  1. For each |handlerConfig| in |handlerMap|[|event name|]:
+
+      1. If |handlerConfig|'s [=WebRequest handler config/handler=] equals
+          |listener|, return true.
+
+  1. Return false.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=WebRequestEvent>hasListeners()</dfn> method steps are:
+
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
+      [=WebRequestEvent/webRequest=].
+
+  1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
+
+  1. If |handlerMap|[|event name|] is
+      [=list/empty=], return false, otherwise return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=WebRequestEvent>removeListener(|listener|)</dfn>
+  method steps are:
+
+  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
+      [=WebRequestEvent/webRequest=].
+
+  1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
+
+  1. Let |handlerConfigs| be |handlerMap|[|event name|].
+
+  1. [=list/Remove=] all items from |handlerConfigs| whose
+      [=WebRequest handler config/handler=] equals |listener|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=WebRequest>handlerBehaviorChanged(|callback|)</dfn>
+  method steps are:
+
+  1. |callback| TODO
+
+</div>
+
+<div algorithm>
+  To <dfn>process beforeRequest events</dfn> given a [=request=] |request|,
+  run the following steps:
+
+  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+      handler configs=] given "beforeRequest", and |request|.
+
+  1. For each |handler| in |handlers|:
+
+      1. Let |details| be the result of calling [=create a
+          WebRequestEventDetails object=] given |request|.
+
+      1. If |request|'s [=request/body=] is not null, then:
+
+          1. Let |requestBody| be a new {{RequestBody}}.
+
+          1. Let |body| be |request|'s [=request/body=].
+
+              <span class=XXX>TODO: serialize [=body/stream=] if present.</span>
+
+          1. Switch on |body|'s [=body/source=]:
+
+              : [=byte sequence=]
+              :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
+                  equal to the serialized |body|'s [=body/source=] to
+                  |requestBody|'s {{RequestBody/raw}}.
+
+              : {{Blob}}
+              :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
+                  equal to the serialized |body|'s [=body/source=] to
+                  |requestBody|'s {{RequestBody/raw}}.
+
+              : {{FormData}}
+              ::  1. Let |formData| be a new {{/object}}.
+
+                  1. [=list/For each=] |entry| in |body|'s [=body/source=]'s
+                      [=FormData/entry list=]:
+
+                      1. Switch on |entry|[1]:
+
+                      : {{File}}
+                      :: [=list/Append=] a new {{UploadData}} with
+                          {{UploadData/file}} equal to |entry|[1]'s
+                          {{File/name}} to |requestBody|'s
+                          {{RequestBody/raw}}.
+
+                      : {{USVString}}
+                      ::  1. If |formData|[|entry|[0]] does not exist, then
+                              set |formData|[|entry|[0]] equal to an empty
+                              [=list=].
+
+                          1. [=list/Append=] |entry|[1] to
+                              |formData|[|entry|[0]].
+
+
+                  1. Set |details|'s {{RequestBody/formData}} to |formData|.
+
+          1. Set |details|'s {{WebRequestBeforeRequestDetails/requestBody}}
+              to |requestBody|.
+
+      1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
+          then:
+
+          1. Let |result| be the result of calling |handler|[[=WebRequest
+              handler config/handler=]] given |details|.
+
+          1. If any [=map/key=] in |result| is not [=list/contained=] in the set
+              « "cancel", "redirect" », then [=throw=] a {{TypeError}}.
+
+          1. Return |result|.
+
+      1. Call |handler|[[=WebRequest handler config/handler=]] given |details|
+          [=in parallel=].
+
+      1. Return null.
+
+</div>
+
+<div algorithm>
+  To <dfn>create a {{WebRequestEventDetails}} object</dfn> given a [=request=]
+  |request|, run the following steps:
+
+  1. Let |environmentSettingsObject| be |request|'s [=request/client=].
+
+  1. Let |crossOriginIsolatedCapability| be |environmentSettingsObject|'s
+      [=environment settings object/cross-origin isolated capability=], or
+      false if |environmentSettingsObject| is null.
+
+  1. Let |details| be a new {{WebRequestEventDetails}} with the following
+      fields:
+      : {{WebRequestEventDetails/timeStamp}}
+      :: The [=coarsened shared current time=] given
+          |crossOriginIsolatedCapability|.
+
+      : {{WebRequestEventDetails/url}}
+      :: The last element of |request|'s [=request/URL list=].
+
+      : {{WebRequestEventDetails/method}}
+      :: |request|'s [=request/method=].
+
+      : {{WebRequestEventDetails/initiator}}
+      :: The [=serialization of an origin=] given |request|'s [=request/origin=].
+
+         Note: An opaque origin will result in {{WebRequestEventDetails/initiator}}
+         being set to the [=string=] "null".
+
+      : {{WebRequestEventDetails/type}}
+      :: The result of calling [=get a request's ResourceType=] given |request|.
+
+      : {{WebRequestEventDetails/requestId}}
+      :: |request|'s [=request/requestId=].
+
+      : {{WebRequestEventDetails/frameId}}
+      :: -1
+
+      : {{WebRequestEventDetails/parentFrameId}}
+      :: -1
+
+  1. If |environmentSettingsObject|'s [=environment settings object/global object=]
+      is a {{Window}} object, then:
+
+      1. Let |window| be |environmentSettingsObject|'s
+          [=environment settings object/global object=].
+
+      1. Update the following fields of |details|:
+
+          : {{WebRequestEventDetails/documentId}}
+          :: |environmentSettingsObject|'s [=environment/id=].
+
+          : {{WebRequestEventDetails/documentLifecycle}}
+          :: <span class=XXX>It's unclear if {{DocumentLifecycle}} values map
+              to existing concepts.</span>
+
+          : {{WebRequestEventDetails/frameId}}
+          :: The [=navigable/frameId=] of |window|'s [=window/navigable=].
+
+          : {{WebRequestEventDetails/frameType}}
+          :: {{FrameType/"fenced_frame"}} if |window|'s {{Window/fence}} is
+              non-null, {{FrameType/"outermost_frame"}} if |window|'s
+              {{Window/top}} equals |window|, {{FrameType/"sub_frame"}}
+              otherwise.
+
+          1. If |window|'s {{Window/parent}} is not equal to |window|, then
+              update the following values of |details|:
+
+              : {{WebRequestEventDetails/parentDocumentId}}
+              :: The [=environment/id=] of |window|'s {{Window/parent}}'s
+                  [=active document=]'s [=relevant global object=].
+
+              : {{WebRequestEventDetails/parentFrameId}}
+              :: The [=navigable/frameId=] of |window|'s {{Window/parent}}'s
+                  [=window/navigable=].
+
+  1. Return |details|.
+
+</div>
+
+<!--
+<div algorithm>
+  To <dfn>create a {{WebRequestResponseEventDetails}} object</dfn> given a
+  [=request=] |request|, a [=response=] |response|, a [=boolean=]
+  |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
+  run the following steps:
+
+  1. Let |details| be the result of [=creating a WebRequestEventDetails object=]
+      given |request|.
+
+  1. Update the following fields in |details|:
+
+      : {{WebRequestResponseEventDetails/statusCode}}
+      :: |response|'s [=response/status=].
+
+      : {{WebRequestResponseEventDetails/statusLine}}
+      :: |response|'s [=response/status message=].
+
+  1. If |requestsHeaders| is true, then set |details|'s
+      {{WebRequestResponseEventDetails/responseHeaders}} to the result of
+      calling [=convert a header list to an HttpHeader sequence=] given
+      |response|'s [=response/header list=], and |requestsAllHeaders|.
+
+  1. Return |details|.
+
+</div>
+
+<div algorithm>
+  To <dfn>create a {{WebRequestResponseWithIpEventDetails}} object</dfn> given a
+  [=request=] |request|, a [=response=] |response|,
+  a [=boolean=] |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
+  run the following steps:
+
+  1. Let |details| be the result of [=creating a
+      WebRequestResponseEventDetails object=] given |request|, |response|,
+      |requestsHeaders|, and |requestsAllHeaders|.
+
+  1. If |response|'s [=response/cache state=] is "local", then set |details|'s
+      {{WebRequestResponseWithIpEventDetails/fromCache}} to true.
+
+  1. Set |details|'s {{WebRequestResponseWithIpEventDetails/ip}} to the
+      [=ip address=] from which |response| was received if the request
+      involved a network request.
+
+      <span class=XXX>The [[FETCH]] spec currently doesn't specify storing
+      the remote IP address used when sending |request|.</span>
+
+  1. Return |details|.
+
+</div>
+
+<div algorithm>
+  To <dfn>convert a [=header list=] to an {{HttpHeader}} sequence</dfn> given
+  a [=header list=] |fetch headers|, and a [=boolean=] |requestsAllHeaders|,
+  run the following steps:
+
+  1. Let |headers| be a an empty list of {{HttpHeader}} objects.
+
+  1. For each |fetch header| in |fetch headers|:
+
+      1. Let |header| be a new {{HttpHeader}}.
+
+          <span class=XXX>TODO: Skip |fetch header| if |requestsAllHeaders|
+          is false and |fetch header|[0] doesn't meet some criteria. Define
+          this criteria.</span>
+
+      1. Set |header|["{{HttpHeader/name}}"] to the [=isomorphic decoding=] of
+          |fetch header|[0].
+
+      1. Let |value| be the [=isomorphic decoding=] of |fetch header|[1] .
+
+      1. If |value| is a [=scalar value string=], then set |header|
+          ["{{HttpHeader/value}}"] to |value|.
+
+      1. Otherwise, set |header|["{{HttpHeader/binaryValue}}"] to
+          |fetch header|[1].
+
+      1. [=list/Append=] |header| to |headers|.
+
+  1. Return |headers|.
+
+</div>
+-->
+
+<div algorithm>
+  To <dfn>get a request's {{ResourceType}}</dfn> given a [=request=]
+  |request|, run the following steps:
+
+  1. Return |request|'s [=request/initiator type=].
+
+      <p class=XXX>TODO: [=request/initiator type=] doesn't exactly map to
+      {{ResourceType}}. Define this mapping.</p>
+
+</div>
+
+<div algorithm>
+  To <dfn>create a redirect response</dfn> given a [=string=] |redirectUrl|,
+  return a [=response=] with the following fields:
+
+  : [=response/status=]
+  :: 301
+
+  : [=response/header list=]
+  :: « ("Location", |redirectUrl|) »
+
+</div>
+
+## WebRequest handler config ## {#webrequest-handler-config-struct}
+
+  A <dfn export>WebRequest handler config</dfn> is a [=struct=] with the
+  following [=struct/items=]:
+
+  <dl export dfn-for="WebRequest handler config">
+    : <dfn>handler</dfn>
+    :: a {{WebRequestEventListener}}
+
+    : <dfn>filter</dfn>
+    :: a {{RequestFilter}}
+
+    : <dfn>requestsBody</dfn>
+    :: a [=boolean=]
+
+    : <dfn>requestsHeaders</dfn>
+    :: a [=boolean=]
+
+    : <dfn>requestsAllHeaders</dfn>
+    :: a [=boolean=]
+
+    : <dfn>blocking</dfn>
+    :: a [=boolean=]
+
+    : <dfn>asyncBlocking</dfn>
+    :: a [=boolean=]
+  </dl>
+
+  <div algorithm>
+    A [=string=] |url| <dfn>matches a URL pattern</dfn> [=string=] |url pattern|
+    if the following steps return true:
+
+    1. |url| |url pattern| <span class=XXX>TODO: Spec this, ideally referring to
+        a not-yet-defined <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">
+        Match pattern</a> spec.</span>
+  </div>
+
+  <div algorithm>
+    To <dfn>lookup registered WebRequest handler configs</dfn> given a
+    [=string=] |event name|, and a [=request=] |request|, run the
+    following steps:
+
+    1. Let |client| be |request|'s [=request/client=].
+
+    1. If |client| is null, return an empty [=list=].
+
+    1. Let |controlled frame| be the {{HTMLControlledFrameElement}} |client|
+        is embedded within, or null.
+
+        <span class=XXX>The ESO to CF mapping needs to be formalized.</span>
+
+    1. If |controlled frame| is null, return an empty [=list=].
+
+    1. Let |valid handlers| be an empty [=list=].
+
+    1. Let |handlerMap| be |controlled frame|'s
+        {{HTMLControlledFrameElement/webRequest}}'s [=WebRequest/handler map=].
+
+    1. For each |handlerConfig| in |handlerMap|[|event name|]:
+
+        1. Let |filter| be |handlerConfig|'s [=WebRequest handler config/filter=]
+
+        1. Let |types| be |filter|[{{RequestFilter/types}}].
+
+        1. If |types| is not [=list/empty=] and |types| does not
+            [=list/contain=] the result of calling [=get a request's ResourceType=]
+            given |request|, then [=iteration/continue=].
+
+        1. Let |urls| be |filter|[{{RequestFilter/urls}}].
+
+        1. Let |is valid url| be true if |urls| is [=list/empty=],
+            false otherwise.
+
+        1. For each |url pattern| in |urls|:
+
+            1. If |request|'s [=request/URL=] [=matches a URL pattern=] given
+                |url pattern|, set |is valid url| to true.
+
+        1. [=list/Append=] |handlerConfig| to |valid handlers|.
+
+    1. Return |valid handlers|.
+
+  </div>
+
+## Monkey Patches ## {#api-web-request-monkey}
+
+### Fetch ### {#api-web-request-monkey-fetch}
+
+A [=request=] has an associated <dfn for=request>requestId</dfn>, which is an
+opaque string, randomly assigned at the request's creation.
+
+Open questions:
+ 1. How does WR interact with HSTS? When is the https upgrade applied?
+    If HSTS is pre-onbeforerequest then we need to move the event later
+ 1. How does WR interact with preload?
+ 1. Does WR intercept worker scripts or requests from workers?
+
+The [=main fetch=] algorithm is monkeypatched as follows:
+
+  1. Let |request| be fetchParam's request.
+
+  2. Let |response| be null.
+
+  3. <ins>Let |webRequestResult| be the result of calling [=process
+      beforeRequest events=] given |request|.</ins>
+
+  4. <ins>If |webRequestResult| is not null, then:</ins>
+
+      1. <ins>If |webRequestResult|["{{BlockingResponse/cancel}}"] is true,
+          then set |response| to a [=network error=].</ins>
+
+      1. <ins>Otherwise, if |webRequestResult|
+          ["{{BlockingResponse/redirectUrl}}"] is not an empty [=string=], then
+          set |response| to the result of [=creating a redirect response=]
+          given |webRequestResult|["{{BlockingResponse/redirectUrl}}"].</ins>
 
 <!-- ====================================================================== -->
 # Context Menus API # {#api-context-menus}
