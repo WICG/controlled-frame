@@ -755,16 +755,7 @@ This specification will make some modifications to specifications to accommodate
 the needs of Controlled Frame.
 
 <!-- ====================================================================== -->
-### Monkey Patch for X ### {#api-monkey-patch-for-x}
-<!-- ====================================================================== -->
-
-The X algorithm will need to include... The step that defines Y should be
-modified as follows:
-
-...
-
-<!-- ====================================================================== -->
-### Monkey Patches to HTML ### {#monkey-patches-to-html}
+### Monkey Patch to HTML ### {#api-monkey-patch-to-html}
 <!-- ====================================================================== -->
 
 Each [=/navigable=] has:
