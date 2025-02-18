@@ -481,6 +481,36 @@ dictionary ContentScriptDetails {
 };
 </xmp>
 
+<div class="domintro note">
+
+  In [=fetch an injection item=], there are references to "associate" some code
+  with each load. This specific functionality is referring to an element of the
+  user agent's page load process that is considered to be unspecified.  This
+  section will elaborate:
+
+  When a page refers to some inline CSS or JS code, this will be injected into
+  the appropriate CSS or JS subsystem at the correct point during the page load
+  process.
+
+  If a page refers to some external file at a [=request/URL=], then the user
+  agent will fetch that [=request/URL=]. If the fetch returns successfully, the
+  user agent will now have a body of either CSS or JS code. The user agent can
+  then inject that code into the appropriate CSS or JS subsystem at the correct
+  point during the page load process.
+
+  The way that [=fetch an injection item=] works is analogous to this process,
+  except assume that the page never referred to the external file yet the
+  content specified at that file [=request/URL=] was still injected into the
+  page during page load.
+
+  Since there is no reference within the page to that external file
+  [=request/URL=], the user agent will not have a "correct point" at which to
+  inject the content into the appropriate CSS or JS subsystem.  Instead the
+  content will be injected at the end of the page load process, as if the
+  external file [=request/URL=] reference existed at the end of the page body.
+
+</div>
+
 <div algorithm>
   To <dfn>fetch an injection item</dfn>, given an |embeddedContent|, an
   {{/object}} |injectionItem| and a |type|, run the following steps:
