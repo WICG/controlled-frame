@@ -246,7 +246,7 @@ Controlled Frame element's instance should be stored. The identifier is composed
 of a string of alphanumeric digits. All data for the embedded [=/navigable=]
 will be stored in this partition.
 
-By default, all data stored will be held in a in-memory storage partition so
+By default, all data stored will be held in an in-memory storage partition so
 that when the Controlled Frame element is destroyed the data is also destroyed.
 While the data is held in this partition, no data will persist from that
 Controlled Frame embedded [=/navigable=].
