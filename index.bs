@@ -241,6 +241,23 @@ The Controlled Frame element is exposed to any {{Document}} with the
 "controlled-frame" [=policy-controlled feature=] whose
 [=environment settings object=] is an [=isolated context=].
 
+The partition attribute takes an identifier specifying where data related to the
+Controlled Frame element's instance should be stored. The identifier is composed
+of a string of alphanumeric digits. All data for the embedded [=/navigable=]
+will be stored in this partition.
+
+By default, all data stored will be held in a in-memory storage partition so
+that when the Controlled Frame element is destroyed the data is also destroyed.
+While the data is held in this partition, no data will persist from that
+Controlled Frame embedded [=/navigable=].
+
+If the partition attribute identifier contains the prefix "persist:", the user
+agent will use a disk-based storage environment rather than an in-memory
+storage partition.
+
+If multiple Controlled Frames share the same partition identifier, all of their
+embedded [=/navigable=] instances will share the same storage partition.
+
 <div algorithm>
   To <dfn>validate embedded content</dfn> with an embedded [=/navigable=]
   |embeddedContent|, run the following steps:
