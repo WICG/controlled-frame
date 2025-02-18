@@ -1782,9 +1782,10 @@ Planned mitigation:
 -  [[Isolated-Web-Apps|IWA]] APIs can never be delegated to cross-origin, so it
     will not be possible for any nested top-level navigable to access an
     [[Isolated-Web-Apps|IWA]].
--  Secondly, only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
-    child navigables that have been granted the "controlled-frame"
-    policy-controlled feature will have the Controlled Frame element available.
+-  Secondly, only embedder applications and their same-origin
+    [[Isolated-Web-Apps|IWA]] child navigables that have been granted the
+    "controlled-frame" policy-controlled feature will have the Controlled Frame
+    element available.
 -  Same-origin child navigables without the "controlled-frame"
     policy-controlled feature will not be provided a Controlled Frame element.
     Their inner same-origin nested navigables will always not have it available.
@@ -1795,7 +1796,7 @@ or 'isolated-app:'</b>
 Planned mitigation:
 
 -  Controlled Frame will only work when the navigable's "src" [=request/URL=]
-   has an 'https:' scheme.
+    has an 'https:' scheme.
 
 <b>Malicious Controlled Frame could access the embedder's running process (eg.
 Spectre attack)</b>
