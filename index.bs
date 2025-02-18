@@ -235,7 +235,15 @@ interface HTMLControlledFrameElement : HTMLElement {
 </dd>
 </dl>
 
-The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
+The <{controlledframe}> element [=represents=] its embedded [=/navigable=] which
+has a [=navigable/embedderParent=] that is valid and refers back to the embedder
+[=/navigable=].
+
+The embedded [=/navigable=] must appear as a top-level traversible. As part of
+the embedded [=/navigable=] being a top-level traversible, the embedded
+[=/navigable=] must have a null [=navigable/parent=]. Content within the
+embedded [=/navigable=] cannot distinguish that it is embedded within another
+[=/navigable=].
 
 The Controlled Frame element is exposed to any {{Document}} with the
 "controlled-frame" [=policy-controlled feature=] whose
@@ -246,7 +254,7 @@ Controlled Frame element's instance should be stored. The identifier is composed
 of a string of alphanumeric digits. All data for the embedded [=/navigable=]
 will be stored in this partition.
 
-By default, all data stored will be held in a in-memory storage partition so
+By default, all data stored will be held in an in-memory storage partition so
 that when the Controlled Frame element is destroyed the data is also destroyed.
 While the data is held in this partition, no data will persist from that
 Controlled Frame embedded [=/navigable=].
@@ -473,9 +481,39 @@ dictionary ContentScriptDetails {
 };
 </xmp>
 
+<div class="domintro note">
+
+  In [=fetch an injection item=], there are references to "associate" some code
+  with each load. This specific functionality is referring to an element of the
+  user agent's page load process that is considered to be unspecified.  This
+  section will elaborate:
+
+  When a page refers to some inline CSS or JS code, this will be injected into
+  the appropriate CSS or JS subsystem at the correct point during the page load
+  process.
+
+  If a page refers to some external file at a [=request/URL=], then the user
+  agent will fetch that [=request/URL=]. If the fetch returns successfully, the
+  user agent will now have a body of either CSS or JS code. The user agent can
+  then inject that code into the appropriate CSS or JS subsystem at the correct
+  point during the page load process.
+
+  The way that [=fetch an injection item=] works is analogous to this process,
+  except assume that the page never referred to the external file yet the
+  content specified at that file [=request/URL=] was still injected into the
+  page during page load.
+
+  Since there is no reference within the page to that external file
+  [=request/URL=], the user agent will not have a "correct point" at which to
+  inject the content into the appropriate CSS or JS subsystem.  Instead the
+  content will be injected at the end of the page load process, as if the
+  external file [=request/URL=] reference existed at the end of the page body.
+
+</div>
+
 <div algorithm>
-  To <dfn>fetch an injection item</dfn>, given an {{/object}}
-  |injectionItem| and a |type|, run the following steps:
+  To <dfn>fetch an injection item</dfn>, given an |embeddedContent|, an
+  {{/object}} |injectionItem| and a |type|, run the following steps:
 
   1. If |type| is neither "css" or "js", return false.
   1. If |injectionItem| is not a [=dictionary=], return false.
@@ -485,39 +523,43 @@ dictionary ContentScriptDetails {
   1. If |injectionItem| has field "code":
       1. Let |injectionCode| be |injectionItem|["code"].
   1. If |injectionItem| has field "file":
-      1. Fetch the content from URL |injectionItem|["file"] and store it as
-         |injectionCode|. If an error is encountered, return false.
+      1. If |injectionItem|["file"] is not a valid [=request/URL=], return
+         false.
+      1. Fetch the content from [=request/URL=] |injectionItem|["file"] and
+         store it as |injectionCode|. If an error is encountered, return false.
   1. If |type| is "css":
-      1. Update the CSS loader for this navigable on this source URL to
-         associate |injectionCode| with each load.
+      1. Update the CSS loader for the |embeddedContent| [=/navigable=]'s
+         source [=request/URL=] to associate |injectionCode| with each load.
   1. If |type| is "js":
-      1. Update the JS loader for this navigable on this source URL to
-         associate |injectionCode| with each load.
+      1. Update the JS loader for the |embeddedContent| [=/navigable=]'s source
+         [=request/URL=] to associate |injectionCode| with each load.
   1. Return true.
 
 </div>
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>addContentScripts(|contentScriptList|)</dfn>
-  method steps are:
+  method steps for an |embeddedContent| are:
 
   1. Let |resultPromise| be a new [=promise=].
-  1. If the result of running [=validate embedded content=] is false,
-     [=reject=] |resultPromise| with
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
       a {{TypeError}} and abort these steps.
   1. [=map/iterate|For each=] |contentScriptDetail| in |contentScriptList|:
       1. If |contentScriptDetail| has field "css":
           1. [=map/iterate|For each=] |cssInjectionItem| in
              |contentScriptDetail|["css"]:
               1. If the result of running [=fetch an injection item=] with
-                 |cssInjectionItem| and |type| "css" is false, [=reject=]
-                 |resultPromise| with a {{TypeError}} and abort these steps.
+                 |embeddedContent|, |cssInjectionItem| and |type| "css" is
+                 false, [=reject=] |resultPromise| with a {{TypeError}} and
+                 abort these steps.
       1. If |contentScriptDetail| has field "js":
           1. [=map/iterate|For each=] |jsInjectionItem| in
              |contentScriptDetail|["js"]:
               1. If the result of running [=fetch an injection item=] with
-                 |jsInjectionItem| and |type| "js" is false, [=reject=]
-                 |resultPromise| with a {{TypeError}} and abort these steps.
+                 |embeddedContent|, |jsInjectionItem| and |type| "js" is
+                 false, [=reject=] |resultPromise| with a {{TypeError}} and
+                 abort these steps.
   1. Otherwise, [=resolve=] |resultPromise|.
 
 </div>
@@ -1780,9 +1822,10 @@ Planned mitigation:
 -  [[Isolated-Web-Apps|IWA]] APIs can never be delegated to cross-origin, so it
     will not be possible for any nested top-level navigable to access an
     [[Isolated-Web-Apps|IWA]].
--  Secondly, only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
-    child navigables that have been granted the "controlled-frame"
-    policy-controlled feature will have the Controlled Frame element available.
+-  Secondly, only embedder applications and their same-origin
+    [[Isolated-Web-Apps|IWA]] child navigables that have been granted the
+    "controlled-frame" policy-controlled feature will have the Controlled Frame
+    element available.
 -  Same-origin child navigables without the "controlled-frame"
     policy-controlled feature will not be provided a Controlled Frame element.
     Their inner same-origin nested navigables will always not have it available.
@@ -1792,8 +1835,8 @@ or 'isolated-app:'</b>
 
 Planned mitigation:
 
--  Controlled Frame will only work when the navigable's "src" URL has an
-    'https:' scheme
+-  Controlled Frame will only work when the navigable's "src" [=request/URL=]
+    has an 'https:' scheme.
 
 <b>Malicious Controlled Frame could access the embedder's running process (eg.
 Spectre attack)</b>
