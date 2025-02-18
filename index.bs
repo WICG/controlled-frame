@@ -485,8 +485,10 @@ dictionary ContentScriptDetails {
   1. If |injectionItem| has field "code":
       1. Let |injectionCode| be |injectionItem|["code"].
   1. If |injectionItem| has field "file":
-      1. Fetch the content from URL |injectionItem|["file"] and store it as
-         |injectionCode|. If an error is encountered, return false.
+      1. If |injectionItem|["file"] is not a valid [=request/URL=], return
+         false.
+      1. Fetch the content from [=request/URL=] |injectionItem|["file"] and
+         store it as |injectionCode|. If an error is encountered, return false.
   1. If |type| is "css":
       1. Update the CSS loader for this navigable on this source URL to
          associate |injectionCode| with each load.
@@ -1792,8 +1794,8 @@ or 'isolated-app:'</b>
 
 Planned mitigation:
 
--  Controlled Frame will only work when the navigable's "src" URL has an
-    'https:' scheme
+-  Controlled Frame will only work when the navigable's "src" [=request/URL=]
+   has an 'https:' scheme.
 
 <b>Malicious Controlled Frame could access the embedder's running process (eg.
 Spectre attack)</b>
