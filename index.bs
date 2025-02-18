@@ -235,7 +235,15 @@ interface HTMLControlledFrameElement : HTMLElement {
 </dd>
 </dl>
 
-The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
+The <{controlledframe}> element [=represents=] its embedded [=/navigable=] which
+has a [=navigable/embedderParent=] that is valid and refers back to the embedder
+[=/navigable=].
+
+The embedded [=/navigable=] must appear as a top-level traversible. As part of
+the embedded [=/navigable=] being a top-level traversible, the embedded
+[=/navigable=] must have a null [=navigable/parent=]. Content within the
+embedded [=/navigable=] cannot distinguish that it is embedded within another
+[=/navigable=].
 
 The Controlled Frame element is exposed to any {{Document}} with the
 "controlled-frame" [=policy-controlled feature=] whose
