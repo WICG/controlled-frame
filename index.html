@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version f5998b114, updated Tue Feb 18 08:22:15 2025 -0800" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="06a40b2283d0b9592f83708c4954b24c65b360a5" name="revision">
+  <meta content="270197f1d93ceb130006a19e38a804e1e9655249" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -969,32 +969,36 @@ patching specifications for some parts of this Controlled Frame specification.</
 };
 </pre>
    </dl>
-   <p>The <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe">controlledframe</a></code> element <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#represents" id="ref-for-represents">represents</a> its <a data-link-type="dfn" href="https://wicg.github.io/fenced-frame/#fenced-navigable-container-fenced-navigable" id="ref-for-fenced-navigable-container-fenced-navigable">fenced navigable</a>.</p>
+   <p>The <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe">controlledframe</a></code> element <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#represents" id="ref-for-represents">represents</a> its embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable">navigable</a> which
+has a <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent">embedderParent</a> that is valid and refers back to the embedder <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①">navigable</a>.</p>
+   <p>The embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②">navigable</a> must appear as a top-level traversible. As part of
+the embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable③">navigable</a> being a top-level traversible, the embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable④">navigable</a> must have a null <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent">parent</a>. Content within the
+embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑤">navigable</a> cannot distinguish that it is embedded within another <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑥">navigable</a>.</p>
    <p>The Controlled Frame element is exposed to any <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> with the
 "controlled-frame" <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> is an <a data-link-type="dfn" href="https://wicg.github.io/isolated-web-apps/isolated-contexts.html#isolated-context" id="ref-for-isolated-context">isolated context</a>.</p>
    <p>The partition attribute takes an identifier specifying where data related to the
 Controlled Frame element’s instance should be stored. The identifier is composed
-of a string of alphanumeric digits. All data for the embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable">navigable</a> will be stored in this partition.</p>
-   <p>By default, all data stored will be held in a in-memory storage partition so
+of a string of alphanumeric digits. All data for the embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑦">navigable</a> will be stored in this partition.</p>
+   <p>By default, all data stored will be held in an in-memory storage partition so
 that when the Controlled Frame element is destroyed the data is also destroyed.
 While the data is held in this partition, no data will persist from that
-Controlled Frame embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①">navigable</a>.</p>
+Controlled Frame embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑧">navigable</a>.</p>
    <p>If the partition attribute identifier contains the prefix "persist:", the user
 agent will use a disk-based storage environment rather than an in-memory
 storage partition.</p>
    <p>If multiple Controlled Frames share the same partition identifier, all of their
-embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②">navigable</a> instances will share the same storage partition.</p>
+embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑨">navigable</a> instances will share the same storage partition.</p>
    <div class="algorithm" data-algorithm="validate embedded content">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="validate-embedded-content">validate embedded content</dfn> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable③">navigable</a> <var>embeddedContent</var>, run the following steps: 
+     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="validate-embedded-content">validate embedded content</dfn> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⓪">navigable</a> <var>embeddedContent</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>If <var>embeddedContent</var> does not have an <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent">embedderParent</a>, return
+      <p>If <var>embeddedContent</var> does not have an <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①">embedderParent</a>, return
  false.</p>
      <li data-md>
-      <p>If <var>embeddedContent</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①">embedderParent</a> is not valid, return
+      <p>If <var>embeddedContent</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②">embedderParent</a> is not valid, return
  false.</p>
      <li data-md>
-      <p>If <var>embeddedContent</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②">embedderParent</a> is not the current <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable④">navigable</a>, return false.</p>
+      <p>If <var>embeddedContent</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent③">embedderParent</a> is not the current <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①①">navigable</a>, return false.</p>
      <li data-md>
       <p>Return true.</p>
     </ol>
@@ -1049,7 +1053,7 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
      <li data-md>
       <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise①③">promise</a>.</p>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑤">navigable</a> <var>embeddedContent</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject">reject</a> <var>resultPromise</var> with
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①②">navigable</a> <var>embeddedContent</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject">reject</a> <var>resultPromise</var> with
   a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code> and abort these steps.</p>
      <li data-md>
       <p>If the result of running <a data-link-type="dfn" href="#navigate-embedded-content-to-state" id="ref-for-navigate-embedded-content-to-state">navigate embedded content to state</a> with
@@ -1063,7 +1067,7 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-cangoback"><code>canGoBack()</code></dfn> method steps for an <var>embeddedContent</var> are: 
     <ol>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content①">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑥">navigable</a> <var>embeddedContent</var> is false, return false.</p>
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content①">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①③">navigable</a> <var>embeddedContent</var> is false, return false.</p>
      <li data-md>
       <p>If embedded content is already at its first history state, return false.</p>
      <li data-md>
@@ -1074,7 +1078,7 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-cangoforward"><code>canGoForward()</code></dfn> method steps for an <var>embeddedContent</var> are: 
     <ol>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content②">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑦">navigable</a> <var>embeddedContent</var> is false, return false.</p>
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content②">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①④">navigable</a> <var>embeddedContent</var> is false, return false.</p>
      <li data-md>
       <p>If embedded content is already at its last history state, return false.</p>
      <li data-md>
@@ -1087,7 +1091,7 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
      <li data-md>
       <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise①④">promise</a>.</p>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content③">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑧">navigable</a> <var>embeddedContent</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject②">reject</a> <var>resultPromise</var> with
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content③">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑤">navigable</a> <var>embeddedContent</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject②">reject</a> <var>resultPromise</var> with
   a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②">TypeError</a></code> and abort these steps.</p>
      <li data-md>
       <p>If the result of running <a data-link-type="dfn" href="#navigate-embedded-content-to-state" id="ref-for-navigate-embedded-content-to-state①">navigate embedded content to state</a> with
@@ -1103,7 +1107,7 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
      <li data-md>
       <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise①⑤">promise</a>.</p>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content④">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑨">navigable</a> <var>embeddedContent</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject④">reject</a> <var>resultPromise</var> with
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content④">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑥">navigable</a> <var>embeddedContent</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject④">reject</a> <var>resultPromise</var> with
   a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror④">TypeError</a></code> and abort these steps.</p>
      <li data-md>
       <p>If the result of running <a data-link-type="dfn" href="#navigate-embedded-content-to-state" id="ref-for-navigate-embedded-content-to-state②">navigate embedded content to state</a> with <var>relativeIndex</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑤">reject</a> <var>resultPromise</var> with
@@ -1116,7 +1120,7 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-reload"><code>reload()</code></dfn> method steps for an <var>embeddedContent</var> are: 
     <ol>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content⑤">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⓪">navigable</a> <var>embeddedContent</var> is false, return false.</p>
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content⑤">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑦">navigable</a> <var>embeddedContent</var> is false, return false.</p>
      <li data-md>
       <p>Reload embedded content for its top-level page.</p>
      <li data-md>
@@ -1127,7 +1131,7 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-stop"><code>stop()</code></dfn> method steps for an <var>embeddedContent</var> are: 
     <ol>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content⑥">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①①">navigable</a> <var>embeddedContent</var> is false, return false.</p>
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content⑥">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑧">navigable</a> <var>embeddedContent</var> is false, return false.</p>
      <li data-md>
       <p>If embedded content is not currently loading a navigation, abort these
  steps.</p>
@@ -1168,8 +1172,30 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
   <a data-link-type="idl-name" href="#enumdef-runat" id="ref-for-enumdef-runat"><c- n>RunAt</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="RunAt" id="dom-contentscriptdetails-run_at"><code><c- g>run_at</c-></code></dfn>;
 };
 </pre>
+   <div class="domintro note" role="note">
+    <p>In <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item">fetch an injection item</a>, there are references to "associate" some code
+  with each load. This specific functionality is referring to an element of the
+  user agent’s page load process that is considered to be unspecified.  This
+  section will elaborate:</p>
+    <p>When a page refers to some inline CSS or JS code, this will be injected into
+  the appropriate CSS or JS subsystem at the correct point during the page load
+  process.</p>
+    <p>If a page refers to some external file at a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url">URL</a>, then the user
+  agent will fetch that <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url①">URL</a>. If the fetch returns successfully, the
+  user agent will now have a body of either CSS or JS code. The user agent can
+  then inject that code into the appropriate CSS or JS subsystem at the correct
+  point during the page load process.</p>
+    <p>The way that <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item①">fetch an injection item</a> works is analogous to this process,
+  except assume that the page never referred to the external file yet the
+  content specified at that file <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url②">URL</a> was still injected into the
+  page during page load.</p>
+    <p>Since there is no reference within the page to that external file <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url③">URL</a>, the user agent will not have a "correct point" at which to
+  inject the content into the appropriate CSS or JS subsystem.  Instead the
+  content will be injected at the end of the page load process, as if the
+  external file <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url④">URL</a> reference existed at the end of the page body.</p>
+   </div>
    <div class="algorithm" data-algorithm="fetch an injection item">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="fetch-an-injection-item">fetch an injection item</dfn>, given an <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object①">object</a></code> <var>injectionItem</var> and a <var>type</var>, run the following steps: 
+     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="fetch-an-injection-item">fetch an injection item</dfn>, given an <var>embeddedContent</var>, an <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object①">object</a></code> <var>injectionItem</var> and a <var>type</var>, run the following steps: 
     <ol>
      <li data-md>
       <p>If <var>type</var> is neither "css" or "js", return false.</p>
@@ -1193,33 +1219,36 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
       <p>If <var>injectionItem</var> has field "file":</p>
       <ol>
        <li data-md>
-        <p>Fetch the content from URL <var>injectionItem</var>["file"] and store it as <var>injectionCode</var>. If an error is encountered, return false.</p>
+        <p>If <var>injectionItem</var>["file"] is not a valid <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url⑤">URL</a>, return
+ false.</p>
+       <li data-md>
+        <p>Fetch the content from <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url⑥">URL</a> <var>injectionItem</var>["file"] and
+ store it as <var>injectionCode</var>. If an error is encountered, return false.</p>
       </ol>
      <li data-md>
       <p>If <var>type</var> is "css":</p>
       <ol>
        <li data-md>
-        <p>Update the CSS loader for this navigable on this source URL to
- associate <var>injectionCode</var> with each load.</p>
+        <p>Update the CSS loader for the <var>embeddedContent</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑨">navigable</a>’s
+ source <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url⑦">URL</a> to associate <var>injectionCode</var> with each load.</p>
       </ol>
      <li data-md>
       <p>If <var>type</var> is "js":</p>
       <ol>
        <li data-md>
-        <p>Update the JS loader for this navigable on this source URL to
- associate <var>injectionCode</var> with each load.</p>
+        <p>Update the JS loader for the <var>embeddedContent</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②⓪">navigable</a>’s source <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url⑧">URL</a> to associate <var>injectionCode</var> with each load.</p>
       </ol>
      <li data-md>
       <p>Return true.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="addContentScripts(contentScriptList)" data-algorithm-for="HTMLControlledFrameElement">
-     The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-addcontentscripts"><code>addContentScripts(<var>contentScriptList</var>)</code></dfn> method steps are: 
+     The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-addcontentscripts"><code>addContentScripts(<var>contentScriptList</var>)</code></dfn> method steps for an <var>embeddedContent</var> are: 
     <ol>
      <li data-md>
       <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise①⑥">promise</a>.</p>
      <li data-md>
-      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content⑦">validate embedded content</a> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑥">reject</a> <var>resultPromise</var> with
+      <p>If the result of running <a data-link-type="dfn" href="#validate-embedded-content" id="ref-for-validate-embedded-content⑦">validate embedded content</a> with an embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②①">navigable</a> <var>embeddedContent</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑥">reject</a> <var>resultPromise</var> with
   a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑥">TypeError</a></code> and abort these steps.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>contentScriptDetail</var> in <var>contentScriptList</var>:</p>
@@ -1231,7 +1260,9 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate①">For each</a> <var>cssInjectionItem</var> in <var>contentScriptDetail</var>["css"]:</p>
           <ol>
            <li data-md>
-            <p>If the result of running <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item">fetch an injection item</a> with <var>cssInjectionItem</var> and <var>type</var> "css" is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑦">reject</a> <var>resultPromise</var> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑦">TypeError</a></code> and abort these steps.</p>
+            <p>If the result of running <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item②">fetch an injection item</a> with <var>embeddedContent</var>, <var>cssInjectionItem</var> and <var>type</var> "css" is
+ false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑦">reject</a> <var>resultPromise</var> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑦">TypeError</a></code> and
+ abort these steps.</p>
           </ol>
         </ol>
        <li data-md>
@@ -1241,7 +1272,9 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate②">For each</a> <var>jsInjectionItem</var> in <var>contentScriptDetail</var>["js"]:</p>
           <ol>
            <li data-md>
-            <p>If the result of running <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item①">fetch an injection item</a> with <var>jsInjectionItem</var> and <var>type</var> "js" is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑧">reject</a> <var>resultPromise</var> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑧">TypeError</a></code> and abort these steps.</p>
+            <p>If the result of running <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item③">fetch an injection item</a> with <var>embeddedContent</var>, <var>jsInjectionItem</var> and <var>type</var> "js" is
+ false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑧">reject</a> <var>resultPromise</var> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑧">TypeError</a></code> and
+ abort these steps.</p>
           </ol>
         </ol>
       </ol>
@@ -1571,23 +1604,23 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
    <p>This specification will make some modifications to specifications to accommodate
 the needs of Controlled Frame.</p>
    <h4 class="heading settled" data-level="3.6.1" id="api-monkey-patch-to-html"><span class="secno">3.6.1. </span><span class="content">Monkey Patch to HTML</span><a class="self-link" href="#api-monkey-patch-to-html"></a></h4>
-   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①②">navigable</a> has:</p>
+   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②②">navigable</a> has:</p>
    <ul>
     <li data-md>
      <p>A <dfn class="dfn-paneled" data-dfn-for="navigable" data-dfn-type="dfn" data-noexport id="navigable-frameid">frameId</dfn> integer, initially 0.</p>
     <li data-md>
      <p>A <dfn class="dfn-paneled" data-dfn-for="navigable" data-dfn-type="dfn" data-noexport id="navigable-next-frameid">next frameId</dfn> integer, initially 1.</p>
     <li data-md>
-     <p>An <dfn class="dfn-paneled" data-dfn-for="navigable" data-dfn-type="dfn" data-noexport id="navigable-embedderparent">embedderParent</dfn>, a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①③">navigable</a> or null.</p>
+     <p>An <dfn class="dfn-paneled" data-dfn-for="navigable" data-dfn-type="dfn" data-noexport id="navigable-embedderparent">embedderParent</dfn>, a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②③">navigable</a> or null.</p>
    </ul>
-   <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#initialize-the-navigable" id="ref-for-initialize-the-navigable">initialize the navigable</a> algorithm given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①④">navigable</a> <var>navigable</var> and an optional <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑤">navigable</a>-or-null <var>parent</var> (default null) is
+   <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#initialize-the-navigable" id="ref-for-initialize-the-navigable">initialize the navigable</a> algorithm given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②④">navigable</a> <var>navigable</var> and an optional <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②⑤">navigable</a>-or-null <var>parent</var> (default null) is
 monkeypatched as follows:</p>
    <ol start="5">
     <li data-md>
-     <p>Set <var>navigable</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent">parent</a> to <var>parent</var>.</p>
+     <p>Set <var>navigable</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent①">parent</a> to <var>parent</var>.</p>
     <li data-md>
-     <ins>If this <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑥">navigable</a> has been created via a Controlled Frame
-embedder, then set <var>embedderParent</var> to the embedder <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable①⑦">navigable</a>.
+     <ins>If this <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②⑥">navigable</a> has been created via a Controlled Frame
+embedder, then set <var>embedderParent</var> to the embedder <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable②⑦">navigable</a>.
 Otherwise, set <var>embedderParent</var> to null.</ins>
     <li data-md>
      <ins>If <var>parent</var> is not null (<var>navigable</var> is not a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable">top-level traversable</a>), then:</ins>
@@ -2207,7 +2240,7 @@ false otherwise.</p>
         <p>For each <var>url pattern</var> in <var>urls</var>:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url">URL</a> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern">matches a URL pattern</a> given <var>url pattern</var>, set <var>is valid url</var> to true.</p>
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url⑨">URL</a> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern">matches a URL pattern</a> given <var>url pattern</var>, set <var>is valid url</var> to true.</p>
         </ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑤">Append</a> <var>handlerConfig</var> to <var>valid handlers</var>.</p>
@@ -2419,8 +2452,9 @@ attempt to embed content.</p>
      <p><a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a> APIs can never be delegated to cross-origin, so it
 will not be possible for any nested top-level navigable to access an <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a>.</p>
     <li data-md>
-     <p>Secondly, only embedder applications and their same-origin <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a> child navigables that have been granted the "controlled-frame"
-policy-controlled feature will have the Controlled Frame element available.</p>
+     <p>Secondly, only embedder applications and their same-origin <a data-link-type="biblio" href="#biblio-isolated-web-apps" title="Isolated Web Apps Explainer">IWA</a> child navigables that have been granted the
+"controlled-frame" policy-controlled feature will have the Controlled Frame
+element available.</p>
     <li data-md>
      <p>Same-origin child navigables without the "controlled-frame"
 policy-controlled feature will not be provided a Controlled Frame element.
@@ -2431,8 +2465,7 @@ or 'isolated-app:'</b></p>
    <p>Planned mitigation:</p>
    <ul>
     <li data-md>
-     <p>Controlled Frame will only work when the navigable’s "src" URL has an
-'https:' scheme</p>
+     <p>Controlled Frame will only work when the navigable’s "src" <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url①⓪">URL</a> has an 'https:' scheme.</p>
    </ul>
    <p><b>Malicious Controlled Frame could access the embedder’s running process (eg.
 Spectre attack)</b></p>
@@ -2999,7 +3032,6 @@ redirection")</p>
     <a data-link-type="biblio">[FENCED-FRAME]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="01a232d7">fence</span>
-     <li><span class="dfn-paneled" id="86804dc9">fenced navigable</span>
     </ul>
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
@@ -3713,7 +3745,7 @@ let dfnPanelData = {
 "1441e3bf": {"dfnID":"1441e3bf","dfnText":"name","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-name"}],"title":"4. Web Request API"}],"url":"https://w3c.github.io/FileAPI/#dfn-name"},
 "15e48c39": {"dfnID":"15e48c39","dfnText":"set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"},{"id":"ref-for-ordered-set\u2460"},{"id":"ref-for-ordered-set\u2461"},{"id":"ref-for-ordered-set\u2462"},{"id":"ref-for-ordered-set\u2463"},{"id":"ref-for-ordered-set\u2464"},{"id":"ref-for-ordered-set\u2465"},{"id":"ref-for-ordered-set\u2466"},{"id":"ref-for-ordered-set\u2467"},{"id":"ref-for-ordered-set\u2468"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
 "16d07e10": {"dfnID":"16d07e10","dfnText":"for each","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
-"1bba3db7": {"dfnID":"1bba3db7","dfnText":"parent (for navigable)","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-parent"}],"title":"3.6.1. Monkey Patch to HTML"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent"},
+"1bba3db7": {"dfnID":"1bba3db7","dfnText":"parent (for navigable)","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-parent"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-nav-parent\u2460"}],"title":"3.6.1. Monkey Patch to HTML"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent"},
 "1d3efcfe": {"dfnID":"1d3efcfe","dfnText":"src","external":true,"refSections":[{"refs":[{"id":"ref-for-attr-source-src"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/embedded-content.html#attr-source-src"},
 "228be966": {"dfnID":"228be966","dfnText":"navigable (for window)","external":true,"refSections":[{"refs":[{"id":"ref-for-window-navigable"},{"id":"ref-for-window-navigable\u2460"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable"},
 "27402d04": {"dfnID":"27402d04","dfnText":"coarsened shared current time","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-coarsened-shared-current-time"}],"title":"4. Web Request API"}],"url":"https://w3c.github.io/hr-time/#dfn-coarsened-shared-current-time"},
@@ -3753,7 +3785,6 @@ let dfnPanelData = {
 "82ca3efc": {"dfnID":"82ca3efc","dfnText":"TypeError","external":true,"refSections":[{"refs":[{"id":"ref-for-exceptiondef-typeerror"},{"id":"ref-for-exceptiondef-typeerror\u2460"},{"id":"ref-for-exceptiondef-typeerror\u2461"},{"id":"ref-for-exceptiondef-typeerror\u2462"},{"id":"ref-for-exceptiondef-typeerror\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2464"}],"title":"3.1. Navigation methods"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2465"},{"id":"ref-for-exceptiondef-typeerror\u2466"},{"id":"ref-for-exceptiondef-typeerror\u2467"},{"id":"ref-for-exceptiondef-typeerror\u2468"},{"id":"ref-for-exceptiondef-typeerror\u2460\u24ea"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2460"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2461"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2462"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2464"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2465"}],"title":"3.2. Scripting methods"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2460\u2466"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2467"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2468"},{"id":"ref-for-exceptiondef-typeerror\u2461\u24ea"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2460"}],"title":"3.3. Configuration methods"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2461\u2461"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2462"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2463"}],"title":"3.4. Capture methods"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2461\u2464"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2465"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2466"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2467"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2468"},{"id":"ref-for-exceptiondef-typeerror\u2462\u24ea"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2460"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2461"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2462"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2464"}],"title":"4. Web Request API"}],"url":"https://webidl.spec.whatwg.org/#exceptiondef-typeerror"},
 "85394472": {"dfnID":"85394472","dfnText":"Document","external":true,"refSections":[{"refs":[{"id":"ref-for-document"}],"title":"3. The controlledframe element"}],"url":"https://dom.spec.whatwg.org/#document"},
 "857d5516": {"dfnID":"857d5516","dfnText":"client","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-client"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-concept-request-client\u2460"}],"title":"4.1. WebRequest handler config"}],"url":"https://fetch.spec.whatwg.org/#concept-request-client"},
-"86804dc9": {"dfnID":"86804dc9","dfnText":"fenced navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-fenced-navigable-container-fenced-navigable"}],"title":"3. The controlledframe element"}],"url":"https://wicg.github.io/fenced-frame/#fenced-navigable-container-fenced-navigable"},
 "86f2bcb8": {"dfnID":"86f2bcb8","dfnText":"entry list","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-formdata-entry-list"}],"title":"4. Web Request API"}],"url":"https://xhr.spec.whatwg.org/#concept-formdata-entry-list"},
 "87fcd40c": {"dfnID":"87fcd40c","dfnText":"iframe","external":true,"refSections":[{"refs":[{"id":"ref-for-the-iframe-element"},{"id":"ref-for-the-iframe-element\u2460"},{"id":"ref-for-the-iframe-element\u2461"},{"id":"ref-for-the-iframe-element\u2462"},{"id":"ref-for-the-iframe-element\u2463"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-the-iframe-element\u2464"},{"id":"ref-for-the-iframe-element\u2465"}],"title":"7.2. Embedding third party web content without restriction"}],"url":"https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element"},
 "8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"},{"id":"ref-for-idl-DOMString\u2466"},{"id":"ref-for-idl-DOMString\u2467"},{"id":"ref-for-idl-DOMString\u2468"},{"id":"ref-for-idl-DOMString\u2460\u24ea"},{"id":"ref-for-idl-DOMString\u2460\u2460"}],"title":"3.2. Scripting methods"},{"refs":[{"id":"ref-for-idl-DOMString\u2460\u2461"},{"id":"ref-for-idl-DOMString\u2460\u2462"}],"title":"3.4. Capture methods"},{"refs":[{"id":"ref-for-idl-DOMString\u2460\u2463"},{"id":"ref-for-idl-DOMString\u2460\u2464"},{"id":"ref-for-idl-DOMString\u2460\u2465"},{"id":"ref-for-idl-DOMString\u2460\u2466"},{"id":"ref-for-idl-DOMString\u2460\u2467"},{"id":"ref-for-idl-DOMString\u2460\u2468"},{"id":"ref-for-idl-DOMString\u2461\u24ea"},{"id":"ref-for-idl-DOMString\u2461\u2460"},{"id":"ref-for-idl-DOMString\u2461\u2461"},{"id":"ref-for-idl-DOMString\u2461\u2462"},{"id":"ref-for-idl-DOMString\u2461\u2463"},{"id":"ref-for-idl-DOMString\u2461\u2464"},{"id":"ref-for-idl-DOMString\u2461\u2465"},{"id":"ref-for-idl-DOMString\u2461\u2466"},{"id":"ref-for-idl-DOMString\u2461\u2467"},{"id":"ref-for-idl-DOMString\u2461\u2468"},{"id":"ref-for-idl-DOMString\u2462\u24ea"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-idl-DOMString\u2462\u2460"},{"id":"ref-for-idl-DOMString\u2462\u2461"},{"id":"ref-for-idl-DOMString\u2462\u2462"},{"id":"ref-for-idl-DOMString\u2462\u2463"},{"id":"ref-for-idl-DOMString\u2462\u2464"},{"id":"ref-for-idl-DOMString\u2462\u2465"},{"id":"ref-for-idl-DOMString\u2462\u2466"},{"id":"ref-for-idl-DOMString\u2462\u2467"},{"id":"ref-for-idl-DOMString\u2462\u2468"},{"id":"ref-for-idl-DOMString\u2463\u24ea"},{"id":"ref-for-idl-DOMString\u2463\u2460"},{"id":"ref-for-idl-DOMString\u2463\u2461"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
@@ -3766,7 +3797,7 @@ let dfnPanelData = {
 "973aaf8e": {"dfnID":"973aaf8e","dfnText":"HTMLConstructor","external":true,"refSections":[{"refs":[{"id":"ref-for-htmlconstructor"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor"},
 "984221ca": {"dfnID":"984221ca","dfnText":"struct","external":true,"refSections":[{"refs":[{"id":"ref-for-struct"}],"title":"4.1. WebRequest handler config"}],"url":"https://infra.spec.whatwg.org/#struct"},
 "99c988d6": {"dfnID":"99c988d6","dfnText":"remove","external":true,"refSections":[{"refs":[{"id":"ref-for-list-remove"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#list-remove"},
-"9c19b7fc": {"dfnID":"9c19b7fc","dfnText":"navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-navigable"},{"id":"ref-for-navigable\u2460"},{"id":"ref-for-navigable\u2461"},{"id":"ref-for-navigable\u2462"},{"id":"ref-for-navigable\u2463"}],"title":"3. The controlledframe element"},{"refs":[{"id":"a552f7a90"},{"id":"ref-for-navigable\u2464"},{"id":"ref-for-navigable\u2465"},{"id":"ref-for-navigable\u2466"},{"id":"ref-for-navigable\u2467"},{"id":"ref-for-navigable\u2468"},{"id":"ref-for-navigable\u2460\u24ea"},{"id":"ref-for-navigable\u2460\u2460"}],"title":"3.1. Navigation methods"},{"refs":[{"id":"ref-for-navigable\u2460\u2461"},{"id":"ref-for-navigable\u2460\u2462"},{"id":"ref-for-navigable\u2460\u2463"},{"id":"ref-for-navigable\u2460\u2464"},{"id":"ref-for-navigable\u2460\u2465"},{"id":"ref-for-navigable\u2460\u2466"}],"title":"3.6.1. Monkey Patch to HTML"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#navigable"},
+"9c19b7fc": {"dfnID":"9c19b7fc","dfnText":"navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-navigable"},{"id":"ref-for-navigable\u2460"},{"id":"ref-for-navigable\u2461"},{"id":"ref-for-navigable\u2462"},{"id":"ref-for-navigable\u2463"},{"id":"ref-for-navigable\u2464"},{"id":"ref-for-navigable\u2465"},{"id":"ref-for-navigable\u2466"},{"id":"ref-for-navigable\u2467"},{"id":"ref-for-navigable\u2468"},{"id":"ref-for-navigable\u2460\u24ea"},{"id":"ref-for-navigable\u2460\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"a552f7a90"},{"id":"ref-for-navigable\u2460\u2461"},{"id":"ref-for-navigable\u2460\u2462"},{"id":"ref-for-navigable\u2460\u2463"},{"id":"ref-for-navigable\u2460\u2464"},{"id":"ref-for-navigable\u2460\u2465"},{"id":"ref-for-navigable\u2460\u2466"},{"id":"ref-for-navigable\u2460\u2467"}],"title":"3.1. Navigation methods"},{"refs":[{"id":"ref-for-navigable\u2460\u2468"},{"id":"ref-for-navigable\u2461\u24ea"},{"id":"ref-for-navigable\u2461\u2460"}],"title":"3.2. Scripting methods"},{"refs":[{"id":"ref-for-navigable\u2461\u2461"},{"id":"ref-for-navigable\u2461\u2462"},{"id":"ref-for-navigable\u2461\u2463"},{"id":"ref-for-navigable\u2461\u2464"},{"id":"ref-for-navigable\u2461\u2465"},{"id":"ref-for-navigable\u2461\u2466"}],"title":"3.6.1. Monkey Patch to HTML"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#navigable"},
 "9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-idl-sequence\u2461"},{"id":"ref-for-idl-sequence\u2462"},{"id":"ref-for-idl-sequence\u2463"},{"id":"ref-for-idl-sequence\u2464"},{"id":"ref-for-idl-sequence\u2465"}],"title":"3.2. Scripting methods"},{"refs":[{"id":"ref-for-idl-sequence\u2466"},{"id":"ref-for-idl-sequence\u2467"},{"id":"ref-for-idl-sequence\u2468"},{"id":"ref-for-idl-sequence\u2460\u24ea"},{"id":"ref-for-idl-sequence\u2460\u2460"},{"id":"ref-for-idl-sequence\u2460\u2461"},{"id":"ref-for-idl-sequence\u2460\u2462"},{"id":"ref-for-idl-sequence\u2460\u2463"},{"id":"ref-for-idl-sequence\u2460\u2464"},{"id":"ref-for-idl-sequence\u2460\u2465"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-idl-sequence\u2460\u2466"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
 "a1d47575": {"dfnID":"a1d47575","dfnText":"status","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response-status"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-response-status"},
 "a686a312": {"dfnID":"a686a312","dfnText":"isolated context","external":true,"refSections":[{"refs":[{"id":"ref-for-isolated-context"}],"title":"3. The controlledframe element"}],"url":"https://wicg.github.io/isolated-web-apps/isolated-contexts.html#isolated-context"},
@@ -3797,7 +3828,7 @@ let dfnPanelData = {
 "d14a6f26": {"dfnID":"d14a6f26","dfnText":"key","external":true,"refSections":[{"refs":[{"id":"ref-for-map-key"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#map-key"},
 "dae0bfde": {"dfnID":"dae0bfde","dfnText":"serialization of an origin","external":true,"refSections":[{"refs":[{"id":"ref-for-ascii-serialisation-of-an-origin"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/browsers.html#ascii-serialisation-of-an-origin"},
 "db8aa4d8": {"dfnID":"db8aa4d8","dfnText":"stream","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-body-stream"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-body-stream"},
-"dc1cd39b": {"dfnID":"dc1cd39b","dfnText":"URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-url"}],"title":"4.1. WebRequest handler config"}],"url":"https://fetch.spec.whatwg.org/#concept-request-url"},
+"dc1cd39b": {"dfnID":"dc1cd39b","dfnText":"URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-url"},{"id":"ref-for-concept-request-url\u2460"},{"id":"ref-for-concept-request-url\u2461"},{"id":"ref-for-concept-request-url\u2462"},{"id":"ref-for-concept-request-url\u2463"},{"id":"ref-for-concept-request-url\u2464"},{"id":"ref-for-concept-request-url\u2465"},{"id":"ref-for-concept-request-url\u2466"},{"id":"ref-for-concept-request-url\u2467"}],"title":"3.2. Scripting methods"},{"refs":[{"id":"ref-for-concept-request-url\u2468"}],"title":"4.1. WebRequest handler config"},{"refs":[{"id":"ref-for-concept-request-url\u2460\u24ea"}],"title":"8.1. Security"}],"url":"https://fetch.spec.whatwg.org/#concept-request-url"},
 "dictdef-authchallenger": {"dfnID":"dictdef-authchallenger","dfnText":"AuthChallenger","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-authchallenger"}],"title":"4. Web Request API"}],"url":"#dictdef-authchallenger"},
 "dictdef-blockingresponse": {"dfnID":"dictdef-blockingresponse","dfnText":"BlockingResponse","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-blockingresponse"}],"title":"4. Web Request API"}],"url":"#dictdef-blockingresponse"},
 "dictdef-cleardataoptions": {"dfnID":"dictdef-cleardataoptions","dfnText":"ClearDataOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-cleardataoptions"}],"title":"3. The controlledframe element"}],"url":"#dictdef-cleardataoptions"},
@@ -4053,12 +4084,12 @@ let dfnPanelData = {
 "f937b7b6": {"dfnID":"f937b7b6","dfnText":"continue","external":true,"refSections":[{"refs":[{"id":"ref-for-iteration-continue"}],"title":"4.1. WebRequest handler config"}],"url":"https://infra.spec.whatwg.org/#iteration-continue"},
 "fbadcbc4": {"dfnID":"fbadcbc4","dfnText":"nothing","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-content-nothing"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#concept-content-nothing"},
 "fe811c8e": {"dfnID":"fe811c8e","dfnText":"represents","external":true,"refSections":[{"refs":[{"id":"ref-for-represents"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#represents"},
-"fetch-an-injection-item": {"dfnID":"fetch-an-injection-item","dfnText":"fetch an injection item","external":false,"refSections":[{"refs":[{"id":"ref-for-fetch-an-injection-item"},{"id":"ref-for-fetch-an-injection-item\u2460"}],"title":"3.2. Scripting methods"}],"url":"#fetch-an-injection-item"},
+"fetch-an-injection-item": {"dfnID":"fetch-an-injection-item","dfnText":"fetch an injection item","external":false,"refSections":[{"refs":[{"id":"ref-for-fetch-an-injection-item"},{"id":"ref-for-fetch-an-injection-item\u2460"},{"id":"ref-for-fetch-an-injection-item\u2461"},{"id":"ref-for-fetch-an-injection-item\u2462"}],"title":"3.2. Scripting methods"}],"url":"#fetch-an-injection-item"},
 "get-a-requests-resourcetype": {"dfnID":"get-a-requests-resourcetype","dfnText":"get a request\u2019s ResourceType","external":false,"refSections":[{"refs":[{"id":"ref-for-get-a-requests-resourcetype"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-get-a-requests-resourcetype\u2460"}],"title":"4.1. WebRequest handler config"}],"url":"#get-a-requests-resourcetype"},
 "htmlcontrolledframeelement": {"dfnID":"htmlcontrolledframeelement","dfnText":"HTMLControlledFrameElement","external":false,"refSections":[{"refs":[{"id":"ref-for-htmlcontrolledframeelement"}],"title":"4.1. WebRequest handler config"}],"url":"#htmlcontrolledframeelement"},
 "lookup-registered-webrequest-handler-configs": {"dfnID":"lookup-registered-webrequest-handler-configs","dfnText":"lookup registered WebRequest handler configs","external":false,"refSections":[{"refs":[{"id":"ref-for-lookup-registered-webrequest-handler-configs"}],"title":"4. Web Request API"}],"url":"#lookup-registered-webrequest-handler-configs"},
 "matches-a-url-pattern": {"dfnID":"matches-a-url-pattern","dfnText":"matches a URL pattern","external":false,"refSections":[{"refs":[{"id":"ref-for-matches-a-url-pattern"}],"title":"4.1. WebRequest handler config"}],"url":"#matches-a-url-pattern"},
-"navigable-embedderparent": {"dfnID":"navigable-embedderparent","dfnText":"embedderParent","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-embedderparent"},{"id":"ref-for-navigable-embedderparent\u2460"},{"id":"ref-for-navigable-embedderparent\u2461"}],"title":"3. The controlledframe element"}],"url":"#navigable-embedderparent"},
+"navigable-embedderparent": {"dfnID":"navigable-embedderparent","dfnText":"embedderParent","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-embedderparent"},{"id":"ref-for-navigable-embedderparent\u2460"},{"id":"ref-for-navigable-embedderparent\u2461"},{"id":"ref-for-navigable-embedderparent\u2462"}],"title":"3. The controlledframe element"}],"url":"#navigable-embedderparent"},
 "navigable-frameid": {"dfnID":"navigable-frameid","dfnText":"frameId","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-frameid"}],"title":"3.6.1. Monkey Patch to HTML"},{"refs":[{"id":"ref-for-navigable-frameid\u2460"},{"id":"ref-for-navigable-frameid\u2461"}],"title":"4. Web Request API"}],"url":"#navigable-frameid"},
 "navigable-next-frameid": {"dfnID":"navigable-next-frameid","dfnText":"next frameId","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-next-frameid"},{"id":"ref-for-navigable-next-frameid\u2460"}],"title":"3.6.1. Monkey Patch to HTML"}],"url":"#navigable-next-frameid"},
 "navigate-embedded-content-to-state": {"dfnID":"navigate-embedded-content-to-state","dfnText":"navigate embedded content to state","external":false,"refSections":[{"refs":[{"id":"ref-for-navigate-embedded-content-to-state"},{"id":"ref-for-navigate-embedded-content-to-state\u2460"},{"id":"ref-for-navigate-embedded-content-to-state\u2461"}],"title":"3.1. Navigation methods"}],"url":"#navigate-embedded-content-to-state"},
@@ -4666,7 +4697,6 @@ let refsData = {
 "https://webidl.spec.whatwg.org/#resolve": {"displayText":"resolve","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"resolve","type":"dfn","url":"https://webidl.spec.whatwg.org/#resolve"},
 "https://webidl.spec.whatwg.org/#this": {"displayText":"this","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"this","type":"dfn","url":"https://webidl.spec.whatwg.org/#this"},
 "https://wicg.github.io/fenced-frame/#dom-window-fence": {"displayText":"fence","export":true,"for_":["Window"],"level":"1","normative":true,"shortname":"fenced-frame","spec":"fenced-frame","status":"current","text":"fence","type":"attribute","url":"https://wicg.github.io/fenced-frame/#dom-window-fence"},
-"https://wicg.github.io/fenced-frame/#fenced-navigable-container-fenced-navigable": {"displayText":"fenced navigable","export":true,"for_":["fenced navigable container"],"level":"1","normative":true,"shortname":"fenced-frame","spec":"fenced-frame","status":"current","text":"fenced navigable","type":"dfn","url":"https://wicg.github.io/fenced-frame/#fenced-navigable-container-fenced-navigable"},
 "https://wicg.github.io/isolated-web-apps/isolated-contexts.html#IsolatedContext": {"displayText":"IsolatedContext","export":true,"for_":[],"level":"1","normative":true,"shortname":"isolated-contexts","spec":"isolated-contexts","status":"current","text":"IsolatedContext","type":"extended-attribute","url":"https://wicg.github.io/isolated-web-apps/isolated-contexts.html#IsolatedContext"},
 "https://wicg.github.io/isolated-web-apps/isolated-contexts.html#isolated-context": {"displayText":"isolated context","export":true,"for_":[],"level":"1","normative":true,"shortname":"isolated-contexts","spec":"isolated-contexts","status":"current","text":"isolated context","type":"dfn","url":"https://wicg.github.io/isolated-web-apps/isolated-contexts.html#isolated-context"},
 "https://xhr.spec.whatwg.org/#concept-formdata-entry-list": {"displayText":"entry list","export":true,"for_":["FormData"],"level":"1","normative":true,"shortname":"xhr","spec":"xhr","status":"current","text":"entry list","type":"dfn","url":"https://xhr.spec.whatwg.org/#concept-formdata-entry-list"},
