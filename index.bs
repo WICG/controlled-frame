@@ -92,7 +92,9 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: dom interface; url: concept-element-dom
             text: represents; url: represents
             text: accessibility considerations; url: concept-element-accessibility-considerations
-        urlPrefix: embedder-content-other.html
+        urlPrefix: embedded-content.html
+            text: src; url: attr-source-src
+        urlPrefix: embedded-content-other.html
             text: width; url: attr-dim-width
             text: height; url: attr-dim-height
         urlPrefix: nav-history-apis.html
@@ -102,6 +104,16 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     type: dfn
         urlPrefix: /
             text: main fetch; url: main-fetch
+spec: infra; urlPrefix: https://infra.spec.whatwg.org
+    type: dfn
+        text: empty; for: map; url: map-is-empty
+spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
+    type: dfn
+        text: Web IDL Standard; url: introduction
+        text: async iterator; url: idl-async-iterable
+        text: promise; url: idl-promise
+        text: promise rejected; url: a-promise-rejected-with
+        text: promise resolved; url: a-promise-resolved-with
 </pre>
 
 <pre class=link-defaults>
@@ -166,10 +178,16 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd>[=Nothing=].</dd>
  <dt>[=Content attributes=]:</dt>
  <dd>[=Global attributes=]</dd>
- <dd><code>[=width=]</code> — Horizontal dimension</dd>
- <dd><code>[=height=]</code> — Vertical dimension</dd>
+ <dd><code>[=src=]</code> — Content source URL to embed</dd>
+ <dd><code>partition</code> — Partition name to hold data related to this content</dd>
+ <dt>Properties</dt>
+ <dd><code>contentWindow</code> — Embedded content window DOM accessor</dd>
+ <dd><code>contextMenus</code> — Context menus accessor</dd>
+ <dd><code>request</code> — WebRequest accessor</dd>
  <dt>[=Accessibility considerations=]:</dt>
- <dd><p class=XXX>TODO</p></dd>
+ <dd><p class=XXX>Screen readers should be able to traverse into
+ the embedded content similar to how a reader can traverse into iframes and
+ other related embedded content.</p></dd>
  <dt>[=DOM interface=]:</dt>
  <dd>
 <xmp class=idl>
@@ -178,15 +196,6 @@ interface HTMLControlledFrameElement : HTMLElement {
     [HTMLConstructor] constructor();
 
     [CEReactions] attribute USVString src;
-    [CEReactions] attribute DOMString name;
-    [CEReactions] attribute boolean allowfullscreen;
-    [CEReactions] attribute boolean allowscaling;
-    [CEReactions] attribute boolean allowtransparency;
-    [CEReactions] attribute boolean autosize;
-    [CEReactions] attribute DOMString maxHeight;
-    [CEReactions] attribute DOMString maxWidth;
-    [CEReactions] attribute DOMString minHeight;
-    [CEReactions] attribute DOMString minWidth;
     attribute DOMString partition;
 
     readonly attribute WindowProxy? contentWindow;
@@ -219,24 +228,94 @@ interface HTMLControlledFrameElement : HTMLElement {
     Promise<undefined> setZoom(long zoomFactor);
 
     // Capture methods.
-    undefined captureVisibleRegion();
+    Promise<undefined> captureVisibleRegion(optional ImageDetails options = {});
     undefined print();
 };
 </xmp>
 </dd>
 </dl>
 
-The <{controlledframe}> element [=represents=] its [=fenced navigable container/fenced navigable=].
+The <{controlledframe}> element [=represents=] its embedded [=/navigable=] which
+has a [=navigable/embedderParent=] that is valid and refers back to the embedder
+[=/navigable=].
+
+The embedded [=/navigable=] must appear as a top-level traversible. As part of
+the embedded [=/navigable=] being a top-level traversible, the embedded
+[=/navigable=] must have a null [=navigable/parent=]. Content within the
+embedded [=/navigable=] cannot distinguish that it is embedded within another
+[=/navigable=].
 
 The Controlled Frame element is exposed to any {{Document}} with the
 "controlled-frame" [=policy-controlled feature=] whose
 [=environment settings object=] is an [=isolated context=].
+
+The partition attribute takes an identifier specifying where data related to the
+Controlled Frame element's instance should be stored. The identifier is composed
+of a string of alphanumeric digits. All data for the embedded [=/navigable=]
+will be stored in this partition.
+
+By default, all data stored will be held in an in-memory storage partition so
+that when the Controlled Frame element is destroyed the data is also destroyed.
+While the data is held in this partition, no data will persist from that
+Controlled Frame embedded [=/navigable=].
+
+If the partition attribute identifier contains the prefix "persist:", the user
+agent will use a disk-based storage environment rather than an in-memory
+storage partition.
+
+If multiple Controlled Frames share the same partition identifier, all of their
+embedded [=/navigable=] instances will share the same storage partition.
+
+<div algorithm>
+  To <dfn>validate embedded content</dfn> with an embedded [=/navigable=]
+  |embeddedContent|, run the following steps:
+
+  1. If |embeddedContent| does not have an [=navigable/embedderParent=], return
+     false.
+  1. If |embeddedContent|'s [=navigable/embedderParent=] is not valid, return
+     false.
+  1. If |embeddedContent|'s [=navigable/embedderParent=] is not the current
+     [=/navigable=], return false.
+  1. Return true.
+
+</div>
 
 <!-- ====================================================================== -->
 ## Navigation methods ## {#api-nav}
 <!-- ====================================================================== -->
 
 <div class="domintro note">
+
+  : {{HTMLControlledFrameElement/back()|back}}()
+
+  :: Goes back one step in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a> in the Controlled Frame.
+
+    If there is no previous page, does nothing.
+
+  : {{HTMLControlledFrameElement/canGoBack()|canGoBack}}()
+
+  :: Returns true if the current
+     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
+     current session history entry</a> is not the first one in the navigation
+     history entry list. This means that there is a previous
+     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
+     session history entry</a> for this
+     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
+     navigable</a>.
+
+  : {{HTMLControlledFrameElement/forward()|forward}}()
+
+  :: Goes forward one step in the overall
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
+    session history entries </a> list for the
+    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
+    traversable navigable</a> in the Controlled Frame.
+
+    If there is no next page, does nothing.
 
   : {{HTMLControlledFrameElement/go()|go}}()
 
@@ -254,37 +333,6 @@ The Controlled Frame element is exposed to any {{Document}} with the
 
     If the relative index is out of range, does nothing.
 
-  : {{HTMLControlledFrameElement/back()|back}}()
-
-  :: Goes back one step in the overall
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
-    session history entries </a> list for the
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
-    traversable navigable</a> in the Controlled Frame.
-
-    If there is no previous page, does nothing.
-
-  : {{HTMLControlledFrameElement/forward()|forward}}()
-
-  :: Goes forward one step in the overall
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-session-history-entries">
-    session history entries </a> list for the
-    <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
-    traversable navigable</a> in the Controlled Frame.
-
-    If there is no next page, does nothing.
-
-  : {{HTMLControlledFrameElement/canGoBack()|canGoBack}}()
-
-  :: Returns true if the current
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
-     current session history entry</a> is not the first one in the navigation
-     history entry list. This means that there is a previous
-     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
-     session history entry</a> for this
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
-     navigable</a>.
-
   : {{HTMLControlledFrameElement/reload()|reload}}()
 
   :: Reloads the current page.
@@ -292,6 +340,108 @@ The Controlled Frame element is exposed to any {{Document}} with the
   : {{HTMLControlledFrameElement/stop()|stop}}()
 
   :: Cancels the document load.
+
+</div>
+
+<div algorithm>
+  To <dfn>navigate embedded content to state</dfn>, given an {{/object}}
+  |state|, run the following steps:
+
+  1. If |state| is not an integer, return false.
+  1. Attempt to navigate the embedded content by |state| history items. If
+     an error is encountered, return false.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>back()</dfn> method steps for
+  an |embeddedContent| are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If the result of running [=navigate embedded content to state=] with
+     "-1" is false, [=reject=] |resultPromise| with
+     a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>canGoBack()</dfn>
+  method steps for an |embeddedContent| are:
+
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
+  1. If embedded content is already at its first history state, return false.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>canGoForward()</dfn>
+  method steps for an |embeddedContent| are:
+
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
+  1. If embedded content is already at its last history state, return false.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>forward()</dfn>
+  method steps for an |embeddedContent| are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If the result of running [=navigate embedded content to state=] with
+     "1" is false, [=reject=] |resultPromise| with
+     a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>go(|relativeIndex|)</dfn>
+  method steps for an |embeddedContent| are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If the result of running [=navigate embedded content to state=] with
+     |relativeIndex| is false, [=reject=] |resultPromise| with
+     a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>reload()</dfn>
+  method steps for an |embeddedContent| are:
+
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
+  1. Reload embedded content for its top-level page.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>stop()</dfn>
+  method steps for an |embeddedContent| are:
+
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, return false.
+  1. If embedded content is not currently loading a navigation, abort these
+     steps.
+  1. Stop the current navigation in embedded content.
+  1. Return true.
 
 </div>
 
@@ -331,6 +481,161 @@ dictionary ContentScriptDetails {
 };
 </xmp>
 
+<div class="domintro note">
+
+  In [=fetch an injection item=], there are references to "associate" some code
+  with each load. This specific functionality is referring to an element of the
+  user agent's page load process that is considered to be unspecified.  This
+  section will elaborate:
+
+  When a page refers to some inline CSS or JS code, this will be injected into
+  the appropriate CSS or JS subsystem at the correct point during the page load
+  process.
+
+  If a page refers to some external file at a [=request/URL=], then the user
+  agent will fetch that [=request/URL=]. If the fetch returns successfully, the
+  user agent will now have a body of either CSS or JS code. The user agent can
+  then inject that code into the appropriate CSS or JS subsystem at the correct
+  point during the page load process.
+
+  The way that [=fetch an injection item=] works is analogous to this process,
+  except assume that the page never referred to the external file yet the
+  content specified at that file [=request/URL=] was still injected into the
+  page during page load.
+
+  Since there is no reference within the page to that external file
+  [=request/URL=], the user agent will not have a "correct point" at which to
+  inject the content into the appropriate CSS or JS subsystem.  Instead the
+  content will be injected at the end of the page load process, as if the
+  external file [=request/URL=] reference existed at the end of the page body.
+
+</div>
+
+<div algorithm>
+  To <dfn>fetch an injection item</dfn>, given an |embeddedContent|, an
+  {{/object}} |injectionItem| and a |type|, run the following steps:
+
+  1. If |type| is neither "css" or "js", return false.
+  1. If |injectionItem| is not a [=dictionary=], return false.
+  1. If |injectionItem| is [=map/empty=], return false.
+  1. If |injectionItem| has both fields "code" and "file" or neither field:
+      1. Return false.
+  1. If |injectionItem| has field "code":
+      1. Let |injectionCode| be |injectionItem|["code"].
+  1. If |injectionItem| has field "file":
+      1. If |injectionItem|["file"] is not a valid [=request/URL=], return
+         false.
+      1. Fetch the content from [=request/URL=] |injectionItem|["file"] and
+         store it as |injectionCode|. If an error is encountered, return false.
+  1. If |type| is "css":
+      1. Update the CSS loader for the |embeddedContent| [=/navigable=]'s
+         source [=request/URL=] to associate |injectionCode| with each load.
+  1. If |type| is "js":
+      1. Update the JS loader for the |embeddedContent| [=/navigable=]'s source
+         [=request/URL=] to associate |injectionCode| with each load.
+  1. Return true.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>addContentScripts(|contentScriptList|)</dfn>
+  method steps for an |embeddedContent| are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] with an embedded
+     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. [=map/iterate|For each=] |contentScriptDetail| in |contentScriptList|:
+      1. If |contentScriptDetail| has field "css":
+          1. [=map/iterate|For each=] |cssInjectionItem| in
+             |contentScriptDetail|["css"]:
+              1. If the result of running [=fetch an injection item=] with
+                 |embeddedContent|, |cssInjectionItem| and |type| "css" is
+                 false, [=reject=] |resultPromise| with a {{TypeError}} and
+                 abort these steps.
+      1. If |contentScriptDetail| has field "js":
+          1. [=map/iterate|For each=] |jsInjectionItem| in
+             |contentScriptDetail|["js"]:
+              1. If the result of running [=fetch an injection item=] with
+                 |embeddedContent|, |jsInjectionItem| and |type| "js" is
+                 false, [=reject=] |resultPromise| with a {{TypeError}} and
+                 abort these steps.
+  1. Otherwise, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>executeScript(optional |details|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If |details| has field "code":
+      1. Let |detailsCode| be |details|["code"].
+  1. If |details| has field "file":
+      1. Let |detailsFile| be |details|["file"].
+  1. If both |detailsCode| and |detailsFile| are set,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If |detailsFile| is set:
+      1. Fetch file located at |detailsFile|.
+      1. If file is not fetched successfully,
+         [=reject=] |resultPromise| with
+          a {{TypeError}} and abort these steps.
+      1. Store the result of fetching file in |detailsCode|.
+  1. In the embedded content, execute the script |detailsCode|.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>insertCSS(optional |details|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If |details| has field "code":
+      1. Let |detailsCode| be |details|["code"].
+  1. If |details| has field "file":
+      1. Let |detailsFile| be |details|["file"].
+  1. If both |detailsCode| and |detailsFile| are set,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+      an error.
+  1. If |detailsFile| is set:
+      1. Fetch file located at |detailsFile|.
+      1. If file is not fetched successfully,
+         [=reject=] |resultPromise| with
+          a {{TypeError}} and abort these steps.
+      1. Store the result of fetching file in |detailsCode|.
+  1. In the embedded content, insert the stylesheet content |detailsCode|.
+  1. Resolve the promise successfully.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>removeContentScripts(|scriptNameList|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. For each item of type {{DOMString}} in |scriptNameList| named |scriptName|:
+      1. Find the loader for |scriptName|. If it doesn't exist, then skip it.
+      1. Attempt to remove the loader associated with |scriptName|.
+         If an error is encountered,
+         [=reject=] |resultPromise| with
+           a {{TypeError}} and abort these steps.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
 <!-- ====================================================================== -->
 ## Configuration methods ## {#api-config}
 <!-- ====================================================================== -->
@@ -353,9 +658,149 @@ dictionary ClearDataTypeSet {
 };
 </xmp>
 
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>clearData(optional |options|, optional |types|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |clearSince| be 0. This will represent to clear all items.
+  1. If |options|["since"] is set:
+      1. Let |clearSince| be |options|["since"].
+  1. If |types|["appcache"] is set:
+      1. Clear the partition's appcache items with a matching |clearSince|.
+  1. If |types|["cache"] is set:
+      1. Clear the partition's cache items with a matching |clearSince|.
+  1. If |types|["cookies"] is set:
+      1. Clear the partition's cookie items with a matching |clearSince|.
+  1. If |types|["fileSystems"] is set:
+      1. Clear the partition's fileSystem items with a matching |clearSince|.
+  1. If |types|["indexedDB"] is set:
+      1. Clear the partition's indexedDB items with a matching |clearSince|.
+  1. If |types|["localStorage"] is set:
+      1. Clear the partition's localStorage items with a matching |clearSince|.
+  1. If |types|["persistentCookies"] is set:
+      1. Clear the partition's persistentCookies items with a matching |clearSince|.
+  1. If |types|["sessionCookies"] is set:
+      1. Clear the partition's sessionCookies items with a matching |clearSince|.
+  1. If |types|["webSQL"] is set:
+      1. Clear the partition's webSQL items with a matching |clearSince|.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>getAudioState()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |muteState| be the current audio mute state of embedded content.
+  1. Then, [=resolve=] |resultPromise| with |muteState|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>getZoom()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |zoomFactor| be the current zoom setting for the embedded content.
+  1. Then, [=resolve=] |resultPromise| with |zoomFactor|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>isAudioMuted()</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false, [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |muteState| be the current audio mute state for embedded content.
+  1. Then, [=resolve=] |resultPromise| with |muteState|.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>setAudioMuted(|mute|)</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     return false.
+  1. Change the audio mute state for embedded content to match |mute| state.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Change  the zoom for the embedded content to be |zoomFactor|.
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
 <!-- ====================================================================== -->
 ## Capture methods ## {#api-capture}
 <!-- ====================================================================== -->
+
+<xmp class="idl">
+// One of |code| or |file| must be specified but not both.
+dictionary ImageDetails {
+  DOMString format;
+  DOMString quality;
+};
+</xmp>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>captureVisibleRegion(optional |options|)</dfn>
+  method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+  1. If the result of running [=validate embedded content=] is false,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Let |optionsFormat| be "JPEG" by default.
+  1. Let |optionsQuality| be 100 by default.
+  1. If |options| has field "format":
+      1. Let |optionsFormat| be |options|["format"].
+  1. If |optionsFormat| is an unrecognized format,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. If |options| has field "quality":
+      1. Let |optionsQuality| be |options|["quality"].
+  1. If |optionsQuality| is not an integer and is not between 0 and 100
+     inclusive,
+     [=reject=] |resultPromise| with
+      a {{TypeError}} and abort these steps.
+  1. Create an image in format `optionsFormat` at quality `optionsQuality`
+     showing the visible region of
+     embedded content.
+  1. Then, [=resolve=] |resultPromise| containing the image data.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>print()</dfn>
+  method steps are:
+
+  1. If the result of running [=validate embedded content=] is false,
+     abort these steps.
+  1. Initiate the browser print page feature for embedded content.
+
+</div>
 
 <!-- ====================================================================== -->
 ## Event listener API ## {#api-event}
@@ -369,21 +814,13 @@ This specification will make some modifications to specifications to accommodate
 the needs of Controlled Frame.
 
 <!-- ====================================================================== -->
-### Monkey Patch for X ### {#api-monkey-patch-for-x}
-<!-- ====================================================================== -->
-
-The X algorithm will need to include... The step that defines Y should be
-modified as follows:
-
-...
-
-<!-- ====================================================================== -->
-### Monkey Patches to HTML ### {#monkey-patches-to-html}
+### Monkey Patch to HTML ### {#api-monkey-patch-to-html}
 <!-- ====================================================================== -->
 
 Each [=/navigable=] has:
  * A <dfn for=navigable>frameId</dfn> integer, initially 0.
  * A <dfn for=navigable>next frameId</dfn> integer, initially 1.
+ * An <dfn for=navigable>embedderParent</dfn>, a [=/navigable=] or null.
 
 The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
 and an optional [=/navigable=]-or-null |parent| (default null) is
@@ -391,7 +828,11 @@ monkeypatched as follows:
 
  5. Set |navigable|'s [=navigable/parent=] to |parent|.
 
- 6. <ins>If |parent| is not null (|navigable| is not a
+ 6. <ins>If this [=/navigable=] has been created via a Controlled Frame
+    embedder, then set |embedderParent| to the embedder [=/navigable=].
+    Otherwise, set |embedderParent| to null.</ins>
+
+ 7. <ins>If |parent| is not null (|navigable| is not a
     [=top-level traversable=]), then:</ins>
 
     1. <ins>Set |navigable|'s [=navigable/frameId=] to |parent|'s
@@ -1390,9 +1831,10 @@ Planned mitigation:
 -  [[Isolated-Web-Apps|IWA]] APIs can never be delegated to cross-origin, so it
     will not be possible for any nested top-level navigable to access an
     [[Isolated-Web-Apps|IWA]].
--  Secondly, only embedder applications and their same-origin [[Isolated-Web-Apps|IWA]]
-    child navigables that have been granted the "controlled-frame"
-    policy-controlled feature will have the Controlled Frame element available.
+-  Secondly, only embedder applications and their same-origin
+    [[Isolated-Web-Apps|IWA]] child navigables that have been granted the
+    "controlled-frame" policy-controlled feature will have the Controlled Frame
+    element available.
 -  Same-origin child navigables without the "controlled-frame"
     policy-controlled feature will not be provided a Controlled Frame element.
     Their inner same-origin nested navigables will always not have it available.
@@ -1402,8 +1844,8 @@ or 'isolated-app:'</b>
 
 Planned mitigation:
 
--  Controlled Frame will only work when the navigable's "src" URL has an
-    'https:' scheme
+-  Controlled Frame will only work when the navigable's "src" [=request/URL=]
+    has an 'https:' scheme.
 
 <b>Malicious Controlled Frame could access the embedder's running process (eg.
 Spectre attack)</b>
