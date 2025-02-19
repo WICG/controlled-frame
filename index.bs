@@ -1684,7 +1684,7 @@ interface ContextMenus {
     Promise<undefined> create(ContextMenusCreateProperties properties);
     Promise<undefined> remove(DOMString menuItemId);
     Promise<undefined> removeAll();
-    Promise<undefined> update(DOMString id, optional ContextMenusProperties properties);
+    Promise<undefined> update(DOMString id, optional ContextMenusProperties properties = {});
 };
 </xmp>
 
