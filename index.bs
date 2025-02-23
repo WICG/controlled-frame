@@ -1684,7 +1684,7 @@ interface ContextMenus {
 };
 </xmp>
 
-Each <{controlledframe}> has a single {{ContextMenus}} which manages a <dfn for=ContextMenus> context menu [=map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
+Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
 
 Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> which is a [=list=] of <a data-link-type="callback" data-lt="ContextMenusCallback">ContextMenusCallbacks</a>.
 
@@ -1694,9 +1694,9 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   1. Let |resultPromise| be a new [=promise=].
 
-  1. Let |contextMenusMap| be the [=ContextMenus/context menu map=] of the {{ContextMenus}}.
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-  1. Let |id| be the |properties|["id"].
+  1. Let |id| be the |properties|["{{OnClickData/id}}"].
 
   1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
 
@@ -1712,7 +1712,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   1. Let |resultPromise| be a new [=promise=].
 
-  1. Let |contextMenusMap| be the [=ContextMenus/context menu map=] of the {{ContextMenus}}.
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
   1. [=map/Remove=] |contextMenusMap|[|id|].
 
@@ -1726,7 +1726,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   1. Let |resultPromise| be a new [=promise=].
 
-  1. Let |contextMenusMap| be the [=ContextMenus/context menu map=] of the {{ContextMenus}}.
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
   1. [=map/Clear=] |contextMenusMap|.
 
@@ -1740,7 +1740,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   1. Let |resultPromise| be a new [=promise=].
 
-  1. Let |contextMenusMap| be the [=ContextMenus/context menu map=] of the {{ContextMenus}}.
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
   1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
 
