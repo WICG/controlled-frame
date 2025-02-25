@@ -869,7 +869,7 @@ Each [=/navigable=] has:
 
 The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
 and an optional [=/navigable=]-or-null |parent| (default null) is
-monkeypatched as follows:
+monkey patched as follows:
 
  5. Set |navigable|'s [=navigable/parent=] to |parent|.
 
@@ -1371,7 +1371,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestBeforeSendHeadersDetails/requestHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |request|'s [=request/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and true.
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to true.
 
       1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
           then:
@@ -1407,7 +1408,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestSendHeadersDetails/requestHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |request|'s [=request/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and true.
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to true.
 
       1. Call |handler|[[=WebRequest handler config/handler=]] given |details|
           [=in parallel=].
@@ -1431,7 +1433,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestResponseEventDetails/responseHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |response|'s [=response/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and false.
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to false.
 
       1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
           then:
@@ -1497,7 +1500,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestResponseEventDetails/responseHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |response|'s [=response/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and false,
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to false.
 
           1. Set |details| {{WebRequestAuthRequiredDetails/challenger}},
               {{WebRequestAuthRequiredDetails/isProxy}},
@@ -1568,7 +1572,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestResponseEventDetails/responseHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |response|'s [=response/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and false.
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to false.
 
       1. Let |internalResponse| be |response|, if |response| is not a
           [=filtered response=]; otherwise |response|’s [=internal response=].
@@ -1599,7 +1604,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestResponseEventDetails/responseHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |response|'s [=response/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and false.
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to false.
 
       1. Call |handler|[[=WebRequest handler config/handler=]] given |details|
           [=in parallel=].
@@ -1623,7 +1629,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestResponseEventDetails/responseHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |response|'s [=response/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and false.
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to false.
 
       1. Call |handler|[[=WebRequest handler config/handler=]] given |details|
           [=in parallel=].
@@ -1647,7 +1654,8 @@ Each {{WebRequestEvent}} has:
           then set |details|'s {{WebRequestResponseEventDetails/responseHeaders}}
           to the result of calling [=convert a header list to an HttpHeader
           sequence=] given |response|'s [=response/header list=], |handler|'s
-          [=WebRequest handler config/requestsAllHeaders=], and false.
+          [=WebRequest handler config/requestsAllHeaders=], and isRequest
+          equal to false.
 
       1. Set |handler|'s {{WebRequestErrorOccurredDetails/error}} field to an
           implementation-defined error message describing the error in
@@ -1757,7 +1765,8 @@ Each {{WebRequestEvent}} has:
   1. If |requestsHeaders| is true, then set |details|'s
       {{WebRequestResponseEventDetails/responseHeaders}} to the result of
       calling [=convert a header list to an HttpHeader sequence=] given
-      |response|'s [=response/header list=], |requestsAllHeaders|, and false.
+      |response|'s [=response/header list=], |requestsAllHeaders|, and isRequest
+      equal to false.
 
   1. Return |details|.
 
@@ -1973,9 +1982,9 @@ Each {{WebRequestEvent}} has:
 A [=request=] has an associated <dfn for=request>requestId</dfn>, which is an
 opaque string, randomly assigned at the request's creation.
 
-The [=main fetch=] algorithm is monkeypatched as follows:
+The [=main fetch=] algorithm is monkey patched as follows:
 
-  1. Let |request| be fetchParam's request.
+  1. Let |request| be |fetchParams|'s request.
 
   2. Let |response| be null.
 
@@ -1993,31 +2002,31 @@ The [=main fetch=] algorithm is monkeypatched as follows:
           given |webRequestResult|["{{BlockingResponse/redirectUrl}}"].</ins>
 
 
-The [=fetch response handover=] algorithm is monkeypatched as follows:
+The [=fetch response handover=] algorithm is monkey patched as follows:
 
   1. <ins>If |response| is not a [=network error=], then call [=process
-      responseStarted events=] given fetchParam's [=fetch params/request=]
+      responseStarted events=] given |fetchParams|'s [=fetch params/request=]
       and |response|.</ins>
 
-  1. Let timingInfo be fetchParams’s timing info.
+  1. Let timingInfo be |fetchParams|’s timing info.
 
 &vellip;
 
-  9. If fetchParams’s process response consume body is non-null, then:
+  9. If |fetchParams|’s process response consume body is non-null, then:
 
       &hellip;
 
   10. <ins>If |response| is not a [=network error=], then call [=process
-      completed events=] given |fetchParam|'s [=fetch params/request=]
+      completed events=] given |fetchParams|'s [=fetch params/request=]
       and |response|.</ins>
 
   11. <ins>Otherwise, call [=process errorOccurred events=] given
-      |fetchParam|'s [=fetch params/request=] and |response|.</ins>
+      |fetchParams|'s [=fetch params/request=] and |response|.</ins>
 
 
-The [=HTTP-network-or-cache fetch=] algorithm is monkeypatched as follows:
+The [=HTTP-network-or-cache fetch=] algorithm is monkey patched as follows:
 
-  7. Let the revalidateingFlag be unset.
+  7. Let the revalidatingFlag be unset.
 
   8. <ins>Set |webRequestResult| to the result of calling [=process
       beforeSendHeaders events=] given |request|.</ins>
@@ -2034,11 +2043,11 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkeypatched as follows:
           ["{{BlockingResponse/requestHeaders}}"].</ins>
 
   10. <ins>If |response| is not null, </ins> run these steps, but abort when
-      fetchParams is canceled:
+      |fetchParams| is canceled:
 
       &vellip;
 
-  11. If aborted, then return the appropriate network error for fetchParams.
+  11. If aborted, then return the appropriate network error for |fetchParams|.
 
   12. If |response| is null, then:
 
@@ -2081,8 +2090,8 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkeypatched as follows:
       3. If request’s use-URL-credentials flag is unset or
           isAuthenticationFetch is true, then:
 
-          1. If fetchParams is canceled, then return the appropriate network
-              error for fetchParams.
+          1. If |fetchParams| is canceled, then return the appropriate network
+              error for |fetchParams|.
 
           1. Let |username| and |password| be null.
 
@@ -2128,12 +2137,12 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkeypatched as follows:
       6. <ins>Otherwise,</ins> prompt the end user as appropriate ...
 
 
-The [=HTTP-redirect fetch=] algorithm is monkeypatched as follows:
+The [=HTTP-redirect fetch=] algorithm is monkey patched as follows:
 
   1. <ins>Call [=process beforeRedirect events=] given |request| and
       |response|.</ins>
 
-  1. Let request be fetchParams’s request.
+  1. Let request be |fetchParams|’s request.
 
 <!-- ====================================================================== -->
 # Context Menus API # {#api-context-menus}
