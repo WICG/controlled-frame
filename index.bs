@@ -1631,7 +1631,7 @@ dictionary OnClickData {
     USVString frameUrl;
     USVString linkUrl;
     DOMString mediaType;
-    required (DOMString or long) id;
+    required (DOMString or long) menuItemId;
     USVString pageUrl;
     (DOMString or long) parentMenuId;
     DOMString selectionText;
@@ -1696,7 +1696,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-  1. Let |id| be the |properties|["{{OnClickData/id}}"].
+  1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
 
   1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
 
@@ -1808,7 +1808,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
     1. Update the following fields of |onClickData|:
 
-    : {{OnClickData/id}}
+    : {{OnClickData/menuItemId}}
     :: <span class=XXX>TODO: describe these fields.</span>
 
   1. [=list/For each=] |callback| in |callbackList|:
