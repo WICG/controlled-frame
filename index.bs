@@ -1639,45 +1639,189 @@ dictionary OnClickData {
     boolean wasChecked;
 };
 
-callback ContextMenusEventListener = undefined (OnClickData data);
+callback ContextMenusCallback = undefined (optional OnClickData Info);
+
+[Exposed=Window, IsolatedContext]
+interface ContextMenusEvent {
+    undefined addListener(ContextMenusCallback callback);
+    undefined removeListener(ContextMenusCallback callback);
+    boolean hasListener(ContextMenusCallback callback);
+    boolean hasListeners();
+    undefined dispatch();
+};
+
+[Exposed=Window, IsolatedContext]
+interface OnClickedEvent : ContextMenusEvent {};
+
+[Exposed=Window, IsolatedContext]
+interface OnShowEvent : ContextMenusEvent {};
 
 dictionary ContextMenusProperties {
     boolean checked;
     sequence<ContextType> context;
-    DOMString documentUrlPatterns;
+    sequence<USVString> documentUrlPatterns;
     boolean enabled;
-    DOMString parentId;
-    DOMString targetUrlPatterns;
+    (DOMString or long) parentId;
+    sequence<USVString> targetUrlPatterns;
     DOMString title;
     ItemType type;
-    ContextMenusEventListener onclick;
+    ContextMenusCallback onclick;
 };
 
 dictionary ContextMenusCreateProperties : ContextMenusProperties {
-    DOMString id;
+    required DOMString id;
 };
-
-callback ContextMenusCallback = undefined ();
 
 [Exposed=Window, IsolatedContext]
 interface ContextMenus {
-    // TODO: Define the `onShow` property.
+    attribute OnClickedEvent onClicked;
+    attribute OnShowEvent onShow;
 
-    // Returns the ID of the newly created menu item.
-    (DOMString or long) create(
-        ContextMenusCreateProperties properties,
-        ContextMenusCallback? callback);
-
-    undefined remove(
-        (DOMString or long) menuItemId,
-        ContextMenusCallback? callback);
-    undefined removeAll(ContextMenusCallback? callback);
-    undefined update(
-        (DOMString or long) id,
-        ContextMenusProperties properties,
-        ContextMenusCallback? callback);
+    Promise<undefined> create(ContextMenusCreateProperties properties);
+    Promise<undefined> remove(DOMString id);
+    Promise<undefined> removeAll();
+    Promise<undefined> update(DOMString id, optional ContextMenusProperties properties = {});
 };
 </xmp>
+
+Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
+
+Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> which is a [=list=] of <a data-link-type="callback" data-lt="ContextMenusCallback">ContextMenusCallbacks</a>.
+
+<div algorithm>
+
+  The <dfn method for=ContextMenus>create(|properties|)</dfn> method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+
+  1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
+
+  1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
+
+  1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
+
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenus>remove(|id|)</dfn> method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+
+  1. [=map/Remove=] |contextMenusMap|[|id|].
+
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenus>removeAll()</dfn> method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+
+  1. [=map/Clear=] |contextMenusMap|.
+
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenus>update(|id|, |properties|)</dfn> method steps are:
+
+  1. Let |resultPromise| be a new [=promise=].
+
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+
+  1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
+
+  1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
+  
+  1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenusEvent>addListener(|callback|)</dfn> method steps are:
+
+  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+
+  1. If |callbackList|[|callback|] [=list/exists=], return.
+
+  1. [=list/Append=] |callback| to |callbackList|.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenusEvent>removeListener(|callback|)</dfn> method steps are:
+
+  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+
+  1. If |callbackList|[|callback|] [=list/exists=], [=list/remove=] |callback| from |callbackList|.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenusEvent>hasListener(|callback|)</dfn> method steps are:
+
+  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+
+  1. If |callbackList|[|callback|] [=list/exists=], return true.
+
+  1. Otherwise, return false.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenusEvent>hasListeners()</dfn> method steps are:
+
+  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+
+  1. If |callbackList| [=list/is empty=], return false.
+
+  1. Otherwise, return true.
+
+</div>
+
+<div algorithm>
+
+  The <dfn method for=ContextMenusEvent>dispatch()</dfn> method steps are:
+
+  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+
+  1. If {{ContextMenusEvent}} is an instance of {{OnShowEvent}}:
+
+    1. Let |onClickData| be a new {{OnClickData}}.
+
+    1. Update the following fields of |onClickData|:
+
+    : {{OnClickData/menuItemId}}
+    :: <span class=XXX>TODO: describe these fields.</span>
+
+  1. [=list/For each=] |callback| in |callbackList|:
+
+      1. If {{ContextMenusEvent}} is an instance of {{OnShowEvent}}:
+
+          1. Run |callback| with no argument.
+
+      1. If {{ContextMenusEvent}} is an instance of {{OnClickedEvent}}:
+
+          1. Run |callback| with |onClickData|.
+
+</div>
 
 <!-- ====================================================================== -->
 # Usage Overview # {#usage-overview}
