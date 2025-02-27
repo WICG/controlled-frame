@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 60c422380, updated Thu Feb 20 19:11:22 2025 -0800" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="dd8644c94213d58a64fced87784905c216af416a" name="revision">
+  <meta content="259b3077fdd1f4c4d2719ffea0f6e7877bdb012d" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -1659,6 +1659,12 @@ Otherwise, set <var>embedderParent</var> to null.</ins>
      </ol>
    </ol>
    <h2 class="heading settled" data-level="4" id="api-web-request"><span class="secno">4. </span><span class="content">Web Request API</span><a class="self-link" href="#api-web-request"></a></h2>
+   <p><strong class="advisement"> This API is based on the <a href="https://developer.chrome.com/docs/extensions/reference/api/webRequest"> WebRequest API</a>, which is available through the &lt;webview> element in <a href="https://developer.chrome.com/docs/apps/overview">Chrome Apps</a>. It
+is exposed to Controlled Frame with minimum modification to make efficient use
+of prior art. As a result, this API does not fully adhere to Web Platform best
+practices, particularly around naming conventions and event handling. If there
+is future cross-browser interest in Controlled Frame, this API should be
+revisited to align better with other Web APIs.</strong></p>
 <pre class="idl highlight def"><c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-resourcetype"><code><c- g>ResourceType</c-></code></dfn> {
   <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-main_frame"><code><c- s>"main_frame"</c-></code></dfn>,
   <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-sub_frame"><code><c- s>"sub_frame"</c-></code></dfn>,
@@ -2827,6 +2833,12 @@ opaque string, randomly assigned at the request’s creation.</p>
      <p>Let request be <var>fetchParams</var>’s request.</p>
    </ol>
    <h2 class="heading settled" data-level="5" id="api-context-menus"><span class="secno">5. </span><span class="content">Context Menus API</span><a class="self-link" href="#api-context-menus"></a></h2>
+   <p><strong class="advisement"> This API is based on the <a href="https://developer.chrome.com/docs/extensions/reference/api/contextMenus"> ContextMenus API</a>, which is available through the &lt;webview> element in <a href="https://developer.chrome.com/docs/apps/overview">Chrome Apps</a>. It
+is exposed to Controlled Frame with minimum modification to make efficient use
+of prior art. As a result, this API does not fully adhere to Web Platform best
+practices, particularly around naming conventions and event handling. If there
+is future cross-browser interest in Controlled Frame, this API should be
+revisited to align better with other Web APIs.</strong></p>
 <pre class="idl highlight def"><c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-contexttype"><code><c- g>ContextType</c-></code></dfn> {
     <dfn class="dfn-paneled idl-code" data-dfn-for="ContextType" data-dfn-type="enum-value" data-export id="dom-contexttype-all"><code><c- s>"all"</c-></code></dfn>,
     <dfn class="dfn-paneled idl-code" data-dfn-for="ContextType" data-dfn-type="enum-value" data-export id="dom-contexttype-page"><code><c- s>"page"</c-></code></dfn>,
