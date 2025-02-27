@@ -894,13 +894,13 @@ monkey patched as follows:
 
 Advisement: This API is based on the
 <a href="https://developer.chrome.com/docs/extensions/reference/api/webRequest">
-WebRequest API</a>, which is exposed to the &lt;webview&gt; element in
+WebRequest API</a>, which is available through the &lt;webview&gt; element in
 <a href="https://developer.chrome.com/docs/apps/overview">Chrome Apps</a>. It
-is exposed to Controlled Frame largely unmodified to make efficient use of
-prior art, but deviates from Web Platform norms, particularly around naming
-conventions and event handling. If there is future cross-browser interest in
-Controlled Frame, this API should be revisited to align better with other
-Web APIs.
+is exposed to Controlled Frame with minimum modification to make efficient use
+of prior art. As a result, this API does not fully adhere to Web Platform best
+practices, particularly around naming conventions and event handling. If there
+is future cross-browser interest in Controlled Frame, this API should be
+revisited to align better with other Web APIs.
 
 
 <xmp class="idl">
@@ -2161,13 +2161,13 @@ The [=HTTP-redirect fetch=] algorithm is monkey patched as follows:
 
 Advisement: This API is based on the
 <a href="https://developer.chrome.com/docs/extensions/reference/api/contextMenus">
-ContextMenus API</a>, which is exposed to the &lt;webview&gt; element in
+ContextMenus API</a>, which is available through the &lt;webview&gt; element in
 <a href="https://developer.chrome.com/docs/apps/overview">Chrome Apps</a>. It
-is exposed to Controlled Frame largely unmodified to make efficient use of
-prior art, but deviates from Web Platform norms, particularly around naming
-conventions and event handling. If there is future cross-browser interest in
-Controlled Frame, this API should be revisited to align better with other
-Web APIs.
+is exposed to Controlled Frame with minimum modification to make efficient use
+of prior art. As a result, this API does not fully adhere to Web Platform best
+practices, particularly around naming conventions and event handling. If there
+is future cross-browser interest in Controlled Frame, this API should be
+revisited to align better with other Web APIs.
 
 <xmp class="idl">
 enum ContextType {
