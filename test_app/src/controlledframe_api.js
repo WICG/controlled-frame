@@ -899,15 +899,17 @@ class ControlledFrameController {
       return;
     }
     let createProperties = this.#readContextMenusCreateProperties();
-    let callback = () => {
-      Log.info(`contextMenus.create callback called`);
-    };
-    let contextMenuID = this.controlledFrame.contextMenus.create(
-      createProperties,
-      callback
+    const p = this.controlledFrame.contextMenus.create(createProperties);
+    Log.info(`contextMenus.create(${JSON.stringify(createProperties)})`);
+    p.then(
+      () => {
+        Log.info(`contextMenus.create successful.`);$('#context_menus_create_result').innerText = `contextMenus.create success: id = ${createProperties.id}`;
+      }
+    ).catch(
+      error => {
+        Log.info(`contextMenus.create failed: ${error}`); $('#context_menus_create_result').innerText = `create() failed`;
+      }
     );
-    Log.info(`contextMenus.create = ${contextMenuID}`);
-    $('#context_menus_create_result').innerText = `id = ${contextMenuID}`;
   }
 
   #contextMenusRemove(e) {
@@ -917,10 +919,17 @@ class ControlledFrameController {
     }
 
     let menuItemId = $('#context_menus_remove_in').value;
-    let callback = () => {
-      Log.info(`contextMenus.remove(${menuItemId}) completed`);
-    };
-    this.controlledFrame.contextMenus.remove(menuItemId, callback);
+    const p = this.controlledFrame.contextMenus.remove(menuItemId);
+    Log.info(`contextMenus.remove(${menuItemId})`);
+    p.then(
+      () => {
+        Log.info(`contextMenus.remove successful.`);
+      }
+    ).catch(
+      error => {
+        Log.info(`contextMenus.remove failed: ${error}`);
+      }
+    );
   }
 
   #contextMenusRemoveAll(e) {
@@ -928,10 +937,17 @@ class ControlledFrameController {
       Log.warn('contextMenus.removeAll: API undefined');
       return;
     }
-    let callback = () => {
-      Log.info('contextMenus.removeAll completed');
-    };
-    this.controlledFrame.contextMenus.removeAll(callback);
+    const p = this.controlledFrame.contextMenus.removeAll();
+    Log.info(`contextMenus.removeAll()`);
+    p.then(
+      () => {
+        Log.info(`contextMenus.removeAll successful.`);
+      }
+    ).catch(
+      error => {
+        Log.info(`contextMenus.removeAll failed: ${error}`);
+      }
+    );
   }
 
   #contextMenusUpdate(e) {
@@ -941,10 +957,18 @@ class ControlledFrameController {
     }
     let id = $('#context_menus_update_in').value;
     let updateProperties = this.#readContextMenusCreateProperties();
-    let callback = () => {
-      Log.info(`contextMenus.update(${id}) completed`);
-    };
-    this.controlledFrame.contextMenus.update(id, updateProperties, callback);
+
+    const p = this.controlledFrame.contextMenus.update(id, updateProperties);
+    Log.info(`contextMenus.update(${id}, ${JSON.stringify(updateProperties)})`);
+    p.then(
+      () => {
+        Log.info(`contextMenus.update successful.`);
+      }
+    ).catch(
+      error => {
+        Log.info(`contextMenus.update failed: ${error}`);
+      }
+    );
   }
 
   #readRequestFilter() {
