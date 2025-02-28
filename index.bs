@@ -9,8 +9,9 @@ URL: https://wicg.github.io/controlled-frame/
 Status: w3c/CG-DRAFT
 Shortname: controlled-frame
 Level: 1
-Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@google.com
+Editor: Chase Phillips 115880, Google LLC https://google.com, cmp@chromium.org
 Editor: Robbie McElrath 139758, Google LLC https://google.com, rmcelrath@chromium.org
+Editor: Zelin Liu 164998, Google LLC https://google.com, zelin@chromium.org
 
 Group: WICG
 Markup Shorthands: markdown yes
