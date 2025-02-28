@@ -87,6 +87,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: dom.html
             text: contexts in which this element can be used; url: concept-element-contexts
             text: content model; url: concept-element-content-model
+            text: event; url: events
             text: nothing; url: concept-content-nothing
             text: content attributes; url: concept-element-attributes
             text: global attributes; url: global-attributes
@@ -123,6 +124,11 @@ spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
         text: promise; url: idl-promise
         text: promise rejected; url: a-promise-rejected-with
         text: promise resolved; url: a-promise-resolved-with
+
+spec: uievents; urlPrefix https://www.w3.org/TR/uievents/
+    type: dfn
+        text: contextmenu; url: event-type-contextmenu
+        text: click; url: event-type-click
 </pre>
 
 <pre class=link-defaults>
@@ -2192,6 +2198,7 @@ enum ItemType {
 
 dictionary OnClickData {
     boolean checked;
+    long controlledFrameInstanceId;
     required boolean editable;
     long frameId;
     USVString frameUrl;
@@ -2205,7 +2212,7 @@ dictionary OnClickData {
     boolean wasChecked;
 };
 
-callback ContextMenusCallback = undefined (optional OnClickData Info);
+callback ContextMenusCallback = undefined (optional OnClickData info);
 
 [Exposed=Window, IsolatedContext]
 interface ContextMenusEvent {
@@ -2213,7 +2220,7 @@ interface ContextMenusEvent {
     undefined removeListener(ContextMenusCallback callback);
     boolean hasListener(ContextMenusCallback callback);
     boolean hasListeners();
-    undefined dispatch();
+    undefined dispatch(any data);
 };
 
 [Exposed=Window, IsolatedContext]
@@ -2251,8 +2258,6 @@ interface ContextMenus {
 </xmp>
 
 Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
-
-Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> which is a [=list=] of <a data-link-type="callback" data-lt="ContextMenusCallback">ContextMenusCallbacks</a>.
 
 <div algorithm>
 
@@ -2316,11 +2321,15 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
 </div>
 
+{{ContextMenusEvent}} represents a target to which an [= event =] can be [= dispatched =] when something has occured.
+
+Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list</dfn> which is a [=list=] of <a data-link-type="callback" data-lt="ContextMenusCallback">ContextMenusCallbacks</a>. It is initially an empty list.
+
 <div algorithm>
 
   The <dfn method for=ContextMenusEvent>addListener(|callback|)</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
 
   1. If |callbackList|[|callback|] [=list/exists=], return.
 
@@ -2332,7 +2341,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   The <dfn method for=ContextMenusEvent>removeListener(|callback|)</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
 
   1. If |callbackList|[|callback|] [=list/exists=], [=list/remove=] |callback| from |callbackList|.
 
@@ -2342,7 +2351,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   The <dfn method for=ContextMenusEvent>hasListener(|callback|)</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
 
   1. If |callbackList|[|callback|] [=list/exists=], return true.
 
@@ -2354,7 +2363,7 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
   The <dfn method for=ContextMenusEvent>hasListeners()</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
 
   1. If |callbackList| [=list/is empty=], return false.
 
@@ -2364,28 +2373,57 @@ Each {{ContextMenusEvent}} has a <dfn for=ContextMenusEvent>callback list</dfn> 
 
 <div algorithm>
 
-  The <dfn method for=ContextMenusEvent>dispatch()</dfn> method steps are:
+  The <dfn method for=ContextMenusEvent>dispatch(|data|)</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/callback list=] of the {{ContextMenusEvent}}.
-
-  1. If {{ContextMenusEvent}} is an instance of {{OnShowEvent}}:
-
-    1. Let |onClickData| be a new {{OnClickData}}.
-
-    1. Update the following fields of |onClickData|:
-
-    : {{OnClickData/menuItemId}}
-    :: <span class=XXX>TODO: describe these fields.</span>
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
 
   1. [=list/For each=] |callback| in |callbackList|:
 
-      1. If {{ContextMenusEvent}} is an instance of {{OnShowEvent}}:
+      1. Invoke |callback| with |data|.
 
-          1. Run |callback| with no argument.
+</div>
 
-      1. If {{ContextMenusEvent}} is an instance of {{OnClickedEvent}}:
+{{ContextMenus}} has the attribute {{ContextMenus/onShow}}, which is a {{ContextMenusEvent}} that is associated with [= contextmenu =] [= events =].
 
-          1. Run |callback| with |onClickData|.
+<div algorithm='onshow-event'>
+
+When an [= event =] associated with {{ContextMenus/onShow}} is [= dispatched =]:
+
+1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with no argument.
+
+</div>
+
+{{ContextMenus}} has the attribute {{ContextMenus/onClicked}}, which is a {{ContextMenusEvent}} that is associated with [= click =] [= events =] on one of the [=map/entries=] of [=ContextMenus/context menu map=].
+
+<div algorithm='onclicked-event'>
+
+When the [= event =] associated with {{ContextMenus/onClicked}} is [= dispatched =]:
+
+1. Let |menuItem| be the [=map/entry=] of [=ContextMenus/context menu map=] that's associated with the [= click =] [= event =].
+
+1. Let |info| be a new {{OnClickData}}.
+
+    1. Update the following fields of |info|:
+
+        : {{OnClickData/frameId}}
+        :: The unique identifier of the [= navigable container =] from which the [= contextmenu =] [= event =] is dispatched, as generated by the user agent.
+
+        : {{OnClickData/frameUrl}}
+        :: The [=Document/URL=] of the [= navigable container =] from which the [= contextmenu =] [= event =] is dispatched.
+
+        : {{OnClickData/menuItemId}}
+        :: The [=map/key=] of |menuItem|.
+
+        : {{OnClickData/pageUrl}}
+        :: The [=Document/URL=] of [=this=].
+
+        : {{OnClickData/controlledFrameInstanceId}}
+        :: The unique identifier of the <{controlledframe}> instance, as generated by the user agent.
+
+
+1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with |info|.
+
+1. If {{ContextMenusProperties/onclick}} field of |menuItem| is not null, invoke {{ContextMenusProperties/onclick}} with |info|.
 
 </div>
 
