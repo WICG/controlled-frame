@@ -1,8 +1,10 @@
 ## [2.1 What information does this feature expose, and for what purposes?](https://www.w3.org/TR/security-privacy-questionnaire/#purpose)
 
-Controlled Frame allows an isolated context (TODO: link) to embed a third-party
-origin in an embedding control. The embedder can interact with the embedding
-control to inspect, access, control, and manage the embedded content.
+Controlled Frame allows an [isolated
+context](https://wicg.github.io/isolated-web-apps/isolated-contexts.html) to
+embed a third-party origin in an embedding control. The embedder can interact
+with the embedding control to inspect, access, control, and manage the embedded
+content.
 
 This control is used to satisfy the use cases outlined in the specification
 document, which include supporting virtualized desktop uses and kiosk needs,
@@ -11,7 +13,8 @@ among others.
 ## [2.2 Do features in your specification expose the minimum amount of information necessary to implement the intended functionality?](https://www.w3.org/TR/security-privacy-questionnaire/#minimum-data)
 
 Yes, we intentionally expose the embedding control and specifically it is only
-available to isolated contexts [TODO: link].
+available to [isolated
+contexts](https://wicg.github.io/isolated-web-apps/isolated-contexts.html).
 
 Controlled Frame is not available unless its corresponding "controlled-frame"
 permissions policy which is managed via the IWA high water permissions
@@ -20,22 +23,25 @@ permissions policy which is managed via the IWA high water permissions
 ## [2.3 Do the features in your specification expose personal information, personally-identifiable information (PII), or information derived from either?](https://www.w3.org/TR/security-privacy-questionnaire/#personal-data)
 
 The features in this specification do not expose PII directly of the user.
-Controlled Frames are only available in isolated contexts (TODO: link) which
+Controlled Frames are only available in [isolated
+contexts](https://wicg.github.io/isolated-web-apps/isolated-contexts.html) which
 require that functionality running in the isolated context store its data in
 a separate storage partition from the default storage partition.
 
 The purpose of the Controlled Frame API is to allow an embedder to control the
 third-party origin's embedding control. By allowing the embedder control over
-this instance, the use cases (TODO: link) can be satisfied which possibly could
-expose all data within the embedding control (including PII) in a specific
-controlled environment.
+this instance, the [use
+cases](https://wicg.github.io/controlled-frame/#motivating-applications) can be
+satisfied which possibly could expose all data within the embedding control
+(including PII) in a specific controlled environment.
 
 ## [2.4 How do the features in your specification deal with sensitive information?](https://www.w3.org/TR/security-privacy-questionnaire/#sensitive-data)
 
-Controlled Frame is only available to isolated contexts (TODO: link) and is not
-available outside of isolated contexts. In addition, the Controlled Frame API is
-only available if the "controlled-frame" permissions policy is requested and
-granted by the user agent's IWA environment.
+Controlled Frame is only available to [isolated
+contexts](https://wicg.github.io/isolated-web-apps/isolated-contexts.html) and
+is not available outside of isolated contexts. In addition, the Controlled Frame
+API is only available if the "controlled-frame" permissions policy is requested
+and granted by the user agent's IWA environment.
 
 If Controlled Frame's requirements are met and it's available, the specification's
 API surface will be available. Each method is responsibly designed to handle just
@@ -43,8 +49,9 @@ the data, identifiers, and arguments that it requires.
 
 ## [2.5 Does data exposed by your specification carry related but distinct information that may not be obvious to users?](https://www.w3.org/TR/security-privacy-questionnaire/#hidden-data)
 
-Controlled Frame is only available to isolated contexts (TODO: link). In Chrome,
-isolated contexts are usually only available to IWAs (TODO: link).
+Controlled Frame is only available to [isolated
+contexts](https://wicg.github.io/isolated-web-apps/isolated-contexts.html). In
+Chrome, isolated contexts are usually only available to IWAs.
 
 IWAs support all of the APIs available to the web, similar to PWAs. IWAs require
 that any permission required to be granted by the user agent must be specified
@@ -64,12 +71,13 @@ of the embedded content before interacting with it.
 * If users interact with embedded content within a Controlled Frame, the
 embedder could exfiltrate that interaction via JavaScript.
 
-* An embedded could interact with embedded content and use APIs that carry
+* An embedder could interact with embedded content and use APIs that carry
 some associated exposure risk.
 
 ## [2.6 Do the features in your specification introduce state that persists across browsing sessions?](https://www.w3.org/TR/security-privacy-questionnaire/#persistent-origin-specific-state)
 
-Controlled Frame is only available to isolated contexts (TODO: link).
+Controlled Frame is only available to [isolated
+contexts](https://wicg.github.io/isolated-web-apps/isolated-contexts.html).
 
 The methods in the specification currently do not store state that perists
 across browsing sessions. As an embedding control, though, Controlled Frame
@@ -78,22 +86,19 @@ within it.
 
 This is a key reason why Controlled Frame is only available to isolated
 contexts.  Isolated contexts store their data in a separate storage partition
-from the default storage partition used in normal web browsing. Any data stored
-in a way that persists will be stored in this separate storage partition.
+from the default storage partition used in normal web browsing. While the IWA
+embedder will store any data it has in its isolated storage partition, a
+Controlled Frame will have a separate storage partition that is apart from the
+isolated storage partition in order to store the Controlled Frame embedded
+content's data.
 
-Controlled Frame by default will not persist its data unless the `partition`
-attribute contains the "persist:" prefix. Otherwise, all of the data in the
-embedding control instance will be stored in memory for the user agent to
-discard once the control no longer needs it.
+Controlled Frame by default should use an in-memory storage partition that does
+not persist user data beyond when the Controlled Frame instance needs access to
+it.  The embedder may adjust the `partition` attribute to contain the "persist:"
+prefix, which will signal to the user agent to place the Controlled Frame
+storage partition in a location where it will persist, such as on disk.
 
 ## [2.7 Do the features in your specification expose information about the underlying platform to origins?](https://www.w3.org/TR/security-privacy-questionnaire/#underlying-platform-data)
-
-By default, third-party origins loaded within a Controlled Frame are not aware
-that they are embedded within another page. To the page embedded within a
-Controlled Frame, the page appears to be the top-level page and has no exposed
-parent the way that, say, an &lt;iframe&gt; would. This allows the page to
-continue to function while being embedded and provides safety to the embedding
-page from the embedded page.
 
 While an embedder has a Controlled Frame instance, it's possible that through
 interacting with the instance using its methods or events, information about the
@@ -103,13 +108,12 @@ as JavaScript execution.
 
 ## [2.8 Does this specification allow an origin to send data to the underlying platform?](https://www.w3.org/TR/security-privacy-questionnaire/#send-to-platform)
 
-Controlled Frame does not support overriding existing operating system APIs
-directly.
+Controlled Frame does not provide a means of communicating with the underlying
+platform.
 
-An embedded page may use a separate feature such as an IWA API or a
-regular web API that allows sending data to the underlying platform. Through
-that mechanism, it would then be possible for an IWA to interact with the
-underlying platform.
+Embedded content may use a separate feature such as an IWA API or a regular web
+API that allows sending data to the underlying platform. Through that mechanism,
+it would then be possible for an IWA to interact with the underlying platform.
 
 ## [2.9 Do features in this specification enable access to device sensors?](https://www.w3.org/TR/security-privacy-questionnaire/#sensor-data)
 
@@ -158,14 +162,16 @@ may not create temporary identifiers.
 Controlled Frame is only available to be embedded to IWAs as a first-party
 concept. Only third-party contexts are allowed to be embedded by Controlled
 Frame, which ensures that a Controlled Frame cannot then embed a separate
-isolated context.
+[isolated
+context](https://wicg.github.io/isolated-web-apps/isolated-contexts.html).
 
 ## [2.15 How do the features in this specification work in the context of a browser’s Private Browsing or Incognito mode?](https://www.w3.org/TR/security-privacy-questionnaire/#private-browsing)
 
-For the purposes of an isolated context, these will not be available within a
-browser's Private Browsing or Incognito mode. Since Controlled Frame is only
-available within isolated contexts, it should not be available in a browser's
-Private Browsing mode.
+For the purposes of an [isolated
+context](https://wicg.github.io/isolated-web-apps/isolated-contexts.html), these
+will not be available within a browser's Private Browsing or Incognito mode.
+Since Controlled Frame is only available within isolated contexts, it should not
+be available in a browser's Private Browsing mode.
 
 ## [2.16 Does this specification have both "Security Considerations" and "Privacy Considerations" sections?](https://www.w3.org/TR/security-privacy-questionnaire/#considerations)
 
