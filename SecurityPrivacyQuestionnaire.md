@@ -179,14 +179,22 @@ Yes.
 
 ## [2.17 Do features in your specification enable origins to downgrade default security protections?](https://www.w3.org/TR/security-privacy-questionnaire/#relaxed-sop)
 
-No, there's no ability for specific origins to downgrade default security
-protections within their embedding environment.
-
-However, Controlled Frame allows embedders to interact with embedded content in
+Controlled Frame allows embedders to interact with embedded content in
 ways that support enabling the [motivating use
 cases](https://wicg.github.io/controlled-frame/#motivating-applications). These
 support interacting with content in ways that are impossible when the default
 security protections are engaged and precisely followed.
+
+For example:
+
+  * Controlled Frame itself is a workaround of X-Frame-Options and
+    frame-ancestors CSP.
+
+  * WebRequest provides a way to remove security related headers of embedded
+    content.
+
+  * Script injection is a workaround of SOP as it lets a developer control
+    script executed on another origin.
 
 ## [2.18 What happens when a document that uses your feature is kept alive in BFCache (instead of getting destroyed) after navigation, and potentially gets reused on future navigations back to the document?](https://www.w3.org/TR/security-privacy-questionnaire/#bfcache)
 
