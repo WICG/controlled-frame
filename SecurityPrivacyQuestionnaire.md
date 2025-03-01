@@ -179,12 +179,57 @@ Yes.
 
 ## [2.17 Do features in your specification enable origins to downgrade default security protections?](https://www.w3.org/TR/security-privacy-questionnaire/#relaxed-sop)
 
+No, there's no ability for specific origins to downgrade default security
+protections within their embedding environment.
+
+However, Controlled Frame allows embedders to interact with embedded content in
+ways that support enabling the [motivating use
+cases](https://wicg.github.io/controlled-frame/#motivating-applications). These
+support interacting with content in ways that are impossible when the default
+security protections are engaged and precisely followed.
+
 ## [2.18 What happens when a document that uses your feature is kept alive in BFCache (instead of getting destroyed) after navigation, and potentially gets reused on future navigations back to the document?](https://www.w3.org/TR/security-privacy-questionnaire/#bfcache)
+
+We expect that content that's non-fully active loaded in an embedding control
+will become disconnected and will not be reused.
 
 ## [2.19 What happens when a document that uses your feature gets disconnected?](https://www.w3.org/TR/security-privacy-questionnaire/#non-fully-active)
 
+That content will no longer be available for interaction with the embedding
+control and any reinstantiation of the embedding control will lead to reloading
+the embedded content from the associated URL.
+
 ## [2.20 Does your spec define when and how new kinds of errors should be raised?](https://www.w3.org/TR/security-privacy-questionnaire/#error-handling)
+
+Yes.
 
 ## [2.21 Does your feature allow sites to learn about the user’s use of assistive technology?](https://www.w3.org/TR/security-privacy-questionnaire/#accessibility-devices)
 
+Controlled Frame does not contain any accessibility features directly. Through
+its use of embedding controls, we expect assistive technology such as screen
+readers to be able to traverse the frame tree just as they can for other
+embedding controls like &lt;iframe&gt;.
+
 ## [2.22 What should this questionnaire have asked?](https://www.w3.org/TR/security-privacy-questionnaire/#missing-questions)
+
+It should have asked, "If your feature adds a new embedding control, what sorts
+of data will be transferred between the embedder and embedded content?"
+
+In this case, we allow transmitting, at the start of an embedding control,
+nothing from the embedded content to the embedder. This is unlike an
+&lt;iframe&gt; which allows embedded content to be aware of the parent embedder
+before the parent makes it aware.
+
+The embedder may execute script by transmitting JavaScript to the embedded
+content, insert CSS, or add content scripts which the embedded content will load
+on each page load.
+
+The embedder may choose to allow the embedded content to pass messages back to
+the embedder. That may either be done by injecting JavaScript that handles does
+this, or by crafting the embedded content so it can receive such a message.
+
+Using this message passing, many forms of serialized data can be transferred,
+from JavaScript, CSS, to binary data such as blobs.
+
+We strongly discourage developers from building an IWA that supports receiving
+complicated objects or script and executing it outside of the embedded content.
