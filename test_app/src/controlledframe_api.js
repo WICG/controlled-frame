@@ -393,19 +393,19 @@ class ControlledFrameController {
   // Content script related functions
   #readContentScriptDetails() {
     let contentScriptDetails = {
-      all_frames: $('#content_script_details_all_frames_chk').checked,
-      match_about_blank: $('#content_script_details_match_about_blank_chk')
+      allFrames: $('#content_script_details_allFrames_chk').checked,
+      matchAboutBlank: $('#content_script_details_matchAboutBlank_chk')
         .checked,
       css: {},
       js: {},
     };
     // Set the string values that are split by commas.
-    for (const keyName of ['exclude_globs', 'exclude_matches', 'include_globs', 'matches']) {
+    for (const keyName of ['excludeGlobs', 'excludeMatches', 'includeGlobs', 'matches']) {
       const keyValue = $(`#content_script_details_${keyName}_in`).value;
       this.#setIfValid(contentScriptDetails, keyName, keyValue, ',');
     }
     // Set the normal string values.
-    for (const keyName of ['name', 'run_at']) {
+    for (const keyName of ['name', 'runAt']) {
       const keyValue = $(`#content_script_details_${keyName}_in`).value;
       this.#setIfValid(contentScriptDetails, keyName, keyValue);
     }
