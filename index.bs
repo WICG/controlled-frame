@@ -99,6 +99,8 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: embedded-content-other.html
             text: width; url: attr-dim-width
             text: height; url: attr-dim-height
+        urlPrefix: links.html
+            text: href; url: attr-hyperlink-href
         urlPrefix: nav-history-apis.html
             text: navigable; for: window; url: window-navigable
         urlPrefix: webappapis.html
@@ -2198,7 +2200,6 @@ enum ItemType {
 
 dictionary OnClickData {
     boolean checked;
-    long controlledFrameInstanceId;
     required boolean editable;
     long frameId;
     USVString frameUrl;
@@ -2259,6 +2260,8 @@ interface ContextMenus {
 
 Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
 
+Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=ContextMenus>context menu item</dfn>. These items can show up when the user opens the <dfn for=ContextMenus>context menu</dfn> on the embedded document.
+
 <div algorithm>
 
   The <dfn method for=ContextMenus>create(|properties|)</dfn> method steps are:
@@ -2318,6 +2321,101 @@ Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} membe
   1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
   
   1. Then, [=resolve=] |resultPromise|.
+
+</div>
+
+The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperties}} objects, control the conditions the [=context menu items=] are displayed, as well as the features and behaviors of the items.
+
+<div class='note'>
+
+<em>This section is non-normative.</em>
+
+    {{ContextMenusProperties}} has the following fields:
+
+    : {{ContextMenusProperties/context}}
+    :: A [=list=] of different {{ContextType}}, used to control the condition to display the [=context menu item=].
+
+    : {{ContextMenusProperties/documentUrlPatterns}}
+    :: A [=list=] of strings that are URL patterns , used to control the condition to display the [=context menu item=].
+
+    : {{ContextMenusProperties/targetUrlPatterns}}
+    :: A [=list=] of strings that are URL patterns , used to control the condition to display the [=context menu item=].
+
+    : {{ContextMenusProperties/parentId}}
+    :: The ID of the parent [=ContextMenus/context menu item=]. The [=ContextMenus/context menu item=] may appear under a sub-menu of the parent. 
+
+    : {{ContextMenusProperties/title}}
+    :: The title of the menu item.
+
+    : {{ContextMenusProperties/type}}
+    :: The type of the menu item.
+
+    : {{ContextMenusProperties/onclick}}
+    :: A {{ContextMenusCallback}} that is invoked when the [=ContextMenus/context menu item=] is clicked.
+
+    : {{ContextMenusProperties/checked}}
+    :: Whether the [=ContextMenus/context menu item=] is initially checked.
+
+    : {{ContextMenusProperties/enabled}}
+    :: Whether the [=ContextMenus/context menu item=] is enabled.
+
+</div>
+
+<div algorithm='show-menu-item'>
+
+  When a [=ContextMenus/context menu=] is shown, to return a boolean value for whether the [=ContextMenus/context menu item=] associated with a {{ContextMenusProperties}} will be shown:
+
+  1. Let |properties| be the {{ContextMenusProperties}}.
+
+  1. Let |element| be the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at.
+
+  1. Let |documentUrl| be the [=Document/URL=] of the embedded document.
+
+  1. Let |targetUrl| be an empty string.
+
+      1. If |element| is an instance of {{HTMLImageElement}}, then set |targetUrl| to the {{HTMLImageElement/src}} attribute of |element|.
+
+      1. If |element| is an instance of {{HTMLVideoElement}}, then set |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
+
+      1. If |element| is an instance of {{HTMLAudioElement}}, then set |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
+
+      1. If |element| is an instance of {{HTMLAnchorElement}}, then set |targetUrl| to the [=href=] attribute of |element|.
+
+  1. if |properties|["{{ContextMenusProperties/context}}"] is not [=list/empty=]:
+
+      1. let |result| be a boolean value that is initially false.
+
+      1. For each |context| in |properties|["{{ContextMenusProperties/context}}"]:
+    
+          1. If |element| matches |context|, set |result| to true and break;
+
+          <span class=XXX>There is no standardized specifications for matching a {{HTMLElement}} against a {{ContextType}}.</span>
+
+      1. If |result| is false, return false.
+
+  1. if |properties|["{{ContextMenusProperties/documentUrlPatterns}}"] is not [=list/empty=]:
+
+      1. let |result| be a boolean value that is initially false.
+
+      1. For each |urlPattern| in |properties|["{{ContextMenusProperties/documentUrlPatterns}}"]:
+    
+          1. If |documentUrl| [=matches a URL pattern=], given |urlPattern|, set |result| to true and break;
+
+      1. If |result| is false, return false.
+
+  1. if |properties|["{{ContextMenusProperties/targetUrlPatterns}}"] is not [=list/empty=]:
+
+      1. let |result| be a boolean value that is initially false.
+
+      1. For each |urlPattern| in |properties|["{{ContextMenusProperties/targetUrlPatterns}}"]:
+    
+          1. If |targetUrl| [=matches a URL pattern=], given |urlPattern|, set |result| to true and break;
+
+      1. If |result| is false, return false.
+
+  Note: Different user agents may implement additional conditions.
+
+  1. return true.
 
 </div>
 
@@ -2393,17 +2491,22 @@ When an [= event =] associated with {{ContextMenus/onShow}} is [= dispatched =]:
 
 </div>
 
-{{ContextMenus}} has the attribute {{ContextMenus/onClicked}}, which is a {{ContextMenusEvent}} that is associated with [= click =] [= events =] on one of the [=map/entries=] of [=ContextMenus/context menu map=].
+{{ContextMenus}} has the attribute {{ContextMenus/onClicked}}, which is a {{ContextMenusEvent}} that is associated with [= click =] [= events =] on a [=context menu item=].
 
 <div algorithm='onclicked-event'>
 
 When the [= event =] associated with {{ContextMenus/onClicked}} is [= dispatched =]:
 
-1. Let |menuItem| be the [=map/entry=] of [=ContextMenus/context menu map=] that's associated with the [= click =] [= event =].
+1. Let |menuItem| be the [=map/entry=] of [=ContextMenus/context menu map=] that's associated with the [=context menu item=].
+
+1. Let |element| be the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at.
 
 1. Let |info| be a new {{OnClickData}}.
 
     1. Update the following fields of |info|:
+
+        : {{OnClickData/editable}}
+        :: Whether |element| is editable. <span class=XXX>what is "editable"?</span>
 
         : {{OnClickData/frameId}}
         :: The [=navigable/frameId=] of the [= navigable container =] from which the [= contextmenu =] [= event =] is dispatched.
@@ -2417,13 +2520,40 @@ When the [= event =] associated with {{ContextMenus/onClicked}} is [= dispatched
         : {{OnClickData/pageUrl}}
         :: The [=Document/URL=] of the embedded [=/navigable=].
 
-        : {{OnClickData/controlledFrameInstanceId}}
-        :: The unique identifier of the <{controlledframe}> instance, as generated by the user agent.
+    1. Update the following optional fields of |info|:
 
+        Note: Different user agents may set these fields differently.
+
+        <div class='note'>
+
+            <em>This section is non-normative.</em>
+
+            : {{OnClickData/checked}}
+            :: Whether the [=context menu item=] is checked.
+
+            : {{OnClickData/linkUrl}}
+            :: The link of |element|, if it exists.
+
+            : {{OnClickData/mediaType}}
+            :: One of "image", "video", or "audio", if any, based on |element|.
+
+            : {{OnClickData/parentMenuId}}
+            :: The ID of the parent, if a parent exists.
+
+            : {{OnClickData/selectionText}}
+            :: The text for the context selection, if any.
+
+            : {{OnClickData/srcUrl}}
+            :: The "src" attribute of |element|, if it exists.
+
+            : {{OnClickData/wasChecked}}
+            :: The state of a checkbox or radio item before it was clicked.
+
+        </div>
 
 1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with |info|.
 
-1. If {{ContextMenusProperties/onclick}} field of |menuItem| is not null, invoke {{ContextMenusProperties/onclick}} with |info|.
+1. If the {{ContextMenusProperties/onclick}} field of |menuItem| is not null, invoke {{ContextMenusProperties/onclick}} with |info|.
 
 </div>
 
