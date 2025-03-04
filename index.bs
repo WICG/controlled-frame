@@ -514,22 +514,22 @@ dictionary InjectionItems {
 };
 
 enum RunAt {
-  "document_start",
-  "document_end",
-  "document_idle",
+  "document-start",
+  "document-end",
+  "document-idle",
 };
 
 dictionary ContentScriptDetails {
-  boolean all_frames;
+  boolean allFrames;
   InjectionItems css;
-  sequence<DOMString> exclude_globs;
-  sequence<DOMString> exclude_matches;
-  sequence<DOMString> include_globs;
+  sequence<DOMString> excludeGlobs;
+  sequence<DOMString> excludeMatches;
+  sequence<DOMString> includeGlobs;
   InjectionItems js;
-  boolean match_about_blank;
+  boolean matchAboutBlank;
   required sequence<DOMString> matches;
   required DOMString name;
-  RunAt run_at;
+  RunAt runAt;
 };
 </xmp>
 
