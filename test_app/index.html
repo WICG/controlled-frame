@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Controlled Frame in IWA Test</title>
+  <title>Controlled Frame Demo</title>
 
   <link rel="manifest" href="/.well-known/manifest.webmanifest" />
   <link rel="stylesheet" href="/src/style.css" />
@@ -13,7 +13,7 @@
 <body>
   <div class="content">
     <div class="grid">
-      <h1 class="heading">Isolated Web App Controlled Frame Test</h1>
+      <h1 class="heading">Controlled Frame Demo</h1>
 
       <div class="view-container">
         <div class="subheading">
@@ -471,20 +471,20 @@
             <h4>Content Scripts: Content Injection</h4>
 
             <h5>ContentScriptDetails detail</h5>
-            <label for="content_script_details_all_frames_chk">all_frames</label>
-            <div class="checkbox"><input type="checkbox" id="content_script_details_all_frames_chk" /></div>
+            <label for="content_script_details_allFrames_chk">allFrames</label>
+            <div class="checkbox"><input type="checkbox" id="content_script_details_allFrames_chk" /></div>
 
-            <label for="content_script_details_exclude_globs_in">exclude_globs</label>
-            <input type="text" id="content_script_details_exclude_globs_in" />
+            <label for="content_script_details_excludeGlobs_in">excludeGlobs</label>
+            <input type="text" id="content_script_details_excludeGlobs_in" />
 
-            <label for="content_script_details_exclude_matches_in">exclude_matches</label>
-            <input type="text" id="content_script_details_exclude_matches_in" />
+            <label for="content_script_details_excludeMatches_in">excludeMatches</label>
+            <input type="text" id="content_script_details_excludeMatches_in" />
 
-            <label for="content_script_details_include_globs_in">include_globs</label>
-            <input type="text" id="content_script_details_include_globs_in" />
+            <label for="content_script_details_includeGlobs_in">includeGlobs</label>
+            <input type="text" id="content_script_details_includeGlobs_in" />
 
-            <label for="content_script_details_match_about_blank_chk">match_about_blank</label>
-            <div class="checkbox"><input type="checkbox" id="content_script_details_match_about_blank_chk" /></div>
+            <label for="content_script_details_matchAboutBlank_chk">matchAboutBlank</label>
+            <div class="checkbox"><input type="checkbox" id="content_script_details_matchAboutBlank_chk" /></div>
 
             <label for="content_script_details_matches_in">matches</label>
 	    <input type="text" id="content_script_details_matches_in" value="<all_urls>" />
@@ -492,11 +492,11 @@
             <label for="content_script_details_name_in">name</label>
             <input type="text" id="content_script_details_name_in" value="myRule" />
 
-            <label for="content_script_details_run_at_in">run_at</label>
-            <select id="content_script_details_run_at_in">
-              <option value="document_start">document_start</option>
-              <option value="document_end" selected>document_end</option>
-              <option value="document_idle">document_idle</option>
+            <label for="content_script_details_runAt_in">runAt</label>
+            <select id="content_script_details_runAt_in">
+              <option value="document-start">document-start</option>
+              <option value="document-end" selected>document-end</option>
+              <option value="document-idle">document-idle</option>
             </select>
 
             <h6>InjectDetails detail.css</h6>
