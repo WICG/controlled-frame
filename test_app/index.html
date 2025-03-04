@@ -163,9 +163,6 @@
 
             <h5>RequestFilter filter</h5>
 
-            <label for="request_filter_tab_id">tabId</label>
-            <input type="number" id="request_filter_tab_id" />
-
             <label for="request_filter_types">types</label>
             <select id="request_filter_types" multiple>
               <option value="main_frame">main_frame</option>
@@ -350,13 +347,13 @@
           <div class="subcontrols">
             <h4>Navigation</h4>
             <label for="can_go_back_chk">canGoBack()</label>
-            <div class="checkbox"><input type="checkbox" id="can_go_back_chk" /></div>
+            <div class="checkbox"><input type="checkbox" id="can_go_back_chk" disabled/></div>
 
             <label for="back_btn">back()</label>
             <button id="back_btn">Back</button>
 
             <label for="can_go_forward_chk">canGoForward()</label>
-            <div class="checkbox"><input type="checkbox" id="can_go_forward_chk" /></div>
+            <div class="checkbox"><input type="checkbox" id="can_go_forward_chk" disabled/></div>
 
             <label for="forward_btn">forward()</label>
             <button id="forward_btn">Forward</button>

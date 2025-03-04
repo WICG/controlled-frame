@@ -442,15 +442,13 @@ class ControlledFrameController {
   }
 
   // Navigation related functions
-  #back(e) {
+  async #back(e) {
     if (typeof this.controlledFrame.back !== 'function') {
       Log.warn('back: API undefined');
       return;
     }
-    this.controlledFrame.back(success => {
-      let successStr = success ? 'successful' : 'unsuccessful';
-      Log.info(`back = ${successStr}`);
-    });
+    const success = await this.controlledFrame.back();
+    Log.info(`back = ${success ? 'successful' : 'unsuccessful'}`);
   }
 
   #canGoBack(e) {
@@ -463,15 +461,13 @@ class ControlledFrameController {
     Log.info(`canGoBack = ${canGoBack}`);
   }
 
-  #forward(e) {
+  async #forward(e) {
     if (typeof this.controlledFrame.forward !== 'function') {
       Log.warn('forward: API undefined');
       return;
     }
-    this.controlledFrame.forward(success => {
-      let successStr = success ? 'successful' : 'unsuccessful';
-      Log.info(`forward = ${successStr}`);
-    });
+    const success = await this.controlledFrame.forward();
+    Log.info(`forward = ${success ? 'successful' : 'unsuccessful'}`);
   }
 
   #canGoForward(e) {
@@ -484,15 +480,14 @@ class ControlledFrameController {
     Log.info(`canGoForward = ${canGoForward}`);
   }
 
-  #go(e) {
+  async #go(e) {
     if (typeof this.controlledFrame.go !== 'function') {
       Log.warn('go: API undefined');
       return;
     }
     let num = parseInt($('#go_in').value);
-    this.controlledFrame.go(num, success => {
-      Log.info(`go = ${success}`);
-    });
+    const success = await this.controlledFrame.go(num);
+    Log.info(`go = ${success}`);
   }
 
   // Other API functions
@@ -503,7 +498,7 @@ class ControlledFrameController {
     };
   }
 
-  #captureVisibleRegion(e) {
+  async #captureVisibleRegion(e) {
     if (typeof this.controlledFrame.captureVisibleRegion !== 'function') {
       Log.warn('captureVisibleRegion: API undefined');
       return;
@@ -511,17 +506,15 @@ class ControlledFrameController {
 
     let imageDetails = this.#readImageDetails();
 
-    let handler = dataUrl => {
-      Log.info(`captureVisibleRegion completed`);
-      let resultEl = $('#capture_visible_region_result');
-      resultEl.src = dataUrl;
-      resultEl.classList.remove('hide');
-      $('#capture_visible_region_result_btn').onclick = e => {
-        toggleHide(resultEl);
-      };
-    };
+    const dataUrl = await this.controlledFrame.captureVisibleRegion(imageDetails);
 
-    this.controlledFrame.captureVisibleRegion(imageDetails, handler);
+    Log.info(`captureVisibleRegion completed`);
+    let resultEl = $('#capture_visible_region_result');
+    resultEl.src = dataUrl;
+    resultEl.classList.remove('hide');
+    $('#capture_visible_region_result_btn').onclick = e => {
+      toggleHide(resultEl);
+    };
   }
 
   async #clearData(e) {
@@ -973,8 +966,6 @@ class ControlledFrameController {
 
   #readRequestFilter() {
     let filter = {};
-    let tabId = $('#request_filter_tab_id').value;
-    if (tabId.length !== 0) filter.tabId = parseInt(tabId);
     let types = new Array();
     for (const option of $('#request_filter_types').options) {
       if (option.selected) types.push(option.value);
