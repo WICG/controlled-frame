@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 60c422380, updated Thu Feb 20 19:11:22 2025 -0800" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="a61ea26daf3ec68cc9bd234b3b14b8e3b0be2b57" name="revision">
+  <meta content="0338c401ad18ea41d8fa344d8afc24418f58e61e" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -778,7 +778,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-04">4 March 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-05">5 March 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1180,22 +1180,22 @@ embedded <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/do
 };
 
 <c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-runat"><code><c- g>RunAt</c-></code></dfn> {
-  <dfn class="dfn-paneled idl-code" data-dfn-for="RunAt" data-dfn-type="enum-value" data-export id="dom-runat-document_start"><code><c- s>"document_start"</c-></code></dfn>,
-  <dfn class="dfn-paneled idl-code" data-dfn-for="RunAt" data-dfn-type="enum-value" data-export id="dom-runat-document_end"><code><c- s>"document_end"</c-></code></dfn>,
-  <dfn class="dfn-paneled idl-code" data-dfn-for="RunAt" data-dfn-type="enum-value" data-export id="dom-runat-document_idle"><code><c- s>"document_idle"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="RunAt" data-dfn-type="enum-value" data-export id="dom-runat-document-start"><code><c- s>"document-start"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="RunAt" data-dfn-type="enum-value" data-export id="dom-runat-document-end"><code><c- s>"document-end"</c-></code></dfn>,
+  <dfn class="dfn-paneled idl-code" data-dfn-for="RunAt" data-dfn-type="enum-value" data-export id="dom-runat-document-idle"><code><c- s>"document-idle"</c-></code></dfn>,
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-contentscriptdetails"><code><c- g>ContentScriptDetails</c-></code></dfn> {
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean⑤"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contentscriptdetails-all_frames"><code><c- g>all_frames</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean⑤"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contentscriptdetails-allframes"><code><c- g>allFrames</c-></code></dfn>;
   <a data-link-type="idl-name" href="#dictdef-injectionitems" id="ref-for-dictdef-injectionitems"><c- n>InjectionItems</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="InjectionItems" id="dom-contentscriptdetails-css"><code><c- g>css</c-></code></dfn>;
-  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence③"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-contentscriptdetails-exclude_globs"><code><c- g>exclude_globs</c-></code></dfn>;
-  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence④"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-contentscriptdetails-exclude_matches"><code><c- g>exclude_matches</c-></code></dfn>;
-  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence⑤"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑧"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-contentscriptdetails-include_globs"><code><c- g>include_globs</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence③"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-contentscriptdetails-excludeglobs"><code><c- g>excludeGlobs</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence④"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-contentscriptdetails-excludematches"><code><c- g>excludeMatches</c-></code></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence⑤"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑧"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-contentscriptdetails-includeglobs"><code><c- g>includeGlobs</c-></code></dfn>;
   <a data-link-type="idl-name" href="#dictdef-injectionitems" id="ref-for-dictdef-injectionitems①"><c- n>InjectionItems</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="InjectionItems" id="dom-contentscriptdetails-js"><code><c- g>js</c-></code></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean⑥"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contentscriptdetails-match_about_blank"><code><c- g>match_about_blank</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean⑥"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contentscriptdetails-matchaboutblank"><code><c- g>matchAboutBlank</c-></code></dfn>;
   <c- b>required</c-> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence⑥"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑨"><c- b>DOMString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="sequence<DOMString>" id="dom-contentscriptdetails-matches"><code><c- g>matches</c-></code></dfn>;
   <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⓪"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-contentscriptdetails-name"><code><c- g>name</c-></code></dfn>;
-  <a data-link-type="idl-name" href="#enumdef-runat" id="ref-for-enumdef-runat"><c- n>RunAt</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="RunAt" id="dom-contentscriptdetails-run_at"><code><c- g>run_at</c-></code></dfn>;
+  <a data-link-type="idl-name" href="#enumdef-runat" id="ref-for-enumdef-runat"><c- n>RunAt</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContentScriptDetails" data-dfn-type="dict-member" data-export data-type="RunAt" id="dom-contentscriptdetails-runat"><code><c- g>runAt</c-></code></dfn>;
 };
 </pre>
    <div class="domintro note" role="note">
@@ -3427,7 +3427,7 @@ redirection")</p>
    <li><a href="#dom-webrequestevent-addlistener">addListener(listener, filter)</a><span>, in § 4</span>
    <li><a href="#dom-webrequestevent-addlistener">addListener(listener, filter, extraInfoSpec)</a><span>, in § 4</span>
    <li><a href="#dom-contexttype-all">"all"</a><span>, in § 5</span>
-   <li><a href="#dom-contentscriptdetails-all_frames">all_frames</a><span>, in § 3.2</span>
+   <li><a href="#dom-contentscriptdetails-allframes">allFrames</a><span>, in § 3.2</span>
    <li><a href="#dom-cleardatatypeset-appcache">appcache</a><span>, in § 3.3</span>
    <li><a href="#dom-extrainfospec-asyncblocking">"asyncBlocking"</a><span>, in § 4</span>
    <li><a href="#webrequest-handler-config-asyncblocking">asyncBlocking</a><span>, in § 4.1</span>
@@ -3498,12 +3498,12 @@ redirection")</p>
    <li><a href="#dom-resourcetype-csp_report">"csp_report"</a><span>, in § 4</span>
    <li><a href="#dom-contentscriptdetails-css">css</a><span>, in § 3.2</span>
    <li><a href="#dom-contextmenusevent-dispatch">dispatch(data)</a><span>, in § 5</span>
-   <li><a href="#dom-runat-document_end">"document_end"</a><span>, in § 3.2</span>
+   <li><a href="#dom-runat-document-end">"document-end"</a><span>, in § 3.2</span>
    <li><a href="#dom-webrequesteventdetails-documentid">documentId</a><span>, in § 4</span>
-   <li><a href="#dom-runat-document_idle">"document_idle"</a><span>, in § 3.2</span>
+   <li><a href="#dom-runat-document-idle">"document-idle"</a><span>, in § 3.2</span>
    <li><a href="#enumdef-documentlifecycle">DocumentLifecycle</a><span>, in § 4</span>
    <li><a href="#dom-webrequesteventdetails-documentlifecycle">documentLifecycle</a><span>, in § 4</span>
-   <li><a href="#dom-runat-document_start">"document_start"</a><span>, in § 3.2</span>
+   <li><a href="#dom-runat-document-start">"document-start"</a><span>, in § 3.2</span>
    <li><a href="#dom-contextmenusproperties-documenturlpatterns">documentUrlPatterns</a><span>, in § 5</span>
    <li><a href="#dom-contexttype-editable">"editable"</a><span>, in § 5</span>
    <li><a href="#dom-onclickdata-editable">editable</a><span>, in § 5</span>
@@ -3517,8 +3517,8 @@ redirection")</p>
     </ul>
    <li><a href="#contextmenusevent-event-listener-list">event listener list</a><span>, in § 5</span>
    <li><a href="#webrequestevent-eventname">eventName</a><span>, in § 4</span>
-   <li><a href="#dom-contentscriptdetails-exclude_globs">exclude_globs</a><span>, in § 3.2</span>
-   <li><a href="#dom-contentscriptdetails-exclude_matches">exclude_matches</a><span>, in § 3.2</span>
+   <li><a href="#dom-contentscriptdetails-excludeglobs">excludeGlobs</a><span>, in § 3.2</span>
+   <li><a href="#dom-contentscriptdetails-excludematches">excludeMatches</a><span>, in § 3.2</span>
    <li><a href="#dom-htmlcontrolledframeelement-executescript">executeScript()</a><span>, in § 3.2</span>
    <li><a href="#dom-htmlcontrolledframeelement-executescript">executeScript(details)</a><span>, in § 3.2</span>
    <li><a href="#dom-htmlcontrolledframeelement-executescript">executeScript(optionaldetails)</a><span>, in § 3.2</span>
@@ -3586,7 +3586,7 @@ redirection")</p>
      <li><a href="#dom-resourcetype-image">enum-value for ResourceType</a><span>, in § 4</span>
     </ul>
    <li><a href="#dictdef-imagedetails">ImageDetails</a><span>, in § 3.4</span>
-   <li><a href="#dom-contentscriptdetails-include_globs">include_globs</a><span>, in § 3.2</span>
+   <li><a href="#dom-contentscriptdetails-includeglobs">includeGlobs</a><span>, in § 3.2</span>
    <li><a href="#dom-cleardatatypeset-indexeddb">indexedDB</a><span>, in § 3.3</span>
    <li><a href="#dom-webrequesteventdetails-initiator">initiator</a><span>, in § 4</span>
    <li><a href="#dictdef-injectdetails">InjectDetails</a><span>, in § 3.2</span>
@@ -3609,7 +3609,7 @@ redirection")</p>
    <li><a href="#dom-cleardatatypeset-localstorage">localStorage</a><span>, in § 3.3</span>
    <li><a href="#lookup-registered-webrequest-handler-configs">lookup registered WebRequest handler configs</a><span>, in § 4.1</span>
    <li><a href="#dom-resourcetype-main_frame">"main_frame"</a><span>, in § 4</span>
-   <li><a href="#dom-contentscriptdetails-match_about_blank">match_about_blank</a><span>, in § 3.2</span>
+   <li><a href="#dom-contentscriptdetails-matchaboutblank">matchAboutBlank</a><span>, in § 3.2</span>
    <li><a href="#dom-contentscriptdetails-matches">matches</a><span>, in § 3.2</span>
    <li><a href="#matches-a-url-pattern">matches a URL pattern</a><span>, in § 4.1</span>
    <li><a href="#dom-resourcetype-media">"media"</a><span>, in § 4</span>
@@ -3712,8 +3712,8 @@ redirection")</p>
      <li><a href="#dom-blockingresponse-responseheaders">dict-member for BlockingResponse</a><span>, in § 4</span>
      <li><a href="#dom-webrequestresponseeventdetails-responseheaders">dict-member for WebRequestResponseEventDetails</a><span>, in § 4</span>
     </ul>
-   <li><a href="#dom-contentscriptdetails-run_at">run_at</a><span>, in § 3.2</span>
    <li><a href="#enumdef-runat">RunAt</a><span>, in § 3.2</span>
+   <li><a href="#dom-contentscriptdetails-runat">runAt</a><span>, in § 3.2</span>
    <li><a href="#dom-webrequestauthrequireddetails-scheme">scheme</a><span>, in § 4</span>
    <li><a href="#dom-resourcetype-script">"script"</a><span>, in § 4</span>
    <li><a href="#dom-contexttype-selection">"selection"</a><span>, in § 5</span>
@@ -4078,22 +4078,22 @@ redirection")</p>
 };
 
 <c- b>enum</c-> <a href="#enumdef-runat"><code><c- g>RunAt</c-></code></a> {
-  <a href="#dom-runat-document_start"><code><c- s>"document_start"</c-></code></a>,
-  <a href="#dom-runat-document_end"><code><c- s>"document_end"</c-></code></a>,
-  <a href="#dom-runat-document_idle"><code><c- s>"document_idle"</c-></code></a>,
+  <a href="#dom-runat-document-start"><code><c- s>"document-start"</c-></code></a>,
+  <a href="#dom-runat-document-end"><code><c- s>"document-end"</c-></code></a>,
+  <a href="#dom-runat-document-idle"><code><c- s>"document-idle"</c-></code></a>,
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-contentscriptdetails"><code><c- g>ContentScriptDetails</c-></code></a> {
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-contentscriptdetails-all_frames"><code><c- g>all_frames</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-contentscriptdetails-allframes"><code><c- g>allFrames</c-></code></a>;
   <a data-link-type="idl-name" href="#dictdef-injectionitems"><c- n>InjectionItems</c-></a> <a data-type="InjectionItems" href="#dom-contentscriptdetails-css"><code><c- g>css</c-></code></a>;
-  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-contentscriptdetails-exclude_globs"><code><c- g>exclude_globs</c-></code></a>;
-  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-contentscriptdetails-exclude_matches"><code><c- g>exclude_matches</c-></code></a>;
-  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-contentscriptdetails-include_globs"><code><c- g>include_globs</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-contentscriptdetails-excludeglobs"><code><c- g>excludeGlobs</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-contentscriptdetails-excludematches"><code><c- g>excludeMatches</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-contentscriptdetails-includeglobs"><code><c- g>includeGlobs</c-></code></a>;
   <a data-link-type="idl-name" href="#dictdef-injectionitems"><c- n>InjectionItems</c-></a> <a data-type="InjectionItems" href="#dom-contentscriptdetails-js"><code><c- g>js</c-></code></a>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-contentscriptdetails-match_about_blank"><code><c- g>match_about_blank</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-contentscriptdetails-matchaboutblank"><code><c- g>matchAboutBlank</c-></code></a>;
   <c- b>required</c-> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString>" href="#dom-contentscriptdetails-matches"><code><c- g>matches</c-></code></a>;
   <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString" href="#dom-contentscriptdetails-name"><code><c- g>name</c-></code></a>;
-  <a data-link-type="idl-name" href="#enumdef-runat"><c- n>RunAt</c-></a> <a data-type="RunAt" href="#dom-contentscriptdetails-run_at"><code><c- g>run_at</c-></code></a>;
+  <a data-link-type="idl-name" href="#enumdef-runat"><c- n>RunAt</c-></a> <a data-type="RunAt" href="#dom-contentscriptdetails-runat"><code><c- g>runAt</c-></code></a>;
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-cleardataoptions"><code><c- g>ClearDataOptions</c-></code></a> {
@@ -4748,16 +4748,16 @@ let dfnPanelData = {
 "dom-cleardatatypeset-persistentcookies": {"dfnID":"dom-cleardatatypeset-persistentcookies","dfnText":"persistentCookies","external":false,"refSections":[],"url":"#dom-cleardatatypeset-persistentcookies"},
 "dom-cleardatatypeset-sessioncookies": {"dfnID":"dom-cleardatatypeset-sessioncookies","dfnText":"sessionCookies","external":false,"refSections":[],"url":"#dom-cleardatatypeset-sessioncookies"},
 "dom-cleardatatypeset-websql": {"dfnID":"dom-cleardatatypeset-websql","dfnText":"webSQL","external":false,"refSections":[],"url":"#dom-cleardatatypeset-websql"},
-"dom-contentscriptdetails-all_frames": {"dfnID":"dom-contentscriptdetails-all_frames","dfnText":"all_frames","external":false,"refSections":[],"url":"#dom-contentscriptdetails-all_frames"},
+"dom-contentscriptdetails-allframes": {"dfnID":"dom-contentscriptdetails-allframes","dfnText":"allFrames","external":false,"refSections":[],"url":"#dom-contentscriptdetails-allframes"},
 "dom-contentscriptdetails-css": {"dfnID":"dom-contentscriptdetails-css","dfnText":"css","external":false,"refSections":[],"url":"#dom-contentscriptdetails-css"},
-"dom-contentscriptdetails-exclude_globs": {"dfnID":"dom-contentscriptdetails-exclude_globs","dfnText":"exclude_globs","external":false,"refSections":[],"url":"#dom-contentscriptdetails-exclude_globs"},
-"dom-contentscriptdetails-exclude_matches": {"dfnID":"dom-contentscriptdetails-exclude_matches","dfnText":"exclude_matches","external":false,"refSections":[],"url":"#dom-contentscriptdetails-exclude_matches"},
-"dom-contentscriptdetails-include_globs": {"dfnID":"dom-contentscriptdetails-include_globs","dfnText":"include_globs","external":false,"refSections":[],"url":"#dom-contentscriptdetails-include_globs"},
+"dom-contentscriptdetails-excludeglobs": {"dfnID":"dom-contentscriptdetails-excludeglobs","dfnText":"excludeGlobs","external":false,"refSections":[],"url":"#dom-contentscriptdetails-excludeglobs"},
+"dom-contentscriptdetails-excludematches": {"dfnID":"dom-contentscriptdetails-excludematches","dfnText":"excludeMatches","external":false,"refSections":[],"url":"#dom-contentscriptdetails-excludematches"},
+"dom-contentscriptdetails-includeglobs": {"dfnID":"dom-contentscriptdetails-includeglobs","dfnText":"includeGlobs","external":false,"refSections":[],"url":"#dom-contentscriptdetails-includeglobs"},
 "dom-contentscriptdetails-js": {"dfnID":"dom-contentscriptdetails-js","dfnText":"js","external":false,"refSections":[],"url":"#dom-contentscriptdetails-js"},
-"dom-contentscriptdetails-match_about_blank": {"dfnID":"dom-contentscriptdetails-match_about_blank","dfnText":"match_about_blank","external":false,"refSections":[],"url":"#dom-contentscriptdetails-match_about_blank"},
+"dom-contentscriptdetails-matchaboutblank": {"dfnID":"dom-contentscriptdetails-matchaboutblank","dfnText":"matchAboutBlank","external":false,"refSections":[],"url":"#dom-contentscriptdetails-matchaboutblank"},
 "dom-contentscriptdetails-matches": {"dfnID":"dom-contentscriptdetails-matches","dfnText":"matches","external":false,"refSections":[],"url":"#dom-contentscriptdetails-matches"},
 "dom-contentscriptdetails-name": {"dfnID":"dom-contentscriptdetails-name","dfnText":"name","external":false,"refSections":[],"url":"#dom-contentscriptdetails-name"},
-"dom-contentscriptdetails-run_at": {"dfnID":"dom-contentscriptdetails-run_at","dfnText":"run_at","external":false,"refSections":[],"url":"#dom-contentscriptdetails-run_at"},
+"dom-contentscriptdetails-runat": {"dfnID":"dom-contentscriptdetails-runat","dfnText":"runAt","external":false,"refSections":[],"url":"#dom-contentscriptdetails-runat"},
 "dom-contextmenus-create": {"dfnID":"dom-contextmenus-create","dfnText":"create(properties)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-create"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-create"},
 "dom-contextmenus-create-properties-properties": {"dfnID":"dom-contextmenus-create-properties-properties","dfnText":"properties","external":false,"refSections":[],"url":"#dom-contextmenus-create-properties-properties"},
 "dom-contextmenus-onclicked": {"dfnID":"dom-contextmenus-onclicked","dfnText":"onClicked","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-onclicked"},{"id":"ref-for-dom-contextmenus-onclicked\u2460"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-onclicked"},
@@ -4890,9 +4890,9 @@ let dfnPanelData = {
 "dom-resourcetype-webbundle": {"dfnID":"dom-resourcetype-webbundle","dfnText":"\"webbundle\"","external":false,"refSections":[],"url":"#dom-resourcetype-webbundle"},
 "dom-resourcetype-websocket": {"dfnID":"dom-resourcetype-websocket","dfnText":"\"websocket\"","external":false,"refSections":[],"url":"#dom-resourcetype-websocket"},
 "dom-resourcetype-xmlhttprequest": {"dfnID":"dom-resourcetype-xmlhttprequest","dfnText":"\"xmlhttprequest\"","external":false,"refSections":[],"url":"#dom-resourcetype-xmlhttprequest"},
-"dom-runat-document_end": {"dfnID":"dom-runat-document_end","dfnText":"\"document_end\"","external":false,"refSections":[],"url":"#dom-runat-document_end"},
-"dom-runat-document_idle": {"dfnID":"dom-runat-document_idle","dfnText":"\"document_idle\"","external":false,"refSections":[],"url":"#dom-runat-document_idle"},
-"dom-runat-document_start": {"dfnID":"dom-runat-document_start","dfnText":"\"document_start\"","external":false,"refSections":[],"url":"#dom-runat-document_start"},
+"dom-runat-document-end": {"dfnID":"dom-runat-document-end","dfnText":"\"document-end\"","external":false,"refSections":[],"url":"#dom-runat-document-end"},
+"dom-runat-document-idle": {"dfnID":"dom-runat-document-idle","dfnText":"\"document-idle\"","external":false,"refSections":[],"url":"#dom-runat-document-idle"},
+"dom-runat-document-start": {"dfnID":"dom-runat-document-start","dfnText":"\"document-start\"","external":false,"refSections":[],"url":"#dom-runat-document-start"},
 "dom-uploaddata-bytes": {"dfnID":"dom-uploaddata-bytes","dfnText":"bytes","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-uploaddata-bytes"},{"id":"ref-for-dom-uploaddata-bytes\u2460"}],"title":"4. Web Request API"}],"url":"#dom-uploaddata-bytes"},
 "dom-uploaddata-file": {"dfnID":"dom-uploaddata-file","dfnText":"file","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-uploaddata-file"}],"title":"4. Web Request API"}],"url":"#dom-uploaddata-file"},
 "dom-webrequest-handlerbehaviorchanged": {"dfnID":"dom-webrequest-handlerbehaviorchanged","dfnText":"handlerBehaviorChanged(callback)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequest-handlerbehaviorchanged"}],"title":"4. Web Request API"}],"url":"#dom-webrequest-handlerbehaviorchanged"},
