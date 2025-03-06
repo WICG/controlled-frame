@@ -131,6 +131,8 @@ spec: uievents; urlPrefix https://www.w3.org/TR/uievents/
     type: dfn
         text: contextmenu; url: event-type-contextmenu
         text: click; url: event-type-click
+
+text: match pattern; type: dfn; url: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns;
 </pre>
 
 <pre class=link-defaults>
@@ -2336,10 +2338,10 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
     :: A [=list=] of different {{ContextType}}, used to control the condition to display the [=context menu item=].
 
     : {{ContextMenusProperties/documentUrlPatterns}}
-    :: A [=list=] of strings that are URL patterns , used to control the condition to display the [=context menu item=].
+    :: A [=list=] of strings that are [=match patterns=], used to control the condition to display the [=context menu item=].
 
     : {{ContextMenusProperties/targetUrlPatterns}}
-    :: A [=list=] of strings that are URL patterns , used to control the condition to display the [=context menu item=].
+    :: A [=list=] of strings that are [=match patterns=], used to control the condition to display the [=context menu item=].
 
     : {{ContextMenusProperties/parentId}}
     :: The ID of the parent [=ContextMenus/context menu item=]. The [=ContextMenus/context menu item=] may appear under a sub-menu of the parent. 
@@ -2354,7 +2356,7 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
     :: A {{ContextMenusCallback}} that is invoked when the [=ContextMenus/context menu item=] is clicked.
 
     : {{ContextMenusProperties/checked}}
-    :: Whether the [=ContextMenus/context menu item=] is initially checked.
+    :: Whether the [=ContextMenus/context menu item=] is initially checked, if the {{ContextMenusProperties/type}} is {{ItemType/checkbox}}.
 
     : {{ContextMenusProperties/enabled}}
     :: Whether the [=ContextMenus/context menu item=] is enabled.
@@ -2369,7 +2371,7 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
   1. Let |element| be the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at.
 
-  1. Let |documentUrl| be the [=Document/URL=] of the embedded document.
+  1. Let |documentUrl| be the [=Document/URL=] of the [=document=] that |element| belongs to.
 
   1. Let |targetUrl| be an empty string.
 
@@ -2381,9 +2383,9 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
       1. If |element| is an instance of {{HTMLAnchorElement}}, then set |targetUrl| to the [=href=] attribute of |element|.
 
-  1. if |properties|["{{ContextMenusProperties/context}}"] is not [=list/empty=]:
+  1. If |properties|["{{ContextMenusProperties/context}}"] is not [=list/empty=]:
 
-      1. let |result| be a boolean value that is initially false.
+      1. Let |result| be a boolean value that is initially false.
 
       1. For each |context| in |properties|["{{ContextMenusProperties/context}}"]:
     
@@ -2393,9 +2395,9 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
       1. If |result| is false, return false.
 
-  1. if |properties|["{{ContextMenusProperties/documentUrlPatterns}}"] is not [=list/empty=]:
+  1. If |properties|["{{ContextMenusProperties/documentUrlPatterns}}"] is not [=list/empty=]:
 
-      1. let |result| be a boolean value that is initially false.
+      1. Let |result| be a boolean value that is initially false.
 
       1. For each |urlPattern| in |properties|["{{ContextMenusProperties/documentUrlPatterns}}"]:
     
@@ -2403,9 +2405,9 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
       1. If |result| is false, return false.
 
-  1. if |properties|["{{ContextMenusProperties/targetUrlPatterns}}"] is not [=list/empty=]:
+  1. If |properties|["{{ContextMenusProperties/targetUrlPatterns}}"] is not [=list/empty=]:
 
-      1. let |result| be a boolean value that is initially false.
+      1. Let |result| be a boolean value that is initially false.
 
       1. For each |urlPattern| in |properties|["{{ContextMenusProperties/targetUrlPatterns}}"]:
     
@@ -2415,7 +2417,7 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
   Note: Different user agents may implement additional conditions.
 
-  1. return true.
+  1. Return true.
 
 </div>
 
@@ -2495,7 +2497,7 @@ When an [= event =] associated with {{ContextMenus/onShow}} is [= dispatched =]:
 
 <div algorithm='onclicked-event'>
 
-When the [= event =] associated with {{ContextMenus/onClicked}} is [= dispatched =]:
+To [=dispatch=] a {{ContextMenus/onClicked}} [=event=]:
 
 1. Let |menuItem| be the [=map/entry=] of [=ContextMenus/context menu map=] that's associated with the [=context menu item=].
 
