@@ -4,9 +4,9 @@
   <title>Controlled Frame API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 60c422380, updated Thu Feb 20 19:11:22 2025 -0800" name="generator">
+  <meta content="Bikeshed version 4b8aed3f7, updated Thu Mar 6 12:35:01 2025 -0800" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="df0da6e0ef9c30651f0bdc2060190a9cb2a644a8" name="revision">
+  <meta content="77b0db44ab9629179299a843186104199fb7e431" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -778,7 +778,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-05">5 March 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-06">6 March 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -909,8 +909,14 @@ patching some specifications, such as HTML. We will also require monkey
 patching specifications for some parts of this Controlled Frame specification.</p>
    <h2 class="heading settled" data-level="3" id="the-controlledframe-element"><span class="secno">3. </span><span class="content">The <dfn class="dfn-paneled" data-dfn-type="element" data-export id="elementdef-controlledframe"><code>controlledframe</code></dfn> element</span><a class="self-link" href="#the-controlledframe-element"></a></h2>
    <dl class="element">
+    <dt><a data-link-type="dfn" href="https://w3c.github.io/manifest-app-info/#dfn-categories" id="ref-for-dfn-categories">Categories</a>:
+    <dd><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#flow-content-2" id="ref-for-flow-content-2">Flow content</a>.
+    <dd><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#phrasing-content-2" id="ref-for-phrasing-content-2">Phrasing content</a>.
+    <dd><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category" id="ref-for-embedded-content-category">Embedded content</a>.
+    <dd><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#interactive-content-2" id="ref-for-interactive-content-2">Interactive content</a>.
+    <dd><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#palpable-content-2" id="ref-for-palpable-content-2">Palpable content</a>.
     <dt><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-contexts" id="ref-for-concept-element-contexts">Contexts in which this element can be used</a>:
-    <dd>Where <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category" id="ref-for-embedded-content-category">embedded content</a> is expected.
+    <dd>Where <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category" id="ref-for-embedded-content-category①">embedded content</a> is expected.
     <dt><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-content-model" id="ref-for-concept-element-content-model">Content model</a>:
     <dd><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-content-nothing" id="ref-for-concept-content-nothing">Nothing</a>.
     <dt><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#concept-element-attributes" id="ref-for-concept-element-attributes">Content attributes</a>:
@@ -3870,6 +3876,7 @@ redirection")</p>
      <li><span class="dfn-paneled" id="24cf98a1">environment</span>
      <li><span class="dfn-paneled" id="3e12e042">environment settings object</span>
      <li><span class="dfn-paneled" id="8f4f419b">event</span>
+     <li><span class="dfn-paneled" id="1236ac1a">flow content</span>
      <li><span class="dfn-paneled" id="8fc74046">global attributes</span>
      <li><span class="dfn-paneled" id="4b6086d7">global object</span>
      <li><span class="dfn-paneled" id="8a30477b">global object <small>(for environment settings object)</small></span>
@@ -3877,12 +3884,15 @@ redirection")</p>
      <li><span class="dfn-paneled" id="87fcd40c">iframe</span>
      <li><span class="dfn-paneled" id="a72449dd">in parallel</span>
      <li><span class="dfn-paneled" id="2fa84525">initialize the navigable</span>
+     <li><span class="dfn-paneled" id="bd7d36d0">interactive content</span>
      <li><span class="dfn-paneled" id="9c19b7fc">navigable</span>
      <li><span class="dfn-paneled" id="228be966">navigable <small>(for window)</small></span>
      <li><span class="dfn-paneled" id="bf63a402">navigable container</span>
      <li><span class="dfn-paneled" id="fbadcbc4">nothing</span>
+     <li><span class="dfn-paneled" id="d54eeea2">palpable content</span>
      <li><span class="dfn-paneled" id="ce474686">parent <small>(for Window)</small></span>
      <li><span class="dfn-paneled" id="1bba3db7">parent <small>(for navigable)</small></span>
+     <li><span class="dfn-paneled" id="e5a7e26c">phrasing content</span>
      <li><span class="dfn-paneled" id="e99bd18e">relevant global object</span>
      <li><span class="dfn-paneled" id="fe811c8e">represents</span>
      <li><span class="dfn-paneled" id="dae0bfde">serialization of an origin</span>
@@ -3929,6 +3939,11 @@ redirection")</p>
     <ul>
      <li><span class="dfn-paneled" id="4f00e731">IsolatedContext</span>
      <li><span class="dfn-paneled" id="a686a312">isolated context</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[MANIFEST-APP-INFO]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="ada784a3">categories</span>
     </ul>
    <li>
     <a data-link-type="biblio">[Permissions-Policy]</a> defines the following terms:
@@ -4002,6 +4017,8 @@ redirection")</p>
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-isolated-contexts">[ISOLATED-CONTEXTS]
    <dd><a href="https://wicg.github.io/isolated-web-apps/isolated-contexts.html"><cite>Isolated Contexts</cite></a>. Draft Community Group Report. URL: <a href="https://wicg.github.io/isolated-web-apps/isolated-contexts.html">https://wicg.github.io/isolated-web-apps/isolated-contexts.html</a>
+   <dt id="biblio-manifest-app-info">[MANIFEST-APP-INFO]
+   <dd>Aaron Gustafson. <a href="https://w3c.github.io/manifest-app-info/"><cite>Web App Manifest - Application Information</cite></a>. URL: <a href="https://w3c.github.io/manifest-app-info/">https://w3c.github.io/manifest-app-info/</a>
    <dt id="biblio-permissions">[Permissions]
    <dd>Marcos Caceres; Mike Taylor. <a href="https://w3c.github.io/permissions/"><cite>Permissions</cite></a>. URL: <a href="https://w3c.github.io/permissions/">https://w3c.github.io/permissions/</a>
    <dt id="biblio-permissions-policy">[Permissions-Policy]
@@ -4572,6 +4589,7 @@ let dfnPanelData = {
 "0e6b2056": {"dfnID":"0e6b2056","dfnText":"set (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-set"},{"id":"ref-for-map-set\u2460"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-set"},
 "0e8de730": {"dfnID":"0e8de730","dfnText":"tuple","external":true,"refSections":[{"refs":[{"id":"ref-for-tuple"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#tuple"},
 "0ee1989a": {"dfnID":"0ee1989a","dfnText":"IP address","external":true,"refSections":[{"refs":[{"id":"ref-for-ip-address"}],"title":"4. Web Request API"}],"url":"https://url.spec.whatwg.org/#ip-address"},
+"1236ac1a": {"dfnID":"1236ac1a","dfnText":"flow content","external":true,"refSections":[{"refs":[{"id":"ref-for-flow-content-2"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#flow-content-2"},
 "1243a891": {"dfnID":"1243a891","dfnText":"exist (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"},{"id":"ref-for-map-exists\u2460"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
 "12d6b9a8": {"dfnID":"12d6b9a8","dfnText":"values","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-values"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-map-getting-the-values\u2460"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
 "1372f92a": {"dfnID":"1372f92a","dfnText":"dispatch","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-event-dispatch"},{"id":"ref-for-concept-event-dispatch\u2460"},{"id":"ref-for-concept-event-dispatch\u2461"}],"title":"5. Context Menus API"}],"url":"https://dom.spec.whatwg.org/#concept-event-dispatch"},
@@ -4594,7 +4612,7 @@ let dfnPanelData = {
 "347e8fe9": {"dfnID":"347e8fe9","dfnText":"URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-url"},{"id":"ref-for-concept-document-url\u2460"}],"title":"5. Context Menus API"}],"url":"https://dom.spec.whatwg.org/#concept-document-url"},
 "35972864": {"dfnID":"35972864","dfnText":"active document","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-document"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document"},
 "36858240": {"dfnID":"36858240","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-boolean"},{"id":"ref-for-boolean\u2460"},{"id":"ref-for-boolean\u2461"},{"id":"ref-for-boolean\u2462"},{"id":"ref-for-boolean\u2463"},{"id":"ref-for-boolean\u2464"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-boolean\u2465"},{"id":"ref-for-boolean\u2466"},{"id":"ref-for-boolean\u2467"},{"id":"ref-for-boolean\u2468"},{"id":"ref-for-boolean\u2460\u24ea"}],"title":"4.1. WebRequest handler config"}],"url":"https://infra.spec.whatwg.org/#boolean"},
-"38c8ba2c": {"dfnID":"38c8ba2c","dfnText":"embedded content","external":true,"refSections":[{"refs":[{"id":"ref-for-embedded-content-category"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category"},
+"38c8ba2c": {"dfnID":"38c8ba2c","dfnText":"embedded content","external":true,"refSections":[{"refs":[{"id":"ref-for-embedded-content-category"},{"id":"ref-for-embedded-content-category\u2460"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category"},
 "3b90bdcd": {"dfnID":"3b90bdcd","dfnText":"resolve","external":true,"refSections":[{"refs":[{"id":"ref-for-resolve"},{"id":"ref-for-resolve\u2460"},{"id":"ref-for-resolve\u2461"}],"title":"3.1. Navigation methods"},{"refs":[{"id":"ref-for-resolve\u2462"},{"id":"ref-for-resolve\u2463"},{"id":"ref-for-resolve\u2464"},{"id":"ref-for-resolve\u2465"}],"title":"3.2. Scripting methods"},{"refs":[{"id":"ref-for-resolve\u2466"},{"id":"ref-for-resolve\u2467"},{"id":"ref-for-resolve\u2468"},{"id":"ref-for-resolve\u2460\u24ea"},{"id":"ref-for-resolve\u2460\u2460"}],"title":"3.3. Configuration methods"},{"refs":[{"id":"ref-for-resolve\u2460\u2461"}],"title":"3.4. Capture methods"},{"refs":[{"id":"ref-for-resolve\u2460\u2462"},{"id":"ref-for-resolve\u2460\u2463"},{"id":"ref-for-resolve\u2460\u2464"},{"id":"ref-for-resolve\u2460\u2465"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#resolve"},
 "3c915747": {"dfnID":"3c915747","dfnText":"contexts in which this element can be used","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-contexts"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#concept-element-contexts"},
 "3de9e659": {"dfnID":"3de9e659","dfnText":"byte sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-byte-sequence"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#byte-sequence"},
@@ -4661,6 +4679,7 @@ let dfnPanelData = {
 "a1d47575": {"dfnID":"a1d47575","dfnText":"status","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response-status"},{"id":"ref-for-concept-response-status\u2460"},{"id":"ref-for-concept-response-status\u2461"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-response-status"},
 "a686a312": {"dfnID":"a686a312","dfnText":"isolated context","external":true,"refSections":[{"refs":[{"id":"ref-for-isolated-context"}],"title":"3. The controlledframe element"}],"url":"https://wicg.github.io/isolated-web-apps/isolated-contexts.html#isolated-context"},
 "a72449dd": {"dfnID":"a72449dd","dfnText":"in parallel","external":true,"refSections":[{"refs":[{"id":"ref-for-in-parallel"},{"id":"ref-for-in-parallel\u2460"},{"id":"ref-for-in-parallel\u2461"},{"id":"ref-for-in-parallel\u2462"},{"id":"ref-for-in-parallel\u2463"},{"id":"ref-for-in-parallel\u2464"},{"id":"ref-for-in-parallel\u2465"},{"id":"ref-for-in-parallel\u2466"},{"id":"ref-for-in-parallel\u2467"},{"id":"ref-for-in-parallel\u2468"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel"},
+"ada784a3": {"dfnID":"ada784a3","dfnText":"categories","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-categories"}],"title":"3. The controlledframe element"}],"url":"https://w3c.github.io/manifest-app-info/#dfn-categories"},
 "ae56d57e": {"dfnID":"ae56d57e","dfnText":"URL list","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-url-list"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-request-url-list"},
 "ae8def21": {"dfnID":"ae8def21","dfnText":"contain","external":true,"refSections":[{"refs":[{"id":"ref-for-list-contain"},{"id":"ref-for-list-contain\u2460"},{"id":"ref-for-list-contain\u2461"},{"id":"ref-for-list-contain\u2462"},{"id":"ref-for-list-contain\u2463"},{"id":"ref-for-list-contain\u2464"},{"id":"ref-for-list-contain\u2465"},{"id":"ref-for-list-contain\u2466"},{"id":"ref-for-list-contain\u2467"},{"id":"ref-for-list-contain\u2468"},{"id":"ref-for-list-contain\u2460\u24ea"},{"id":"ref-for-list-contain\u2460\u2460"},{"id":"ref-for-list-contain\u2460\u2461"},{"id":"ref-for-list-contain\u2460\u2462"},{"id":"ref-for-list-contain\u2460\u2463"},{"id":"ref-for-list-contain\u2460\u2464"},{"id":"ref-for-list-contain\u2460\u2465"},{"id":"ref-for-list-contain\u2460\u2466"},{"id":"ref-for-list-contain\u2460\u2467"},{"id":"ref-for-list-contain\u2460\u2468"},{"id":"ref-for-list-contain\u2461\u24ea"},{"id":"ref-for-list-contain\u2461\u2460"},{"id":"ref-for-list-contain\u2461\u2461"},{"id":"ref-for-list-contain\u2461\u2462"},{"id":"ref-for-list-contain\u2461\u2463"},{"id":"ref-for-list-contain\u2461\u2464"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-list-contain\u2461\u2465"}],"title":"4.1. WebRequest handler config"},{"refs":[{"id":"ref-for-list-contain\u2461\u2466"},{"id":"ref-for-list-contain\u2461\u2467"},{"id":"ref-for-list-contain\u2461\u2468"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#list-contain"},
 "aea6ce83": {"dfnID":"aea6ce83","dfnText":"proxy-authentication entry","external":true,"refSections":[{"refs":[{"id":"ref-for-proxy-authentication-entry"}],"title":"4.2.1. Fetch"}],"url":"https://fetch.spec.whatwg.org/#proxy-authentication-entry"},
@@ -4673,6 +4692,7 @@ let dfnPanelData = {
 "b8a5b03f": {"dfnID":"b8a5b03f","dfnText":"HTTP-network-or-cache fetch","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-http-network-or-cache-fetch"}],"title":"4.2.1. Fetch"}],"url":"https://fetch.spec.whatwg.org//#concept-http-network-or-cache-fetch"},
 "bc7b9068": {"dfnID":"bc7b9068","dfnText":"clear","external":true,"refSections":[{"refs":[{"id":"ref-for-map-clear"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-clear"},
 "bd736ec6": {"dfnID":"bd736ec6","dfnText":"top-level traversable","external":true,"refSections":[{"refs":[{"id":"ref-for-top-level-traversable"},{"id":"ref-for-top-level-traversable\u2460"}],"title":"3.6.1. Monkey Patch to HTML"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
+"bd7d36d0": {"dfnID":"bd7d36d0","dfnText":"interactive content","external":true,"refSections":[{"refs":[{"id":"ref-for-interactive-content-2"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#interactive-content-2"},
 "bdbd19d1": {"dfnID":"bdbd19d1","dfnText":"Promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise"},{"id":"ref-for-idl-promise\u2460"},{"id":"ref-for-idl-promise\u2461"},{"id":"ref-for-idl-promise\u2462"},{"id":"ref-for-idl-promise\u2463"},{"id":"ref-for-idl-promise\u2464"},{"id":"ref-for-idl-promise\u2465"},{"id":"ref-for-idl-promise\u2466"},{"id":"ref-for-idl-promise\u2467"},{"id":"ref-for-idl-promise\u2468"},{"id":"ref-for-idl-promise\u2460\u24ea"},{"id":"ref-for-idl-promise\u2460\u2460"},{"id":"ref-for-idl-promise\u2460\u2461"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-idl-promise\u2461\u2465"},{"id":"ref-for-idl-promise\u2461\u2466"},{"id":"ref-for-idl-promise\u2461\u2467"},{"id":"ref-for-idl-promise\u2461\u2468"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#idl-promise"},
 "bec98d30": {"dfnID":"bec98d30","dfnText":"dictionary","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-dictionary"}],"title":"3.2. Scripting methods"}],"url":"https://webidl.spec.whatwg.org/#dfn-dictionary"},
 "bf63a402": {"dfnID":"bf63a402","dfnText":"navigable container","external":true,"refSections":[{"refs":[{"id":"ref-for-navigable-container"},{"id":"ref-for-navigable-container\u2460"}],"title":"5. Context Menus API"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#navigable-container"},
@@ -4696,6 +4716,7 @@ let dfnPanelData = {
 "create-a-webrequestresponseeventdetails-object": {"dfnID":"create-a-webrequestresponseeventdetails-object","dfnText":"create a WebRequestResponseEventDetails object","external":false,"refSections":[{"refs":[{"id":"ref-for-create-a-webrequestresponseeventdetails-object"},{"id":"ref-for-create-a-webrequestresponseeventdetails-object\u2460"},{"id":"ref-for-create-a-webrequestresponseeventdetails-object\u2461"}],"title":"4. Web Request API"}],"url":"#create-a-webrequestresponseeventdetails-object"},
 "create-a-webrequestresponsewithipeventdetails-object": {"dfnID":"create-a-webrequestresponsewithipeventdetails-object","dfnText":"create a WebRequestResponseWithIpEventDetails object","external":false,"refSections":[{"refs":[{"id":"ref-for-create-a-webrequestresponsewithipeventdetails-object"},{"id":"ref-for-create-a-webrequestresponsewithipeventdetails-object\u2460"},{"id":"ref-for-create-a-webrequestresponsewithipeventdetails-object\u2461"},{"id":"ref-for-create-a-webrequestresponsewithipeventdetails-object\u2462"}],"title":"4. Web Request API"}],"url":"#create-a-webrequestresponsewithipeventdetails-object"},
 "d14a6f26": {"dfnID":"d14a6f26","dfnText":"key","external":true,"refSections":[{"refs":[{"id":"ref-for-map-key"},{"id":"ref-for-map-key\u2460"},{"id":"ref-for-map-key\u2461"},{"id":"ref-for-map-key\u2462"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-map-key\u2463"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-key"},
+"d54eeea2": {"dfnID":"d54eeea2","dfnText":"palpable content","external":true,"refSections":[{"refs":[{"id":"ref-for-palpable-content-2"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#palpable-content-2"},
 "d85a6c84": {"dfnID":"d85a6c84","dfnText":"header list","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-header-list"},{"id":"ref-for-concept-header-list\u2460"},{"id":"ref-for-concept-header-list\u2461"},{"id":"ref-for-concept-header-list\u2462"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-header-list"},
 "d8b963e8": {"dfnID":"d8b963e8","dfnText":"isomorphic decode","external":true,"refSections":[{"refs":[{"id":"ref-for-isomorphic-decode"},{"id":"ref-for-isomorphic-decode\u2460"},{"id":"ref-for-isomorphic-decode\u2461"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#isomorphic-decode"},
 "dac3e030": {"dfnID":"dac3e030","dfnText":"contextmenu","external":true,"refSections":[{"refs":[{"id":"ref-for-something"},{"id":"ref-for-something\u2462"},{"id":"ref-for-something\u2463"}],"title":"5. Context Menus API"}],"url":"event-type-contextmenu"},
@@ -4947,6 +4968,7 @@ let dfnPanelData = {
 "dom-webrequestresponsewithipeventdetails-fromcache": {"dfnID":"dom-webrequestresponsewithipeventdetails-fromcache","dfnText":"fromCache","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequestresponsewithipeventdetails-fromcache"}],"title":"4. Web Request API"}],"url":"#dom-webrequestresponsewithipeventdetails-fromcache"},
 "dom-webrequestresponsewithipeventdetails-ip": {"dfnID":"dom-webrequestresponsewithipeventdetails-ip","dfnText":"ip","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequestresponsewithipeventdetails-ip"}],"title":"4. Web Request API"}],"url":"#dom-webrequestresponsewithipeventdetails-ip"},
 "dom-webrequestsendheadersdetails-requestheaders": {"dfnID":"dom-webrequestsendheadersdetails-requestheaders","dfnText":"requestHeaders","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequestsendheadersdetails-requestheaders"}],"title":"4. Web Request API"}],"url":"#dom-webrequestsendheadersdetails-requestheaders"},
+"e5a7e26c": {"dfnID":"e5a7e26c","dfnText":"phrasing content","external":true,"refSections":[{"refs":[{"id":"ref-for-phrasing-content-2"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#phrasing-content-2"},
 "e6defb69": {"dfnID":"e6defb69","dfnText":"cache state","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response-cache-state"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-response-cache-state"},
 "e99bd18e": {"dfnID":"e99bd18e","dfnText":"relevant global object","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-relevant-global"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global"},
 "eb1b1af3": {"dfnID":"eb1b1af3","dfnText":"network error","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-network-error"},{"id":"ref-for-concept-network-error\u2460"},{"id":"ref-for-concept-network-error\u2461"},{"id":"ref-for-concept-network-error\u2462"},{"id":"ref-for-concept-network-error\u2463"},{"id":"ref-for-concept-network-error\u2464"},{"id":"ref-for-concept-network-error\u2465"},{"id":"ref-for-concept-network-error\u2466"}],"title":"4.2.1. Fetch"}],"url":"https://fetch.spec.whatwg.org/#concept-network-error"},
@@ -5623,9 +5645,13 @@ let refsData = {
 "https://html.spec.whatwg.org/multipage/dom.html#concept-element-dom": {"displayText":"dom interface","export":true,"for_":[],"level":"","normative":true,"shortname":"html","spec":"html","status":"anchor-block","text":"dom interface","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#concept-element-dom"},
 "https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category": {"displayText":"embedded content","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"embedded content","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category"},
 "https://html.spec.whatwg.org/multipage/dom.html#events": {"displayText":"event","export":true,"for_":[],"level":"","normative":true,"shortname":"html","spec":"html","status":"anchor-block","text":"event","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#events"},
+"https://html.spec.whatwg.org/multipage/dom.html#flow-content-2": {"displayText":"flow content","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"flow content","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#flow-content-2"},
 "https://html.spec.whatwg.org/multipage/dom.html#global-attributes": {"displayText":"global attributes","export":true,"for_":[],"level":"","normative":true,"shortname":"html","spec":"html","status":"anchor-block","text":"global attributes","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#global-attributes"},
 "https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor": {"displayText":"HTMLConstructor","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLConstructor","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor"},
 "https://html.spec.whatwg.org/multipage/dom.html#htmlelement": {"displayText":"HTMLElement","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLElement","type":"interface","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlelement"},
+"https://html.spec.whatwg.org/multipage/dom.html#interactive-content-2": {"displayText":"interactive content","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"interactive content","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#interactive-content-2"},
+"https://html.spec.whatwg.org/multipage/dom.html#palpable-content-2": {"displayText":"palpable content","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"palpable content","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#palpable-content-2"},
+"https://html.spec.whatwg.org/multipage/dom.html#phrasing-content-2": {"displayText":"phrasing content","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"phrasing content","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#phrasing-content-2"},
 "https://html.spec.whatwg.org/multipage/dom.html#represents": {"displayText":"represents","export":true,"for_":[],"level":"","normative":true,"shortname":"html","spec":"html","status":"anchor-block","text":"represents","type":"dfn","url":"https://html.spec.whatwg.org/multipage/dom.html#represents"},
 "https://html.spec.whatwg.org/multipage/embedded-content.html#attr-source-src": {"displayText":"src","export":true,"for_":[],"level":"","normative":true,"shortname":"html","spec":"html","status":"anchor-block","text":"src","type":"dfn","url":"https://html.spec.whatwg.org/multipage/embedded-content.html#attr-source-src"},
 "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element": {"displayText":"iframe","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"iframe","type":"element","url":"https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element"},
@@ -5680,6 +5706,7 @@ let refsData = {
 "https://w3c.github.io/FileAPI/#dfn-file": {"displayText":"File","export":true,"for_":[],"level":"1","normative":true,"shortname":"fileapi","spec":"fileapi","status":"current","text":"File","type":"interface","url":"https://w3c.github.io/FileAPI/#dfn-file"},
 "https://w3c.github.io/FileAPI/#dfn-name": {"displayText":"name","export":true,"for_":["File"],"level":"1","normative":true,"shortname":"fileapi","spec":"fileapi","status":"current","text":"name","type":"attribute","url":"https://w3c.github.io/FileAPI/#dfn-name"},
 "https://w3c.github.io/hr-time/#dfn-coarsened-shared-current-time": {"displayText":"coarsened shared current time","export":true,"for_":[],"level":"3","normative":true,"shortname":"hr-time","spec":"hr-time-3","status":"current","text":"coarsened shared current time","type":"dfn","url":"https://w3c.github.io/hr-time/#dfn-coarsened-shared-current-time"},
+"https://w3c.github.io/manifest-app-info/#dfn-categories": {"displayText":"categories","export":true,"for_":["manifest"],"level":"1","normative":false,"shortname":"manifest-app-info","spec":"manifest-app-info","status":"current","text":"categories","type":"dfn","url":"https://w3c.github.io/manifest-app-info/#dfn-categories"},
 "https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature": {"displayText":"policy-controlled feature","export":true,"for_":[],"level":"1","normative":true,"shortname":"permissions-policy","spec":"permissions-policy-1","status":"current","text":"policy-controlled feature","type":"dfn","url":"https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature"},
 "https://webidl.spec.whatwg.org#idl-promise": {"displayText":"promise","export":true,"for_":[],"level":"","normative":true,"shortname":"webidl","spec":"webidl","status":"anchor-block","text":"promise","type":"dfn","url":"https://webidl.spec.whatwg.org#idl-promise"},
 "https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
