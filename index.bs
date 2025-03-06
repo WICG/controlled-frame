@@ -143,6 +143,7 @@ spec:html; type:dfn; for:/; text:global object
 spec:html; type:dfn; for:/; text:top-level traversable
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; text:list
+spec:infra; type:dfn; text:byte sequence
 spec:webidl; type:dfn; text:attribute
 </pre>
 
@@ -2371,7 +2372,7 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
   1. Let |element| be the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at.
 
-  1. Let |documentUrl| be the [=Document/URL=] of the [=document=] that |element| belongs to.
+  1. Let |documentUrl| be the [=Document/URL=] of the [=/document=] that |element| belongs to.
 
   1. Let |targetUrl| be an empty string.
 
