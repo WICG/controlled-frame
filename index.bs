@@ -2327,7 +2327,7 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
 </div>
 
-The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperties}} objects, control the conditions the [=context menu items=] are displayed, as well as the features and behaviors of the items.
+The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperties}} objects, control the conditions under which the [=context menu items=] are displayed, as well as the features and behaviors of the items.
 
 <div class='note'>
 
@@ -2336,13 +2336,13 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
     {{ContextMenusProperties}} has the following fields:
 
     : {{ContextMenusProperties/context}}
-    :: A [=list=] of different {{ContextType}}, used to control the condition to display the [=context menu item=].
+    :: A [=list=] of different {{ContextType}}, used to control the conditions under which the [=context menu item=] is displayed.
 
     : {{ContextMenusProperties/documentUrlPatterns}}
-    :: A [=list=] of strings that are [=match patterns=], used to control the condition to display the [=context menu item=].
+    :: A [=list=] of strings that are [=match patterns=], used to control the conditions under which the [=context menu item=] is displayed.
 
     : {{ContextMenusProperties/targetUrlPatterns}}
-    :: A [=list=] of strings that are [=match patterns=], used to control the condition to display the [=context menu item=].
+    :: A [=list=] of strings that are [=match patterns=], used to control the conditions under which the [=context menu item=] is displayed.
 
     : {{ContextMenusProperties/parentId}}
     :: The ID of the parent [=ContextMenus/context menu item=]. The [=ContextMenus/context menu item=] may appear under a sub-menu of the parent. 
@@ -2527,7 +2527,7 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=], given |element| as the 
             :: Whether the [=context menu item=] is checked.
 
             : {{OnClickData/linkUrl}}
-            :: The link of |element|, if it exists.
+            :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s {{HTMLAnchorElement/href}} [=attribute=], otherwise [=undefined=].
 
             : {{OnClickData/mediaType}}
             :: One of "image", "video", or "audio", if any, based on |element|.
