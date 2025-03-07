@@ -2527,7 +2527,7 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=], given |element| as the 
             :: Whether the [=context menu item=] is checked.
 
             : {{OnClickData/linkUrl}}
-            :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s {{HTMLAnchorElement/href}} [=attribute=], otherwise [=undefined=].
+            :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s [=href=] [=attribute=].
 
             : {{OnClickData/mediaType}}
             :: One of "image", "video", or "audio", if any, based on |element|.
