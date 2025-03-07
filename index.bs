@@ -2519,32 +2519,26 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=], given |element| as the 
 
         Note: Different user agents may set these fields differently.
 
-        <div class='note'>
+        : {{OnClickData/checked}}
+        :: Whether the [=context menu item=] is checked.
 
-            <em>This section is non-normative.</em>
+        : {{OnClickData/linkUrl}}
+        :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s [=href=] [=attribute=].
 
-            : {{OnClickData/checked}}
-            :: Whether the [=context menu item=] is checked.
+        : {{OnClickData/mediaType}}
+        :: One of "image", "video", or "audio", if any, based on |element|.
 
-            : {{OnClickData/linkUrl}}
-            :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s [=href=] [=attribute=].
+        : {{OnClickData/parentMenuId}}
+        :: The ID of the parent, if a parent exists.
 
-            : {{OnClickData/mediaType}}
-            :: One of "image", "video", or "audio", if any, based on |element|.
+        : {{OnClickData/selectionText}}
+        :: The text for the context selection, if any.
 
-            : {{OnClickData/parentMenuId}}
-            :: The ID of the parent, if a parent exists.
+        : {{OnClickData/srcUrl}}
+        :: The "src" attribute of |element|, if it exists.
 
-            : {{OnClickData/selectionText}}
-            :: The text for the context selection, if any.
-
-            : {{OnClickData/srcUrl}}
-            :: The "src" attribute of |element|, if it exists.
-
-            : {{OnClickData/wasChecked}}
-            :: The state of a checkbox or radio item before it was clicked.
-
-        </div>
+        : {{OnClickData/wasChecked}}
+        :: The state of a checkbox or radio item before it was clicked.
 
 1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with |info|.
 
