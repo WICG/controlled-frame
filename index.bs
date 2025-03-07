@@ -2366,11 +2366,7 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
 <div algorithm='show-menu-item'>
 
-  When a [=ContextMenus/context menu=] is shown, to return a boolean value for whether the [=ContextMenus/context menu item=] associated with a {{ContextMenusProperties}} will be shown:
-
-  1. Let |properties| be the {{ContextMenusProperties}}.
-
-  1. Let |element| be the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at.
+  When a [=ContextMenus/context menu=] is opened at {{HTMLElement}} |element| inside the embedded document, to return a boolean value for whether the [=ContextMenus/context menu item=] associated with a {{ContextMenusProperties}} |properties| will be shown:
 
   1. Let |documentUrl| be the [=Document/URL=] of the [=/document=] that |element| belongs to.
 
@@ -2488,7 +2484,7 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
 <div algorithm='onshow-event'>
 
-When an [= event =] associated with {{ContextMenus/onShow}} is [= dispatched =]:
+To [= dispatched =] an {{ContextMenus/onShow}} [= event =]:
 
 1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with no argument.
 
@@ -2498,11 +2494,7 @@ When an [= event =] associated with {{ContextMenus/onShow}} is [= dispatched =]:
 
 <div algorithm='onclicked-event'>
 
-To [=dispatch=] a {{ContextMenus/onClicked}} [=event=]:
-
-1. Let |menuItem| be the [=map/entry=] of [=ContextMenus/context menu map=] that's associated with the [=context menu item=].
-
-1. Let |element| be the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at.
+To [=dispatch=] an {{ContextMenus/onClicked}} [=event=], given |element| as the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at, |id| as the [=map/key=] of the [=ContextMenus/context menu map=]'s [=map/entry=] that is associated with the [=context menu item=].
 
 1. Let |info| be a new {{OnClickData}}.
 
@@ -2518,7 +2510,7 @@ To [=dispatch=] a {{ContextMenus/onClicked}} [=event=]:
         :: The [=Document/URL=] of the [= navigable container =] from which the [= contextmenu =] [= event =] is dispatched.
 
         : {{OnClickData/menuItemId}}
-        :: The [=map/key=] of |menuItem|.
+        :: |id|.
 
         : {{OnClickData/pageUrl}}
         :: The [=Document/URL=] of the embedded [=/navigable=].
@@ -2556,7 +2548,9 @@ To [=dispatch=] a {{ContextMenus/onClicked}} [=event=]:
 
 1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with |info|.
 
-1. If the {{ContextMenusProperties/onclick}} field of |menuItem| is not null, invoke {{ContextMenusProperties/onclick}} with |info|.
+1. Let |properties| be the result of [=map/getting=] the [=map/value=] of the [=map/entry=] in [=ContextMenus/context menu map=] given the [=map/key=] |id|.
+
+1. If the {{ContextMenusProperties/onclick}} field of |properties| is not null, invoke {{ContextMenusProperties/onclick}} with |info|.
 
 </div>
 
