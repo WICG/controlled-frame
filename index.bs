@@ -81,9 +81,27 @@ Markup Shorthands: markdown yes
 <pre class="anchors">
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
+        urlPrefix: browsing-the-web.html
+            text: apply the traverse history step; url: apply-the-traverse-history-step
+            text: document state; url: she-document-state
+            text: get all used history steps; url: getting-all-used-history-steps
+            text: reload; url: reload
+            for: session history entry
+                text: step; url: she-step
+                text: URL; url: she-url
+        urlPrefix: document-lifecycle.html
+            text: completely loaded; url: completely-loaded
+            text: stop loading; url: nav-stop
         urlPrefix: document-sequences.html
+            text: browsing context group; url: browsing-context-group
+            text: create a new browsing context and document; url: creating-a-new-browsing-context
+            text: current session history entry; url: nav-current-history-entry
             text: navigable; for: /; url: navigable
             text: initialize the navigable; url: initialize-the-navigable
+            for: navigable
+                text: active session history entry; url: nav-active-history-entry
+            for: traversable navigable
+                text: session history entries; url: tn-session-history-entries
         urlPrefix: dom.html
             text: contexts in which this element can be used; url: concept-element-contexts
             text: content model; url: concept-element-content-model
@@ -117,6 +135,10 @@ spec: infra; urlPrefix: https://infra.spec.whatwg.org
     type: dfn
         text: empty; for: map; url: map-is-empty
 
+spec: storage; urlPrefix: https://storage.spec.whatwg.org
+    type: dfn
+        text: storage shelf; url: storage-shelf
+
 spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
     type: dfn
         text: Web IDL Standard; url: introduction
@@ -135,8 +157,10 @@ spec: uievents; urlPrefix https://www.w3.org/TR/uievents/
 spec:fetch; type:dfn; for:/; text:header list
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dfn; for:/; text:response
+spec:html; type:dfn; for:/; text:browsing context
 spec:html; type:dfn; for:/; text:global object
 spec:html; type:dfn; for:/; text:top-level traversable
+spec:html; type:dfn; for:/; text:traversable navigable
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; text:list
 spec:webidl; type:dfn; text:attribute
@@ -169,7 +193,7 @@ including IWAs where possible.
 
 For convenience, the Controlled Frame specification assumes that the Fenced
 Frame specification is in place. There are concepts introduced in the Fenced
-Frame specification, such as nested top-level traversibles, that are broadly
+Frame specification, such as nested top-level traversables, that are broadly
 useful to refer to in the context of Controlled Frame.
 
 The Fenced Frame specification achieves defining these concepts via monkey
@@ -193,12 +217,8 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd>[=Nothing=].</dd>
  <dt>[=Content attributes=]:</dt>
  <dd>[=Global attributes=]</dd>
- <dd><code>[=src=]</code> — Content source URL to embed</dd>
- <dd><code>partition</code> — Partition name to hold data related to this content</dd>
- <dt>Properties</dt>
- <dd><code>contentWindow</code> — Embedded content window DOM accessor</dd>
- <dd><code>contextMenus</code> — Context menus accessor</dd>
- <dd><code>request</code> — WebRequest accessor</dd>
+ <dd><code>{{src}}</code> — Content source URL to embed</dd>
+ <dd><code>{{partition}}</code> — Partition name to hold data related to this content</dd>
  <dt>[=Accessibility considerations=]:</dt>
  <dd><p class=XXX>Screen readers should be able to traverse into
  the embedded content similar to how a reader can traverse into iframes and
@@ -250,53 +270,110 @@ interface HTMLControlledFrameElement : HTMLElement {
 </dd>
 </dl>
 
-The <{controlledframe}> element [=represents=] its embedded [=/navigable=] which
-has a [=navigable/embedderParent=] that is valid and refers back to the embedder
-[=/navigable=].
+The <{controlledframe}> element [=represents=] its [=embedded navigable=].
 
-The embedded [=/navigable=] must appear as a top-level traversible. As part of
-the embedded [=/navigable=] being a top-level traversible, the embedded
-[=/navigable=] must have a null [=navigable/parent=]. Content within the
-embedded [=/navigable=] cannot distinguish that it is embedded within another
-[=/navigable=].
+Descendents of <{controlledframe}> elements represent nothing.
 
 The Controlled Frame element is exposed to any {{Document}} with the
-"controlled-frame" [=policy-controlled feature=] whose
+"`controlled-frame`" [=policy-controlled feature=] whose
 [=environment settings object=] is an [=isolated context=].
 
-The partition attribute takes an identifier specifying where data related to the
-Controlled Frame element's instance should be stored. The identifier is composed
-of a string of alphanumeric digits. All data for the embedded [=/navigable=]
-will be stored in this partition.
+The IDL attributes {{HTMLControlledFrameElement/src}} and
+{{HTMLControlledFrameElement/partition}} must [=reflect=] the respective content
+attributes of the same name.
 
-By default, all data stored will be held in an in-memory storage partition so
-that when the Controlled Frame element is destroyed the data is also destroyed.
-While the data is held in this partition, no data will persist from that
-Controlled Frame embedded [=/navigable=].
+Note: The embedded [=/navigable=] appears as a top-level traversable, with a
+null [=navigable/parent=]. Content within the embedded [=/navigable=] cannot
+detect that it is embedded.
 
-If the partition attribute identifier contains the prefix "persist:", the user
-agent will use a disk-based storage environment rather than an in-memory
-storage partition.
+Each <{controlledframe}> has an <dfn for=controlledframe>embedded navigable</dfn>,
+which is either a [=traversable navigable=] with a non-null [=embedderParent=],
+or null. It is initially null.
 
-If multiple Controlled Frames share the same partition identifier, all of their
-embedded [=/navigable=] instances will share the same storage partition.
+<div algorithm=insertion>
+  When a <{controlledframe}> element |element| is [=inserted into a document=]
+  whose [=browsing context=] is non-null, run the following steps:
 
-<div algorithm>
-  To <dfn>validate embedded content</dfn> with an embedded [=/navigable=]
-  |embeddedContent|, run the following steps:
+  1. If |element|'s {{HTMLControlledFrameElement/src}} is not empty, then:
 
-  1. If |embeddedContent| does not have an [=navigable/embedderParent=], return
-     false.
-  1. If |embeddedContent|'s [=navigable/embedderParent=] is not valid, return
-     false.
-  1. If |embeddedContent|'s [=navigable/embedderParent=] is not the current
-     [=/navigable=], return false.
-  1. Return true.
+      1. [=Initialize a controlledframe=] given |element|.
+
+</div>
+
+<div algorithm=destroy>
+  When a <{controlledframe}> element |element| is [=removed from a document=],
+  run the following steps:
+
+  1. TODO: destroy |element|'s [=embedded navigable=].
 
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>constructor()</dfn> steps are:
+  To <dfn>initialize a <{controlledframe}></dfn> element |element|, run the
+  following steps:
+
+  1. [=Assert=] that |element|'s [=embedded navigable=] is null.
+
+  1. Let |group| be a new [=browsing context group=].
+
+  1. Let |document| be the second return value of [=creating a new browsing
+      context and document=] given |element|'s [=node document=], |element|,
+      and |group|.
+
+  1. Let |documentState| be a new [=document state=], whose [=/document=]
+      is |document|.
+
+  1. Let |traversable| be a new [=traversable navigable=].
+
+  1. [=Initialize the navigable=] |traversable| given |documentState|.
+
+  1. Set |traversable|'s [=embedderParent=] to |element|.
+
+  1. Set |element|'s [=embedded navigable=] to |traversable|.
+
+  1. Let |initialHistoryEntry| be |traversable|'s [=navigable/active
+      session history entry=].
+
+  1. Set |initialHistoryEntry|'s [=session history entry/step=] to 0.
+
+  1. [=list/Append=] |initialHistoryEntry| to |traversable|'s [=traversable
+      navigable/session history entries=].
+
+      Issue: These steps are needed to initialize {{History}}.{{History/length}}
+          in the new navigable. This is an existing
+          <a href="https://github.com/whatwg/html/issues/9030">issue</a>
+          in the HTML Standard.
+
+  1. Set |element|'s {{HTMLControlledFrameElement/contentWindow}} to
+      |document|'s {{WindowProxy}}.
+
+  1. [=Navigate a controlledframe=] given |element| and |element|'s
+      {{HTMLControlledFrameElement/src}}.
+
+</div>
+
+<div algorithm>
+  To <dfn>navigate a <{controlledframe}></dfn> element |element| given a
+  {{USVString}} |urlString|, run the following steps:
+
+  1. If |urlString| is not an [=absolute-URL string=], return.
+
+  1. Let |url| be the result of running the [=URL parser=] given |urlString|.
+
+  1. Let |historyHandling| be "{{NavigationHistoryBehavior/auto}}".
+
+  1. If |element|'s [=embedded navigable=]'s [=active document=] is not
+      [=completely loaded=], then set |historyHandling| to
+      "{{NavigationHistoryBehavior/replace}}".
+
+  1. [=Navigate=] |element|'s [=embedded navigable=] to |url| using |element|'s
+      [=node document=], with a {{NavigationHistoryBehavior}} of |historyHandling|.
+
+</div>
+
+<div algorithm>
+  The <dfn constructor for=HTMLControlledFrameElement>HTMLControlledFrameElement()</dfn>
+  constructor steps are:
 
   1. Let |webRequest| be [=this=]'s {{HTMLControlledFrameElement/request}}.
 
@@ -335,6 +412,65 @@ embedded [=/navigable=] instances will share the same storage partition.
   1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
       fields of |webRequest|[{{WebRequest/onErrorOccurred}}] to
       `"errorOccurred"` and |webRequest| respectively.
+
+</div>
+
+<!-- ====================================================================== -->
+## Attributes ## {#attributes}
+<!-- ====================================================================== -->
+
+The {{HTMLControlledFrameElement/partition}} attribute takes an identifier
+specifying where data related to the Controlled Frame element's instance
+should be stored. The identifier is composed of a string of alphanumeric
+characters. All data for the embedded [=/navigable=] will be stored in a
+[=storage shelf=] keyed by this partition string along with the origin
+that created the data.
+
+By default, all data stored will be held in an in-memory storage partition so
+that when the last Controlled Frame element with a given
+{{HTMLControlledFrameElement/partition}} value is destroyed, the data is also
+destroyed. While the data is held in this partition, no data will persist from
+that Controlled Frame embedded [=/navigable=].
+
+If the partition attribute identifier contains the prefix "persist:", the user
+agent will use a disk-based storage environment rather than an in-memory
+storage partition.
+
+If multiple Controlled Frames share the same partition identifier, all of their
+embedded [=/navigable=] instances will share the same storage partition.
+
+Note: The [[STORAGE]] specification is monkey patched below to partition
+storage based on the value of the {{HTMLControlledFrameElement/partition}}
+attribute.
+
+<div algorithm=partition-setter>
+  The {{HTMLControlledFrameElement/partition}} IDL attribute setter steps are:
+
+  1. If [=this=]'s [=embedded navigable=] is not null, then:
+
+      1. [=Throw=] a "{{NotSupportedError}}" {{DOMException}}.
+
+      1. Do not change the value of {{HTMLControlledFrameElement/partition}}.
+
+</div>
+
+The {{HTMLControlledFrameElement/src}} attribute reflects the Controlled
+Frame's [=embedded navigable=]'s [=current session history entry=]'s
+[=session history entry/URL=].
+
+<div algorithm=src-setter>
+  The {{HTMLControlledFrameElement/src}} IDL attribute setter steps are:
+
+  1. If [=this=] is not [=in a document tree=], then return.
+
+  1. If [=this=]'s [=embedded navigable=] is null, then:
+
+      1. [=Initialize a controlledframe=] given [=this=].
+
+  1. Otherwise:
+
+      1. [=Navigate a controlledframe=] given [=this=] and [=this=]'s
+          {{HTMLControlledFrameElement/src}}.
 
 </div>
 
@@ -402,104 +538,112 @@ embedded [=/navigable=] instances will share the same storage partition.
 </div>
 
 <div algorithm>
-  To <dfn>navigate embedded content to state</dfn>, given an {{/object}}
-  |state|, run the following steps:
-
-  1. If |state| is not an integer, return false.
-  1. Attempt to navigate the embedded content by |state| history items. If
-     an error is encountered, return false.
-  1. Return true.
-
-</div>
-
-<div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>back()</dfn> method steps for
-  an |embeddedContent| are:
+  To <dfn>traverse an embedded navigable's history</dfn>, given a
+  <{controlledframe}> |controlledframe| and an integer |stepDelta|, run the
+  following steps:
 
   1. Let |resultPromise| be a new [=promise=].
-  1. If the result of running [=validate embedded content=] with an embedded
-     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
-      a {{TypeError}} and abort these steps.
-  1. If the result of running [=navigate embedded content to state=] with
-     "-1" is false, [=reject=] |resultPromise| with
-     a {{TypeError}} and abort these steps.
-  1. Then, [=resolve=] |resultPromise|.
+
+  1. Return |resultPromise| and run the remaining steps [=in parallel=].
+
+  1. If |controlledframe|'s [=embedded navigable=] is null, then [=resolve=]
+      |resultPromise| with false.
+
+  1. Let |currentStep| be |controlledframe|'s [=embedded navigable=]'s
+      [=current session history step=].
+
+  1. Let |step| be the sum of |currentStep| and |stepDelta|.
+
+  1. Let |result| be the result of [=applying the traverse history step=]
+      given |step|, |controlledframe|'s [=embedded navigable=], and a
+      [=user navigation involvement=] of "[=browser UI=]".
+
+  1. If |result| is not equal to "`applied`", [=resolve=] |resultPromise|
+      with false.
+
+  1. <span class=XXX>TODO: resolve the promise when the navigation
+      completes</span>.
 
 </div>
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>canGoBack()</dfn>
-  method steps for an |embeddedContent| are:
+  method steps are:
 
-  1. If the result of running [=validate embedded content=] with an embedded
-     [=/navigable=] |embeddedContent| is false, return false.
-  1. If embedded content is already at its first history state, return false.
-  1. Return true.
+  ISSUE: We can't actually synchronously access the embedded navigable's
+  history state. In the future we should update this method to return a
+  Promise, but in the meantime we should keep track of the embedded
+  navigable's navigation state by observing its navigations.
+
+  1. If [=this=]'s [=embedded navigable=] is null, then return false.
+
+  1. If [=this=]'s [=embedded navigable=]'s [=current session history step=]
+      is greater than 0, return true.
+
+  1. Return false.
 
 </div>
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>canGoForward()</dfn>
-  method steps for an |embeddedContent| are:
+  method steps are:
 
-  1. If the result of running [=validate embedded content=] with an embedded
-     [=/navigable=] |embeddedContent| is false, return false.
-  1. If embedded content is already at its last history state, return false.
-  1. Return true.
+  1. If [=this=]'s [=embedded navigable=] is null, then return false.
+
+  1. Let |step| be [=this=]'s [=embedded navigable=]'s [=current session
+      history step=].
+
+  1. Let |steps| be the result of [=getting all used history steps=]
+      given [=this=]'s [=embedded navigable=].
+
+  1. If |step|+1 is less than the [=list/size=] of |steps|, then return true.
+
+  1. Return false.
 
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>forward()</dfn>
-  method steps for an |embeddedContent| are:
+  The <dfn method for=HTMLControlledFrameElement>back()</dfn> method steps are:
 
-  1. Let |resultPromise| be a new [=promise=].
-  1. If the result of running [=validate embedded content=] with an embedded
-     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
-      a {{TypeError}} and abort these steps.
-  1. If the result of running [=navigate embedded content to state=] with
-     "1" is false, [=reject=] |resultPromise| with
-     a {{TypeError}} and abort these steps.
-  1. Then, [=resolve=] |resultPromise|.
+  1. Return the result of [=traversing an embedded navigable's history=] given
+      [=this=] and -1.
+
+</div>
+
+<div algorithm>
+  The <dfn method for=HTMLControlledFrameElement>forward()</dfn> method steps
+  are:
+
+  1. Return the result of [=traversing an embedded navigable's history=] given
+      [=this=] and 1.
 
 </div>
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>go(|relativeIndex|)</dfn>
-  method steps for an |embeddedContent| are:
+  method steps  are:
 
-  1. Let |resultPromise| be a new [=promise=].
-  1. If the result of running [=validate embedded content=] with an embedded
-     [=/navigable=] |embeddedContent| is false, [=reject=] |resultPromise| with
-      a {{TypeError}} and abort these steps.
-  1. If the result of running [=navigate embedded content to state=] with
-     |relativeIndex| is false, [=reject=] |resultPromise| with
-     a {{TypeError}} and abort these steps.
-  1. Then, [=resolve=] |resultPromise|.
+  1. Return the result of [=traversing an embedded navigable's history=] given
+      [=this=] and |relativeIndex|.
 
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>reload()</dfn>
-  method steps for an |embeddedContent| are:
+  The <dfn method for=HTMLControlledFrameElement>reload()</dfn> steps are:
 
-  1. If the result of running [=validate embedded content=] with an embedded
-     [=/navigable=] |embeddedContent| is false, return false.
-  1. Reload embedded content for its top-level page.
-  1. Return true.
+  1. If [=this=]'s [=embedded navigable=] is null, return.
+
+  1. [=Reload=] [=this=]'s [=embedded navigable=] given a [=user navigation
+      involvement=] of "[=browser UI=]".
 
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>stop()</dfn>
-  method steps for an |embeddedContent| are:
+  The <dfn method for=HTMLControlledFrameElement>stop()</dfn> steps are:
 
-  1. If the result of running [=validate embedded content=] with an embedded
-     [=/navigable=] |embeddedContent| is false, return false.
-  1. If embedded content is not currently loading a navigation, abort these
-     steps.
-  1. Stop the current navigation in embedded content.
-  1. Return true.
+  1. If [=this=]'s [=embedded navigable=] is null, return.
+
+  1. [=Stop loading=] [=this=]'s [=embedded navigable=].
 
 </div>
 
@@ -567,6 +711,13 @@ dictionary ContentScriptDetails {
   content will be injected at the end of the page load process, as if the
   external file [=request/URL=] reference existed at the end of the page body.
 
+</div>
+
+<div algorithm>
+  The <dfn>validate embedded content</dfn> algorithm is obsolete and is in
+  the process of being removed from this spec.
+
+  <span class=XXX>Remove all callers of this algorithm.</span>
 </div>
 
 <div algorithm>
@@ -872,13 +1023,16 @@ This specification will make some modifications to specifications to accommodate
 the needs of Controlled Frame.
 
 <!-- ====================================================================== -->
-### Monkey Patch to HTML ### {#api-monkey-patch-to-html}
+### Monkey Patches ### {#api-monkey-patches}
 <!-- ====================================================================== -->
+
+#### [[HTML]] #### {#api-monkey-patches-html}
 
 Each [=/navigable=] has:
  * A <dfn for=navigable>frameId</dfn> integer, initially 0.
  * A <dfn for=navigable>next frameId</dfn> integer, initially 1.
- * An <dfn for=navigable>embedderParent</dfn>, a [=/navigable=] or null.
+ * An <dfn for=navigable>embedderParent</dfn>, an {{HTMLControlledFrameElement}}
+    or null.
 
 The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
 and an optional [=/navigable=]-or-null |parent| (default null) is
@@ -886,11 +1040,7 @@ monkey patched as follows:
 
  5. Set |navigable|'s [=navigable/parent=] to |parent|.
 
- 6. <ins>If this [=/navigable=] has been created via a Controlled Frame
-    embedder, then set |embedderParent| to the embedder [=/navigable=].
-    Otherwise, set |embedderParent| to null.</ins>
-
- 7. <ins>If |parent| is not null (|navigable| is not a
+ 6. <ins>If |parent| is not null (|navigable| is not a
     [=top-level traversable=]), then:</ins>
 
     1. <ins>Let |topLevelTraversable| be the [=top-level traversable=] that
@@ -900,6 +1050,45 @@ monkey patched as follows:
         [=navigable/next frameId=].</ins>
 
     1. <ins>Increment |topLevelTraversable|'s [=navigable/next frameId=].</ins>
+
+#### [[STORAGE]] #### {#api-monkey-patches-storage}
+
+The [=obtain a storage key for non-storage purposes=] algorithm is extended to
+require double-keying on all storage belonging to a <{controlledframe}>'s
+[=embedded navigable=].
+
+<div algorithm="obtain a storage key for non-storage purposes controlled frame">
+To obtain a storage key for non-storage purposes, given an [=environment=]
+|environment|, run these steps:
+
+  1. Let |origin| be |environment|'s [=environment settings object/origin=] if
+      |environment| is an [=environment settings object=]; otherwise
+      |environment|'s [=creation URL=]'s [=/origin=].
+
+  1. If |environment| is an [=environment settings object=] whose
+      [=global object=] is a {{Window}} object, then:
+
+      Issue: This algorithm doesn't handle partitioning Shared or Service
+      Workers. If initiated from a document, Shared and Service Workers will
+      inherit the storage key of the document, but won't correctly inherit
+      the embedded storage key if started from another worker.
+
+      1. Let |navigable| be |environment|'s [=global object=]'s
+          [=Window/navigable=].
+
+      1. Let |root| be the [=top-level traversable=] of |navigable|.
+
+      1. If |root|'s [=embedderParent=] is not null, then:
+
+          1. Let |controlledframe| be |root|'s [=embedderParent=].
+
+          1. Return a [=tuple=] consisting of |controlledframe|'s
+              {{HTMLControlledFrameElement/partition}} and |origin|.
+
+  1. Return a [=tuple=] consisting of |origin|.
+
+</div>
+
 
 <!-- ====================================================================== -->
 # Web Request API # {#api-web-request}
@@ -1746,7 +1935,7 @@ Each {{WebRequestEvent}} has:
               to existing concepts.</span>
 
           : {{WebRequestEventDetails/frameId}}
-          :: The [=navigable/frameId=] of |window|'s [=window/navigable=].
+          :: The [=navigable/frameId=] of |window|'s [=Window/navigable=].
 
           : {{WebRequestEventDetails/frameType}}
           :: {{FrameType/"fenced_frame"}} if |window|'s {{Window/fence}} is
@@ -1763,7 +1952,7 @@ Each {{WebRequestEvent}} has:
 
               : {{WebRequestEventDetails/parentFrameId}}
               :: The [=navigable/frameId=] of |window|'s {{Window/parent}}'s
-                  [=window/navigable=].
+                  [=Window/navigable=].
 
   1. Return |details|.
 
@@ -1964,9 +2153,6 @@ Each {{WebRequestEvent}} has:
 
     1. Let |controlledFrame| be the {{HTMLControlledFrameElement}}
         corresponding to |navigable|'s [=embedderParent=].
-
-        <span class=XXX>embedderParent doesn't actually map to a single
-        controlledframe element.</span>
 
     1. Let |valid handlers| be an empty [=list=].
 
