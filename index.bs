@@ -2277,9 +2277,9 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   1. Let |p| be a new [=promise=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Run the following steps [=in parallel=]:
 
-  1. Queue a task to update |contextMenusMap|:
+      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
       1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
 
@@ -2296,10 +2296,10 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
   The <dfn method for=ContextMenus>remove(|id|)</dfn> method steps are:
 
   1. Let |p| be a new [=promise=].
-
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
     
-  1. Queue a task to update |contextMenusMap|:
+  1. Run the following steps [=in parallel=]:
+
+      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
       1. [=map/Remove=] |contextMenusMap|[|id|].
 
@@ -2313,9 +2313,9 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   1. Let |p| be a new [=promise=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Run the following steps [=in parallel=]:
 
-  1. Queue a task to update |contextMenusMap|:
+    1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
     1. [=map/Clear=] |contextMenusMap|.
 
@@ -2329,9 +2329,9 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   1. Let |p| be a new [=promise=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Run the following steps [=in parallel=]:
 
-  1. Queue a task to update |contextMenusMap|:
+      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
       1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |p| with a {{TypeError}} and abort these steps.
 
