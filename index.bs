@@ -51,6 +51,18 @@ Markup Shorthands: markdown yes
   margin: 1em 0;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%:
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 2px 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 /* .XXX from https://resources.whatwg.org/standard.css */
 .XXX {
   color: #D50606;
@@ -1035,9 +1047,61 @@ dictionary ImageDetails {
 </div>
 
 <!-- ====================================================================== -->
-## Events
+## Events ## {#events}
 <!-- ====================================================================== -->
 
+{{HTMLControlledFrameElement}} implements {{EventTarget}} and supports the following [=event handlers=] (and their corresponding [=event handler event types=]).
+
+<table>
+  <tr>
+    <th>[=Event handlers=]</th>
+    <th>[=Event handler event types=]</th>
+  </tr>
+  <tr>
+    <td>onconsolemessage</td>
+    <td>consolemessage</td>
+  </tr>
+  <tr>
+    <td>oncontentload</td>
+    <td>contentload</td>
+  </tr>
+  <tr>
+    <td>ondialog</td>
+    <td>dialog</td>
+  </tr>
+  <tr>
+    <td>onloadabort</td>
+    <td>loadabort</td>
+  </tr>
+  <tr>
+    <td>onloadcommit</td>
+    <td>loadcommit</td>
+  </tr>
+  <tr>
+    <td>onloadstart</td>
+    <td>loadstart</td>
+  </tr>
+  <tr>
+    <td>onloadstop</td>
+    <td>loadstop</td>
+  </tr>
+  <tr>
+    <td>onnewwindow</td>
+    <td>newwindow</td>
+  </tr>
+  <tr>
+    <td>onpermissionrequest</td>
+    <td>permissionrequest</td>
+  </tr>
+  <tr>
+    <td>onsizechanged</td>
+    <td>sizechanged</td>
+  </tr>
+  <tr>
+    <td>onzoomchange</td>
+    <td>zoomchange</td>
+  </tr>
+</table>
 
 
 <!-- ====================================================================== -->
