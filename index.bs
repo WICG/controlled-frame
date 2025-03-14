@@ -270,6 +270,19 @@ interface HTMLControlledFrameElement : HTMLElement {
     // Capture methods.
     Promise<undefined> captureVisibleRegion(optional ImageDetails options = {});
     undefined print();
+
+    // Events:
+    attribute EventHandler onconsolemessage;
+    attribute EventHandler oncontentload;
+    attribute EventHandler ondialog;
+    attribute EventHandler onloadabort;
+    attribute EventHandler onloadcommit;
+    attribute EventHandler onloadstart;
+    attribute EventHandler onloadstop;
+    attribute EventHandler onnewwindow;
+    attribute EventHandler onpermissionrequest;
+    attribute EventHandler onsizechanged;
+    attribute EventHandler onzoomchange;
 };
 </xmp>
 </dd>
@@ -1022,8 +1035,10 @@ dictionary ImageDetails {
 </div>
 
 <!-- ====================================================================== -->
-## Event listener API ## {#api-event}
+## Events
 <!-- ====================================================================== -->
+
+
 
 <!-- ====================================================================== -->
 ## Integration with other specifications ## {#api-integration-with-other-specifications}
