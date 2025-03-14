@@ -2275,17 +2275,19 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   The <dfn method for=ContextMenus>create(|properties|)</dfn> method steps are:
 
-  1. Let |resultPromise| be a new [=promise=].
+  1. Let |p| be a new [=promise=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Run the following steps [=in parallel=]:
 
-  1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
+      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-  1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
+      1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
 
-  1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
+      1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |p| with a {{TypeError}} and abort these steps.
 
-  1. Then, [=resolve=] |resultPromise|.
+      1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
+
+      1. [=Resolve=] |p| with undefined.
 
 </div>
 
@@ -2293,13 +2295,15 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   The <dfn method for=ContextMenus>remove(|id|)</dfn> method steps are:
 
-  1. Let |resultPromise| be a new [=promise=].
+  1. Let |p| be a new [=promise=].
+    
+  1. Run the following steps [=in parallel=]:
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-  1. [=map/Remove=] |contextMenusMap|[|id|].
+      1. [=map/Remove=] |contextMenusMap|[|id|].
 
-  1. Then, [=resolve=] |resultPromise|.
+      1. [=Resolve=] |p| with undefined.
 
 </div>
 
@@ -2307,13 +2311,15 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   The <dfn method for=ContextMenus>removeAll()</dfn> method steps are:
 
-  1. Let |resultPromise| be a new [=promise=].
+  1. Let |p| be a new [=promise=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Run the following steps [=in parallel=]:
 
-  1. [=map/Clear=] |contextMenusMap|.
+    1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-  1. Then, [=resolve=] |resultPromise|.
+    1. [=map/Clear=] |contextMenusMap|.
+
+    1. [=Resolve=] |p| with undefined.
 
 </div>
 
@@ -2321,15 +2327,17 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   The <dfn method for=ContextMenus>update(|id|, |properties|)</dfn> method steps are:
 
-  1. Let |resultPromise| be a new [=promise=].
+  1. Let |p| be a new [=promise=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Run the following steps [=in parallel=]:
 
-  1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |resultPromise| with a {{TypeError}} and abort these steps.
+      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-  1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
-  
-  1. Then, [=resolve=] |resultPromise|.
+      1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |p| with a {{TypeError}} and abort these steps.
+
+      1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
+
+      1. [=Resolve=] |p| with undefined.
 
 </div>
 
