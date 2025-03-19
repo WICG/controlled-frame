@@ -91,8 +91,15 @@ th, td {
 </pre>
 
 <pre class="anchors">
+spec: console; urlPrefix: https://console.spec.whatwg.org/
+    type: dfn
+        urlPrefix: /
+            text: printer; for: /; url: printer
+
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
+        urlPrefix: /
+            text: simple-dialogs; for: /; url: simple-dialogs
         urlPrefix: browsing-the-web.html
             text: apply the traverse history step; url: apply-the-traverse-history-step
             text: document state; url: she-document-state
@@ -1058,51 +1065,308 @@ dictionary ImageDetails {
     <th>[=Event handler event types=]</th>
   </tr>
   <tr>
-    <td>onconsolemessage</td>
+    <td>{{onconsolemessage}}</td>
     <td>consolemessage</td>
   </tr>
   <tr>
-    <td>oncontentload</td>
+    <td>{{oncontentload}}</td>
     <td>contentload</td>
   </tr>
   <tr>
-    <td>ondialog</td>
+    <td>{{ondialog}}</td>
     <td>dialog</td>
   </tr>
   <tr>
-    <td>onloadabort</td>
+    <td>{{onloadabort}}</td>
     <td>loadabort</td>
   </tr>
   <tr>
-    <td>onloadcommit</td>
+    <td>{{onloadcommit}}</td>
     <td>loadcommit</td>
   </tr>
   <tr>
-    <td>onloadstart</td>
+    <td>{{onloadstart}}</td>
     <td>loadstart</td>
   </tr>
   <tr>
-    <td>onloadstop</td>
+    <td>{{onloadstop}}</td>
     <td>loadstop</td>
   </tr>
   <tr>
-    <td>onnewwindow</td>
+    <td>{{onnewwindow}}</td>
     <td>newwindow</td>
   </tr>
   <tr>
-    <td>onpermissionrequest</td>
+    <td>{{onpermissionrequest}}</td>
     <td>permissionrequest</td>
   </tr>
   <tr>
-    <td>onsizechanged</td>
+    <td>{{onsizechanged}}</td>
     <td>sizechanged</td>
   </tr>
   <tr>
-    <td>onzoomchange</td>
+    <td>{{onzoomchange}}</td>
     <td>zoomchange</td>
   </tr>
 </table>
 
+The interactive events:
+
+- {{onconsolemessage}}
+
+- {{ondialog}}
+
+- {{onnewwindow}}
+
+- {{onpermissionrequest}}
+
+The UI-change events:
+
+- {{onsizechanged}} 
+
+- {{onzoomchange}}
+
+The navigation events:
+
+- {{oncontentload}}
+
+- {{onloadabort}}
+
+- {{onloadcommit}}
+
+- {{onloadstart}}
+
+- {{onloadstop}}
+
+<!-- ====================================================================== -->
+### consolemessage ### {#event-consolemessage}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+dictionary ConsoleMessage {
+  long level;
+  DOMString message;
+};
+
+[Exposed=Window, IsolatedContext]
+interface ConsoleMessageEvent : Event {
+  constructor(DOMString type, optional ConsoleMessageEventInit eventInitDict = {});
+  readonly attribute ConsoleMessage consoleMessage;
+};
+
+dictionary ConsoleMessageEventInit: EventInit {
+  ConsoleMessage? consoleMessage;
+};
+
+</xmp>
+
+<div algorithm=dispatch-consolemessage>
+
+To fire a {{ConsoleMessageEvent}} |e| given <{controlledframe}> element |target| and the [=Printer=](|logLevel|, |args|[, options]) method arguments.
+
+1. Let |consoleMessage| be a new ConsoleMessage object.
+
+1. Set the following fields of |consoleMessage|:
+
+      : {{ConsoleMessage/level}}
+      :: |logLevel|.
+
+      : {{ConsoleMessage/message}}
+      :: The result of [=implementation-defined=] formatting to |args|.
+
+1. Set e's {{ConsoleMessageEvent/consoleMessage}} to |consoleMessage|.
+
+1. Dispatch |e| at |target|.
+
+<span class=XXX>TODO: monkey patch console [=Printer=].</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### dialog ### {#event-dialog}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+interface DialogController {
+  undefined okay(optional DOMString response);
+  undefined cancel();
+};
+
+dictionary DialogMessage {
+  DOMString messageType;
+  DOMString messageText;
+  DialogController dialogController;
+};
+
+[Exposed=Window, IsolatedContext]
+interface DialogEvent : Event {
+  constructor(DOMString type, optional DialogEventInit eventInitDict = {});
+  readonly attribute DialogMessage dialogMessage;
+};
+
+dictionary DialogEventInit: EventInit {
+  DialogMessage? DialogMessage;
+};
+
+</xmp>
+
+<div algorithm=dispatch-dialog>
+
+To fire a {{DialogEvent}} |e| given <{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and message |message|.
+
+1. Let |dialogMessage| be a new DialogMessage object.
+
+1. Set the following fields of |dialogMessage|:
+
+      : {{DialogMessage/messageType}}
+      :: |dialogType|, one of "alert", "confirm", or "prompt".
+
+      : {{DialogMessage/messageText}}
+      :: |message|.
+
+1. Set e's {{DialogEvent/dialogMessage}} to |dialogMessage|.
+
+1. Dispatch |e| at |target|.
+
+<span class=XXX>TODO: monkey patch [=simple-dialogs=].</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### newwindow ### {#event-newwindow}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface NewWindowController {
+  undefined attach(HTMLControlledFrameElement controlledFrame);
+  undefined discard();
+};
+
+dictionary NewWindow {
+  NewWindowController window;
+  USVString targetUrl;
+  DOMString initialWidth;
+  DOMString initialHeight;
+  DOMString name;
+  DOMString windowOpenDisposition;
+};
+
+[Exposed=Window, IsolatedContext]
+interface NewWindowEvent : Event {
+  constructor(DOMString type, optional NewWindowEventInit eventInitDict = {});
+  readonly attribute NewWindow newWindow;
+};
+
+dictionary NewWindowEventInit: EventInit {
+  NewWindow? newWindow;
+};
+
+</xmp>
+
+<div algorithm=dispatch-newwindow>
+
+<span class=XXX>TODO:.</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### permissionrequest ### {#event-permissionrequest}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface PermissionRequestControllerBase {
+  undefined allow();
+  undefined cancel();
+};
+
+dictionary PermissionRequest {
+  DOMString permission;
+  PermissionRequestControllerBase request;
+};
+
+[Exposed=Window, IsolatedContext]
+interface PermissionRequestEvent : Event {
+  constructor(DOMString type, optional PermissionRequestEventInit eventInitDict = {});
+  readonly attribute PermissionRequest permissionRequest;
+};
+
+dictionary PermissionRequestEventInit: EventInit {
+  PermissionRequest? permissionRequest;
+};
+
+</xmp>
+
+<div algorithm=dispatch-permissionrequest>
+
+<span class=XXX>TODO: Different child interfaces of PermissionRequestControllerBase for different permissions</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### sizechanged ### {#event-sizechanged}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+dictionary SizeChange {
+  long oldWidth;
+  long oldHeight;
+  long newWidth;
+  long newHeight;
+};
+
+[Exposed=Window, IsolatedContext]
+interface SizeChangedEvent : Event {
+  constructor(DOMString type, optional SizeChangedEventInit eventInitDict = {});
+  readonly attribute SizeChange sizeChange;
+};
+
+dictionary SizeChangedEventInit: EventInit {
+  SizeChange? sizeChange;
+};
+
+</xmp>
+
+<div algorithm=dispatch-sizechanged>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### zoomchange ### {#event-zoomchange}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+dictionary ZoomChange {
+  float oldZoomFactor;
+  float newZoomFactor;
+};
+
+[Exposed=Window, IsolatedContext]
+interface ZoomChangeEvent : Event {
+  constructor(DOMString type, optional ZoomChangeEventInit eventInitDict = {});
+  readonly attribute ZoomChange zoomChange;
+};
+
+dictionary ZoomChangeEventInit: EventInit {
+  ZoomChange? zoomChange;
+};
+
+</xmp>
+
+<div algorithm=dispatch-zoomchange>
+
+<span class=XXX>TODO:</span>
+
+</div>
 
 <!-- ====================================================================== -->
 ## Integration with other specifications ## {#api-integration-with-other-specifications}
