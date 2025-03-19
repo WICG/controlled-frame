@@ -1210,7 +1210,7 @@ interface DialogEvent : Event {
 };
 
 dictionary DialogEventInit: EventInit {
-  DialogMessage? DialogMessage;
+  DialogMessage? dialogMessage;
 };
 
 </xmp>
