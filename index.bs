@@ -1176,7 +1176,7 @@ To fire a {{ConsoleMessageEvent}} |e| given <{controlledframe}> element |target|
       : {{ConsoleMessage/message}}
       :: The result of [=implementation-defined=] formatting to |args|.
 
-1. Set e's {{ConsoleMessageEvent/consoleMessage}} to |consoleMessage|.
+1. Set |e|'s {{ConsoleMessageEvent/consoleMessage}} to |consoleMessage|.
 
 1. Dispatch |e| at |target|.
 
@@ -1229,7 +1229,7 @@ To fire a {{DialogEvent}} |e| given <{controlledframe}> element |target|, [=simp
       : {{DialogMessage/messageText}}
       :: |message|.
 
-1. Set e's {{DialogEvent/dialogMessage}} to |dialogMessage|.
+1. Set |e|'s {{DialogEvent/dialogMessage}} to |dialogMessage|.
 
 1. Dispatch |e| at |target|.
 
