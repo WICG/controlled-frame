@@ -1144,9 +1144,10 @@ The navigation events:
 
 <xmp class="idl">
 
-dictionary ConsoleMessage {
-  long level;
-  DOMString message;
+[Exposed=Window, IsolatedContext]
+interface ConsoleMessage {
+  readonly attribute long level;
+  readonly attribute DOMString message;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1189,15 +1190,17 @@ To fire a {{ConsoleMessageEvent}} |e| given <{controlledframe}> element |target|
 
 <xmp class="idl">
 
+[Exposed=Window, IsolatedContext]
 interface DialogController {
   undefined okay(optional DOMString response);
   undefined cancel();
 };
 
-dictionary DialogMessage {
-  DOMString messageType;
-  DOMString messageText;
-  DialogController dialogController;
+[Exposed=Window, IsolatedContext]
+interface DialogMessage {
+  readonly attribute DOMString messageType;
+  readonly attribute DOMString messageText;
+  readonly attribute DialogController dialogController;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1246,13 +1249,14 @@ interface NewWindowController {
   undefined discard();
 };
 
-dictionary NewWindow {
-  NewWindowController window;
-  USVString targetUrl;
-  DOMString initialWidth;
-  DOMString initialHeight;
-  DOMString name;
-  DOMString windowOpenDisposition;
+[Exposed=Window, IsolatedContext]
+interface NewWindow {
+  readonly attribute NewWindowController window;
+  readonly attribute USVString targetUrl;
+  readonly attribute DOMString initialWidth;
+  readonly attribute DOMString initialHeight;
+  readonly attribute DOMString name;
+  readonly attribute DOMString windowOpenDisposition;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1285,9 +1289,10 @@ interface PermissionRequestControllerBase {
   undefined cancel();
 };
 
-dictionary PermissionRequest {
-  DOMString permission;
-  PermissionRequestControllerBase request;
+[Exposed=Window, IsolatedContext]
+interface PermissionRequest {
+  readonly attribute DOMString permission;
+  readonly attribute PermissionRequestControllerBase request;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1314,11 +1319,12 @@ dictionary PermissionRequestEventInit: EventInit {
 
 <xmp class="idl">
 
-dictionary SizeChange {
-  long oldWidth;
-  long oldHeight;
-  long newWidth;
-  long newHeight;
+[Exposed=Window, IsolatedContext]
+interface SizeChange {
+  readonly attribute long oldWidth;
+  readonly attribute long oldHeight;
+  readonly attribute long newWidth;
+  readonly attribute long newHeight;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1345,9 +1351,10 @@ dictionary SizeChangedEventInit: EventInit {
 
 <xmp class="idl">
 
-dictionary ZoomChange {
-  float oldZoomFactor;
-  float newZoomFactor;
+[Exposed=Window, IsolatedContext]
+interface ZoomChange {
+  readonly attribute float oldZoomFactor;
+  readonly attribute float newZoomFactor;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1396,14 +1403,16 @@ dictionary ContentLoadEventInit: EventInit {
 
 <xmp class="idl">
 
-dictionary LoadInfo {
-  USVString url;
-  boolean isTopLevel;
+[Exposed=Window, IsolatedContext]
+interface LoadInfo {
+  readonly attribute USVString url;
+  readonly attribute boolean isTopLevel;
 };
 
-dictionary LoadAbortInfo : LoadInfo{
-  long code;
-  DOMString reason;
+[Exposed=Window, IsolatedContext]
+interface LoadAbortInfo : LoadInfo{
+  readonly attribute long code;
+  readonly attribute DOMString reason;
 };
 
 [Exposed=Window, IsolatedContext]
