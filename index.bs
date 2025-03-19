@@ -1398,7 +1398,7 @@ dictionary ContentLoadEventInit: EventInit {
 
 dictionary LoadInfo {
   USVString url;
-  bool isTopLevel;
+  boolean isTopLevel;
 };
 
 dictionary LoadAbortInfo : LoadInfo{
