@@ -51,6 +51,18 @@ Markup Shorthands: markdown yes
   margin: 1em 0;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 2px 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 /* .XXX from https://resources.whatwg.org/standard.css */
 .XXX {
   color: #D50606;
@@ -79,8 +91,15 @@ Markup Shorthands: markdown yes
 </pre>
 
 <pre class="anchors">
+spec: console; urlPrefix: https://console.spec.whatwg.org/
+    type: dfn
+        urlPrefix: /
+            text: printer; for: /; url: printer
+
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
+        urlPrefix: /
+            text: simple-dialogs; for: /; url: simple-dialogs
         urlPrefix: browsing-the-web.html
             text: apply the traverse history step; url: apply-the-traverse-history-step
             text: document state; url: she-document-state
@@ -270,6 +289,19 @@ interface HTMLControlledFrameElement : HTMLElement {
     // Capture methods.
     Promise<undefined> captureVisibleRegion(optional ImageDetails options = {});
     undefined print();
+
+    // Events:
+    attribute EventHandler onconsolemessage;
+    attribute EventHandler oncontentload;
+    attribute EventHandler ondialog;
+    attribute EventHandler onloadabort;
+    attribute EventHandler onloadcommit;
+    attribute EventHandler onloadstart;
+    attribute EventHandler onloadstop;
+    attribute EventHandler onnewwindow;
+    attribute EventHandler onpermissionrequest;
+    attribute EventHandler onsizechanged;
+    attribute EventHandler onzoomchange;
 };
 </xmp>
 </dd>
@@ -1022,8 +1054,455 @@ dictionary ImageDetails {
 </div>
 
 <!-- ====================================================================== -->
-## Event listener API ## {#api-event}
+## Events ## {#events}
 <!-- ====================================================================== -->
+
+{{HTMLControlledFrameElement}} implements {{EventTarget}} and supports the following [=event handlers=] (and their corresponding [=event handler event types=]).
+
+<table>
+  <tr>
+    <th>[=Event handlers=]</th>
+    <th>[=Event handler event types=]</th>
+  </tr>
+  <tr>
+    <td>{{onconsolemessage}}</td>
+    <td>consolemessage</td>
+  </tr>
+  <tr>
+    <td>{{oncontentload}}</td>
+    <td>contentload</td>
+  </tr>
+  <tr>
+    <td>{{ondialog}}</td>
+    <td>dialog</td>
+  </tr>
+  <tr>
+    <td>{{onloadabort}}</td>
+    <td>loadabort</td>
+  </tr>
+  <tr>
+    <td>{{onloadcommit}}</td>
+    <td>loadcommit</td>
+  </tr>
+  <tr>
+    <td>{{onloadstart}}</td>
+    <td>loadstart</td>
+  </tr>
+  <tr>
+    <td>{{onloadstop}}</td>
+    <td>loadstop</td>
+  </tr>
+  <tr>
+    <td>{{onnewwindow}}</td>
+    <td>newwindow</td>
+  </tr>
+  <tr>
+    <td>{{onpermissionrequest}}</td>
+    <td>permissionrequest</td>
+  </tr>
+  <tr>
+    <td>{{onsizechanged}}</td>
+    <td>sizechanged</td>
+  </tr>
+  <tr>
+    <td>{{onzoomchange}}</td>
+    <td>zoomchange</td>
+  </tr>
+</table>
+
+The interactive events:
+
+- {{onconsolemessage}}
+
+- {{ondialog}}
+
+- {{onnewwindow}}
+
+- {{onpermissionrequest}}
+
+The UI-change events:
+
+- {{onsizechanged}} 
+
+- {{onzoomchange}}
+
+The navigation events:
+
+- {{oncontentload}}
+
+- {{onloadabort}}
+
+- {{onloadcommit}}
+
+- {{onloadstart}}
+
+- {{onloadstop}}
+
+<!-- ====================================================================== -->
+### consolemessage ### {#event-consolemessage}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface ConsoleMessage {
+  readonly attribute long level;
+  readonly attribute DOMString message;
+};
+
+[Exposed=Window, IsolatedContext]
+interface ConsoleMessageEvent : Event {
+  constructor(DOMString type, optional ConsoleMessageEventInit eventInitDict = {});
+  readonly attribute ConsoleMessage consoleMessage;
+};
+
+dictionary ConsoleMessageEventInit: EventInit {
+  ConsoleMessage? consoleMessage;
+};
+
+</xmp>
+
+<div algorithm=dispatch-consolemessage>
+
+To fire a {{ConsoleMessageEvent}} |e| given <{controlledframe}> element |target| and the [=Printer=](|logLevel|, |args|[, options]) method arguments.
+
+1. Let |consoleMessage| be a new ConsoleMessage object.
+
+1. Set the following fields of |consoleMessage|:
+
+      : {{ConsoleMessage/level}}
+      :: |logLevel|.
+
+      : {{ConsoleMessage/message}}
+      :: The result of [=implementation-defined=] formatting to |args|.
+
+1. Set |e|'s {{ConsoleMessageEvent/consoleMessage}} to |consoleMessage|.
+
+1. Dispatch |e| at |target|.
+
+<span class=XXX>TODO: monkey patch console [=Printer=].</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### dialog ### {#event-dialog}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface DialogController {
+  undefined okay(optional DOMString response);
+  undefined cancel();
+};
+
+[Exposed=Window, IsolatedContext]
+interface DialogMessage {
+  readonly attribute DOMString messageType;
+  readonly attribute DOMString messageText;
+  readonly attribute DialogController dialogController;
+};
+
+[Exposed=Window, IsolatedContext]
+interface DialogEvent : Event {
+  constructor(DOMString type, optional DialogEventInit eventInitDict = {});
+  readonly attribute DialogMessage dialogMessage;
+};
+
+dictionary DialogEventInit: EventInit {
+  DialogMessage? dialogMessage;
+};
+
+</xmp>
+
+<div algorithm=dispatch-dialog>
+
+To fire a {{DialogEvent}} |e| given <{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and message |message|.
+
+1. Let |dialogMessage| be a new DialogMessage object.
+
+1. Set the following fields of |dialogMessage|:
+
+      : {{DialogMessage/messageType}}
+      :: |dialogType|, one of "alert", "confirm", or "prompt".
+
+      : {{DialogMessage/messageText}}
+      :: |message|.
+
+1. Set |e|'s {{DialogEvent/dialogMessage}} to |dialogMessage|.
+
+1. Dispatch |e| at |target|.
+
+<span class=XXX>TODO: monkey patch [=simple-dialogs=].</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### newwindow ### {#event-newwindow}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface NewWindowController {
+  undefined attach(HTMLControlledFrameElement controlledFrame);
+  undefined discard();
+};
+
+[Exposed=Window, IsolatedContext]
+interface NewWindow {
+  readonly attribute NewWindowController window;
+  readonly attribute USVString targetUrl;
+  readonly attribute DOMString initialWidth;
+  readonly attribute DOMString initialHeight;
+  readonly attribute DOMString name;
+  readonly attribute DOMString windowOpenDisposition;
+};
+
+[Exposed=Window, IsolatedContext]
+interface NewWindowEvent : Event {
+  constructor(DOMString type, optional NewWindowEventInit eventInitDict = {});
+  readonly attribute NewWindow newWindow;
+};
+
+dictionary NewWindowEventInit: EventInit {
+  NewWindow? newWindow;
+};
+
+</xmp>
+
+<div algorithm=dispatch-newwindow>
+
+<span class=XXX>TODO:.</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### permissionrequest ### {#event-permissionrequest}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface PermissionRequestControllerBase {
+  undefined allow();
+  undefined cancel();
+};
+
+[Exposed=Window, IsolatedContext]
+interface PermissionRequest {
+  readonly attribute DOMString permission;
+  readonly attribute PermissionRequestControllerBase request;
+};
+
+[Exposed=Window, IsolatedContext]
+interface PermissionRequestEvent : Event {
+  constructor(DOMString type, optional PermissionRequestEventInit eventInitDict = {});
+  readonly attribute PermissionRequest permissionRequest;
+};
+
+dictionary PermissionRequestEventInit: EventInit {
+  PermissionRequest? permissionRequest;
+};
+
+</xmp>
+
+<div algorithm=dispatch-permissionrequest>
+
+<span class=XXX>TODO: Different child interfaces of PermissionRequestControllerBase for different permissions</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### sizechanged ### {#event-sizechanged}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface SizeChange {
+  readonly attribute long oldWidth;
+  readonly attribute long oldHeight;
+  readonly attribute long newWidth;
+  readonly attribute long newHeight;
+};
+
+[Exposed=Window, IsolatedContext]
+interface SizeChangedEvent : Event {
+  constructor(DOMString type, optional SizeChangedEventInit eventInitDict = {});
+  readonly attribute SizeChange sizeChange;
+};
+
+dictionary SizeChangedEventInit: EventInit {
+  SizeChange? sizeChange;
+};
+
+</xmp>
+
+<div algorithm=dispatch-sizechanged>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### zoomchange ### {#event-zoomchange}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface ZoomChange {
+  readonly attribute float oldZoomFactor;
+  readonly attribute float newZoomFactor;
+};
+
+[Exposed=Window, IsolatedContext]
+interface ZoomChangeEvent : Event {
+  constructor(DOMString type, optional ZoomChangeEventInit eventInitDict = {});
+  readonly attribute ZoomChange zoomChange;
+};
+
+dictionary ZoomChangeEventInit: EventInit {
+  ZoomChange? zoomChange;
+};
+
+</xmp>
+
+<div algorithm=dispatch-zoomchange>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### contentload ### {#event-contentload}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface ContentLoadEvent : Event {
+  constructor(DOMString type, optional ContentLoadEventInit eventInitDict = {});
+};
+
+dictionary ContentLoadEventInit: EventInit {
+};
+
+</xmp>
+
+<div algorithm=dispatch-contentload>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadabort ### {#event-loadabort}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadInfo {
+  readonly attribute USVString url;
+  readonly attribute boolean isTopLevel;
+};
+
+[Exposed=Window, IsolatedContext]
+interface LoadAbortInfo : LoadInfo{
+  readonly attribute long code;
+  readonly attribute DOMString reason;
+};
+
+[Exposed=Window, IsolatedContext]
+interface LoadAbortEvent : Event {
+  constructor(DOMString type, optional LoadAbortEventInit eventInitDict = {});
+  readonly attribute LoadAbortInfo loadAbortInfo;
+};
+
+dictionary LoadAbortEventInit: EventInit {
+  LoadAbortInfo? loadAbortInfo;
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadabort>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadcommit ### {#event-loadcommit}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadCommitEvent : Event {
+  constructor(DOMString type, optional LoadCommitEventInit eventInitDict = {});
+  readonly attribute LoadInfo loadInfo;
+};
+
+dictionary LoadCommitEventInit: EventInit {
+  LoadInfo? loadInfo;
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadcommit>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadstart ### {#event-loadstart}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadStartEvent : Event {
+  constructor(DOMString type, optional LoadStartEventInit eventInitDict = {});
+  readonly attribute LoadInfo loadInfo;
+};
+
+dictionary LoadStartEventInit: EventInit {
+  LoadInfo? loadInfo;
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadstart>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadstop ### {#event-loadstop}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadStopEvent : Event {
+  constructor(DOMString type, optional LoadStopEventInit eventInitDict = {});
+};
+
+dictionary LoadStopEventInit: EventInit {
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadstop>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
 
 <!-- ====================================================================== -->
 ## Integration with other specifications ## {#api-integration-with-other-specifications}
