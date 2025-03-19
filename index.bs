@@ -1369,6 +1369,133 @@ dictionary ZoomChangeEventInit: EventInit {
 </div>
 
 <!-- ====================================================================== -->
+### contentload ### {#event-contentload}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface ContentLoadEvent : Event {
+  constructor(DOMString type, optional ContentLoadEventInit eventInitDict = {});
+};
+
+dictionary ContentLoadEventInit: EventInit {
+};
+
+</xmp>
+
+<div algorithm=dispatch-contentload>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadabort ### {#event-loadabort}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+dictionary LoadInfo {
+  USVString url;
+  bool isTopLevel;
+};
+
+dictionary LoadAbortInfo : LoadInfo{
+  long code;
+  DOMString reason;
+};
+
+[Exposed=Window, IsolatedContext]
+interface LoadAbortEvent : Event {
+  constructor(DOMString type, optional LoadAbortEventInit eventInitDict = {});
+  readonly attribute LoadAbortInfo loadAbortInfo;
+};
+
+dictionary LoadAbortEventInit: EventInit {
+  LoadAbortInfo? loadAbortInfo;
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadabort>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadcommit ### {#event-loadcommit}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadCommitEvent : Event {
+  constructor(DOMString type, optional LoadCommitEventInit eventInitDict = {});
+  readonly attribute LoadInfo loadInfo;
+};
+
+dictionary LoadCommitEventInit: EventInit {
+  LoadInfo? loadInfo;
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadcommit>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadstart ### {#event-loadstart}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadStartEvent : Event {
+  constructor(DOMString type, optional LoadStartEventInit eventInitDict = {});
+  readonly attribute LoadInfo loadInfo;
+};
+
+dictionary LoadStartEventInit: EventInit {
+  LoadInfo? loadInfo;
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadstart>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+<!-- ====================================================================== -->
+### loadstop ### {#event-loadstop}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadStopEvent : Event {
+  constructor(DOMString type, optional LoadStopEventInit eventInitDict = {});
+};
+
+dictionary LoadStopEventInit: EventInit {
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadstop>
+
+<span class=XXX>TODO:</span>
+
+</div>
+
+
+<!-- ====================================================================== -->
 ## Integration with other specifications ## {#api-integration-with-other-specifications}
 <!-- ====================================================================== -->
 
