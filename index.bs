@@ -1793,6 +1793,9 @@ monkey patched as follows:
 
     1. <ins>Increment |topLevelTraversable|'s [=navigable/next frameId=].</ins>
 
+<span class=XXX>TODO: Monkeypatch in calls to the [=inject content scripts into
+a document=] algorithm.</span>
+
 #### [[STORAGE]] #### {#api-monkey-patches-storage}
 
 The [=obtain a storage key for non-storage purposes=] algorithm is extended to
