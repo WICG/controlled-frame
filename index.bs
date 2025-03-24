@@ -735,35 +735,35 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
 <dl export dfn-for="content script config">
   : <dfn>pendingFetchCount</dfn>
-  :: a {{long}} representing the number of pending script/style fetches
+  :: a {{long}} representing the number of pending script/style fetches.
 
   : <dfn>js</dfn>
   :: a [=list=] of [=string=]s containing JavaScript that will be injected into
-      a document
+      a document.
 
   : <dfn>css</dfn>
   :: a [=list=] of [=string=]s containing CSS that will be injected into a
-      document
+      document.
 
   : <dfn>matches</dfn>
   :: a [=list=] of [=string=]s containing patterns. Content will be injected
-      into pages whose URL matches one of these patterns.
+      into pages whose [=Document/URL=] matches one of these patterns.
 
   : <dfn>excludeMatches</dfn>
   :: a [=list=] of [=string=]s containing patterns. Content will *not* be
-      injected into pages whose URL matches one of these patterns.
+      injected into pages whose [=Document/URL=] matches one of these patterns.
 
   : <dfn>allFrames</dfn>
   :: a [=boolean=] indicating whether content should be injected into all
-      frames in a page, or just the top-level frame
+      frames in a page, or just the top-level frame.
 
   : <dfn>matchAboutBlank</dfn>
   :: a [=boolean=] indicating whether content should be injected into
-      about:blank pages
+      about:blank pages.
 
   : <dfn>runAt</dfn>
   :: a {{RunAt}} indicating when JavaScript content should be executed in a
-      document's lifecycle
+      document's lifecycle.
 
 </dl>
 
@@ -867,8 +867,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       1. If |config|'s [=content script config/pendingFetchCount=] is greater
           than 0, then return.
 
-      1. Set |controlledframe|'s [=controlledframe/content script map=]
-          [|details|[{{ContentScriptDetails/name}}]] to |config|.
+      1. Set |controlledframe|'s [=controlledframe/content script map
+          =][|details|[{{ContentScriptDetails/name}}]] to |config|.
 
       1. [=Resolve=] |result|.
 
@@ -1071,9 +1071,9 @@ implementation of this isolation that can be implemented by all browsers.
   1. If [=this=]'s [=embedded navigable=] is null, [=reject=] |promise| with a
       {{TypeError}} and abort these steps.
 
-  1. If |details|[{{InjectDetails/code}}] and |details|[{{InjectDetails/file}}]
-      are either both defined or both undefined, [=reject=] |result| with a
-      {{TypeError}} and abort these steps.
+  1. If |details|["{{InjectDetails/code}}"] and
+      |details|"[{{InjectDetails/file}}"] are either both defined or both
+      undefined, [=reject=] |result| with a {{TypeError}} and abort these steps.
 
   1. Let |executionSteps| be the following algorithm that takes a {{long}} and
       a [=string=] or [=boolean=] |scriptString|:
@@ -1095,11 +1095,11 @@ implementation of this isolation that can be implemented by all browsers.
 
           1. [=Reject=] |promise| with |status|.`[[Value]]`.
 
-  1. If |details|[{{InjectDetails/code}}] is defined, then run |executionSteps|
-      given 0 and |details|[{{InjectDetails/code}}].
+  1. If |details|["{{InjectDetails/code}}"] is defined, then run
+      |executionSteps| given 0 and |details|["{{InjectDetails/code}}"].
 
   1. Otherwise, [=fetch an injection item=] given [=this=],
-      |details|[{{InjectDetails/file}}], false, 0, and |executionSteps|.
+      |details|["{{InjectDetails/file}}"], false, 0, and |executionSteps|.
 
 </div>
 
@@ -1114,9 +1114,9 @@ implementation of this isolation that can be implemented by all browsers.
   1. If [=this=]'s [=embedded navigable=] is null, [=reject=] |promise| with a
       {{TypeError}} and abort these steps.
 
-  1. If |details|[{{InjectDetails/code}}] and |details|[{{InjectDetails/file}}]
-      are either both defined or both undefined, [=reject=] |result| with a
-      {{TypeError}} and abort these steps.
+  1. If |details|["{{InjectDetails/code}}"] and
+      |details|["{{InjectDetails/file}}"] are either both defined or both
+      undefined, [=reject=] |result| with a {{TypeError}} and abort these steps.
 
   1. Let |executionSteps| be the following algorithm that takes a {{long}} and
       a [=string=] or [=boolean=] |styleString|:
@@ -1132,11 +1132,11 @@ implementation of this isolation that can be implemented by all browsers.
 
       1. [=Resolve=] |promise|.
 
-  1. If |details|[{{InjectDetails/code}}] is defined, then run |executionSteps|
-      given 0 and |details|[{{InjectDetails/code}}].
+  1. If |details|["{{InjectDetails/code}}"] is defined, then run |executionSteps|
+      given 0 and |details|["{{InjectDetails/code}}"].
 
   1. Otherwise, [=fetch an injection item=] given [=this=],
-      |details|[{{InjectDetails/file}}], false, 0, and |executionSteps|.
+      |details|["{{InjectDetails/file}}"], false, 0, and |executionSteps|.
 
 </div>
 
