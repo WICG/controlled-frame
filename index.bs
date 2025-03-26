@@ -73,6 +73,9 @@ th, td {
 
 <pre class="biblio">
 {
+  "HTTP-CACHING": {
+    "aliasOf": "RFC9111"
+  },
   "isolated-web-apps": {
     "authors": [
       "Reilly Grant"
@@ -160,6 +163,12 @@ spec: infra; urlPrefix: https://infra.spec.whatwg.org
 
 spec: storage; urlPrefix: https://storage.spec.whatwg.org
     type: dfn
+        text: map; for: storage bottle; url: storage-bottle-map
+        text: proxy map reference set; for: storage bottle; url: storage-bottle-proxy-map-reference-set
+        text: storage bottle; url: storage-bottle
+        text: storage bucket; url: storage-bucket
+        text: storage identifier; url: storage-identifier
+        text: storage shed; url: storage-shed
         text: storage shelf; url: storage-shelf
 
 spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
@@ -189,6 +198,7 @@ spec:html; type:dfn; for:/; text:traversable navigable
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; text:list
 spec:infra; type:dfn; text:byte sequence
+spec:infra; type:dfn; text:user agent
 spec:webidl; type:dfn; text:attribute
 spec:webidl; type:interface; text:long
 </pre>
@@ -331,7 +341,7 @@ null [=navigable/parent=]. Content within the [=embedded navigable=] cannot
 detect that it is embedded.
 
 Each <{controlledframe}> has a <dfn for=controlledframe>content script map</dfn>,
-which is a [=map=] whose [=map/keys=] are [=strings=] and whose [=map/values=]
+which is a [=/map=] whose [=map/keys=] are [=strings=] and whose [=map/values=]
 are [=content script config=]s.
 
 <div algorithm=insertion>
@@ -1142,7 +1152,6 @@ dictionary ClearDataOptions {
 };
 
 dictionary ClearDataTypeSet {
-  boolean appcache;
   boolean cache;
   boolean cookies;
   boolean fileSystems;
@@ -1150,38 +1159,111 @@ dictionary ClearDataTypeSet {
   boolean localStorage;
   boolean persistentCookies;
   boolean sessionCookies;
-  boolean webSQL;
 };
 </xmp>
+
+<div algorithm>
+  To <dfn>empty a [=storage bottle=]</dfn> given a [=storage bucket=] |bucket|,
+  a [=storage identifier=] |identifier|, and a {{long}} |since|, run the
+  following steps:
+
+  Note: If possible, the [=user agent=] should only remove data that has been
+  last used after |since|, which represents a timestamp in milliseconds since
+  [=epoch=]. Not all [=user agents=] track write or access time for all
+  browsing data. Implementations should respect |since| to the best of their
+  ability, but the API does not guarantee its availability.
+
+  1. Let |bottle| be |bucket|[|identifier|].
+
+  1. [=map/Clear=] |bottle|'s [=storage bottle/map=].
+
+  1. Set |bottle|'s [=storage bottle/proxy map reference set=] to a new [=set=].
+
+</div>
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>clearData(optional |options|, optional |types|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be a new [=promise=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
-  1. Let |clearSince| be 0. This will represent to clear all items.
-  1. If |options|["since"] is set:
-      1. Let |clearSince| be |options|["since"].
-  1. If |types|["appcache"] is set:
-      1. Clear the partition's appcache items with a matching |clearSince|.
-  1. If |types|["cache"] is set:
-      1. Clear the partition's cache items with a matching |clearSince|.
-  1. If |types|["cookies"] is set:
-      1. Clear the partition's cookie items with a matching |clearSince|.
-  1. If |types|["fileSystems"] is set:
-      1. Clear the partition's fileSystem items with a matching |clearSince|.
-  1. If |types|["indexedDB"] is set:
-      1. Clear the partition's indexedDB items with a matching |clearSince|.
-  1. If |types|["localStorage"] is set:
-      1. Clear the partition's localStorage items with a matching |clearSince|.
-  1. If |types|["persistentCookies"] is set:
-      1. Clear the partition's persistentCookies items with a matching |clearSince|.
-  1. If |types|["sessionCookies"] is set:
-      1. Clear the partition's sessionCookies items with a matching |clearSince|.
-  1. If |types|["webSQL"] is set:
-      1. Clear the partition's webSQL items with a matching |clearSince|.
-  1. Then, [=resolve=] |resultPromise|.
+
+  1. Let |clearSince| be 0.
+
+  1. If |options|["{{ClearDataOptions/since}}"] is set:
+      1. Set |clearSince| to |options|["{{ClearDataOptions/since}}"].
+
+  1. Let |embeddingOrigin| be the [=environment/top-level origin=] of [=this=]'s
+      [=relevant settings object=].
+
+  1. Let |partition| be [=this=]'s {{HTMLControlledFrameElement/partition}}.
+
+  1. [=map/For each=] |storageKey| &rightarrow; |shelf| of the [=user agent=]'s
+      [=storage shed=]:
+
+      1. If |storageKey|'s [=storage key/embedding origin=] is not equal to
+          |embeddingOrigin| or |storageKey|'s [=storage key/partition=] is not
+          equal to |partition|, then [=continue=].
+
+      1. Let |bucket| be |shelf|["`default`"].
+
+      1. If |types|["{{ClearDataTypeSet/fileSystems}}"] is true:
+
+          1. [=Empty a storage bottle=] given |bucket|, "`fileSystem`", and
+              |clearSince|.
+
+      1. If |types|["{{ClearDataTypeSet/indexedDB}}"] is true:
+
+          1. [=Empty a storage bottle=] given |bucket|, "`indexedDB`", and
+              |clearSince|.
+
+      1. If |types|["{{ClearDataTypeSet/localStorage}}"] is true:
+
+          1. [=Empty a storage bottle=] given |bucket|, "`localStorage`", and
+              |clearSince|.
+
+  1. If |types|["{{ClearDataTypeSet/cookies}}"],
+      |types|["{{ClearDataTypeSet/persistentCookies}}"], or
+      |types|["{{ClearDataTypeSet/sessionCookies}}"] are true, then:
+
+      Advisement: The [[COOKIES]] specification does not support partitioning
+      cookies through a mechanism like [=storage key=]s. The following steps
+      will clear all cookies, but the intention is to only delete cookies
+      created by content within a Controlled Frame with this Controlled Frame's
+      current {{HTMLControlledFrameElement/partition}}.
+
+      1. [=list/For each=] |cookie| in the [=user agent=]'s cookie store:
+
+          1. If |cookie|'s persistent-flag is set, then:
+
+              1. If |types|["{{ClearDataTypeSet/cookies}}"] and
+                  |types|["{{ClearDataTypeSet/persistentCookies}}"] are false,
+                  then [=continue=].
+
+          1. Otherwise:
+
+              1. If |types|["{{ClearDataTypeSet/cookies}}"] and
+                  |types|["{{ClearDataTypeSet/sessionCookies}}"] are false,
+                  then [=continue=].
+
+          1. If |cookie|'s last-access-time represented as milliseconds since
+              the [=epoch=] is less than |clearSince|, then [=continue=].
+
+          1. Remove |cookie| from the [=user agent=]'s  cookie store.
+
+  1. If |types|["{{ClearDataTypeSet/cache}}"] is true, then:
+
+      1. [=list/For each=] |storageKey| &rightarrow; |cache| that the
+          [=user agent=] manages: [[HTTP-CACHING]]
+
+          1. If |storageKey|'s [=storage key/embedding origin=] is not equal to
+              |embeddingOrigin| or |storageKey|'s [=storage key/partition=] is
+              not equal to |partition|, then [=continue=].
+
+          1. Clear |cache|.
+
+  1. [=Resolve=] |resultPromise|.
 
 </div>
 
@@ -1799,19 +1881,35 @@ To determine the network partition key, given an [=environment=] |environment|:
   4. Let |topLevelSite| be the result of [=obtaining a site=], given
       topLevelOrigin.
 
-  5. Let |secondKey| be null or an [=implementation-defined=] value.
+  5. Let |secondKey| be null <del>or an [=implementation-defined=] value</del>.
 
   6. <ins>Let |embedderParent| be the result of [=getting an environment's
       embedderParent=] given |environment|.</ins>
 
-  7. <ins>If |embedderParent| is not null, then set |secondKey| to
-      |embedderParent|'s {{HTMLControlledFrameElement/partition}}.</ins>
+  7. <ins>If |embedderParent| is not null, then set |secondKey| to a [=tuple=]
+      consisting of the [=environment/top-level origin=] of |embedderParent|'s
+      [=relevant settings object=], and |embedderParent|'s
+      {{HTMLControlledFrameElement/partition}}.</ins>
 
   8. Return (|topLevelSite|, |secondKey|).
 
 </div>
 
 #### [[STORAGE]] #### {#api-monkey-patches-storage}
+
+Storage keys are re-defined as follows:
+
+A <dfn>storage key</dfn> is a [=tuple=] consisting of an
+<dfn for="storage key">embedding origin</dfn> (an [=/origin=] or null), a
+<dfn for="storage key">partition</dfn> (a [=string=] or null), and an
+<dfn for="storage key">origin</dfn> (an [=/origin=]).
+
+Note: This definition will need to be expanded to include the embedded content's
+top-level origin in addition to [=storage key/origin=] in the future once
+storage partitioning is fully specified.
+
+Note: Controlled Frame data is triple keyed with the origin of the document that
+owns the Controlled Frame element, not the top-level document that owns it.
 
 The [=obtain a storage key for non-storage purposes=] algorithm is extended to
 require double-keying on all storage belonging to a <{controlledframe}>'s
@@ -1825,14 +1923,23 @@ To obtain a storage key for non-storage purposes, given an [=environment=]
       |environment| is an [=environment settings object=]; otherwise
       |environment|'s [=creation URL=]'s [=/origin=].
 
+  1. <del>Return a [=tuple=] consisting of |origin|.</del>
+
+  1. <ins>Let |topLevelOrigin| and |partition| be null.</ins>
+
   1. <ins>Let |embedderParent| be the result of [=getting an environment's
       embedderParent=] given |environment|.</ins>
 
-  1. <ins>If |embedderParent| is not null, then return a [=tuple=] consisting
-      of |embedderParent|'s {{HTMLControlledFrameElement/partition}} and
-      |origin|.</ins>
+  1. <ins>If |embedderParent| is not null, then:</ins>
 
-  1. Return a [=tuple=] consisting of |origin|.
+      1. <ins>Set |topLevelOrigin| to the [=environment/top-level origin=] of
+          |embedderParent|'s [=relevant settings object=].</ins>
+
+      1. <ins>Set |partition| to |embedderParent|'s
+          {{HTMLControlledFrameElement/partition}}.</ins>
+
+  1. <ins>Return a [=tuple=] consisting of |topLevelOrigin|, |partition|,
+       and |origin|.</ins>
 
 </div>
 
@@ -2047,7 +2154,7 @@ interface WebRequest {
 </xmp>
 
 Each {{WebRequest}} has a <dfn for=WebRequest>handler map</dfn>, which is a
-[=map=] whose [=map/keys=] are [=strings=] and whose [=map/values=] are
+[=/map=] whose [=map/keys=] are [=strings=] and whose [=map/values=] are
 [=lists=] of [=WebRequest handler configs=].
 
 Each {{WebRequestEvent}} has:
@@ -3219,7 +3326,7 @@ interface ContextMenus {
 };
 </xmp>
 
-Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
+Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=/map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
 
 Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=ContextMenus>context menu item</dfn>. These items can show up when the user opens the <dfn for=ContextMenus>context menu</dfn> on the embedded document.
 
