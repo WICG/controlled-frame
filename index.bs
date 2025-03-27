@@ -122,6 +122,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: creating a new auxiliary browsing context; url: creating-a-new-auxiliary-browsing-context
             text: current session history entry; url: nav-current-history-entry
             text: navigable; for: /; url: navigable
+            text: active WindowProxy; for: navigable; url: nav-wp
             text: initialize the navigable; url: initialize-the-navigable
             for: navigable
                 text: active session history entry; url: nav-active-history-entry
@@ -148,6 +149,8 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: href; url: attr-hyperlink-href
         urlPrefix: nav-history-apis.html
             text: navigable; for: window; url: window-navigable
+        urlPrefix: system-state.html
+            text: associated Navigator; url: associated-navigator
         urlPrefix: timers-and-user-prompts.html
             text: alert; url:dom-alert
             text: confirm; url:dom-confirm
@@ -1584,11 +1587,15 @@ dictionary NewWindowEventInit: EventInit {
 
 </xmp>
 
+Each {{NewWindowController}} has reference to the <dfn for=NewWindowController>current Controlled Frame</dfn>.
+
 <div>
 
 The <dfn method for=NewWindowController>attach(|controlledFrame|)</dfn> method steps are:
 
       1. Set |controlledFrame|'s {{HTMLControlledFrameElement/src}} to {{NewWindow/targetUrl}}.
+
+      1. Set |controlledFrame|'s embedder navigable's [=navigable/active window=]'s {{Window/opener}} to [=current Controlled Frame=]'s embedder navigable's [=navigable/active WindowProxy=].
 
 </div>
 
@@ -2228,7 +2235,7 @@ Define new algorithm:
 
 To determine if a [=/Document=] |document| is <dfn data-lt='allowed by embedder to use'>allowed by embedder to use a permission</dfn> given DOMString |permission|, and optional dictionary |options|, run the following steps:
 
-1. Let |embedderParent| be |document|'s [=embedderParent=].
+1. Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].
 
 1. If |embedderParent| is not {{HTMLControlledFrameElement}}, return true.
 
@@ -2250,9 +2257,29 @@ For [=request a position=] (geolocation):
 
       1. <ins>If watchId was passed, remove watchId from watchIDs.</ins>
 
-      2. <ins>Call back with error passing errorCallback and PERMISSION_DENIED.</ins>
+      1. <ins>Call back with error passing errorCallback and PERMISSION_DENIED.</ins>
 
-      3. <ins>Terminate this algorithm.</ins>
+      1. <ins>Terminate this algorithm.</ins>
+
+5. <ins>Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].</ins>
+
+6. <ins>If |embedderParent| is {{HTMLControlledFrameElement}}:</ins>
+
+      1. Let |nodeDocument| be |embedderParent|'s [=node document=].
+
+      1. <ins>If |nodeDocument| is null:</ins>
+
+            1. <ins>If watchId was passed, remove watchId from watchIDs.</ins>
+
+            1. <ins>Call back with error passing errorCallback and PERMISSION_DENIED.</ins>
+
+            1. <ins>Terminate this algorithm.</ins>
+
+      1. <ins>Let |embedderNavigator| be the [=associated Navigator=] of |nodeDocument|'s [=global object=].
+
+      1. <ins>Let |embedderGeolocation| be the {{Navigator/geolocation}} of |embedderNavigator|.
+
+      1. <ins>Return the result of [=request a position=] with |embedderGeolocation|, <var ignore=''>successCallback</var>, <var ignore=''>errorCallback</var>, <var ignore=''>options</var>, and <var ignore=''>whatchId</var>.</ins>
 
 <span class='XXX'>TODO: patch other permission request sites similar to geolocation.</span>
 
