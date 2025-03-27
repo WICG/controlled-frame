@@ -116,7 +116,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: document-lifecycle.html
             text: completely loaded; url: completely-loaded
             text: stop loading; url: nav-stop
-            text: completely finish loading; url: completely finish loading
+            text: completely finish loading; url: completely-finish-loading
         urlPrefix: document-sequences.html
             text: browsing context group; url: browsing-context-group
             text: create a new browsing context and document; url: creating-a-new-browsing-context
