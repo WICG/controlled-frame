@@ -2215,7 +2215,7 @@ For [=HTTP fetch=](loadredirect):
 
       1. <ins>If |request|'s [=request/window=] |window| is a [=environment settings object=] whose [=global object=] is a {{Window}} object:</ins>
 
-            1. <ins>Let |currentNavigable| be |window|'s associated [=window/navigable=].
+            1. <ins>Let |currentNavigable| be |window|'s associated [=Window/navigable=].
 
             1. <ins>Let |embedderParent| be |currentNavigable|'s [top-level traversable=]'s [=embedderParent=].</ins>
 
