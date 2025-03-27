@@ -95,7 +95,6 @@ th, td {
 spec: console; urlPrefix: https://console.spec.whatwg.org/
     type: dfn
         urlPrefix: /
-            text: printer; for: /; url: printer
             text: logger; for: /; url: logger
             text: formatter; for: /; url: formatter
 
@@ -808,7 +807,7 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       :: "`cors`"
 
   1. [=Fetch=] |request|, with [=processResponseConsumeBody=] set to the
-      following steps given a [=response=] |response| and a null, failure, or
+      following steps given a [=/response=] |response| and a null, failure, or
       [=byte sequence=] |contents|:
 
       1. If |response|'s [=response/status=] is not 200, or |contents| is null
@@ -1482,28 +1481,27 @@ interface DialogMessage {
 interface DialogEvent : Event {
   constructor(DOMString type, optional DialogEventInit eventInitDict = {});
   readonly attribute DialogMessage dialogMessage;
-
-  readonly attribute boolean accept;
-  readonly attribute DOMString response;
 };
 
 dictionary DialogEventInit: EventInit {
   DialogMessage? dialogMessage;
-  boolean accept = false;
-  DOMString response = "";
 };
 
 </xmp>
 
-{{DialogEvent}} exposes its attributes {{DialogEvent/accept}} and {{DialogEvent/response}}. {{DialogController}} is constructed with writable references to the exposed attributes.
+Each {{DialogEvent}} has:
+
+      - A boolean <dfn for=DialogEvent>accept</dfn>, initially set to false.
+      
+      - A DOMString <dfn for=DialogEvent>response</dfn>, initally an empty string.
 
 <div>
 
 The <dfn method for=DialogController>okay(|response|)</dfn> method steps are:
 
-1. Set {{DialogEvent/accept}} to true.
+1. Set [=DialogEvent/accept=] to true.
 
-1. Set {{DialogEvent/response}} to |response|.
+1. Set [=DialogEvent/response=] to |response|.
 
 </div>
 
@@ -1511,7 +1509,7 @@ The <dfn method for=DialogController>okay(|response|)</dfn> method steps are:
 
 The <dfn method for=DialogController>cancel()</dfn> method steps are:
 
-1. Set {{DialogEvent/accept}} to false.
+1. Set [=DialogEvent/accept=] to false.
 
 </div>
 
@@ -1519,11 +1517,11 @@ The <dfn method for=DialogController>cancel()</dfn> method steps are:
 
 To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given <{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and message |message|, run the following steps:
 
-1. Assert that |e|["{{DialogEvent/accept}}"] equals false.
+1. Assert that |e|["[=DialogEvent/accept=]"] equals false.
 
 1. Let |dialogMessage| be a new {{DialogMessage}} object.
 
-1. Let |dialog| be a new {{DialogController}} object that is exposed to |e|'s {{DialogEvent/accept}} and {{DialogEvent/response}}.
+1. Let |dialog| be a new {{DialogController}} object that is exposed to |e|'s [=DialogEvent/accept=] and [=DialogEvent/response=].
 
 1. Set the following fields of |dialogMessage|:
 
@@ -1540,7 +1538,7 @@ To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given <
 
 1. Dispatch |e| at |target|.
 
-1. Return |e|["{{DialogEvent/accept}}"] and |e|["{{DialogEvent/response}}"].
+1. Return |e|["[=DialogEvent/accept=]"] and |e|["[=DialogEvent/response=]"].
 
 </div>
 
@@ -1585,8 +1583,6 @@ dictionary NewWindowEventInit: EventInit {
 };
 
 </xmp>
-
-{{NewWindow}} exposes its {{NewWindow/targetUrl}} to {{NewWindow/window}}. {{NewWindowController}} can access reference to {{NewWindow/targetUrl}}.
 
 <div>
 
@@ -1706,24 +1702,21 @@ interface PermissionRequest {
 interface PermissionRequestEvent : Event {
   constructor(DOMString type, optional PermissionRequestEventInit eventInitDict = {});
   readonly attribute PermissionRequest permissionRequest;
-
-  readonly attribute boolean allow;
 };
 
 dictionary PermissionRequestEventInit: EventInit {
   PermissionRequest? permissionRequest;
-  boolean allow = false;
 };
 
 </xmp>
 
-{{PermissionRequestEvent}} exposes its attribute {{PermissionRequestEvent/allow}}. {{PermissionRequestControllerBase}} is constructed with writable references to the exposed attribute.
+Each {{PermissionRequestEvent}} has a boolean value <dfn for=PermissionRequestEvent>allow</dfn>, which is initially false.
 
 <div>
 
 The <dfn method for=PermissionRequestControllerBase>allow()</dfn> method steps are:
 
-1. Set {{PermissionRequestEvent/allow}} to true.
+1. Set [=PermissionRequestEvent/allow=] to true.
 
 </div>
 
@@ -1731,7 +1724,7 @@ The <dfn method for=PermissionRequestControllerBase>allow()</dfn> method steps a
 
 The <dfn method for=PermissionRequestControllerBase>cancel()</dfn> method steps are:
 
-1. Set {{PermissionRequestEvent/allow}} to false.
+1. Set [=PermissionRequestEvent/allow=] to false.
 
 </div>
 
@@ -1811,7 +1804,7 @@ To <dfn data-lt='fire a "permissionrequest" event'>fire a {{PermissionRequestEve
 
 1. Dispatch |e| at |target|.
 
-1. Return |e|["{{PermissionRequestEvent/allow}}"].
+1. Return |e|["[=PermissionRequestEvent/allow=]"].
 
 </div>
 
@@ -2153,7 +2146,7 @@ For [=confirm=]:
 
 4. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
 
-5. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, [=fire a "dialog" event=] with |embedderParent|, "confirm" and |message|.</ins>
+5. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, [=fire a "dialog" event=] with |embedderParent|, "confirm" and |message|, and return.</ins>
 
 For [=prompt=]:
 
@@ -2165,15 +2158,15 @@ For [=prompt=]:
       
       1. <ins>Let [|accept|, |response|] be the result of [=fire a "dialog" event=] with |embedderParent|, "prompt" and |message|.</ins>
 
-      1. If |accept| equals false, return null.
+      1. <ins>If |accept| equals false, return null.</ins>
 
-      1. Return |response|. 
+      1. <ins>Return |response|.</ins>
 
 For [=window open steps=]:
 
 14. If targetNavigable is null, then return null.
 
-15. <ins>Let |embedderParent| be <var ignore=''>sourceDocument</var>'s [=embedderParent=].</ins>
+15. <ins>Let |embedderParent| be <var ignore=''>sourceDocument</var>'s [=node navigable=]'s [=embedderParent=].</ins>
 
 16. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
 
@@ -2267,7 +2260,7 @@ For [=request a position=] (geolocation):
 
 For [=Logger=]:
 
-1. Otherwise, perform [=Printer=](|logLevel|, [=Formatter=](|args|)).
+1. Otherwise, perform Printer(|logLevel|, [=Formatter=](|args|)).
 
 1. <ins>[=Fire a "consolemessage" event=] with |logLevel|, [=Formatter=](|args|).</ins>
 
@@ -2927,7 +2920,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process headersReceived events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "headersReceived", and |request|.
@@ -2966,7 +2959,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process authRequired events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "authRequired", and |request|.
@@ -3066,7 +3059,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process beforeRedirect events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "beforeRedirect", and |request|.
@@ -3098,7 +3091,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process responseStarted events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "responseStarted", and |request|.
@@ -3123,7 +3116,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process completed events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "completed", and |request|.
@@ -3148,7 +3141,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process errorOccurred events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "errorOccurred", and |request|.
@@ -3256,7 +3249,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a {{WebRequestResponseEventDetails}} object</dfn> given a
-  [=request=] |request|, a [=response=] |response|, a [=boolean=]
+  [=request=] |request|, a [=/response=] |response|, a [=boolean=]
   |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
   run the following steps:
 
@@ -3283,7 +3276,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a {{WebRequestResponseWithIpEventDetails}} object</dfn> given a
-  [=request=] |request|, a [=response=] |response|,
+  [=request=] |request|, a [=/response=] |response|,
   a [=boolean=] |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
   run the following steps:
 
@@ -3383,7 +3376,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a redirect response</dfn> given a [=string=] |redirectUrl|,
-  return a [=response=] with the following fields:
+  return a [=/response=] with the following fields:
 
   : [=response/status=]
   :: 301
