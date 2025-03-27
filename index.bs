@@ -2032,8 +2032,6 @@ To fire a {{LoadCommitEvent}} |e| given <{controlledframe}> element |target|, a 
 
 1. Dispatch |e| at |target|.
 
-<span class=XXX>TODO:</span>
-
 </div>
 
 <!-- ====================================================================== -->
@@ -2245,7 +2243,7 @@ To determine if a [=/Document=] |document| is <dfn data-lt='allowed by embedder 
 
 </div>
 
-For [=request a position=]:
+For [=request a position=] (geolocation):
 
 3. If |document| is not allowed to use the "geolocation" feature:
 
@@ -2262,6 +2260,8 @@ For [=request a position=]:
       2. <ins>Call back with error passing errorCallback and PERMISSION_DENIED.</ins>
 
       3. <ins>Terminate this algorithm.</ins>
+
+<span class='XXX'>TODO: patch other permission request sites similar to geolocation.</span>
 
 #### [[Console]] #### {#events-monkey-patches-console}
 
