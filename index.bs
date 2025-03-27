@@ -2207,7 +2207,7 @@ For each of these, check whether the [=top-level traversable=] of the [=/navigab
 
 </div>
 
-#### [[Fetch]] #### {#events-monkey-patches-fetch}
+#### [[FETCH]] #### {#events-monkey-patches-redirect}
 
 For [=HTTP fetch=](loadredirect):
 
@@ -2241,7 +2241,7 @@ To determine if a [=/Document=] |document| is <dfn data-lt='allowed by embedder 
 
 1. If |embedderParent| is not {{HTMLControlledFrameElement}}, return true.
 
-1. Return the result of [=firing a "permissionrequest" event=] with |embedderParent|, |permission|, |document|'s [=document/url=], and |options|.
+1. Return the result of [=firing a "permissionrequest" event=] with |embedderParent|, |permission|, |document|'s [=Document/URL=], and |options|.
 
 </div>
 
