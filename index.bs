@@ -1489,19 +1489,19 @@ dictionary DialogEventInit: EventInit {
 
 </xmp>
 
-Each {{DialogEvent}} has:
+Each {{DialogController}} has:
 
-      - A boolean <dfn for=DialogEvent>accept</dfn>, initially set to false.
+      - A boolean <dfn for=DialogController>accept</dfn>, initially set to false.
       
-      - A DOMString <dfn for=DialogEvent>response</dfn>, initally an empty string.
+      - A DOMString <dfn for=DialogController>response</dfn>, initally an empty string.
 
 <div>
 
 The <dfn method for=DialogController>okay(|response|)</dfn> method steps are:
 
-1. Set [=DialogEvent/accept=] to true.
+1. Set [=DialogController/accept=] to true.
 
-1. Set [=DialogEvent/response=] to |response|.
+1. Set [=DialogController/response=] to |response|.
 
 </div>
 
@@ -1509,7 +1509,7 @@ The <dfn method for=DialogController>okay(|response|)</dfn> method steps are:
 
 The <dfn method for=DialogController>cancel()</dfn> method steps are:
 
-1. Set [=DialogEvent/accept=] to false.
+1. Set [=DialogController/accept=] to false.
 
 </div>
 
@@ -1517,11 +1517,11 @@ The <dfn method for=DialogController>cancel()</dfn> method steps are:
 
 To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given <{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and message |message|, run the following steps:
 
-1. Assert that |e|["[=DialogEvent/accept=]"] equals false.
+1. Assert that |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"] equals false.
 
 1. Let |dialogMessage| be a new {{DialogMessage}} object.
 
-1. Let |dialog| be a new {{DialogController}} object that is exposed to |e|'s [=DialogEvent/accept=] and [=DialogEvent/response=].
+1. Let |dialog| be a new {{DialogController}} object.
 
 1. Set the following fields of |dialogMessage|:
 
@@ -1538,7 +1538,7 @@ To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given <
 
 1. Dispatch |e| at |target|.
 
-1. Return |e|["[=DialogEvent/accept=]"] and |e|["[=DialogEvent/response=]"].
+1. Return |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"] and |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/response=]"].
 
 </div>
 
@@ -1710,13 +1710,13 @@ dictionary PermissionRequestEventInit: EventInit {
 
 </xmp>
 
-Each {{PermissionRequestEvent}} has a boolean value <dfn for=PermissionRequestEvent>allow</dfn>, which is initially false.
+Each {{PermissionRequestControllerBase}} has a boolean value <dfn for=PermissionRequestControllerBase>allow</dfn>, which is initially false.
 
 <div>
 
 The <dfn method for=PermissionRequestControllerBase>allow()</dfn> method steps are:
 
-1. Set [=PermissionRequestEvent/allow=] to true.
+1. Set [=PermissionRequestControllerBase/allow=] to true.
 
 </div>
 
@@ -1724,7 +1724,7 @@ The <dfn method for=PermissionRequestControllerBase>allow()</dfn> method steps a
 
 The <dfn method for=PermissionRequestControllerBase>cancel()</dfn> method steps are:
 
-1. Set [=PermissionRequestEvent/allow=] to false.
+1. Set [=PermissionRequestControllerBase/allow=] to false.
 
 </div>
 
@@ -1804,7 +1804,7 @@ To <dfn data-lt='fire a "permissionrequest" event'>fire a {{PermissionRequestEve
 
 1. Dispatch |e| at |target|.
 
-1. Return |e|["[=PermissionRequestEvent/allow=]"].
+1. Return |e|["{{PermissionRequestEvent/permissionRequest}}"]["{{PermissionRequest/permission}}"]["[=PermissionRequestControllerBase/allow=]"].
 
 </div>
 
