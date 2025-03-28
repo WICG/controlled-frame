@@ -107,6 +107,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: simple-dialogs; for: /; url: simple-dialogs
             text: window open steps; for: /; url: window-open-steps
         urlPrefix: browsing-the-web.html
+            text: append the following session history traversal steps; url: tn-append-session-history-traversal-steps
             text: apply the traverse history step; url: apply-the-traverse-history-step
             text: document state; url: she-document-state
             text: get all used history steps; url: getting-all-used-history-steps
@@ -611,36 +612,44 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 </div>
 
 <div algorithm>
-  To <dfn>traverse an embedded navigable's history</dfn>, given a
-  <{controlledframe}> |controlledframe| and an integer |stepDelta|, run the
+  To <dfn>delta traverse an embedded navigable's history</dfn>, given a
+  <{controlledframe}> |controlledframe| and an integer |delta|, run the
   following steps:
 
   1. Let |resultPromise| be a new [=promise=].
 
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
 
-  1. If |controlledframe|'s [=embedded navigable=] is null, then [=resolve=]
-      |resultPromise| with false.
+  1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
-  1. Let |currentStep| be |controlledframe|'s [=embedded navigable=]'s
-      [=current session history step=].
-
-  1. Let |step| be the sum of |currentStep| and |stepDelta|.
-
-  1. If |step| is negative, then [=resolve=] |resultPromise| with false.
-
-  1. If |step| is greater than or equal to the [=list/size=] of the
-      |controlledframe|'s [=embedded navigable=]'s [=session history entries=],
-      then [=resolve=] |resultPromise| with false.
-
-  1. Let |result| be the result of [=applying the traverse history step=]
-      given |step|, |controlledframe|'s [=embedded navigable=], and a
-      [=user navigation involvement=] of "[=browser UI=]".
-
-  1. If |result| is not equal to "`applied`", [=resolve=] |resultPromise|
+  1. If |embeddedNavigable| is null, then [=resolve=] |resultPromise|
       with false.
 
-  1. Otherwise, [=resolve=] |resultPromise| with true.
+  1. If |embeddedNavigable|'s [=active document=] is not [=fully active=],
+      then [=resolve=] |resultPromise| with false.
+
+  1. [=Append the following session history traversal steps=] to
+      |embeddedNavigable|:
+
+      1. Let |allSteps| be the result of [=getting all used history steps=]
+          for |embeddedNavigable|.
+
+      1. Let |currentStepIndex| be the index of |embeddedNavigable|'s
+          [=current session history step=] wihin |allSteps|.
+
+      1. Let |targetStepIndex| be |currentStepIndex| plus |delta|.
+
+      1. If |allSteps|[|targetStepIndex|] does not [=list/exist=], then abort
+          these steps.
+
+      1. Let |result| be the result of [=applying the traverse history step=]
+          |allSteps|[|targetStepIndex|] to |embeddedNavigable| given a
+          [=user navigation involvement=] of "[=browser UI=]".
+
+      1. If |result| is not equal to "`applied`", [=resolve=] |resultPromise|
+          with false.
+
+      1. Otherwise, [=resolve=] |resultPromise| with true.
 
 </div>
 
@@ -682,8 +691,8 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>back()</dfn> method steps are:
 
-  1. Return the result of [=traversing an embedded navigable's history=] given
-      [=this=] and -1.
+  1. Return the result of [=delta traverse an embedded navigable's history=]
+      given [=this=] and -1.
 
 </div>
 
@@ -691,8 +700,8 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   The <dfn method for=HTMLControlledFrameElement>forward()</dfn> method steps
   are:
 
-  1. Return the result of [=traversing an embedded navigable's history=] given
-      [=this=] and 1.
+  1. Return the result of [=delta traverse an embedded navigable's history=]
+      given [=this=] and 1.
 
 </div>
 
@@ -700,8 +709,8 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   The <dfn method for=HTMLControlledFrameElement>go(|relativeIndex|)</dfn>
   method steps  are:
 
-  1. Return the result of [=traversing an embedded navigable's history=] given
-      [=this=] and |relativeIndex|.
+  1. Return the result of [=delta traverse an embedded navigable's history=]
+      given [=this=] and |relativeIndex|.
 
 </div>
 
@@ -1719,7 +1728,7 @@ To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e| g
 
 <div>
 
-To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and an [=map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
+To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and a [=/map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
 
 <span class=XXX>TODO: define how we {{WindowOpenDisposition}}</span>
 
