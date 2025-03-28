@@ -314,9 +314,11 @@ interface HTMLControlledFrameElement : HTMLElement {
       optional ClearDataTypeSet types = {});
     Promise<boolean> getAudioState();
     Promise<long> getZoom();
+    Promise<DOMString> getZoomMode();
     Promise<boolean> isAudioMuted();
     undefined setAudioMuted(boolean mute);
     Promise<undefined> setZoom(long zoomFactor);
+    Promise<undefined> setZoomMode(DOMString zoomMode);
 
     // Capture methods.
     Promise<undefined> captureVisibleRegion(optional ImageDetails options = {});
@@ -1300,19 +1302,6 @@ dictionary ClearDataTypeSet {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>getZoom()</dfn>
-  method steps are:
-
-  1. Let |resultPromise| be a new [=promise=].
-  1. Return |resultPromise| and run the remaining steps [=in parallel=].
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject=]
-      |resultPromise| with a {{TypeError}} and abort these steps.
-  1. Let |zoomFactor| be the current zoom setting for the embedded content.
-  1. Then, [=resolve=] |resultPromise| with |zoomFactor|.
-
-</div>
-
-<div algorithm>
   The <dfn method for=HTMLControlledFrameElement>isAudioMuted()</dfn>
   method steps are:
 
@@ -1335,16 +1324,189 @@ dictionary ClearDataTypeSet {
 
 </div>
 
-<div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn>
-  method steps are:
+<!-- ====================================================================== -->
+### Zoom ### {#api-config-zoom}
+<!-- ====================================================================== -->
 
-  1. Let |resultPromise| be a new [=promise=].
-  1. Return |resultPromise| and run the remaining steps [=in parallel=].
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject=]
-      |resultPromise| with a {{TypeError}} and abort these steps.
-  1. Change  the zoom for the embedded content to be |zoomFactor|.
-  1. Then, [=resolve=] |resultPromise|.
+<xmp class="idl">
+
+enum ZoomMode {
+  "per-origin",
+  "per-view",
+  "disabled"
+};
+
+</xmp>
+
+The user agent holds a <dfn>Controlled Frame zoom map</dfn> which is a [=/map=] whose [=map/keys=] are [=tuples=], and [=map/values=] are [=floats=].
+
+Each {{HTMLControlledFrameElement}} holds a {{ZoomMode}} <dfn for=HTMLControlledFrameElement>zoomMode</dfn>, which is defaulted to {{ZoomMode/per-origin}}, but can have the following values:
+
+      : {{ZoomMode/per-origin}}
+      :: Zoom changes will persist in the embedded document's [=Document/origin=], i.e. all other {{HTMLControlledFrameElement}} in the same {{HTMLControlledFrameElement/partition}} that are navigated to that same [=/origin=] will be zoomed as well.
+
+      : {{ZoomMode/per-view}}
+      :: Zoom changes only take effect in this {{HTMLControlledFrameElement}}, and zoom changes in other {{HTMLControlledFrameElement}} will not affect the zooming of this {{HTMLControlledFrameElement}}. 
+
+      : {{ZoomMode/disabled}}
+      :: Disables all zooming in the {{HTMLControlledFrameElement}}. The content will revert to the default zoom level, and all attempted zoom changes will be ignored.
+
+Each {{HTMLControlledFrameElement}} holds a float number <dfn>currentZoom</dfn>, initially set to 1.0f.
+
+How <dfn data-lt='apply zoom level'>zoom level is applied</dfn> to a [=/document=] given [=float=] <var ignore=''>zoomLevel</var> is specific to the implementation.
+
+<div algorithm>
+
+To <dfn>get the per-origin zoom level</dfn>, given {{HTMLControlledFrameElement}} |e|, run the following steps:
+
+1. Let |result| be a float initially set to 1.0f.
+
+1. Let |key| be the result of [=obtaining a Controlled Frame storage key=] given the [=environment=] associated |e|'s [=embedded navigable=]'s [=navigable/active document=]'s [=current settings object=].
+
+1. If [=Controlled Frame zoom map=][|key|] [=map/exists=], set |result| to the result of [=map/get the value=] of [=Controlled Frame zoom map=] given key |key|.
+
+1. Return |result|.
+
+</div>
+
+<div algorithm>
+
+To <dfn>set the per-origin zoom level</dfn>, given {{HTMLControlledFrameElement}} |e|, and a [=float=] |zoomLevel|, run the following steps:
+
+1. Let |key| be the result of [=obtaining a Controlled Frame storage key=] given the [=environment=] associated |e|'s [=embedded navigable=]'s [=navigable/active document=]'s [=current settings object=].
+
+1. [=map/Set the value=] of [=Controlled Frame zoom map=] given key |key| and value |zoomLevel|.
+
+</div>
+
+
+<div algorithm>
+
+To determine whether <dfn>current document has a per-origin zoom level</dfn>, given {{HTMLControlledFrameElement}} |e|, run the following steps:
+
+1. Let |key| be the result of [=obtaining a Controlled Frame storage key=] given the [=environment=] associated |e|'s [=embedded navigable=]'s [=navigable/active document=]'s [=current settings object=].
+
+1. If [=Controlled Frame zoom map=][|key|] [=map/exist=], return true.
+
+1. Return false.
+
+</div>
+
+<div algorithm>
+
+The <dfn method for=HTMLControlledFrameElement>getZoomMode()</dfn> method steps are:
+
+1. Let |p| be a new [=promise=].
+
+1. Return |p| and run the remaining steps [=in parallel=]:
+
+      1. Resolve |p| with [=this=]'s [=HTMLControlledFrameElement/zoomMode=].
+
+</div>
+
+<div algorithm>
+
+The <dfn method for=HTMLControlledFrameElement>setZoomMode(|zoomMode|)</dfn> method steps are:
+
+1. Let |p| be a new [=promise=].
+
+1. Return |p| and run the remaining steps [=in parallel=]:
+
+      1. Let |currentZoomMode| be the result of {{HTMLControlledFrameElement/getZoomMode}} given [=this=].
+
+      1. If |currentZoomMode| equals |zoomMode|, resolve |p| with undefined.
+
+      1. Set [=this=]'s [=HTMLControlledFrameElement/zoomMode=] to |zoomMode|.
+
+      1. If |zoomMode| is {{ZoomMode/per-origin}}:
+
+            1. If [=current document has a per-origin zoom level=] given [=this=] is true:
+
+                  1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+            
+                  1. Set [=this=]'s [=currentZoom=] to the result of [=get the per-origin zoom level=] given [=this=].
+
+                  1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+
+                        1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+
+                        1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+
+      1. If |zoomMode| is {{ZoomMode/disabled}}:
+
+            1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+
+            1. Set [=this=]'s [=currentZoom=] to 1.0f.
+
+            1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+
+                  1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+
+                  1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+
+      1. Resolve |p| with undefined.
+
+</div>
+
+<div algorithm>
+
+The <dfn method for=HTMLControlledFrameElement>getZoom()</dfn> method steps are:
+
+1. Let |p| be a new [=promise=].
+
+1. Return |p| and run the remaining steps [=in parallel=]:
+
+      1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
+
+      1. If |embeddedNavigable| is null, then [=reject=] |p| with a {{TypeError}} and abort these steps.
+
+      1. Resolve |p| with [=this=]'s [=currentZoom=].
+
+</div>
+
+<div algorithm>
+
+The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> method steps are:
+
+1. Let |p| be a new [=promise=].
+
+1. Return |p| and run the remaining steps [=in parallel=]:
+
+      1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
+
+      1. If |embeddedNavigable| is null, then [=reject=] |p| with a {{TypeError}} and abort these steps.
+
+      1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/disabled}}:
+
+            1. [=Reject=] |p| with a {{TypeError}} and abort these steps.
+
+      1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-origin}}:
+
+            1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+
+            1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
+
+            1. [=Set the per-origin zoom level=] given [=this=] and |zoomFactor|. <span class='XXX'>TODO:update zoom of all Controlled Frames with the same partition and origin.</span>
+
+            1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+
+                  1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+
+                  1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+
+      1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-view}}:
+
+            1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+
+            1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
+
+            1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+
+                  1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+
+                  1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+
+      1. Resolve |p| with undefined.
 
 </div>
 
@@ -1719,7 +1881,7 @@ To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e| g
 
 <div>
 
-To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and an [=map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
+To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and an [=/map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
 
 <span class=XXX>TODO: define how we {{WindowOpenDisposition}}</span>
 
@@ -1979,7 +2141,7 @@ dictionary ZoomChangeEventInit: EventInit {
 
 <div algorithm=dispatch-zoomchange>
 
-To fire a {{ZoomChangeEvent}} |e| given <{controlledframe}> element |target|, 2 float numbers |oldZoomFactor|, |newZoomFactor|:
+To <dfn data-lt='Fire a "zoomchange" event'>fire a {{ZoomChangeEvent}}</dfn> |e| given <{controlledframe}> element |target|, 2 [=float=] numbers |oldZoomFactor|, |newZoomFactor|:
 
 1. Let |zoomChange| be a new {{ZoomChange}} object.
 
@@ -1996,8 +2158,6 @@ To fire a {{ZoomChangeEvent}} |e| given <{controlledframe}> element |target|, 2 
 1. Dispatch |e| at |target|.
 
 </div>
-
-<span class='XXX'>TODO: in the setZoom method, describe how zoomchange event is fired.<span>
 
 <!-- ====================================================================== -->
 ### contentload ### {#event-contentload}
@@ -2465,7 +2625,7 @@ require double-keying on all storage belonging to a <{controlledframe}>'s
 [=embedded navigable=].
 
 <div algorithm="obtain a storage key for non-storage purposes controlled frame">
-To obtain a storage key for non-storage purposes, given an [=environment=]
+To <dfn data-lt='obtain a Controlled Frame storage key'>obtain a storage key for non-storage purposes</dfn>, given an [=environment=]
 |environment|, run these steps:
 
   1. Let |origin| be |environment|'s [=environment settings object/origin=] if
