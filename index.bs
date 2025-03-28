@@ -1595,9 +1595,9 @@ The <dfn method for=NewWindowController>attach(|controlledFrame|)</dfn> method s
 
       1. Set |controlledFrame|'s {{HTMLControlledFrameElement/src}} to {{NewWindow/targetUrl}}.
 
-      1. Set |controlledFrame|'s embedder navigable's [=navigable/active window=]'s {{Window/opener}} to [=current Controlled Frame=]'s embedder navigable's [=navigable/active WindowProxy=].
+      1. Set |controlledFrame|'s [=embedded navigable=]'s [=navigable/active window=]'s {{Window/opener}} to [=current Controlled Frame=]'s [=embedded navigable=]'s [=navigable/active WindowProxy=].
 
-      Note: This is not quite correct because the {{HTMLControlledFrameElement/src}} setter will cause the embedded navigable to [=/navigate=], which is an asynchronous operation.
+      Note: This is not quite correct because the {{HTMLControlledFrameElement/src}} setter will cause the [=embedded navigable=] to [=/navigate=], which is an asynchronous operation.
 
       <span class='XXX'>TODO: revisit this algorithm.</span>
 
