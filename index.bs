@@ -91,31 +91,38 @@ th, td {
 </pre>
 
 <pre class="anchors">
+
 spec: console; urlPrefix: https://console.spec.whatwg.org/
     type: dfn
         urlPrefix: /
-            text: printer; for: /; url: printer
+            text: logger; for: /; url: logger
+            text: formatter; for: /; url: formatter
 
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
         urlPrefix: /
             text: simple-dialogs; for: /; url: simple-dialogs
+            text: window open steps; for: /; url: window-open-steps
         urlPrefix: browsing-the-web.html
             text: apply the traverse history step; url: apply-the-traverse-history-step
             text: document state; url: she-document-state
             text: get all used history steps; url: getting-all-used-history-steps
             text: reload; url: reload
+            text: navigable; for:navigation params; url: navigation-params-navigable
             for: session history entry
                 text: step; url: she-step
                 text: URL; url: she-url
         urlPrefix: document-lifecycle.html
             text: completely loaded; url: completely-loaded
             text: stop loading; url: nav-stop
+            text: completely finish loading; url: completely-finish-loading
         urlPrefix: document-sequences.html
             text: browsing context group; url: browsing-context-group
             text: create a new browsing context and document; url: creating-a-new-browsing-context
+            text: creating a new auxiliary browsing context; url: creating-a-new-auxiliary-browsing-context
             text: current session history entry; url: nav-current-history-entry
             text: navigable; for: /; url: navigable
+            text: active WindowProxy; for: navigable; url: nav-wp
             text: initialize the navigable; url: initialize-the-navigable
             for: navigable
                 text: active session history entry; url: nav-active-history-entry
@@ -136,10 +143,18 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: embedded-content-other.html
             text: width; url: attr-dim-width
             text: height; url: attr-dim-height
+        urlPrefix: indices.html
+            text: load; url: event-load
         urlPrefix: links.html
             text: href; url: attr-hyperlink-href
         urlPrefix: nav-history-apis.html
             text: navigable; for: window; url: window-navigable
+        urlPrefix: system-state.html
+            text: associated Navigator; url: associated-navigator
+        urlPrefix: timers-and-user-prompts.html
+            text: alert; url:dom-alert
+            text: confirm; url:dom-confirm
+            text: prompt; url:dom-prompt
         urlPrefix: webappapis.html
             text: create a classic script; url: creating-a-classic-script
             text: default script fetch options; url: default-script-fetch-options
@@ -170,10 +185,14 @@ spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
         text: promise rejected; url: a-promise-rejected-with
         text: promise resolved; url: a-promise-resolved-with
 
-spec: uievents; urlPrefix https://www.w3.org/TR/uievents/
+spec: uievents; urlPrefix: https://www.w3.org/TR/uievents/
     type: dfn
         text: contextmenu; url: event-type-contextmenu
         text: click; url: event-type-click
+
+spec: geolocation; urlPrefix: https://www.w3.org/TR/geolocation/
+    type: dfn
+        text: request a position; url: dfn-request-a-position
 
 text: match pattern; type: dfn; url: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns;
 </pre>
@@ -791,7 +810,7 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       :: "`cors`"
 
   1. [=Fetch=] |request|, with [=processResponseConsumeBody=] set to the
-      following steps given a [=response=] |response| and a null, failure, or
+      following steps given a [=/response=] |response| and a null, failure, or
       [=byte sequence=] |contents|:
 
       1. If |response|'s [=response/status=] is not 200, or |contents| is null
@@ -1366,21 +1385,31 @@ The interactive events:
 
 The UI-change events:
 
-- {{onsizechanged}}
+- {{onsizechanged}} - fired when the embedded web content has been resized via autosize. Only fires if autosize is enabled. <span class='XXX'>spec autosize</span>
 
 - {{onzoomchange}}
 
 The navigation events:
 
-- {{oncontentload}}
+- {{oncontentload}} - fired when the {{Window}} associated with [=embedded navigable=] fires a [=load=] event.
 
-- {{onloadabort}}
+- {{onloadabort}} - fired when navigation has exited before completion.
 
-- {{onloadcommit}}
+- {{onloadcommit}} - fired when navigation has been completed.
 
-- {{onloadstart}}
+- {{onloadstart}} - fired when navigation (including reloads and traversals) starts, for every navigable of the embedded document, but not same document navigation.
 
-- {{onloadstop}}
+- {{onloadstop}} - fired when all pending navigations finish(either commit or abort). If a new navigation starts after, loadstop may fire again.
+
+Each {{HTMLControlledFrameElement}} has a <dfn>load counter</dfn> which is a number that is initially zero.
+
+Each time a {{onloadstart}} event fires, [=load counter=] increases by 1.
+
+Each time a {{onloadabort}} event fires, [=load counter=] decreses by 1.
+
+Each time a {{onloadcommit}} event fires, [=load counter=] decreses by 1.
+
+When [=load counter=] changes from a non-zero number to 0, [=fire a "loadstop" event=].
 
 <!-- ====================================================================== -->
 ### consolemessage ### {#event-consolemessage}
@@ -1408,9 +1437,9 @@ dictionary ConsoleMessageEventInit: EventInit {
 
 <div algorithm=dispatch-consolemessage>
 
-To fire a {{ConsoleMessageEvent}} |e| given <{controlledframe}> element |target| and the [=Printer=](|logLevel|, |args|[, options]) method arguments.
+To <dfn data-lt='fire a "consolemessage" event'>fire a {{ConsoleMessageEvent}}</dfn> |e| given <{controlledframe}> element |target|, a long |logLevel| and a DOMString |message|, run the following steps:
 
-1. Let |consoleMessage| be a new ConsoleMessage object.
+1. Let |consoleMessage| be a new {{ConsoleMessage}} object.
 
 1. Set the following fields of |consoleMessage|:
 
@@ -1418,13 +1447,11 @@ To fire a {{ConsoleMessageEvent}} |e| given <{controlledframe}> element |target|
       :: |logLevel|.
 
       : {{ConsoleMessage/message}}
-      :: The result of [=implementation-defined=] formatting to |args|.
+      :: |message|.
 
 1. Set |e|'s {{ConsoleMessageEvent/consoleMessage}} to |consoleMessage|.
 
 1. Dispatch |e| at |target|.
-
-<span class=XXX>TODO: monkey patch console [=Printer=].</span>
 
 </div>
 
@@ -1434,6 +1461,12 @@ To fire a {{ConsoleMessageEvent}} |e| given <{controlledframe}> element |target|
 
 <xmp class="idl">
 
+enum DialogType {
+  "alert",
+  "confirm",
+  "prompt"
+};
+
 [Exposed=Window, IsolatedContext]
 interface DialogController {
   undefined okay(optional DOMString response);
@@ -1442,9 +1475,9 @@ interface DialogController {
 
 [Exposed=Window, IsolatedContext]
 interface DialogMessage {
-  readonly attribute DOMString messageType;
+  readonly attribute DialogType messageType;
   readonly attribute DOMString messageText;
-  readonly attribute DialogController dialogController;
+  readonly attribute DialogController dialog;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1459,25 +1492,56 @@ dictionary DialogEventInit: EventInit {
 
 </xmp>
 
+Each {{DialogController}} has:
+
+      - A boolean <dfn for=DialogController>accept</dfn>, initially set to false.
+      
+      - A DOMString <dfn for=DialogController>response</dfn>, initally an empty string.
+
+<div>
+
+The <dfn method for=DialogController>okay(|response|)</dfn> method steps are:
+
+1. Set [=DialogController/accept=] to true.
+
+1. Set [=DialogController/response=] to |response|.
+
+</div>
+
+<div>
+
+The <dfn method for=DialogController>cancel()</dfn> method steps are:
+
+1. Set [=DialogController/accept=] to false.
+
+</div>
+
 <div algorithm=dispatch-dialog>
 
-To fire a {{DialogEvent}} |e| given <{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and message |message|.
+To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given <{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and message |message|, run the following steps:
 
-1. Let |dialogMessage| be a new DialogMessage object.
+1. Assert that |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"] equals false.
+
+1. Let |dialogMessage| be a new {{DialogMessage}} object.
+
+1. Let |dialog| be a new {{DialogController}} object.
 
 1. Set the following fields of |dialogMessage|:
 
       : {{DialogMessage/messageType}}
-      :: |dialogType|, one of "alert", "confirm", or "prompt".
+      :: |dialogType|.
 
       : {{DialogMessage/messageText}}
       :: |message|.
+
+      : {{DialogMessage/dialog}}
+      :: |dialog|.
 
 1. Set |e|'s {{DialogEvent/dialogMessage}} to |dialogMessage|.
 
 1. Dispatch |e| at |target|.
 
-<span class=XXX>TODO: monkey patch [=simple-dialogs=].</span>
+1. Return |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"] and |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/response=]"].
 
 </div>
 
@@ -1486,6 +1550,16 @@ To fire a {{DialogEvent}} |e| given <{controlledframe}> element |target|, [=simp
 <!-- ====================================================================== -->
 
 <xmp class="idl">
+
+enum WindowOpenDisposition {
+  "ignore",
+  "save_to_disk",
+  "current_tab",
+  "new_background_tab",
+  "new_foreground_tab",
+  "new_window",
+  "new_popup"
+};
 
 [Exposed=Window, IsolatedContext]
 interface NewWindowController {
@@ -1497,10 +1571,8 @@ interface NewWindowController {
 interface NewWindow {
   readonly attribute NewWindowController window;
   readonly attribute USVString targetUrl;
-  readonly attribute DOMString initialWidth;
-  readonly attribute DOMString initialHeight;
   readonly attribute DOMString name;
-  readonly attribute DOMString windowOpenDisposition;
+  readonly attribute WindowOpenDisposition windowOpenDisposition;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1515,9 +1587,59 @@ dictionary NewWindowEventInit: EventInit {
 
 </xmp>
 
+Each {{NewWindowController}} has reference to the <dfn for=NewWindowController>current Controlled Frame</dfn>.
+
+<div>
+
+The <dfn method for=NewWindowController>attach(|controlledFrame|)</dfn> method steps are:
+
+      1. Set |controlledFrame|'s {{HTMLControlledFrameElement/src}} to {{NewWindow/targetUrl}}.
+
+      1. Set |controlledFrame|'s [=embedded navigable=]'s [=navigable/active window=]'s {{Window/opener}} to [=current Controlled Frame=]'s [=embedded navigable=]'s [=navigable/active WindowProxy=].
+
+      Note: This is not quite correct because the {{HTMLControlledFrameElement/src}} setter will cause the [=embedded navigable=] to [=/navigate=], which is an asynchronous operation.
+
+      <span class='XXX'>TODO: revisit this algorithm.</span>
+
+</div>
+
+<div>
+
+The <dfn method for=NewWindowController>discard()</dfn> method steps are:
+
+1. Do nothing.
+
+</div>
+
 <div algorithm=dispatch-newwindow>
 
-<span class=XXX>TODO:.</span>
+To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e| given <{controlledframe}> element |target|, string |url| (input of [=window open steps=]), string |target| (input of [=window open steps=]), and WindowOpenDisposition |windowOpenDisposition|, run the following steps:
+
+1. Let |newWindow| be a new {{NewWindow}} object.
+
+1. Set the following fields of |newWindow|:
+
+      : {{NewWindow/targetUrl}}
+      :: |url|
+
+      : {{NewWindow/name}}
+      :: |target|.
+
+      : {{NewWindow/windowOpenDisposition}}
+      :: |windowOpenDisposition|
+
+
+1. Set |e|'s {{NewWindowEvent/newWindow}} to |newWindow|.
+
+1. Dispatch |e| at |target|.
+
+</div>
+
+<div>
+
+To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and an [=map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
+
+<span class=XXX>TODO: define how we {{WindowOpenDisposition}}</span>
 
 </div>
 
@@ -1527,6 +1649,16 @@ dictionary NewWindowEventInit: EventInit {
 
 <xmp class="idl">
 
+enum PermissionType {
+  "media",
+  "geolocation",
+  "pointerLock",
+  "download",
+  "filesystem",
+  "fullscreen",
+  "hid",
+};
+
 [Exposed=Window, IsolatedContext]
 interface PermissionRequestControllerBase {
   undefined allow();
@@ -1534,8 +1666,46 @@ interface PermissionRequestControllerBase {
 };
 
 [Exposed=Window, IsolatedContext]
+interface MediaPermissionRequestController: PermissionRequestControllerBase {
+  readonly attribute USVString url;
+};
+
+[Exposed=Window, IsolatedContext]
+interface GeolocationPermissionRequestController: PermissionRequestControllerBase {
+  readonly attribute USVString url;
+};
+
+[Exposed=Window, IsolatedContext]
+interface PointerLockPermissionRequestController: PermissionRequestControllerBase {
+  readonly attribute boolean lastUnlockedBySelf;
+  readonly attribute boolean userGesture;
+  readonly attribute USVString url;
+};
+
+[Exposed=Window, IsolatedContext]
+interface DownloadPermissionRequestController : PermissionRequestControllerBase {
+  readonly attribute DOMString requestMethod;
+  readonly attribute USVString url;
+};
+
+[Exposed=Window, IsolatedContext]
+interface FileSystemPermissionRequestController : PermissionRequestControllerBase {
+  readonly attribute USVString url;
+};
+
+[Exposed=Window, IsolatedContext]
+interface FullscreenPermissionRequestController : PermissionRequestControllerBase {
+  readonly attribute USVString origin;
+};
+
+[Exposed=Window, IsolatedContext]
+interface HidPermissionRequestController : PermissionRequestControllerBase {
+  readonly attribute USVString url;
+};
+
+[Exposed=Window, IsolatedContext]
 interface PermissionRequest {
-  readonly attribute DOMString permission;
+  readonly attribute PermissionType permission;
   readonly attribute PermissionRequestControllerBase request;
 };
 
@@ -1551,9 +1721,101 @@ dictionary PermissionRequestEventInit: EventInit {
 
 </xmp>
 
+Each {{PermissionRequestControllerBase}} has a boolean value <dfn for=PermissionRequestControllerBase>allow</dfn>, which is initially false.
+
+<div>
+
+The <dfn method for=PermissionRequestControllerBase>allow()</dfn> method steps are:
+
+1. Set [=PermissionRequestControllerBase/allow=] to true.
+
+</div>
+
+<div>
+
+The <dfn method for=PermissionRequestControllerBase>cancel()</dfn> method steps are:
+
+1. Set [=PermissionRequestControllerBase/allow=] to false.
+
+</div>
+
 <div algorithm=dispatch-permissionrequest>
 
-<span class=XXX>TODO: Different child interfaces of PermissionRequestControllerBase for different permissions</span>
+To <dfn data-lt='fire a "permissionrequest" event'>fire a {{PermissionRequestEvent}}</dfn> |e| given <{controlledframe}> element |target|, DOMString |type|, USVString |url|, and optional dictionary |options|, run the following steps:
+
+1. Let |permissionRequest| be a new {{PermissionRequest}} object.
+
+1. If |type| is "media":
+
+    1. Let |requestController| be a new {{MediaPermissionRequestController}} with the following attributes:
+
+          : {{MediaPermissionRequestController/url}}
+          :: |url|
+
+1. If |type| is "geolocation":
+
+    1. Let |requestController| be a new {{GeolocationPermissionRequestController}} with the following attributes:
+
+          : {{GeolocationPermissionRequestController/url}}
+          :: |url|
+
+1. If |type| is "pointerLock":
+
+    1. Let |requestController| be a new {{PointerLockPermissionRequestController}} with the following attributes:
+
+          : {{PointerLockPermissionRequestController/lastUnlockedBySelf}}
+          :: |options|["lastUnlockedBySelf"]
+
+          : {{PointerLockPermissionRequestController/userGesture}}
+          :: |options|["userGesture"]
+
+          : {{PointerLockPermissionRequestController/url}}
+          :: |url|
+
+1. If |type| is "download":
+
+    1. Let |requestController| be a new {{DownloadPermissionRequestController}} with the following attributes:
+
+          : {{DownloadPermissionRequestController/requestMethod}}
+          :: |options|["requestMethod"]
+
+          : {{DownloadPermissionRequestController/url}}
+          :: |url|
+
+1. If |type| is "filesystem":
+
+    1. Let |requestController| be a new {{FileSystemPermissionRequestController}} with the following attributes:
+
+          : {{FileSystemPermissionRequestController/url}}
+          :: |url|
+
+1. If |type| is "fullscreen":
+
+    1. Let |requestController| be a new {{FullscreenPermissionRequestController}} with the following attributes:
+
+          : {{FullscreenPermissionRequestController/origin}}
+          :: origin of |url|
+
+1. If |type| is "hid":
+
+    1. Let |requestController| be a new {{HidPermissionRequestController}} with the following attributes:
+
+          : {{HidPermissionRequestController/url}}
+          :: |url|
+
+1. Set the following fields of |permissionRequest|:
+
+      : {{PermissionRequest/request}}
+      :: |requestController|
+
+      : {{PermissionRequest/permission}}
+      :: |type|.
+
+1. Set |e|'s {{PermissionRequestEvent/permissionRequest}} to |permissionRequest|.
+
+1. Dispatch |e| at |target|.
+
+1. Return |e|["{{PermissionRequestEvent/permissionRequest}}"]["{{PermissionRequest/permission}}"]["[=PermissionRequestControllerBase/allow=]"].
 
 </div>
 
@@ -1565,10 +1827,10 @@ dictionary PermissionRequestEventInit: EventInit {
 
 [Exposed=Window, IsolatedContext]
 interface SizeChange {
-  readonly attribute long oldWidth;
-  readonly attribute long oldHeight;
-  readonly attribute long newWidth;
-  readonly attribute long newHeight;
+  readonly attribute unsigned long oldWidth;
+  readonly attribute unsigned long oldHeight;
+  readonly attribute unsigned long newWidth;
+  readonly attribute unsigned long newHeight;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -1585,7 +1847,27 @@ dictionary SizeChangedEventInit: EventInit {
 
 <div algorithm=dispatch-sizechanged>
 
-<span class=XXX>TODO:</span>
+To fire a {{SizeChangedEvent}} |e| given <{controlledframe}> element |target|, 4 non-negative numbers |oldWidth|, |oldHeight|, |newWidth|, |newHeight|:
+
+1. Let |sizeChange| be a new {{SizeChange}} object.
+
+1. Set the following fields of |sizeChange|:
+
+      : {{SizeChange/oldWidth}}
+      :: |oldWidth|.
+
+      : {{SizeChange/oldHeight}}
+      :: |oldHeight|.
+
+      : {{SizeChange/newWidth}}
+      :: |newWidth|.
+
+      : {{SizeChange/newHeight}}
+      :: |newHeight|.
+
+1. Set |e|'s {{SizeChangedEvent/sizeChange}} to |sizeChange|.
+
+1. Dispatch |e| at |target|.
 
 </div>
 
@@ -1615,9 +1897,25 @@ dictionary ZoomChangeEventInit: EventInit {
 
 <div algorithm=dispatch-zoomchange>
 
-<span class=XXX>TODO:</span>
+To fire a {{ZoomChangeEvent}} |e| given <{controlledframe}> element |target|, 2 float numbers |oldZoomFactor|, |newZoomFactor|:
+
+1. Let |zoomChange| be a new {{ZoomChange}} object.
+
+1. Set the following fields of |zoomChange|:
+
+      : {{ZoomChange/oldZoomFactor}}
+      :: |oldZoomFactor|.
+
+      : {{ZoomChange/newZoomFactor}}
+      :: |newZoomFactor|.
+
+1. Set |e|'s {{ZoomChangeEvent/zoomChange}} to |zoomChange|.
+
+1. Dispatch |e| at |target|.
 
 </div>
+
+<span class='XXX'>TODO: in the setZoom method, describe how zoomchange event is fired.<span>
 
 <!-- ====================================================================== -->
 ### contentload ### {#event-contentload}
@@ -1637,7 +1935,9 @@ dictionary ContentLoadEventInit: EventInit {
 
 <div algorithm=dispatch-contentload>
 
-<span class=XXX>TODO:</span>
+To <dfn data-lt='fire a "contentload" event'>fire a {{ContentLoadEvent}}</dfn> |e| given <{controlledframe}> element |target|, run the following steps:
+
+1. Dispatch |e| at |target|.
 
 </div>
 
@@ -1660,6 +1960,13 @@ interface LoadAbortInfo : LoadInfo{
 };
 
 [Exposed=Window, IsolatedContext]
+interface LoadRedirectInfo{
+  readonly attribute USVString oldUrl;
+  readonly attribute USVString newUrl;
+  readonly attribute boolean isTopLevel;
+};
+
+[Exposed=Window, IsolatedContext]
 interface LoadAbortEvent : Event {
   constructor(DOMString type, optional LoadAbortEventInit eventInitDict = {});
   readonly attribute LoadAbortInfo loadAbortInfo;
@@ -1673,7 +1980,25 @@ dictionary LoadAbortEventInit: EventInit {
 
 <div algorithm=dispatch-loadabort>
 
-<span class=XXX>TODO:</span>
+To fire a {{LoadAbortEvent}} |e| given <{controlledframe}> element |target|, a USVString |url|, a boolean |isTopLevel|, a long |code|, and a DOMString |reason|, run the following steps:
+
+1. Let |info| be a new {{LoadAbortInfo}} with the following attributes:
+
+      : {{LoadInfo/url}}
+      :: |url|
+
+      : {{LoadInfo/isTopLevel}}
+      :: |isTopLevel|
+
+      : {{LoadAbortInfo/code}}
+      :: |code|
+
+      : {{LoadAbortInfo/reason}}
+      :: |reason|
+
+1. Set |e|'s {{LoadAbortEvent/loadAbortInfo}} to |info|.
+
+1. Dispatch |e| at |target|.
 
 </div>
 
@@ -1697,7 +2022,19 @@ dictionary LoadCommitEventInit: EventInit {
 
 <div algorithm=dispatch-loadcommit>
 
-<span class=XXX>TODO:</span>
+To fire a {{LoadCommitEvent}} |e| given <{controlledframe}> element |target|, a USVString |url|, and a boolean |isTopLevel|, run the following steps:
+
+1. Let |info| be a new {{LoadInfo}} with the following attributes:
+
+      : {{LoadInfo/url}}
+      :: |url|
+
+      : {{LoadInfo/isTopLevel}}
+      :: |isTopLevel|
+
+1. Set |e|'s {{LoadCommitEvent/loadInfo}} to |info|.
+
+1. Dispatch |e| at |target|.
 
 </div>
 
@@ -1721,7 +2058,19 @@ dictionary LoadStartEventInit: EventInit {
 
 <div algorithm=dispatch-loadstart>
 
-<span class=XXX>TODO:</span>
+To fire a {{LoadStartEvent}} |e| given <{controlledframe}> element |target|, a USVString |url|, and a boolean |isTopLevel|, run the following steps:
+
+1. Let |info| be a new {{LoadInfo}} with the following attributes:
+
+      : {{LoadInfo/url}}
+      :: |url|
+
+      : {{LoadInfo/isTopLevel}}
+      :: |isTopLevel|
+
+1. Set |e|'s {{LoadStartEvent/loadInfo}} to |info|.
+
+1. Dispatch |e| at |target|.
 
 </div>
 
@@ -1743,10 +2092,210 @@ dictionary LoadStopEventInit: EventInit {
 
 <div algorithm=dispatch-loadstop>
 
-<span class=XXX>TODO:</span>
+To <dfn data-lt='fire a "loadstop" event'>fire a {{LoadStopEvent}}</dfn> |e| given <{controlledframe}> element |target|, run the following steps:
+
+1. [=Dispatch=] |e| at |target|.
 
 </div>
 
+<!-- ====================================================================== -->
+### loadredirect ### {#event-loadredirect}
+<!-- ====================================================================== -->
+
+<xmp class="idl">
+
+[Exposed=Window, IsolatedContext]
+interface LoadRedirectEvent : Event {
+  constructor(DOMString type, optional LoadRedirectEventInit eventInitDict = {});
+  readonly attribute LoadRedirectInfo loadRedirectInfo;
+};
+
+dictionary LoadRedirectEventInit: EventInit {
+  LoadRedirectInfo? loadRedirectInfo;
+};
+
+</xmp>
+
+<div algorithm=dispatch-loadredirect>
+
+To <dfn data-lt='fire a "loadredirect" event'>fire a {{LoadRedirectEvent}}</dfn> |e| given <{controlledframe}> element |target|, a USVString |oldUrl|, a USVString |newUrl|, and a boolean |isTopLevel|, run the following steps:
+
+1. Let |info| be a new {{LoadInfo}} with the following attributes:
+
+      : {{LoadRedirectInfo/oldUrl}}
+      :: |oldUrl|
+
+      : {{LoadRedirectInfo/newUrl}}
+      :: |newUrl|
+
+      : {{LoadRedirectInfo/isTopLevel}}
+      :: |isTopLevel|
+
+1. Set |e|'s {{LoadRedirectEvent/loadRedirectInfo}} to |info|.
+
+1. Dispatch |e| at |target|.
+
+</div>
+
+<!-- ====================================================================== -->
+### Monkey Patches ### {#events-monkey-patches}
+<!-- ====================================================================== -->
+
+#### [[HTML]] #### {#events-monkey-patches-html}
+
+For [=alert=]:
+
+4. Set |message| to the result of optionally truncating message.
+
+5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
+
+6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, [=fire a "dialog" event=] with |embedderParent|, "alert" and |message|, and return.</ins>
+
+For [=confirm=]:
+
+3. Set |message| to the result of optionally truncating message.
+
+4. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
+
+5. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, [=fire a "dialog" event=] with |embedderParent|, "confirm" and |message|, and return.</ins>
+
+For [=prompt=]:
+
+4. Set <var ignore=''>default</var> to the result of optionally truncating default.
+
+5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
+
+6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:
+      
+      1. <ins>Let [|accept|, |response|] be the result of [=fire a "dialog" event=] with |embedderParent|, "prompt" and |message|.</ins>
+
+      1. <ins>If |accept| equals false, return null.</ins>
+
+      1. <ins>Return |response|.</ins>
+
+For [=window open steps=]:
+
+14. If targetNavigable is null, then return null.
+
+15. <ins>Let |embedderParent| be <var ignore=''>sourceDocument</var>'s [=node navigable=]'s [=embedderParent=].</ins>
+
+16. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
+
+      1. <ins>Let |windowOpenDisposition| be the result of [=get window open disposition=].</ins>
+      
+      1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, <var ignore=''>url</var>, <var ignore=''>target</var>, and |windowOpenDisposition|.</ins>
+
+      1. <ins>Return null.</ins>
+
+For [=completely finish loading=]:
+
+5. Otherwise, if container is non-null, then queue an element task on the DOM manipulation task source given container to fire an event named load at container.
+
+6. <ins>Let |embedderParent| be <var ignore=''>document</var>'s [=node navigable=]'s [=embedderParent=].
+
+7. <ins> If |embedderParent| is {{HTMLControlledFrameElement}}, then [=Fire a "contentload" event=] with |embedderParent|.</ins>
+
+<div style="border: 2px solid red;">
+
+Monkey-patch for loadstart, loadabort, and loadcommit which looks like the following:
+
+1. loadstart -> at the navigation entry points: normal navigation, reloads, traversal.
+
+1. loadcommit -> at the common navigation completion point.
+
+1. loadabort -> at each early exist points of the algorithm between loadstart and loadcommit.
+
+For each of these, check whether the [=top-level traversable=] of the [=/navigable=] has an [=embedderParent=] of {{HTMLControlledFrameElement}}, if so, then fire the corresponding event with input arguments.
+
+</div>
+
+#### [[FETCH]] #### {#events-monkey-patches-redirect}
+
+For [=HTTP fetch=](loadredirect):
+
+6. If internalResponse’s status is a redirect status:
+
+      1. <ins>If |request|'s [=request/window=] |window| is a [=environment settings object=] whose [=global object=] is a {{Window}} object:</ins>
+
+            1. <ins>Let |currentNavigable| be |window|'s associated [=Window/navigable=].
+
+            1. <ins>Let |embedderParent| be |currentNavigable|'s [top-level traversable=]'s [=embedderParent=].</ins>
+
+            1. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
+
+                  1.<ins>Let |oldUrl| be |request|'s associated [=request/URL=].</ins>
+
+                  1.<ins>Let |newUrl| be |response|'s [=response/location url=].</ins>
+
+                  1.<ins>Let |isTopLevel| be false, if |currentNavigable| has a null [=navigable/parent=] set |isTopLevel| to true.
+
+                  1.<ins>[=Fire a "loadredirect" event=] with |embedderParent|, |oldUrl|, |newUrl|, and |isTopLevel|.</ins>
+
+#### [[Permissions]] #### {#events-monkey-patches-permissions}
+
+Define new algorithm:
+
+<div>
+
+To determine if a [=/Document=] |document| is <dfn data-lt='allowed by embedder to use'>allowed by embedder to use a permission</dfn> given DOMString |permission|, and optional dictionary |options|, run the following steps:
+
+1. Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].
+
+1. If |embedderParent| is not {{HTMLControlledFrameElement}}, return true.
+
+1. Return the result of [=firing a "permissionrequest" event=] with |embedderParent|, |permission|, |document|'s [=Document/URL=], and |options|.
+
+</div>
+
+For [=request a position=] (geolocation):
+
+3. If |document| is not allowed to use the "geolocation" feature:
+
+      1. If watchId was passed, remove watchId from watchIDs.
+
+      2. Call back with error passing errorCallback and PERMISSION_DENIED.
+
+      3. Terminate this algorithm.
+
+4. <ins>If |document| is not [=allowed by embedder to use=] the "geolocation" feature:</ins>
+
+      1. <ins>If watchId was passed, remove watchId from watchIDs.</ins>
+
+      1. <ins>Call back with error passing errorCallback and PERMISSION_DENIED.</ins>
+
+      1. <ins>Terminate this algorithm.</ins>
+
+5. <ins>Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].</ins>
+
+6. <ins>If |embedderParent| is {{HTMLControlledFrameElement}}:</ins>
+
+      1. Let |nodeDocument| be |embedderParent|'s [=node document=].
+
+      1. <ins>If |nodeDocument| is null:</ins>
+
+            1. <ins>If watchId was passed, remove watchId from watchIDs.</ins>
+
+            1. <ins>Call back with error passing errorCallback and PERMISSION_DENIED.</ins>
+
+            1. <ins>Terminate this algorithm.</ins>
+
+      1. <ins>Let |embedderNavigator| be the [=associated Navigator=] of |nodeDocument|'s [=global object=].
+
+      1. <ins>Let |embedderGeolocation| be the {{Navigator/geolocation}} of |embedderNavigator|.
+
+      1. <ins>Return the result of [=request a position=] with |embedderGeolocation|, <var ignore=''>successCallback</var>, <var ignore=''>errorCallback</var>, <var ignore=''>options</var>, and <var ignore=''>whatchId</var>.</ins>
+
+<span class='XXX'>TODO: patch other permission request sites similar to geolocation.</span>
+
+#### [[Console]] #### {#events-monkey-patches-console}
+
+For [=Logger=]:
+
+1. Otherwise, perform Printer(|logLevel|, [=Formatter=](|args|)).
+
+1. <ins>[=Fire a "consolemessage" event=] with |logLevel|, [=Formatter=](|args|).</ins>
+
+Note: Console by default does not have association with document so we cannot track the associated {{HTMLControlledFrameElement}}.
 
 <!-- ====================================================================== -->
 ## Integration with other specifications ## {#api-integration-with-other-specifications}
@@ -2402,7 +2951,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process headersReceived events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "headersReceived", and |request|.
@@ -2441,7 +2990,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process authRequired events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "authRequired", and |request|.
@@ -2541,7 +3090,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process beforeRedirect events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "beforeRedirect", and |request|.
@@ -2573,7 +3122,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process responseStarted events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "responseStarted", and |request|.
@@ -2598,7 +3147,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process completed events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "completed", and |request|.
@@ -2623,7 +3172,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>process errorOccurred events</dfn> given a [=request=] |request|
-  and a [=response=] |response|, run the following steps:
+  and a [=/response=] |response|, run the following steps:
 
   1. Let |handlers| be the result of calling [=lookup registered WebRequest
       handler configs=] given "errorOccurred", and |request|.
@@ -2642,7 +3191,7 @@ Each {{WebRequestEvent}} has:
           equal to false.
 
       1. Set |handler|'s {{WebRequestErrorOccurredDetails/error}} field to an
-          implementation-defined error message describing the error in
+          [=implementation-defined=] error message describing the error in
           |response|.
 
       1. Call |handler|[[=WebRequest handler config/handler=]] given |details|
@@ -2731,7 +3280,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a {{WebRequestResponseEventDetails}} object</dfn> given a
-  [=request=] |request|, a [=response=] |response|, a [=boolean=]
+  [=request=] |request|, a [=/response=] |response|, a [=boolean=]
   |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
   run the following steps:
 
@@ -2758,7 +3307,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a {{WebRequestResponseWithIpEventDetails}} object</dfn> given a
-  [=request=] |request|, a [=response=] |response|,
+  [=request=] |request|, a [=/response=] |response|,
   a [=boolean=] |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
   run the following steps:
 
@@ -2858,7 +3407,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a redirect response</dfn> given a [=string=] |redirectUrl|,
-  return a [=response=] with the following fields:
+  return a [=/response=] with the following fields:
 
   : [=response/status=]
   :: 301
