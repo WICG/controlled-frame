@@ -141,6 +141,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: dom interface; url: concept-element-dom
             text: represents; url: represents
             text: accessibility considerations; url: concept-element-accessibility-considerations
+            text: update the current document readiness; url: update-the-current-document-readiness
         urlPrefix: embedded-content.html
             text: src; url: attr-source-src
         urlPrefix: embedded-content-other.html
@@ -214,6 +215,7 @@ spec:html; type:dfn; for:/; text:browsing context
 spec:html; type:dfn; for:/; text:global object
 spec:html; type:dfn; for:/; text:top-level traversable
 spec:html; type:dfn; for:/; text:traversable navigable
+spec:html; type:event; text:readystatechange
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; text:list
 spec:infra; type:dfn; text:byte sequence
@@ -1039,7 +1041,12 @@ implementation of this isolation that can be implemented by all browsers.
       |scriptSource|, |document|'s [=relevant settings object=], |document|'s
       [=Document/URL=], and the [=default script fetch options=].
 
-  1. Return the result of [=running a classic script=] given |script|.
+  1. Let |taskSource| be the [=DOM manipulation task source=] of |document|'s
+      [=global object=].
+
+  1. [=Queue a global task=] on |taskSource| that will run the following step:
+
+      1. Return the result of [=running a classic script=] given |script|.
 
 </div>
 
@@ -1881,7 +1888,7 @@ To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e| g
 
 <div>
 
-To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and an [=/map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
+To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and a [=/map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
 
 <span class=XXX>TODO: define how we {{WindowOpenDisposition}}</span>
 
@@ -2575,8 +2582,23 @@ monkey patched as follows:
 
     1. <ins>Increment |topLevelTraversable|'s [=navigable/next frameId=].</ins>
 
-<span class=XXX>TODO: Monkeypatch in calls to the [=inject content scripts into
-a document=] algorithm.</span>
+The [=update the current document readiness=] for {{Document}} |document| to
+|readinessValue| algorithm is monkey patched as follows:
+
+  4. <ins>Let |runAt| be the result of applying the following mapping to
+      |readinessValue|:
+
+      : "`loading`"
+      :: "{{RunAt/document-start}}"
+      : "`interactive`"
+      :: "{{RunAt/document-end}}"
+      : "`complete`"
+      :: "{{RunAt/document-idle}}"</ins>
+
+  5. <ins>[=Inject content scripts into a document=] given |document| and
+      |runAt|.</ins>
+
+  6. [=Fire an event=] named {{readystatechange}} at |document|.
 
 #### [[FETCH]] #### {#api-monkey-patches-fetch}
 
