@@ -297,11 +297,11 @@ interface HTMLControlledFrameElement : HTMLElement {
     readonly attribute WebRequest request;
 
     // Navigation methods.
-    Promise<undefined> back();
+    Promise<boolean> back();
     boolean canGoBack();
     boolean canGoForward();
-    Promise<undefined> forward();
-    Promise<undefined> go(long relativeIndex);
+    Promise<boolean> forward();
+    Promise<boolean> go(long relativeIndex);
     undefined reload();
     undefined stop();
 
@@ -566,7 +566,9 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
     traversable navigable</a> in the Controlled Frame.
 
-    If there is no previous page, does nothing.
+    Returns a promise that resolves to true if the page was successfully
+    navigated back, or false if the navigation failed or there was no previous
+    step.
 
   : {{HTMLControlledFrameElement/canGoBack()|canGoBack}}()
 
@@ -587,7 +589,9 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
     traversable navigable</a> in the Controlled Frame.
 
-    If there is no next page, does nothing.
+    Returns a promise that resolves to true if the page was successfully
+    navigated forward, or false if the navigation failed or there was no next
+    step.
 
   : {{HTMLControlledFrameElement/go()|go}}()
 
@@ -603,7 +607,9 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
     A zero relative index will reload the current page.
 
-    If the relative index is out of range, does nothing.
+    Returns a promise that resolves to true if the page was successfully
+    navigated, or false if the navigation failed or the provided relative index
+    was out of range.
 
   : {{HTMLControlledFrameElement/reload()|reload}}()
 
@@ -639,12 +645,12 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
           for |embeddedNavigable|.
 
       1. Let |currentStepIndex| be the index of |embeddedNavigable|'s
-          [=current session history step=] wihin |allSteps|.
+          [=current session history step=] within |allSteps|.
 
       1. Let |targetStepIndex| be |currentStepIndex| plus |delta|.
 
-      1. If |allSteps|[|targetStepIndex|] does not [=list/exist=], then abort
-          these steps.
+      1. If |allSteps|[|targetStepIndex|] does not [=list/exist=], then
+          [=resolve=] |resultPromise| with false and abort these steps.
 
       1. Let |result| be the result of [=applying the traverse history step=]
           |allSteps|[|targetStepIndex|] to |embeddedNavigable| given a
@@ -1362,7 +1368,7 @@ Each {{HTMLControlledFrameElement}} holds a {{ZoomMode}} <dfn for=HTMLControlled
       :: Zoom changes will persist in the embedded document's [=Document/origin=], i.e. all other {{HTMLControlledFrameElement}} in the same {{HTMLControlledFrameElement/partition}} that are navigated to that same [=/origin=] will be zoomed as well.
 
       : {{ZoomMode/per-view}}
-      :: Zoom changes only take effect in this {{HTMLControlledFrameElement}}, and zoom changes in other {{HTMLControlledFrameElement}} will not affect the zooming of this {{HTMLControlledFrameElement}}. 
+      :: Zoom changes only take effect in this {{HTMLControlledFrameElement}}, and zoom changes in other {{HTMLControlledFrameElement}} will not affect the zooming of this {{HTMLControlledFrameElement}}.
 
       : {{ZoomMode/disabled}}
       :: Disables all zooming in the {{HTMLControlledFrameElement}}. The content will revert to the default zoom level, and all attempted zoom changes will be ignored.
@@ -1439,7 +1445,7 @@ The <dfn method for=HTMLControlledFrameElement>setZoomMode(|zoomMode|)</dfn> met
             1. If [=current document has a per-origin zoom level=] given [=this=] is true:
 
                   1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
-            
+
                   1. Set [=this=]'s [=currentZoom=] to the result of [=get the per-origin zoom level=] given [=this=].
 
                   1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
@@ -1755,7 +1761,7 @@ dictionary DialogEventInit: EventInit {
 Each {{DialogController}} has:
 
       - A boolean <dfn for=DialogController>accept</dfn>, initially set to false.
-      
+
       - A DOMString <dfn for=DialogController>response</dfn>, initally an empty string.
 
 <div>
@@ -2424,7 +2430,7 @@ For [=prompt=]:
 5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
 
 6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:
-      
+
       1. <ins>Let [|accept|, |response|] be the result of [=fire a "dialog" event=] with |embedderParent|, "prompt" and |message|.</ins>
 
       1. <ins>If |accept| equals false, return null.</ins>
@@ -2440,7 +2446,7 @@ For [=window open steps=]:
 16. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
 
       1. <ins>Let |windowOpenDisposition| be the result of [=get window open disposition=].</ins>
-      
+
       1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, <var ignore=''>url</var>, <var ignore=''>target</var>, and |windowOpenDisposition|.</ins>
 
       1. <ins>Return null.</ins>
