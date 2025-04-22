@@ -2834,6 +2834,7 @@ dictionary UploadData {
   ArrayBuffer bytes;
   DOMString file;
 };
+
 dictionary RequestBody {
   DOMString error;
   any formData;
@@ -2870,6 +2871,7 @@ dictionary AuthChallenger {
   DOMString host;
   long port;
 };
+
 dictionary WebRequestAuthRequiredDetails : WebRequestResponseEventDetails {
   required AuthChallenger challenger;
   required boolean isProxy;
@@ -3133,17 +3135,27 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeRequest events</dfn> given a [=request=] |request|,
   run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "beforeRequest", and |request|.
+  1. Let |configs| and |blocking| be the results of calling
+      [=lookup registered WebRequest handler configs=] given "beforeRequest",
+      and |request|.
+
+  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+
+  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
 
   1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestEventDetails object=] given |request|.
 
-      1. If |request|'s [=request/body=] is not null, then:
+      1. If |config|'s [=WebRequest handler config/requestsBody=] is true and
+          |request|'s [=request/body=] is not null, then:
 
-          1. Let |requestBody| be a new {{RequestBody}}.
+          1. Let |requestBody| be an empty {{RequestBody}}.
 
           1. Let |body| be |request|'s [=request/body=].
 
@@ -3152,17 +3164,17 @@ Each {{WebRequestEvent}} has:
           1. Switch on |body|'s [=body/source=]:
 
               : [=byte sequence=]
-              :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
+              :: [=list/Append=] an {{UploadData}} with {{UploadData/bytes}}
                   equal to the serialized |body|'s [=body/source=] to
                   |requestBody|["{{RequestBody/raw}}"].
 
               : {{Blob}}
-              :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
+              :: [=list/Append=] an {{UploadData}} with {{UploadData/bytes}}
                   equal to the serialized |body|'s [=body/source=] to
                   |requestBody|["{{RequestBody/raw}}"].
 
               : {{FormData}}
-              ::  1. Let |formData| be a new {{/object}}.
+              ::  1. Let |formData| be «[]».
 
                   1. [=list/For each=] |entry| in |body|'s [=body/source=]'s
                       [=FormData/entry list=]:
@@ -3170,7 +3182,7 @@ Each {{WebRequestEvent}} has:
                       1. Switch on |entry|[1]:
 
                       : {{File}}
-                      :: [=list/Append=] a new {{UploadData}} with
+                      :: [=list/Append=] an {{UploadData}} with
                           {{UploadData/file}} equal to |entry|[1]'s
                           {{File/name}} to |requestBody|["{{RequestBody/raw}}"].
 
@@ -3182,27 +3194,41 @@ Each {{WebRequestEvent}} has:
                           1. [=list/Append=] |entry|[1] to
                               |formData|[|entry|[0]].
 
-
                   1. Set |details|["{{RequestBody/formData}}"] to |formData|.
 
           1. Set |details|["{{WebRequestBeforeRequestDetails/requestBody}}"]
               to |requestBody|.
 
-      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
-          then:
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will run the following steps:
 
           1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details|.
 
-          1. If any [=map/key=] in |result| is not [=list/contained=] in the set
-              « "cancel", "redirect" », then [=throw=] a {{TypeError}}.
+              Note: Any exceptions thrown by the handler are intentionally
+              ignored and will not affect the request.
 
-          1. Return |result|.
+          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
+              « "cancel", "redirect" », then:
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
 
-      1. Return null.
+              1. If |result|["{{BlockingResponse/redirectUrl}}"] is a
+                  [=valid URL string=] and
+                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] is
+                  undefined, then set
+                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] to
+                  |result|["{{BlockingResponse/redirectUrl}}"].
+
+          1. Decrement |pendingHandlerCount|.
+
+  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+      to equal 0, then [=queue a global task=] on the [=networking task source=]
+      of |request|'s [=request/client=]'s [=environment settings object/
+      global object=] that will continue the remaining steps of this algorithm.
+
+  1. Return |combinedResults|.
 
 </div>
 
@@ -3210,8 +3236,17 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeSendHeaders events</dfn> given a [=request=] |request|,
   run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "beforeSendHeaders", and |request|.
+  1. Let |configs| and |blocking| be the results of calling
+      [=lookup registered WebRequest handler configs=] given
+      "beforeSendHeaders", and |request|.
+
+  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+
+  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
 
   1. For each |config| in |configs|:
 
@@ -3225,21 +3260,39 @@ Each {{WebRequestEvent}} has:
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to true.
 
-      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
-          then:
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will run the following steps:
 
           1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details|.
 
-          1. If any [=map/key=] in |result| is not [=list/contained=] in the set
-              « "cancel", "requestHeaders" », then [=throw=] a {{TypeError}}.
+              Note: Any exceptions thrown by the handler are intentionally
+              ignored and will not affect the request.
 
-          1. Return |result|.
+          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
+              « "cancel", "requestHeaders" », then:
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
 
-      1. Return null.
+              1. If |result|["{{BlockingResponse/requestHeaders}}"] is a
+                  [=list=] whose [=list/size=] &gt; 0, then:
+
+                  1. Set |combinedResults|["{{BlockingResponse/requestHeaders}}"]
+                      to [] if it is not defined.
+
+                  1. [=list/Append=] the contents of
+                      |result|["{{BlockingResponse/requestHeaders}}"] to
+                      |combinedResults|["{{BlockingResponse/requestHeaders}}"].
+
+          1. Decrement |pendingHandlerCount|.
+
+  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+      to equal 0, then [=queue a global task=] on the [=networking task source=]
+      of |request|'s [=request/client=]'s [=environment settings object/
+      global object=] that will continue the remaining steps of this algorithm.
+
+  1. Return |combinedResults|.
 
 </div>
 
@@ -3249,6 +3302,10 @@ Each {{WebRequestEvent}} has:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "sendHeaders", and |request|.
+
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
 
   1. For each |config| in |configs|:
 
@@ -3262,8 +3319,9 @@ Each {{WebRequestEvent}} has:
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to true.
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will call |config|'s [=WebRequest handler
+          config/handler=] given |details|.
 
 </div>
 
@@ -3271,8 +3329,17 @@ Each {{WebRequestEvent}} has:
   To <dfn>process headersReceived events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "headersReceived", and |request|.
+  1. Let |configs| and |blocking| be the results of calling
+      [=lookup registered WebRequest handler configs=] given
+      "headersReceived", and |request|.
+
+  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+
+  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
 
   1. For each |config| in |configs|:
 
@@ -3287,22 +3354,46 @@ Each {{WebRequestEvent}} has:
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
-          then:
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will run the following steps:
 
           1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details|.
 
-          1. If any [=map/key=] in |result| is not [=list/contained=] in the set
-              « "cancel", "redirectUrl", "responseHeaders" », then [=throw=]
-              a {{TypeError}}.
+              Note: Any exceptions thrown by the handler are intentionally
+              ignored and will not affect the request.
 
-          1. Return |result|.
+          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
+              « "cancel", "redirectUrl", "responseHeaders" », then:
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
 
-      1. Return null.
+              1. If |result|["{{BlockingResponse/redirectUrl}}"] is a
+                  [=valid URL string=] and
+                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] is
+                  undefined, then set
+                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] to
+                  |result|["{{BlockingResponse/redirectUrl}}"].
+
+              1. If |result|["{{BlockingResponse/responseHeaders}}"] is a
+                  [=list=] whose [=list/size=] &gt; 0, then:
+
+                  1. Set |combinedResults|["{{BlockingResponse/responseHeaders}}"]
+                      to [] if it is not defined.
+
+                  1. [=list/Append=] the contents of
+                      |result|["{{BlockingResponse/responseHeaders}}"] to
+                      |combinedResults|["{{BlockingResponse/responseHeaders}}"].
+
+          1. Decrement |pendingHandlerCount|.
+
+  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+      to equal 0, then [=queue a global task=] on the [=networking task source=]
+      of |request|'s [=request/client=]'s [=environment settings object/
+      global object=] that will continue the remaining steps of this algorithm.
+
+  1. Return |combinedResults|.
 
 </div>
 
@@ -3310,8 +3401,9 @@ Each {{WebRequestEvent}} has:
   To <dfn>process authRequired events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "authRequired", and |request|.
+  1. Let |configs| and |blocking| be the results of calling
+      [=lookup registered WebRequest handler configs=] given
+      "authRequired", and |request|.
 
   1. Let |challenger| be an {{AuthChallenger}} with {{AuthChallenger/host}} and
       {{AuthChallenger/port}} equal to the [=url/host=] and [=url/port=] of
@@ -3339,7 +3431,15 @@ Each {{WebRequestEvent}} has:
       1. Let |realm| be the realm from |response|'s `Proxy-Authenticate` header,
           parsed as defined by the [[HTML]] specification.
 
-  1. If |scheme| is null, then return.
+  1. If |scheme| is null, then return null.
+
+  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+
+  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
 
   1. For each |config| in |configs|:
 
@@ -3354,55 +3454,59 @@ Each {{WebRequestEvent}} has:
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-          1. Set |details| {{WebRequestAuthRequiredDetails/challenger}},
-              {{WebRequestAuthRequiredDetails/isProxy}},
-              {{WebRequestAuthRequiredDetails/scheme}}, and
-              {{WebRequestAuthRequiredDetails/realm}} fields equal to
-              |challenger|, |isProxy|, |scheme|, and |realm| respectively.
+      1. Set |details|["{{WebRequestAuthRequiredDetails/challenger}}"],
+          |details|["{{WebRequestAuthRequiredDetails/isProxy}}"],
+          |details|["{{WebRequestAuthRequiredDetails/scheme}}"], and
+          |details|["{{WebRequestAuthRequiredDetails/realm}}"] fields equal
+          to |challenger|, |isProxy|, |scheme|, and |realm| respectively.
 
-      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
-          then:
-
-          1. Let |result| be the result of calling |config|'s [=WebRequest
-              handler config/handler=] given |details|.
-
-          1. Return the result of calling [=process an authRequired response=]
-              given |result|.
-
-      1. Otherwise, if |config|'s [=WebRequest handler config/asyncBlocking=]
-          flat is true, then:
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will run the following steps:
 
           1. Let |result| be null.
 
-          1. Let |callback| be a [=function=] that takes a
-              {{BlockingResponse}} |blockingResponse| argument and when
-              executed calls [=process an authRequired response=] with
-              |blockingResponse| and sets |result| equal to its return value.
+          1. If |config|'s [=WebRequest handler config/asyncBlocking=] flag is
+              true, then:
 
-          1. Let |result| be the result of calling |config|'s [=WebRequest
-              handler config/handler=] given |details| and |callback|.
+              1. Let |callback| be a [=function=] that takes a
+                  {{BlockingResponse}} |blockingResponse| argument and when
+                  executed will set |result| to |blockingResponse|.
 
-          1. Pause these steps until |callback| has been invoked.
+              1. Call |config|'s [=WebRequest handler config/handler=] given
+                  |details| and |callback|.
 
-          1. Return |result|.
+              1. Wait [=in parallel=] for |callback| to be invoked, and then
+                  continue executing these steps.
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+          1. Otherwise, set |result| to the result of calling |config|'s
+              [=WebRequest handler config/handler=] given |details|.
 
-      1. Return null.
+              Note: Any exceptions thrown by the handler are intentionally
+              ignored and will not affect the request.
 
-</div>
+          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
+              « "cancel", "authCredentials" » and |result|["{{
+              BlockingResponse/authCredentials}}"] is either undefined or a
+              dictionary [=list/containing=] two [=map/keys=] equal to
+              "username" and "password", then:
 
-<div algorithm>
-  To <dfn>process an authRequired response</dfn> given a {{BlockingResponse}}
-  |blockingResponse|, run the following steps:
+              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
 
-  1. If any [=map/key=] in |blockingResponse| is not [=list/contained=] in the
-      set « "cancel", "authCredentials" », or if |blockingResponse|
-      ["{{BlockingResponse/authCredentials}}"] does not contain two [=map/keys=]
-      equal to `"username"` and `"password"`, then [=throw=] a {{TypeError}}.
+              1. If |result|["{{BlockingResponse/authCredentials}}"] is defined
+                  and |combinedResults|["{{BlockingResponse/authCredentials}}"]
+                  is undefined, then set |combinedResults|["{{
+                  BlockingResponse/authCredentials}}"] to
+                  |result|["{{BlockingResponse/authCredentials}}"].
 
-  1. Return |blockingResponse|.
+          1. Decrement |pendingHandlerCount|.
+
+  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+      to equal 0, then [=queue a global task=] on the [=networking task source=]
+      of |request|'s [=request/client=]'s [=environment settings object/
+      global object=] that will continue the remaining steps of this algorithm.
+
+  1. Return |combinedResults|.
 
 </div>
 
@@ -3412,6 +3516,10 @@ Each {{WebRequestEvent}} has:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "beforeRedirect", and |request|.
+
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
 
   1. For each |config| in |configs|:
 
@@ -3433,8 +3541,9 @@ Each {{WebRequestEvent}} has:
           |internalResponse|'s [=location URL=] given |request|'s
           [=request/current URL=]'s [=url/fragment=].
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will call |config|'s [=WebRequest handler
+          config/handler=] given |details|.
 
 </div>
 
@@ -3445,6 +3554,10 @@ Each {{WebRequestEvent}} has:
   1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "responseStarted", and |request|.
 
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
+
   1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
@@ -3458,8 +3571,9 @@ Each {{WebRequestEvent}} has:
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will call |config|'s [=WebRequest handler
+          config/handler=] given |details|.
 
 </div>
 
@@ -3470,6 +3584,10 @@ Each {{WebRequestEvent}} has:
   1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "completed", and |request|.
 
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
+
   1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
@@ -3483,8 +3601,9 @@ Each {{WebRequestEvent}} has:
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will call |config|'s [=WebRequest handler
+          config/handler=] given |details|.
 
 </div>
 
@@ -3494,6 +3613,10 @@ Each {{WebRequestEvent}} has:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "errorOccurred", and |request|.
+
+  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
+      [=getting an environment's embedderParent=] given |request|'s
+      [=request/client=].
 
   1. For each |config| in |configs|:
 
@@ -3512,8 +3635,9 @@ Each {{WebRequestEvent}} has:
           [=implementation-defined=] error message describing the error in
           |response|.
 
-      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
-          [=in parallel=].
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embedderGlobal| that will call |config|'s [=WebRequest handler
+          config/handler=] given |details|.
 
 </div>
 
@@ -3527,7 +3651,7 @@ Each {{WebRequestEvent}} has:
       [=environment settings object/cross-origin isolated capability=], or
       false if |environmentSettingsObject| is null.
 
-  1. Let |details| be a new {{WebRequestEventDetails}} with the following
+  1. Let |details| be a {{WebRequestEventDetails}} with the following
       fields:
       : {{WebRequestEventDetails/timeStamp}}
       :: The [=coarsened shared current time=] given
@@ -3652,17 +3776,17 @@ Each {{WebRequestEvent}} has:
   a [=header list=] |fetchHeaders|, a [=boolean=] |requestsAllHeaders|, and
   a [=boolean=] |isRequest|, run the following steps:
 
-  1. Let |headers| be a an empty list of {{HttpHeader}} objects.
+  1. Let |headers| be a an empty [=list=] of {{HttpHeader}} objects.
 
   1. For each |fetchHeader| in |fetchHeaders|:
 
-      1. If each of the following conditions are true, then [=continue=]:
+      1. If all of the following conditions are true, then [=continue=]:
 
           * |isRequest| is true
           * |requestsAllHeaders| is false
           * |fetchHeader|[0] is not a [=CORS-safelisted request-header=]
 
-      1. If each of the following conditions are true, then [=continue=]:
+      1. If all of the following conditions are true, then [=continue=]:
 
           * |isRequest| is false
           * |requestsAllHeaders| is false
@@ -3675,8 +3799,8 @@ Each {{WebRequestEvent}} has:
 
       1. Let |value| be the [=isomorphic decoding=] of |fetchHeader|[1] .
 
-      1. If |value| is a [=scalar value string=], then set |header|
-          ["{{HttpHeader/value}}"] to |value|.
+      1. If |value| is a [=scalar value string=], then set |header|["{{
+          HttpHeader/value}}"] to |value|.
 
       1. Otherwise, set |header|["{{HttpHeader/binaryValue}}"] to
           |fetchHeader|[1].
@@ -3774,52 +3898,62 @@ Each {{WebRequestEvent}} has:
 
   <div algorithm>
     To <dfn>lookup registered WebRequest handler configs</dfn> given a
-    [=string=] |event name|, and a [=request=] |request|, run the
+    [=string=] |eventName|, and a [=request=] |request|, run the
     following steps:
 
     1. Let |client| be |request|'s [=request/client=].
 
-    1. If |client| is null, return an empty [=list=].
+    1. If |client| is null, return an empty [=list=] and false.
 
     1. If |client|'s corresponding [=global object=] is not a {{Window}},
-        return an empty [=list=].
+        return an empty [=list=] and false.
 
     1. Let |navigable| be the [=/navigable=] that |client|'s [=global object=]
         is within.
 
-    1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=].
+    1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=]
+        and false.
 
     1. Let |controlledFrame| be the {{HTMLControlledFrameElement}}
         corresponding to |navigable|'s [=embedderParent=].
 
-    1. Let |valid handlers| be an empty [=list=].
+    1. Let |validHandlers| be an empty [=list=].
+
+    1. Let |blocking| be false.
 
     1. Let |handlerMap| be |controlledFrame|'s
         {{HTMLControlledFrameElement/request}}'s [=WebRequest/handler map=].
 
-    1. For each |handlerConfig| in |handlerMap|[|event name|]:
+    1. For each |handlerConfig| in |handlerMap|[|eventName|]:
 
-        1. Let |filter| be |handlerConfig|'s [=WebRequest handler config/filter=]
+        1. Let |filter| be |handlerConfig|'s
+            [=WebRequest handler config/filter=].
 
-        1. Let |types| be |filter|[{{RequestFilter/types}}].
+        1. Let |types| be |filter|["{{RequestFilter/types}}"].
 
         1. If |types| is not [=list/empty=] and |types| does not
-            [=list/contain=] the result of calling [=get a request's ResourceType=]
-            given |request|, then [=iteration/continue=].
+            [=list/contain=] the result of calling [=get a request's
+            ResourceType=] given |request|, then [=iteration/continue=].
 
-        1. Let |urls| be |filter|[{{RequestFilter/urls}}].
+        1. Let |urls| be |filter|["{{RequestFilter/urls}}"].
 
-        1. Let |is valid url| be true if |urls| is [=list/empty=],
+        1. Let |isValidUrl| be true if |urls| is [=list/empty=],
             false otherwise.
 
-        1. For each |url pattern| in |urls|:
+        1. For each |urlPattern| in |urls|:
 
             1. If |request|'s [=request/URL=] [=matches a URL pattern=] given
-                |url pattern|, set |is valid url| to true.
+                |urlPattern|, set |isValidUrl| to true.
 
-        1. [=list/Append=] |handlerConfig| to |valid handlers|.
+        1. If |isValidUrl| is false, then [=iteration/continue=].
 
-    1. Return |valid handlers|.
+        1. If |handlerConfig|'s [=WebRequest handler config/blocking=] or
+            [=WebRequest handler config/asyncBlocking=] are true, then set
+            |blocking| to true.
+
+        1. [=list/Append=] |handlerConfig| to |validHandlers|.
+
+    1. Return |validHandlers| and |blocking|.
 
   </div>
 
