@@ -566,8 +566,8 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
     traversable navigable</a> in the Controlled Frame.
 
-    Returns a promise that resolves to true if the page was successfully
-    navigated back, or false if the navigation failed or there was no previous
+    Returns a promise that resolves to `true` if the page was successfully
+    navigated back, or `false` if the navigation failed or there was no previous
     step.
 
   : {{HTMLControlledFrameElement/canGoBack()|canGoBack}}()
@@ -589,8 +589,8 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable">
     traversable navigable</a> in the Controlled Frame.
 
-    Returns a promise that resolves to true if the page was successfully
-    navigated forward, or false if the navigation failed or there was no next
+    Returns a promise that resolves to `true` if the page was successfully
+    navigated forward, or `false` if the navigation failed or there was no next
     step.
 
   : {{HTMLControlledFrameElement/go()|go}}()
@@ -607,9 +607,9 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
     A zero relative index will reload the current page.
 
-    Returns a promise that resolves to true if the page was successfully
-    navigated, or false if the navigation failed or the provided relative index
-    was out of range.
+    Returns a promise that resolves to `true` if the page was successfully
+    navigated, or `false` if the navigation failed or the provided relative
+    index was out of range.
 
   : {{HTMLControlledFrameElement/reload()|reload}}()
 
@@ -626,17 +626,18 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   <{controlledframe}> |controlledframe| and an integer |delta|, run the
   following steps:
 
-  1. Let |resultPromise| be a new [=promise=].
+  1. Let |resultPromise| be [=a new promise=].
 
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
 
   1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
-  1. If |embeddedNavigable| is null, then [=resolve=] |resultPromise|
-      with false.
+  1. If |embeddedNavigable| is null, then [=resolve an embedder promise=] given
+      [=this=], |resultPromise|, and false.
 
   1. If |embeddedNavigable|'s [=active document=] is not [=fully active=],
-      then [=resolve=] |resultPromise| with false.
+      then [=resolve an embedder promise=] given [=this=], |resultPromise|,
+      and false.
 
   1. [=Append the following session history traversal steps=] to
       |embeddedNavigable|:
@@ -650,16 +651,18 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
       1. Let |targetStepIndex| be |currentStepIndex| plus |delta|.
 
       1. If |allSteps|[|targetStepIndex|] does not [=list/exist=], then
-          [=resolve=] |resultPromise| with false and abort these steps.
+          [=resolve an embedder promise=] given [=this=], |resultPromise|,
+          and false, and abort these steps.
 
       1. Let |result| be the result of [=applying the traverse history step=]
           |allSteps|[|targetStepIndex|] to |embeddedNavigable| given a
           [=user navigation involvement=] of "[=browser UI=]".
 
-      1. If |result| is not equal to "`applied`", [=resolve=] |resultPromise|
-          with false.
+      1. If |result| is not equal to "`applied`", then [=resolve an
+          embedder promise=] given [=this=], |resultPromise|, and false.
 
-      1. Otherwise, [=resolve=] |resultPromise| with true.
+      1. Otherwise, [=resolve an embedder promise=] given [=this=],
+          |resultPromise|, and true.
 
 </div>
 
@@ -740,6 +743,18 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   1. If [=this=]'s [=embedded navigable=] is null, return.
 
   1. [=Stop loading=] [=this=]'s [=embedded navigable=].
+
+</div>
+
+<div algorithm>
+  To <dfn>resolve an embedder promise</dfn> given a <{controlledframe}>
+  |controlledframe|, a [=promise=] |promise|, and a |value|, run the following
+  steps:
+
+  1. Let |global| be |controlledframe|'s [=node document=]'s [=global object=].
+
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] given
+      |global| to [=resolve=] |promise| with |value|.
 
 </div>
 
