@@ -1353,7 +1353,7 @@ Each {{HTMLControlledFrameElement}} holds a {{ZoomMode}} <dfn for=HTMLControlled
       :: Zoom changes will persist in the embedded document's [=Document/origin=], i.e. all other {{HTMLControlledFrameElement}} in the same {{HTMLControlledFrameElement/partition}} that are navigated to that same [=/origin=] will be zoomed as well.
 
       : {{ZoomMode/per-view}}
-      :: Zoom changes only take effect in this {{HTMLControlledFrameElement}}, and zoom changes in other {{HTMLControlledFrameElement}} will not affect the zooming of this {{HTMLControlledFrameElement}}. 
+      :: Zoom changes only take effect in this {{HTMLControlledFrameElement}}, and zoom changes in other {{HTMLControlledFrameElement}} will not affect the zooming of this {{HTMLControlledFrameElement}}.
 
       : {{ZoomMode/disabled}}
       :: Disables all zooming in the {{HTMLControlledFrameElement}}. The content will revert to the default zoom level, and all attempted zoom changes will be ignored.
@@ -1430,7 +1430,7 @@ The <dfn method for=HTMLControlledFrameElement>setZoomMode(|zoomMode|)</dfn> met
             1. If [=current document has a per-origin zoom level=] given [=this=] is true:
 
                   1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
-            
+
                   1. Set [=this=]'s [=currentZoom=] to the result of [=get the per-origin zoom level=] given [=this=].
 
                   1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
@@ -1746,7 +1746,7 @@ dictionary DialogEventInit: EventInit {
 Each {{DialogController}} has:
 
       - A boolean <dfn for=DialogController>accept</dfn>, initially set to false.
-      
+
       - A DOMString <dfn for=DialogController>response</dfn>, initally an empty string.
 
 <div>
@@ -2415,7 +2415,7 @@ For [=prompt=]:
 5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
 
 6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:
-      
+
       1. <ins>Let [|accept|, |response|] be the result of [=fire a "dialog" event=] with |embedderParent|, "prompt" and |message|.</ins>
 
       1. <ins>If |accept| equals false, return null.</ins>
@@ -2431,7 +2431,7 @@ For [=window open steps=]:
 16. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
 
       1. <ins>Let |windowOpenDisposition| be the result of [=get window open disposition=].</ins>
-      
+
       1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, <var ignore=''>url</var>, <var ignore=''>target</var>, and |windowOpenDisposition|.</ins>
 
       1. <ins>Return null.</ins>
@@ -3103,17 +3103,26 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeRequest events</dfn> given a [=request=] |request|,
   run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "beforeRequest", and |request|.
+  1. Let |handlers| and |blocking| be the results of calling
+      [=lookup registered WebRequest handler configs=] given "beforeRequest",
+      and |request|.
+
+  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+
+  1. Let |pendingHandlerCount| be |handler|'s [=list/size=].
+
+  1. Let |taskSource| be the result of [=getting the embedder's DOM manipulation
+      task source=] given |request|.
 
   1. For each |handler| in |handlers|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestEventDetails object=] given |request|.
 
-      1. If |request|'s [=request/body=] is not null, then:
+      1. If |handler|'s [=WebRequest handler config/requestsBody=] is true and
+          |request|'s [=request/body=] is not null, then:
 
-          1. Let |requestBody| be a new {{RequestBody}}.
+          1. Let |requestBody| be an empty {{RequestBody}}.
 
           1. Let |body| be |request|'s [=request/body=].
 
@@ -3122,17 +3131,17 @@ Each {{WebRequestEvent}} has:
           1. Switch on |body|'s [=body/source=]:
 
               : [=byte sequence=]
-              :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
+              :: [=list/Append=] an {{UploadData}} with {{UploadData/bytes}}
                   equal to the serialized |body|'s [=body/source=] to
                   |requestBody|'s {{RequestBody/raw}}.
 
               : {{Blob}}
-              :: [=list/Append=] a new {{UploadData}} with {{UploadData/bytes}}
+              :: [=list/Append=] an {{UploadData}} with {{UploadData/bytes}}
                   equal to the serialized |body|'s [=body/source=] to
                   |requestBody|'s {{RequestBody/raw}}.
 
               : {{FormData}}
-              ::  1. Let |formData| be a new {{/object}}.
+              ::  1. Let |formData| be «[]».
 
                   1. [=list/For each=] |entry| in |body|'s [=body/source=]'s
                       [=FormData/entry list=]:
@@ -3140,7 +3149,7 @@ Each {{WebRequestEvent}} has:
                       1. Switch on |entry|[1]:
 
                       : {{File}}
-                      :: [=list/Append=] a new {{UploadData}} with
+                      :: [=list/Append=] an {{UploadData}} with
                           {{UploadData/file}} equal to |entry|[1]'s
                           {{File/name}} to |requestBody|'s
                           {{RequestBody/raw}}.
@@ -3159,21 +3168,32 @@ Each {{WebRequestEvent}} has:
           1. Set |details|'s {{WebRequestBeforeRequestDetails/requestBody}}
               to |requestBody|.
 
-      1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
-          then:
+      1. [=Queue a global task=] on |taskSource| that will run the
+          following steps:
 
           1. Let |result| be the result of calling |handler|[[=WebRequest
               handler config/handler=]] given |details|.
 
-          1. If any [=map/key=] in |result| is not [=list/contained=] in the set
-              « "cancel", "redirect" », then [=throw=] a {{TypeError}}.
+              Note: Any exceptions thrown by the handler are intentionally
+              ignored and will not affect the request.
 
-          1. Return |result|.
+          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
+              « "cancel", "redirect" », then:
 
-      1. Call |handler|[[=WebRequest handler config/handler=]] given |details|
-          [=in parallel=].
+              1. If |result|["cancel"] is true, then set
+                  |combinedResults|["cancel"] to true.
 
-      1. Return null.
+              1. If |result|["redirectUrl"] is a [=valid URL string=] and
+                  |combinedResults|["redirectUrl"] is undefined, then set
+                  |combinedResults|["redirectUrl"] to |result|["redirectUrl"].
+
+          1. Decrement |pendingHandlerCount|.
+
+  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+      to equal 0, then [=queue a task=] on the [=networking task source=] that
+      will run |completionSteps| given |combinedResults|.
+
+  1. Otherwise, run |completionSteps| given |combinedResults|.
 
 </div>
 
@@ -3489,6 +3509,19 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
+  To <dfn>get the embedder's DOM manipulation task source</dfn> given a
+  [=request=] |request|, run the following steps:
+
+  1. Let |embedderParent| be the result of [=getting an environment's
+      embedderParent=] given |request|'s [=request/client=].
+
+  1. Let |embedderDocument| be |embedderParent|'s [=node document=].
+
+  1. Return |embedderDocument|'s [=DOM manipulation task source=].
+
+</div>
+
+<div algorithm>
   To <dfn>create a {{WebRequestEventDetails}} object</dfn> given a [=request=]
   |request|, run the following steps:
 
@@ -3750,20 +3783,23 @@ Each {{WebRequestEvent}} has:
 
     1. Let |client| be |request|'s [=request/client=].
 
-    1. If |client| is null, return an empty [=list=].
+    1. If |client| is null, return an empty [=list=] and false.
 
     1. If |client|'s corresponding [=global object=] is not a {{Window}},
-        return an empty [=list=].
+        return an empty [=list=] and false.
 
     1. Let |navigable| be the [=/navigable=] that |client|'s [=global object=]
         is within.
 
-    1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=].
+    1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=]
+        and false.
 
     1. Let |controlledFrame| be the {{HTMLControlledFrameElement}}
         corresponding to |navigable|'s [=embedderParent=].
 
     1. Let |valid handlers| be an empty [=list=].
+
+    1. Let |blocking| be false.
 
     1. Let |handlerMap| be |controlledFrame|'s
         {{HTMLControlledFrameElement/request}}'s [=WebRequest/handler map=].
@@ -3780,17 +3816,23 @@ Each {{WebRequestEvent}} has:
 
         1. Let |urls| be |filter|[{{RequestFilter/urls}}].
 
-        1. Let |is valid url| be true if |urls| is [=list/empty=],
+        1. Let |isValidUrl| be true if |urls| is [=list/empty=],
             false otherwise.
 
         1. For each |url pattern| in |urls|:
 
             1. If |request|'s [=request/URL=] [=matches a URL pattern=] given
-                |url pattern|, set |is valid url| to true.
+                |url pattern|, set |isValidUrl| to true.
+
+        1. If |isValidUrl| is false, then [=iteration/continue=].
+
+        1. If |handlerConfig|'s [=WebRequest handler config/blocking=] or
+            [=WebRequest handler config/asyncBlocking=] are true, then set
+            |blocking| to true.
 
         1. [=list/Append=] |handlerConfig| to |valid handlers|.
 
-    1. Return |valid handlers|.
+    1. Return |valid handlers| and |blocking|.
 
   </div>
 
