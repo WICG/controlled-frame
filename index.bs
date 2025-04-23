@@ -3133,10 +3133,10 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeRequest events</dfn> given a [=request=] |request|,
   run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "beforeRequest", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestEventDetails object=] given |request|.
@@ -3188,10 +3188,10 @@ Each {{WebRequestEvent}} has:
           1. Set |details|["{{WebRequestBeforeRequestDetails/requestBody}}"]
               to |requestBody|.
 
-      1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
+      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
           then:
 
-          1. Let |result| be the result of calling |handler|'s [=WebRequest
+          1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details|.
 
           1. If any [=map/key=] in |result| is not [=list/contained=] in the set
@@ -3199,7 +3199,7 @@ Each {{WebRequestEvent}} has:
 
           1. Return |result|.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
       1. Return null.
@@ -3210,25 +3210,25 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeSendHeaders events</dfn> given a [=request=] |request|,
   run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "beforeSendHeaders", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestEventDetails object=] given |request|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestBeforeSendHeadersDetails/requestHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |request|'s [=request/header list=], |handler|'s
+          sequence=] given |request|'s [=request/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to true.
 
-      1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
+      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
           then:
 
-          1. Let |result| be the result of calling |handler|'s [=WebRequest
+          1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details|.
 
           1. If any [=map/key=] in |result| is not [=list/contained=] in the set
@@ -3236,7 +3236,7 @@ Each {{WebRequestEvent}} has:
 
           1. Return |result|.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
       1. Return null.
@@ -3247,22 +3247,22 @@ Each {{WebRequestEvent}} has:
   To <dfn>process sendHeaders events</dfn> given a [=request=] |request|,
   run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "sendHeaders", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestEventDetails object=] given |request|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestSendHeadersDetails/requestHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |request|'s [=request/header list=], |handler|'s
+          sequence=] given |request|'s [=request/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to true.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
 </div>
@@ -3271,26 +3271,26 @@ Each {{WebRequestEvent}} has:
   To <dfn>process headersReceived events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "headersReceived", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestResponseEventDetails object=] given |request| and
           |response|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |handler|'s
+          sequence=] given |response|'s [=response/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-      1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
+      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
           then:
 
-          1. Let |result| be the result of calling |handler|'s [=WebRequest
+          1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details|.
 
           1. If any [=map/key=] in |result| is not [=list/contained=] in the set
@@ -3299,7 +3299,7 @@ Each {{WebRequestEvent}} has:
 
           1. Return |result|.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
       1. Return null.
@@ -3310,7 +3310,7 @@ Each {{WebRequestEvent}} has:
   To <dfn>process authRequired events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "authRequired", and |request|.
 
   1. Let |challenger| be an {{AuthChallenger}} with {{AuthChallenger/host}} and
@@ -3341,16 +3341,16 @@ Each {{WebRequestEvent}} has:
 
   1. If |scheme| is null, then return.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestResponseEventDetails object=] given |request| and
           |response|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |handler|'s
+          sequence=] given |response|'s [=response/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
@@ -3360,16 +3360,16 @@ Each {{WebRequestEvent}} has:
               {{WebRequestAuthRequiredDetails/realm}} fields equal to
               |challenger|, |isProxy|, |scheme|, and |realm| respectively.
 
-      1. If |handler|'s [=WebRequest handler config/blocking=] flag is true,
+      1. If |config|'s [=WebRequest handler config/blocking=] flag is true,
           then:
 
-          1. Let |result| be the result of calling |handler|'s [=WebRequest
+          1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details|.
 
           1. Return the result of calling [=process an authRequired response=]
               given |result|.
 
-      1. Otherwise, if |handler|'s [=WebRequest handler config/asyncBlocking=]
+      1. Otherwise, if |config|'s [=WebRequest handler config/asyncBlocking=]
           flat is true, then:
 
           1. Let |result| be null.
@@ -3379,14 +3379,14 @@ Each {{WebRequestEvent}} has:
               executed calls [=process an authRequired response=] with
               |blockingResponse| and sets |result| equal to its return value.
 
-          1. Let |result| be the result of calling |handler|'s [=WebRequest
+          1. Let |result| be the result of calling |config|'s [=WebRequest
               handler config/handler=] given |details| and |callback|.
 
           1. Pause these steps until |callback| has been invoked.
 
           1. Return |result|.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
       1. Return null.
@@ -3410,19 +3410,19 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeRedirect events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "beforeRedirect", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestResponseWithIpEventDetails object=] given |request| and
           |response|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |handler|'s
+          sequence=] given |response|'s [=response/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
@@ -3433,7 +3433,7 @@ Each {{WebRequestEvent}} has:
           |internalResponse|'s [=location URL=] given |request|'s
           [=request/current URL=]'s [=url/fragment=].
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
 </div>
@@ -3442,23 +3442,23 @@ Each {{WebRequestEvent}} has:
   To <dfn>process responseStarted events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "responseStarted", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestResponseWithIpEventDetails object=] given |request| and
           |response|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |handler|'s
+          sequence=] given |response|'s [=response/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
 </div>
@@ -3467,23 +3467,23 @@ Each {{WebRequestEvent}} has:
   To <dfn>process completed events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "completed", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestResponseWithIpEventDetails object=] given |request| and
           |response|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |handler|'s
+          sequence=] given |response|'s [=response/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
 </div>
@@ -3492,27 +3492,27 @@ Each {{WebRequestEvent}} has:
   To <dfn>process errorOccurred events</dfn> given a [=request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |handlers| be the result of calling [=lookup registered WebRequest
+  1. Let |configs| be the result of calling [=lookup registered WebRequest
       handler configs=] given "errorOccurred", and |request|.
 
-  1. For each |handler| in |handlers|:
+  1. For each |config| in |configs|:
 
       1. Let |details| be the result of calling [=create a
           WebRequestResponseWithIpEventDetails object=] given |request| and
           |response|.
 
-      1. If |handler|'s [=WebRequest handler config/requestsHeaders=] is true,
+      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is true,
           then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
           to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |handler|'s
+          sequence=] given |response|'s [=response/header list=], |config|'s
           [=WebRequest handler config/requestsAllHeaders=], and isRequest
           equal to false.
 
-      1. Set |handler|'s {{WebRequestErrorOccurredDetails/error}} field to an
+      1. Set |config|'s {{WebRequestErrorOccurredDetails/error}} field to an
           [=implementation-defined=] error message describing the error in
           |response|.
 
-      1. Call |handler|'s [=WebRequest handler config/handler=] given |details|
+      1. Call |config|'s [=WebRequest handler config/handler=] given |details|
           [=in parallel=].
 
 </div>
