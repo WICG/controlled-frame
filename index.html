@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="166517c6bfeb885f66bdf9bcce7d01b5ec0809de" name="revision">
+  <meta content="ab601fe6beb30bc56e3ec53e77450362c6e70e17" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -789,7 +789,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-04-23">23 April 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-04-24">24 April 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -3624,9 +3624,9 @@ it is a member of.</p>
   run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs">lookup registered WebRequest handler configs</a> given "beforeRequest", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs">lookup registered WebRequest handler configs</a> given "beforeRequest", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequesteventdetails-object" id="ref-for-create-a-webrequesteventdetails-object">create a WebRequestEventDetails object</a> given <var>request</var>.</p>
@@ -3643,10 +3643,10 @@ it is a member of.</p>
           <dl>
            <dt data-md><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#byte-sequence" id="ref-for-byte-sequence①">byte sequence</a>
            <dd data-md>
-            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append③">Append</a> a new <code class="idl"><a data-link-type="idl" href="#dictdef-uploaddata" id="ref-for-dictdef-uploaddata①">UploadData</a></code> with <code class="idl"><a data-link-type="idl" href="#dom-uploaddata-bytes" id="ref-for-dom-uploaddata-bytes">bytes</a></code> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source①">source</a> to <var>requestBody</var>’s <code class="idl"><a data-link-type="idl" href="#dom-requestbody-raw" id="ref-for-dom-requestbody-raw">raw</a></code>.</p>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append③">Append</a> a new <code class="idl"><a data-link-type="idl" href="#dictdef-uploaddata" id="ref-for-dictdef-uploaddata①">UploadData</a></code> with <code class="idl"><a data-link-type="idl" href="#dom-uploaddata-bytes" id="ref-for-dom-uploaddata-bytes">bytes</a></code> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source①">source</a> to <var>requestBody</var>["<code class="idl"><a data-link-type="idl" href="#dom-requestbody-raw" id="ref-for-dom-requestbody-raw">raw</a></code>"].</p>
            <dt data-md><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-Blob" id="ref-for-dfn-Blob">Blob</a></code>
            <dd data-md>
-            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append④">Append</a> a new <code class="idl"><a data-link-type="idl" href="#dictdef-uploaddata" id="ref-for-dictdef-uploaddata②">UploadData</a></code> with <code class="idl"><a data-link-type="idl" href="#dom-uploaddata-bytes" id="ref-for-dom-uploaddata-bytes①">bytes</a></code> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source②">source</a> to <var>requestBody</var>’s <code class="idl"><a data-link-type="idl" href="#dom-requestbody-raw" id="ref-for-dom-requestbody-raw①">raw</a></code>.</p>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append④">Append</a> a new <code class="idl"><a data-link-type="idl" href="#dictdef-uploaddata" id="ref-for-dictdef-uploaddata②">UploadData</a></code> with <code class="idl"><a data-link-type="idl" href="#dom-uploaddata-bytes" id="ref-for-dom-uploaddata-bytes①">bytes</a></code> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source②">source</a> to <var>requestBody</var>["<code class="idl"><a data-link-type="idl" href="#dom-requestbody-raw" id="ref-for-dom-requestbody-raw①">raw</a></code>"].</p>
            <dt data-md><code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#formdata" id="ref-for-formdata">FormData</a></code>
            <dd data-md>
             <ol>
@@ -3661,7 +3661,7 @@ it is a member of.</p>
               <dl>
                <dt data-md><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-file" id="ref-for-dfn-file">File</a></code>
                <dd data-md>
-                <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑤">Append</a> a new <code class="idl"><a data-link-type="idl" href="#dictdef-uploaddata" id="ref-for-dictdef-uploaddata③">UploadData</a></code> with <code class="idl"><a data-link-type="idl" href="#dom-uploaddata-file" id="ref-for-dom-uploaddata-file">file</a></code> equal to <var>entry</var>[1]'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-name" id="ref-for-dfn-name">name</a></code> to <var>requestBody</var>’s <code class="idl"><a data-link-type="idl" href="#dom-requestbody-raw" id="ref-for-dom-requestbody-raw②">raw</a></code>.</p>
+                <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑤">Append</a> a new <code class="idl"><a data-link-type="idl" href="#dictdef-uploaddata" id="ref-for-dictdef-uploaddata③">UploadData</a></code> with <code class="idl"><a data-link-type="idl" href="#dom-uploaddata-file" id="ref-for-dom-uploaddata-file">file</a></code> equal to <var>entry</var>[1]'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-name" id="ref-for-dfn-name">name</a></code> to <var>requestBody</var>["<code class="idl"><a data-link-type="idl" href="#dom-requestbody-raw" id="ref-for-dom-requestbody-raw②">raw</a></code>"].</p>
                <dt data-md><code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString①⑧">USVString</a></code>
                <dd data-md>
                 <ol>
@@ -3673,18 +3673,19 @@ it is a member of.</p>
                 </ol>
               </dl>
              <li data-md>
-              <p>Set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-requestbody-formdata" id="ref-for-dom-requestbody-formdata">formData</a></code> to <var>formData</var>.</p>
+              <p>Set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-requestbody-formdata" id="ref-for-dom-requestbody-formdata">formData</a></code>"] to <var>formData</var>.</p>
             </ol>
           </dl>
          <li data-md>
-          <p>Set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestbeforerequestdetails-requestbody" id="ref-for-dom-webrequestbeforerequestdetails-requestbody">requestBody</a></code> to <var>requestBody</var>.</p>
+          <p>Set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestbeforerequestdetails-requestbody" id="ref-for-dom-webrequestbeforerequestdetails-requestbody">requestBody</a></code>"]
+  to <var>requestBody</var>.</p>
         </ol>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking④">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking④">blocking</a> flag is true,
   then:</p>
         <ol>
          <li data-md>
-          <p>Let <var>result</var> be the result of calling <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler③">handler</a>] given <var>details</var>.</p>
+          <p>Let <var>result</var> be the result of calling <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler③">handler</a> given <var>details</var>.</p>
          <li data-md>
           <p>If any <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-key" id="ref-for-map-key">key</a> in <var>result</var> is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②③">contained</a> in the set
   « "cancel", "redirect" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①③">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③②">TypeError</a></code>.</p>
@@ -3692,7 +3693,7 @@ it is a member of.</p>
           <p>Return <var>result</var>.</p>
         </ol>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler④">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①④">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler④">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①④">in parallel</a>.</p>
        <li data-md>
         <p>Return null.</p>
       </ol>
@@ -3703,22 +3704,23 @@ it is a member of.</p>
   run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs①">lookup registered WebRequest handler configs</a> given "beforeSendHeaders", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs①">lookup registered WebRequest handler configs</a> given "beforeSendHeaders", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequesteventdetails-object" id="ref-for-create-a-webrequesteventdetails-object①">create a WebRequestEventDetails object</a> given <var>request</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑦">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestbeforesendheadersdetails-requestheaders" id="ref-for-dom-webrequestbeforesendheadersdetails-requestheaders">requestHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence">convert a header list to an HttpHeader sequence</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑨">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑦">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestbeforesendheadersdetails-requestheaders" id="ref-for-dom-webrequestbeforesendheadersdetails-requestheaders">requestHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence">convert a header list to an HttpHeader sequence</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑨">requestsAllHeaders</a>, and isRequest
   equal to true.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑤">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑤">blocking</a> flag is true,
   then:</p>
         <ol>
          <li data-md>
-          <p>Let <var>result</var> be the result of calling <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑤">handler</a>] given <var>details</var>.</p>
+          <p>Let <var>result</var> be the result of calling <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑤">handler</a> given <var>details</var>.</p>
          <li data-md>
           <p>If any <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-key" id="ref-for-map-key①">key</a> in <var>result</var> is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②④">contained</a> in the set
   « "cancel", "requestHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①④">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③③">TypeError</a></code>.</p>
@@ -3726,7 +3728,7 @@ it is a member of.</p>
           <p>Return <var>result</var>.</p>
         </ol>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑥">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑤">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑥">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑤">in parallel</a>.</p>
        <li data-md>
         <p>Return null.</p>
       </ol>
@@ -3737,18 +3739,19 @@ it is a member of.</p>
   run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs②">lookup registered WebRequest handler configs</a> given "sendHeaders", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs②">lookup registered WebRequest handler configs</a> given "sendHeaders", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequesteventdetails-object" id="ref-for-create-a-webrequesteventdetails-object②">create a WebRequestEventDetails object</a> given <var>request</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑧">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestsendheadersdetails-requestheaders" id="ref-for-dom-webrequestsendheadersdetails-requestheaders">requestHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence①">convert a header list to an HttpHeader sequence</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list①">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⓪">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑧">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestsendheadersdetails-requestheaders" id="ref-for-dom-webrequestsendheadersdetails-requestheaders">requestHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence①">convert a header list to an HttpHeader sequence</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list①">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⓪">requestsAllHeaders</a>, and isRequest
   equal to true.</p>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑦">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑥">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑦">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑥">in parallel</a>.</p>
       </ol>
     </ol>
    </div>
@@ -3756,22 +3759,23 @@ it is a member of.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-headersreceived-events">process headersReceived events</dfn> given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request④">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response①">response</a> <var>response</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs③">lookup registered WebRequest handler configs</a> given "headersReceived", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs③">lookup registered WebRequest handler configs</a> given "headersReceived", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponseeventdetails-object" id="ref-for-create-a-webrequestresponseeventdetails-object">create a WebRequestResponseEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑨">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders">responseHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence②">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①①">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑨">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders">responseHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence②">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①①">requestsAllHeaders</a>, and isRequest
   equal to false.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑥">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑥">blocking</a> flag is true,
   then:</p>
         <ol>
          <li data-md>
-          <p>Let <var>result</var> be the result of calling <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑧">handler</a>] given <var>details</var>.</p>
+          <p>Let <var>result</var> be the result of calling <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑧">handler</a> given <var>details</var>.</p>
          <li data-md>
           <p>If any <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-key" id="ref-for-map-key②">key</a> in <var>result</var> is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②⑤">contained</a> in the set
   « "cancel", "redirectUrl", "responseHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①⑤">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③④">TypeError</a></code>.</p>
@@ -3779,7 +3783,7 @@ it is a member of.</p>
           <p>Return <var>result</var>.</p>
         </ol>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑨">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑦">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑨">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑦">in parallel</a>.</p>
        <li data-md>
         <p>Return null.</p>
       </ol>
@@ -3789,7 +3793,7 @@ it is a member of.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-authrequired-events">process authRequired events</dfn> given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request⑤">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response②">response</a> <var>response</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs④">lookup registered WebRequest handler configs</a> given "authRequired", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs④">lookup registered WebRequest handler configs</a> given "authRequired", and <var>request</var>.</p>
      <li data-md>
       <p>Let <var>challenger</var> be an <code class="idl"><a data-link-type="idl" href="#dictdef-authchallenger" id="ref-for-dictdef-authchallenger①">AuthChallenger</a></code> with <code class="idl"><a data-link-type="idl" href="#dom-authchallenger-host" id="ref-for-dom-authchallenger-host">host</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-authchallenger-port" id="ref-for-dom-authchallenger-port">port</a></code> equal to the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-host" id="ref-for-concept-url-host">host</a> and <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-port" id="ref-for-concept-url-port">port</a> of <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-url" id="ref-for-concept-response-url">URL</a>.</p>
      <li data-md>
@@ -3820,29 +3824,30 @@ it is a member of.</p>
      <li data-md>
       <p>If <var>scheme</var> is null, then return.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponseeventdetails-object" id="ref-for-create-a-webrequestresponseeventdetails-object①">create a WebRequestResponseEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①⓪">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders①">responseHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence③">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list①">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①②">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①⓪">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders①">responseHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence③">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list①">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①②">requestsAllHeaders</a>, and isRequest
   equal to false.</p>
         <ol>
          <li data-md>
           <p>Set <var>details</var> <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-challenger" id="ref-for-dom-webrequestauthrequireddetails-challenger">challenger</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-isproxy" id="ref-for-dom-webrequestauthrequireddetails-isproxy">isProxy</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-scheme" id="ref-for-dom-webrequestauthrequireddetails-scheme">scheme</a></code>, and <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-realm" id="ref-for-dom-webrequestauthrequireddetails-realm">realm</a></code> fields equal to <var>challenger</var>, <var>isProxy</var>, <var>scheme</var>, and <var>realm</var> respectively.</p>
         </ol>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑦">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑦">blocking</a> flag is true,
   then:</p>
         <ol>
          <li data-md>
-          <p>Let <var>result</var> be the result of calling <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①⓪">handler</a>] given <var>details</var>.</p>
+          <p>Let <var>result</var> be the result of calling <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①⓪">handler</a> given <var>details</var>.</p>
          <li data-md>
           <p>Return the result of calling <a data-link-type="dfn" href="#process-an-authrequired-response" id="ref-for-process-an-authrequired-response">process an authRequired response</a> given <var>result</var>.</p>
         </ol>
        <li data-md>
-        <p>Otherwise, if <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-asyncblocking" id="ref-for-webrequest-handler-config-asyncblocking①">asyncBlocking</a> flat is true, then:</p>
+        <p>Otherwise, if <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-asyncblocking" id="ref-for-webrequest-handler-config-asyncblocking①">asyncBlocking</a> flat is true, then:</p>
         <ol>
          <li data-md>
           <p>Let <var>result</var> be null.</p>
@@ -3850,14 +3855,14 @@ it is a member of.</p>
           <p>Let <var>callback</var> be a <a data-link-type="dfn" href="https://drafts.csswg.org/css-syntax-3/#function" id="ref-for-function">function</a> that takes a <code class="idl"><a data-link-type="idl" href="#dictdef-blockingresponse" id="ref-for-dictdef-blockingresponse①">BlockingResponse</a></code> <var>blockingResponse</var> argument and when
   executed calls <a data-link-type="dfn" href="#process-an-authrequired-response" id="ref-for-process-an-authrequired-response①">process an authRequired response</a> with <var>blockingResponse</var> and sets <var>result</var> equal to its return value.</p>
          <li data-md>
-          <p>Let <var>result</var> be the result of calling <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①①">handler</a>] given <var>details</var> and <var>callback</var>.</p>
+          <p>Let <var>result</var> be the result of calling <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①①">handler</a> given <var>details</var> and <var>callback</var>.</p>
          <li data-md>
           <p>Pause these steps until <var>callback</var> has been invoked.</p>
          <li data-md>
           <p>Return <var>result</var>.</p>
         </ol>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①②">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑧">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①②">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑧">in parallel</a>.</p>
        <li data-md>
         <p>Return null.</p>
       </ol>
@@ -3877,22 +3882,23 @@ it is a member of.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-beforeredirect-events">process beforeRedirect events</dfn> given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request⑥">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response③">response</a> <var>response</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑤">lookup registered WebRequest handler configs</a> given "beforeRedirect", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑤">lookup registered WebRequest handler configs</a> given "beforeRedirect", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①①">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders②">responseHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence④">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list②">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①③">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①①">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders②">responseHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence④">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list②">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①③">requestsAllHeaders</a>, and isRequest
   equal to false.</p>
        <li data-md>
         <p>Let <var>internalResponse</var> be <var>response</var>, if <var>response</var> is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-filtered-response" id="ref-for-concept-filtered-response">filtered response</a>; otherwise <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-internal-response" id="ref-for-concept-internal-response">internal response</a>.</p>
        <li data-md>
-        <p>Set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestbeforeredirectdetails-redirecturl" id="ref-for-dom-webrequestbeforeredirectdetails-redirecturl">redirectUrl</a></code> to <var>internalResponse</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-location-url" id="ref-for-concept-response-location-url①">location URL</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current URL</a>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-fragment" id="ref-for-concept-url-fragment">fragment</a>.</p>
+        <p>Set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestbeforeredirectdetails-redirecturl" id="ref-for-dom-webrequestbeforeredirectdetails-redirecturl">redirectUrl</a></code>"] to <var>internalResponse</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-location-url" id="ref-for-concept-response-location-url①">location URL</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current URL</a>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-fragment" id="ref-for-concept-url-fragment">fragment</a>.</p>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①③">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑨">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①③">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑨">in parallel</a>.</p>
       </ol>
     </ol>
    </div>
@@ -3900,18 +3906,19 @@ it is a member of.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-responsestarted-events">process responseStarted events</dfn> given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request⑦">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response④">response</a> <var>response</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑥">lookup registered WebRequest handler configs</a> given "responseStarted", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑥">lookup registered WebRequest handler configs</a> given "responseStarted", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object①">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①②">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders③">responseHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑤">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list③">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①④">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①②">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders③">responseHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑤">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list③">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①④">requestsAllHeaders</a>, and isRequest
   equal to false.</p>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①④">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⓪">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①④">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⓪">in parallel</a>.</p>
       </ol>
     </ol>
    </div>
@@ -3919,18 +3926,19 @@ it is a member of.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-completed-events">process completed events</dfn> given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request⑧">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response⑤">response</a> <var>response</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑦">lookup registered WebRequest handler configs</a> given "completed", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑦">lookup registered WebRequest handler configs</a> given "completed", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object②">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①③">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders④">responseHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑥">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list④">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⑤">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①③">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders④">responseHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑥">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list④">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⑤">requestsAllHeaders</a>, and isRequest
   equal to false.</p>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①⑤">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②①">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①⑤">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②①">in parallel</a>.</p>
       </ol>
     </ol>
    </div>
@@ -3938,20 +3946,21 @@ it is a member of.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-erroroccurred-events">process errorOccurred events</dfn> given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request⑨">request</a> <var>request</var> and a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response⑥">response</a> <var>response</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>handlers</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑧">lookup registered WebRequest handler configs</a> given "errorOccurred", and <var>request</var>.</p>
+      <p>Let <var>configs</var> be the result of calling <a data-link-type="dfn" href="#lookup-registered-webrequest-handler-configs" id="ref-for-lookup-registered-webrequest-handler-configs⑧">lookup registered WebRequest handler configs</a> given "errorOccurred", and <var>request</var>.</p>
      <li data-md>
-      <p>For each <var>handler</var> in <var>handlers</var>:</p>
+      <p>For each <var>config</var> in <var>configs</var>:</p>
       <ol>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object③">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①④">requestsHeaders</a> is true,
-  then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders⑤">responseHeaders</a></code> to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑦">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list⑤">header list</a>, <var>handler</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⑥">requestsAllHeaders</a>, and isRequest
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①④">requestsHeaders</a> is true,
+  then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders⑤">responseHeaders</a></code>"]
+  to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑦">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list⑤">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⑥">requestsAllHeaders</a>, and isRequest
   equal to false.</p>
        <li data-md>
-        <p>Set <var>handler</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequesterroroccurreddetails-error" id="ref-for-dom-webrequesterroroccurreddetails-error">error</a></code> field to an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#implementation-defined" id="ref-for-implementation-defined①">implementation-defined</a> error message describing the error in <var>response</var>.</p>
+        <p>Set <var>config</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequesterroroccurreddetails-error" id="ref-for-dom-webrequesterroroccurreddetails-error">error</a></code> field to an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#implementation-defined" id="ref-for-implementation-defined①">implementation-defined</a> error message describing the error in <var>response</var>.</p>
        <li data-md>
-        <p>Call <var>handler</var>[<a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①⑥">handler</a>] given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②②">in parallel</a>.</p>
+        <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①⑥">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②②">in parallel</a>.</p>
       </ol>
     </ol>
    </div>
@@ -4051,7 +4060,7 @@ it is a member of.</p>
         <p><var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-status-message" id="ref-for-concept-response-status-message">status message</a>.</p>
       </dl>
      <li data-md>
-      <p>If <var>requestsHeaders</var> is true, then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders⑥">responseHeaders</a></code> to the result of
+      <p>If <var>requestsHeaders</var> is true, then set <var>details</var>[" <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders⑥">responseHeaders</a></code>"] to the result of
   calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑧">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list⑥">header list</a>, <var>requestsAllHeaders</var>, and isRequest
   equal to false.</p>
      <li data-md>
@@ -4066,9 +4075,9 @@ it is a member of.</p>
      <li data-md>
       <p>Let <var>details</var> be the result of <a data-link-type="dfn" href="#create-a-webrequestresponseeventdetails-object" id="ref-for-create-a-webrequestresponseeventdetails-object②">creating a WebRequestResponseEventDetails object</a> given <var>request</var>, <var>response</var>, <var>requestsHeaders</var>, and <var>requestsAllHeaders</var>.</p>
      <li data-md>
-      <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-cache-state" id="ref-for-concept-response-cache-state">cache state</a> is "local", then set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponsewithipeventdetails-fromcache" id="ref-for-dom-webrequestresponsewithipeventdetails-fromcache">fromCache</a></code> to true.</p>
+      <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-cache-state" id="ref-for-concept-response-cache-state">cache state</a> is "local", then set <var>details</var>[" <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponsewithipeventdetails-fromcache" id="ref-for-dom-webrequestresponsewithipeventdetails-fromcache">fromCache</a></code>"] to true.</p>
      <li data-md>
-      <p>Set <var>details</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponsewithipeventdetails-ip" id="ref-for-dom-webrequestresponsewithipeventdetails-ip">ip</a></code> to the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#ip-address" id="ref-for-ip-address">ip address</a> from which <var>response</var> was received if the request
+      <p>Set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponsewithipeventdetails-ip" id="ref-for-dom-webrequestresponsewithipeventdetails-ip">ip</a></code>"] to the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#ip-address" id="ref-for-ip-address">ip address</a> from which <var>response</var> was received if the request
   involved a network request.</p>
       <p><span class="XXX">The <a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a> spec currently doesn’t specify storing
   the remote IP address used when sending <var>request</var>.</span></p>
