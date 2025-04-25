@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="ab601fe6beb30bc56e3ec53e77450362c6e70e17" name="revision">
+  <meta content="ed00011c3a18a35db1f479f62fb8bb6ff08a2572" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -789,7 +789,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-04-24">24 April 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-04-25">25 April 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1203,7 +1203,7 @@ navigated back, or <code>false</code> if the navigation failed or there was no p
 step.</p>
      <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-cangoback" id="ref-for-dom-htmlcontrolledframeelement-cangoback①">canGoBack</a></code>()
      <dd data-md>
-      <p>Returns true if the current <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry" id="10bdeceb0"> current session history entry</a> is not the first one in the navigation
+      <p>Returns <code>true</code> if the current <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry" id="10bdeceb0"> current session history entry</a> is not the first one in the navigation
  history entry list. This means that there is a previous <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry"> session history entry</a> for this <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="a552f7a90"> navigable</a>.</p>
      <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-forward" id="ref-for-dom-htmlcontrolledframeelement-forward①">forward</a></code>()
      <dd data-md>
@@ -1240,11 +1240,11 @@ index was out of range.</p>
      <li data-md>
       <p>Let <var>embeddedNavigable</var> be <var>controlledframe</var>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①④">embedded navigable</a>.</p>
      <li data-md>
-      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a>, <var>resultPromise</var>, and false.</p>
+      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a>, <var>resultPromise</var>, and <code>false</code>.</p>
      <li data-md>
       <p>If <var>embeddedNavigable</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document①">active document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active" id="ref-for-fully-active">fully active</a>,
   then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧">this</a>, <var>resultPromise</var>,
-  and false.</p>
+  and <code>false</code>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#tn-append-session-history-traversal-steps" id="ref-for-tn-append-session-history-traversal-steps">Append the following session history traversal steps</a> to <var>embeddedNavigable</var>:</p>
       <ol>
@@ -1256,13 +1256,13 @@ index was out of range.</p>
         <p>Let <var>targetStepIndex</var> be <var>currentStepIndex</var> plus <var>delta</var>.</p>
        <li data-md>
         <p>If <var>allSteps</var>[<var>targetStepIndex</var>] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">exist</a>, then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨">this</a>, <var>resultPromise</var>,
-  and false, and abort these steps.</p>
+  and <code>false</code>, and abort these steps.</p>
        <li data-md>
         <p>Let <var>result</var> be the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#apply-the-traverse-history-step" id="ref-for-apply-the-traverse-history-step">applying the traverse history step</a> <var>allSteps</var>[<var>targetStepIndex</var>] to <var>embeddedNavigable</var> given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#user-navigation-involvement" id="ref-for-user-navigation-involvement">user navigation involvement</a> of "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#uni-browser-ui" id="ref-for-uni-browser-ui">browser UI</a>".</p>
        <li data-md>
-        <p>If <var>result</var> is not equal to "<code>applied</code>", then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise③">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪">this</a>, <var>resultPromise</var>, and false.</p>
+        <p>If <var>result</var> is not equal to "<code>applied</code>", then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise③">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪">this</a>, <var>resultPromise</var>, and <code>false</code>.</p>
        <li data-md>
-        <p>Otherwise, <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise④">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①">this</a>, <var>resultPromise</var>, and true.</p>
+        <p>Otherwise, <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise④">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①">this</a>, <var>resultPromise</var>, and <code>true</code>.</p>
       </ol>
     </ol>
    </div>
@@ -1273,26 +1273,26 @@ index was out of range.</p>
   Promise.</p>
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑤">embedded navigable</a> is null, then return false.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑤">embedded navigable</a> is null, then return <code>false</code>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑥">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-current-session-history-step" id="ref-for-tn-current-session-history-step①">current session history step</a> is greater than 0, return true.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑥">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-current-session-history-step" id="ref-for-tn-current-session-history-step①">current session history step</a> is greater than 0, return <code>true</code>.</p>
      <li data-md>
-      <p>Return false.</p>
+      <p>Return <code>false</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="canGoForward()" data-algorithm-for="HTMLControlledFrameElement">
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-cangoforward"><code>canGoForward()</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①④">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑦">embedded navigable</a> is null, then return false.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①④">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑦">embedded navigable</a> is null, then return <code>false</code>.</p>
      <li data-md>
       <p>Let <var>step</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑤">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑧">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-current-session-history-step" id="ref-for-tn-current-session-history-step②">current session history step</a>.</p>
      <li data-md>
       <p>Let <var>steps</var> be the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#getting-all-used-history-steps" id="ref-for-getting-all-used-history-steps①">getting all used history steps</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑥">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑨">embedded navigable</a>.</p>
      <li data-md>
-      <p>If <var>step</var>+1 is less than the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size">size</a> of <var>steps</var>, then return true.</p>
+      <p>If <var>step</var>+1 is less than the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size">size</a> of <var>steps</var>, then return <code>true</code>.</p>
      <li data-md>
-      <p>Return false.</p>
+      <p>Return <code>false</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="back()" data-algorithm-for="HTMLControlledFrameElement">
@@ -1415,7 +1415,7 @@ index was out of range.</p>
       <p>If <var>urlString</var> is not an <a data-link-type="dfn" href="https://url.spec.whatwg.org/#valid-url-string" id="ref-for-valid-url-string">valid URL string</a>, then:</p>
       <ol>
        <li data-md>
-        <p>Run <var>completionSteps</var> given 0 and false.</p>
+        <p>Run <var>completionSteps</var> given 0 and <code>false</code>.</p>
        <li data-md>
         <p>Return.</p>
       </ol>
@@ -1430,7 +1430,7 @@ index was out of range.</p>
         <p>"<code>GET</code>"</p>
        <dt data-md><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination">destination</a>
        <dd data-md>
-        <p>"<code>style</code>" if <var>isCss</var> is true, "<code>script</code>" otherwise</p>
+        <p>"<code>style</code>" if <var>isCss</var> is <code>true</code>, "<code>script</code>" otherwise</p>
        <dt data-md><a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client">client</a>
        <dd data-md>
         <p><var>controlledframe</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document④">node document</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object">relevant settings object</a></p>
@@ -1444,7 +1444,7 @@ index was out of range.</p>
       <ol>
        <li data-md>
         <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-status" id="ref-for-concept-response-status">status</a> is not 200, or <var>contents</var> is null
-  or failure, then run <var>completionSteps</var> given 0 and false.</p>
+  or failure, then run <var>completionSteps</var> given 0 and <code>false</code>.</p>
        <li data-md>
         <p>Otherwise, run <var>completionSteps</var> given <var>index</var> and <var>contents</var>.</p>
       </ol>
@@ -1454,7 +1454,7 @@ index was out of range.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="validate-and-resolve-contentscriptdetails">validate and resolve <code class="idl"><a data-link-type="idl" href="#dictdef-contentscriptdetails" id="ref-for-dictdef-contentscriptdetails①">ContentScriptDetails</a></code></dfn> given a <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe①①">controlledframe</a></code> <var>controlledframe</var> and a <code class="idl"><a data-link-type="idl" href="#dictdef-contentscriptdetails" id="ref-for-dictdef-contentscriptdetails②">ContentScriptDetails</a></code> <var>details</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>result</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise①⑥">promise</a>.</p>
+      <p>Let <var>result</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①">a new promise</a>.</p>
      <li data-md>
       <p>If <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-js" id="ref-for-dom-contentscriptdetails-js">js</a></code>"] and <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-css" id="ref-for-dom-contentscriptdetails-css">css</a></code>"] are both defined, or both
   undefined, then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject">reject</a> <var>result</var> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code> and abort
@@ -1478,18 +1478,17 @@ index was out of range.</p>
   otherwise an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list④">list</a></p>
        <dt data-md><a data-link-type="dfn" href="#content-script-config-allframes" id="ref-for-content-script-config-allframes">allFrames</a>
        <dd data-md>
-        <p><var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-allframes" id="ref-for-dom-contentscriptdetails-allframes">allFrames</a></code>"] if defined, otherwise
-  false</p>
+        <p><var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-allframes" id="ref-for-dom-contentscriptdetails-allframes">allFrames</a></code>"] if defined, otherwise <code>false</code></p>
        <dt data-md><a data-link-type="dfn" href="#content-script-config-matchaboutblank" id="ref-for-content-script-config-matchaboutblank">matchAboutBlank</a>
        <dd data-md>
         <p><var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-matchaboutblank" id="ref-for-dom-contentscriptdetails-matchaboutblank">matchAboutBlank</a></code>"] if defined,
-  otherwise false</p>
+  otherwise <code>false</code></p>
        <dt data-md><a data-link-type="dfn" href="#content-script-config-runat" id="ref-for-content-script-config-runat">runAt</a>
        <dd data-md>
         <p><var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-runat" id="ref-for-dom-contentscriptdetails-runat">runAt</a></code>"] if defined, otherwise <code class="idl"><a data-link-type="idl" href="#dom-runat-document-idle" id="ref-for-dom-runat-document-idle">document-idle</a></code></p>
       </dl>
      <li data-md>
-      <p>Let <var>isCss</var> be a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean③">boolean</a> equal to true if <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-css" id="ref-for-dom-contentscriptdetails-css①">css</a></code>"] is defined, false otherwise.</p>
+      <p>Let <var>isCss</var> be a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean③">boolean</a> equal to <code>true</code> if <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-css" id="ref-for-dom-contentscriptdetails-css①">css</a></code>"] is defined, <code>false</code> otherwise.</p>
      <li data-md>
       <p>Let <var>completionSteps</var> be the following algorithm, which takes a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑤">long</a></code> <var>index</var> and a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string⑤">string</a> or <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean④">boolean</a> <var>source</var>:</p>
       <ol>
@@ -1518,7 +1517,7 @@ index was out of range.</p>
         <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve①">Resolve</a> <var>result</var>.</p>
       </ol>
      <li data-md>
-      <p>Let <var>injectionItems</var> be <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-css" id="ref-for-dom-contentscriptdetails-css②">css</a></code>"] if <var>isCss</var> is true, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-js" id="ref-for-dom-contentscriptdetails-js①">js</a></code>"] otherwise.</p>
+      <p>Let <var>injectionItems</var> be <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-css" id="ref-for-dom-contentscriptdetails-css②">css</a></code>"] if <var>isCss</var> is <code>true</code>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-contentscriptdetails-js" id="ref-for-dom-contentscriptdetails-js①">js</a></code>"] otherwise.</p>
      <li data-md>
       <p>If <var>injectionItems</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectionitems-code" id="ref-for-dom-injectionitems-code">code</a></code>"] and <var>injectionItems</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectionitems-files" id="ref-for-dom-injectionitems-files">files</a></code>"] are both defined, or both
   undefined, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject③">reject</a> <var>result</var> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③">TypeError</a></code> and abort these steps.</p>
@@ -1548,25 +1547,25 @@ index was out of range.</p>
      To determine if a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="content-script-config-applies-to-a-document"><a data-link-type="dfn" href="#content-script-config" id="ref-for-content-script-config②">content script config</a> applies to a document</dfn> given a <a data-link-type="dfn" href="#content-script-config" id="ref-for-content-script-config③">content script config</a> <var>config</var>, a <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url" id="ref-for-concept-url">URL</a> <var>url</var>, and a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean⑤">boolean</a> <var>isTopLevel</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>If <var>isTopLevel</var> is false, and <var>config</var>’s <a data-link-type="dfn" href="#content-script-config-allframes" id="ref-for-content-script-config-allframes①">allFrames</a> is false, then return false.</p>
+      <p>If <var>isTopLevel</var> is <code>false</code>, and <var>config</var>’s <a data-link-type="dfn" href="#content-script-config-allframes" id="ref-for-content-script-config-allframes①">allFrames</a> is <code>false</code>, then return <code>false</code>.</p>
      <li data-md>
-      <p>If the result of <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlencoded-serializer" id="ref-for-concept-urlencoded-serializer">serializing</a> <var>url</var> with <a data-link-type="dfn" href="https://url.spec.whatwg.org/#url-serializer-exclude-fragment" id="ref-for-url-serializer-exclude-fragment">exclude fragment</a> equal to true is equal to
-  "about:blank", and <var>config</var>’s <a data-link-type="dfn" href="#content-script-config-matchaboutblank" id="ref-for-content-script-config-matchaboutblank①">matchAboutBlank</a> is false, then return false.</p>
+      <p>If the result of <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlencoded-serializer" id="ref-for-concept-urlencoded-serializer">serializing</a> <var>url</var> with <a data-link-type="dfn" href="https://url.spec.whatwg.org/#url-serializer-exclude-fragment" id="ref-for-url-serializer-exclude-fragment">exclude fragment</a> equal to <code>true</code> is equal to
+  "about:blank", and <var>config</var>’s <a data-link-type="dfn" href="#content-script-config-matchaboutblank" id="ref-for-content-script-config-matchaboutblank①">matchAboutBlank</a> is <code>false</code>, then return <code>false</code>.</p>
      <li data-md>
       <p>Let <var>urlString</var> be the result of <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlencoded-serializer" id="ref-for-concept-urlencoded-serializer①"> serializing</a> <var>url</var>.</p>
      <li data-md>
-      <p>Let <var>match</var> be false.</p>
+      <p>Let <var>match</var> be <code>false</code>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">For each</a> <var>pattern</var> of <var>config</var>’s <a data-link-type="dfn" href="#content-script-config-matches" id="ref-for-content-script-config-matches①">matches</a>:</p>
       <ol>
        <li data-md>
-        <p>If <var>urlString</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern">matches a URL pattern</a> <var>pattern</var>, then set <var>match</var> to true.</p>
+        <p>If <var>urlString</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern">matches a URL pattern</a> <var>pattern</var>, then set <var>match</var> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> <var>pattern</var> of <var>config</var>’s <a data-link-type="dfn" href="#content-script-config-excludematches" id="ref-for-content-script-config-excludematches①">excludeMatches</a>:</p>
       <ol>
        <li data-md>
-        <p>If <var>urlString</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern①">matches a URL pattern</a> <var>pattern</var>, then set <var>match</var> to false.</p>
+        <p>If <var>urlString</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern①">matches a URL pattern</a> <var>pattern</var>, then set <var>match</var> to <code>false</code>.</p>
       </ol>
      <li data-md>
       <p>Return <var>match</var>.</p>
@@ -1585,12 +1584,12 @@ index was out of range.</p>
      <li data-md>
       <p>Let <var>url</var> be <var>document</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url②">URL</a>.</p>
      <li data-md>
-      <p>Let <var>isTopLevel</var> be true if <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable①">node navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent①">parent</a> is null, false otherwise.</p>
+      <p>Let <var>isTopLevel</var> be <code>true</code> if <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable①">node navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent①">parent</a> is null, <code>false</code> otherwise.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> <var>config</var> of <var>controlledframe</var>’s <a data-link-type="dfn" href="#controlledframe-content-script-map" id="ref-for-controlledframe-content-script-map①">content script map</a>:</p>
       <ol>
        <li data-md>
-        <p>If the result of determining whether a <a data-link-type="dfn" href="#content-script-config-applies-to-a-document" id="ref-for-content-script-config-applies-to-a-document">content script config applies to a document</a> given <var>config</var>, <var>url</var>, and <var>isTopLevel</var> equals false,
+        <p>If the result of determining whether a <a data-link-type="dfn" href="#content-script-config-applies-to-a-document" id="ref-for-content-script-config-applies-to-a-document">content script config applies to a document</a> given <var>config</var>, <var>url</var>, and <var>isTopLevel</var> equals <code>false</code>,
   then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue">continue</a>.</p>
        <li data-md>
         <p>If <var>currentPhase</var> is equal to <code class="idl"><a data-link-type="idl" href="#dom-runat-document-start" id="ref-for-dom-runat-document-start">document-start</a></code> and <var>config</var>’s <a data-link-type="dfn" href="#content-script-config-css" id="ref-for-content-script-config-css①">css</a> is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty②">empty</a>, then:</p>
@@ -1652,7 +1651,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-addcontentscripts"><code>addContentScripts(<var>contentScriptList</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>If <var>contentScriptList</var> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty③">empty</a>, return a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise①⑦">promise</a> that is <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑤">rejected</a> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑤">TypeError</a></code>.</p>
+      <p>If <var>contentScriptList</var> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty③">empty</a>, return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise②">a new promise</a> that is <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑤">rejected</a> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑤">TypeError</a></code>.</p>
      <li data-md>
       <p>Let <var>promises</var> be an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list⑤">list</a>.</p>
      <li data-md>
@@ -1664,14 +1663,14 @@ implementation of this isolation that can be implemented by all browsers.</stron
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①">Append</a> <var>promise</var> to <var>promises</var>.</p>
       </ol>
      <li data-md>
-      <p>Return the result of calling <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⑧">Promise</a></code>.<code class="idl"><a data-link-type="idl" href="https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise.all" id="ref-for-sec-promise.all">all</a></code> given <var>promises</var>.</p>
+      <p>Return the result of calling <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⑥">Promise</a></code>.<code class="idl"><a data-link-type="idl" href="https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise.all" id="ref-for-sec-promise.all">all</a></code> given <var>promises</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="removeContentScripts(scriptNameList)" data-algorithm-for="HTMLControlledFrameElement">
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-removecontentscripts"><code>removeContentScripts(<var>scriptNameList</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>result</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise①⑨">promise</a>.</p>
+      <p>Let <var>result</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise③">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>result</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②">in parallel</a>.</p>
      <li data-md>
@@ -1694,7 +1693,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export data-lt="executeScript(details)|executeScript()|executeScript(optionaldetails)" id="dom-htmlcontrolledframeelement-executescript"><code>executeScript(optional <var>details</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>result</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②⓪">promise</a>.</p>
+      <p>Let <var>result</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise④">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>result</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>.</p>
      <li data-md>
@@ -1728,14 +1727,14 @@ implementation of this isolation that can be implemented by all browsers.</stron
      <li data-md>
       <p>If <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code①">code</a></code>"] is defined, then run <var>executionSteps</var> given 0 and <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code②">code</a></code>"].</p>
      <li data-md>
-      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item①">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑧">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file①">file</a></code>"], false, 0, and <var>executionSteps</var>.</p>
+      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item①">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑧">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file①">file</a></code>"], <code>false</code>, 0, and <var>executionSteps</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="insertCSS(optional details)" data-algorithm-for="HTMLControlledFrameElement">
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export data-lt="insertCSS(details)|insertCSS()|insertCSS(optionaldetails)" id="dom-htmlcontrolledframeelement-insertcss"><code>insertCSS(optional <var>details</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>result</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②①">promise</a>.</p>
+      <p>Let <var>result</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise⑤">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>promise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel④">in parallel</a>.</p>
      <li data-md>
@@ -1759,7 +1758,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      <li data-md>
       <p>If <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code④">code</a></code>"] is defined, then run <var>executionSteps</var> given 0 and <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code⑤">code</a></code>"].</p>
      <li data-md>
-      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item②">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③①">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file③">file</a></code>"], false, 0, and <var>executionSteps</var>.</p>
+      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item②">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③①">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file③">file</a></code>"], <code>false</code>, 0, and <var>executionSteps</var>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.4" id="api-config"><span class="secno">3.4. </span><span class="content">Configuration methods</span><a class="self-link" href="#api-config"></a></h3>
@@ -1798,7 +1797,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export data-lt="clearData(options, types)|clearData(options)|clearData()|clearData(optionaloptions, optionaltypes)" id="dom-htmlcontrolledframeelement-cleardata"><code>clearData(optional <var>options</var>, optional <var>types</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②②">promise</a>.</p>
+      <p>Let <var>resultPromise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise⑥">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>resultPromise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑤">in parallel</a>.</p>
      <li data-md>
@@ -1822,26 +1821,26 @@ implementation of this isolation that can be implemented by all browsers.</stron
        <li data-md>
         <p>Let <var>bucket</var> be <var>shelf</var>["<code>default</code>"].</p>
        <li data-md>
-        <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-filesystems" id="ref-for-dom-cleardatatypeset-filesystems">fileSystems</a></code>"] is true:</p>
+        <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-filesystems" id="ref-for-dom-cleardatatypeset-filesystems">fileSystems</a></code>"] is <code>true</code>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#empty-a-storage-bottle" id="ref-for-empty-a-storage-bottle">Empty a storage bottle</a> given <var>bucket</var>, "<code>fileSystem</code>", and <var>clearSince</var>.</p>
         </ol>
        <li data-md>
-        <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-indexeddb" id="ref-for-dom-cleardatatypeset-indexeddb">indexedDB</a></code>"] is true:</p>
+        <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-indexeddb" id="ref-for-dom-cleardatatypeset-indexeddb">indexedDB</a></code>"] is <code>true</code>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#empty-a-storage-bottle" id="ref-for-empty-a-storage-bottle①">Empty a storage bottle</a> given <var>bucket</var>, "<code>indexedDB</code>", and <var>clearSince</var>.</p>
         </ol>
        <li data-md>
-        <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-localstorage" id="ref-for-dom-cleardatatypeset-localstorage">localStorage</a></code>"] is true:</p>
+        <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-localstorage" id="ref-for-dom-cleardatatypeset-localstorage">localStorage</a></code>"] is <code>true</code>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#empty-a-storage-bottle" id="ref-for-empty-a-storage-bottle②">Empty a storage bottle</a> given <var>bucket</var>, "<code>localStorage</code>", and <var>clearSince</var>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cookies" id="ref-for-dom-cleardatatypeset-cookies">cookies</a></code>"], <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-persistentcookies" id="ref-for-dom-cleardatatypeset-persistentcookies">persistentCookies</a></code>"], or <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-sessioncookies" id="ref-for-dom-cleardatatypeset-sessioncookies">sessionCookies</a></code>"] are true, then:</p>
+      <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cookies" id="ref-for-dom-cleardatatypeset-cookies">cookies</a></code>"], <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-persistentcookies" id="ref-for-dom-cleardatatypeset-persistentcookies">persistentCookies</a></code>"], or <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-sessioncookies" id="ref-for-dom-cleardatatypeset-sessioncookies">sessionCookies</a></code>"] are <code>true</code>, then:</p>
       <p><strong class="advisement"> The <a data-link-type="biblio" href="#biblio-cookies" title="HTTP State Management Mechanism">[COOKIES]</a> specification does not support partitioning
   cookies through a mechanism like <a data-link-type="dfn" href="#storage-key" id="ref-for-storage-key">storage key</a>s. The following steps
   will clear all cookies, but the intention is to only delete cookies
@@ -1855,14 +1854,14 @@ implementation of this isolation that can be implemented by all browsers.</stron
           <p>If <var>cookie</var>’s persistent-flag is set, then:</p>
           <ol>
            <li data-md>
-            <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cookies" id="ref-for-dom-cleardatatypeset-cookies①">cookies</a></code>"] and <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-persistentcookies" id="ref-for-dom-cleardatatypeset-persistentcookies①">persistentCookies</a></code>"] are false,
+            <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cookies" id="ref-for-dom-cleardatatypeset-cookies①">cookies</a></code>"] and <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-persistentcookies" id="ref-for-dom-cleardatatypeset-persistentcookies①">persistentCookies</a></code>"] are <code>false</code>,
   then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue②">continue</a>.</p>
           </ol>
          <li data-md>
           <p>Otherwise:</p>
           <ol>
            <li data-md>
-            <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cookies" id="ref-for-dom-cleardatatypeset-cookies②">cookies</a></code>"] and <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-sessioncookies" id="ref-for-dom-cleardatatypeset-sessioncookies①">sessionCookies</a></code>"] are false,
+            <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cookies" id="ref-for-dom-cleardatatypeset-cookies②">cookies</a></code>"] and <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-sessioncookies" id="ref-for-dom-cleardatatypeset-sessioncookies①">sessionCookies</a></code>"] are <code>false</code>,
   then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue③">continue</a>.</p>
           </ol>
          <li data-md>
@@ -1873,7 +1872,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
         </ol>
       </ol>
      <li data-md>
-      <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cache" id="ref-for-dom-cleardatatypeset-cache">cache</a></code>"] is true, then:</p>
+      <p>If <var>types</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardatatypeset-cache" id="ref-for-dom-cleardatatypeset-cache">cache</a></code>"] is <code>true</code>, then:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>storageKey</var> → <var>cache</var> that the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent" id="ref-for-user-agent⑤">user agent</a> manages: <a data-link-type="biblio" href="#biblio-http-caching" title="HTTP Caching">[HTTP-CACHING]</a></p>
@@ -1893,7 +1892,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-getaudiostate"><code>getAudioState()</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②③">promise</a>.</p>
+      <p>Let <var>resultPromise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise⑦">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>resultPromise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑥">in parallel</a>.</p>
      <li data-md>
@@ -1908,7 +1907,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-isaudiomuted"><code>isAudioMuted()</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②④">promise</a>.</p>
+      <p>Let <var>resultPromise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise⑧">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>resultPromise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑦">in parallel</a>.</p>
      <li data-md>
@@ -1979,16 +1978,16 @@ implementation of this isolation that can be implemented by all browsers.</stron
      <li data-md>
       <p>Let <var>key</var> be the result of <a data-link-type="dfn" href="#obtain-a-controlled-frame-storage-key" id="ref-for-obtain-a-controlled-frame-storage-key②">obtaining a Controlled Frame storage key</a> given the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment③">environment</a> associated <var>e</var>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③③">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document⑥">active document</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object②">current settings object</a>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="#controlled-frame-zoom-map" id="ref-for-controlled-frame-zoom-map③">Controlled Frame zoom map</a>[<var>key</var>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exist</a>, return true.</p>
+      <p>If <a data-link-type="dfn" href="#controlled-frame-zoom-map" id="ref-for-controlled-frame-zoom-map③">Controlled Frame zoom map</a>[<var>key</var>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exist</a>, return <code>true</code>.</p>
      <li data-md>
-      <p>Return false.</p>
+      <p>Return <code>false</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="getZoomMode()" data-algorithm-for="HTMLControlledFrameElement">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-getzoommode"><code>getZoomMode()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②⑤">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise⑨">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑧">in parallel</a>:</p>
       <ol>
@@ -2001,7 +2000,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-setzoommode"><code>setZoomMode(<var>zoomMode</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②⑥">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⓪">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑨">in parallel</a>:</p>
       <ol>
@@ -2015,7 +2014,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
         <p>If <var>zoomMode</var> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-per-origin" id="ref-for-dom-zoommode-per-origin②">per-origin</a></code>:</p>
         <ol>
          <li data-md>
-          <p>If <a data-link-type="dfn" href="#current-document-has-a-per-origin-zoom-level" id="ref-for-current-document-has-a-per-origin-zoom-level">current document has a per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⓪">this</a> is true:</p>
+          <p>If <a data-link-type="dfn" href="#current-document-has-a-per-origin-zoom-level" id="ref-for-current-document-has-a-per-origin-zoom-level">current document has a per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⓪">this</a> is <code>true</code>:</p>
           <ol>
            <li data-md>
             <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④①">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom">currentZoom</a>.</p>
@@ -2056,7 +2055,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-getzoom"><code>getZoom()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②⑦">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①①">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⓪">in parallel</a>:</p>
       <ol>
@@ -2073,7 +2072,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-setzoom"><code>setZoom(<var>zoomFactor</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②⑧">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①②">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①①">in parallel</a>:</p>
       <ol>
@@ -2137,7 +2136,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export data-lt="captureVisibleRegion(options)|captureVisibleRegion()|captureVisibleRegion(optionaloptions)" id="dom-htmlcontrolledframeelement-capturevisibleregion"><code>captureVisibleRegion(optional <var>options</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>resultPromise</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise②⑨">promise</a>.</p>
+      <p>Let <var>resultPromise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①③">a new promise</a>.</p>
      <li data-md>
       <p>Return <var>resultPromise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①②">in parallel</a>.</p>
      <li data-md>
@@ -2331,7 +2330,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
    <p>Each <code class="idl"><a data-link-type="idl" href="#dialogcontroller" id="ref-for-dialogcontroller①">DialogController</a></code> has:</p>
    <ul>
     <li data-md>
-     <p>A boolean <dfn class="dfn-paneled" data-dfn-for="DialogController" data-dfn-type="dfn" data-noexport id="dialogcontroller-accept">accept</dfn>, initially set to false.</p>
+     <p>A boolean <dfn class="dfn-paneled" data-dfn-for="DialogController" data-dfn-type="dfn" data-noexport id="dialogcontroller-accept">accept</dfn>, initially set to <code>false</code>.</p>
     <li data-md>
      <p>A DOMString <dfn class="dfn-paneled" data-dfn-for="DialogController" data-dfn-type="dfn" data-noexport id="dialogcontroller-response">response</dfn>, initally an empty string.</p>
    </ul>
@@ -2339,7 +2338,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="DialogController" data-dfn-type="method" data-export data-lt="okay(response)|okay()" id="dom-dialogcontroller-okay"><code>okay(<var>response</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Set <a data-link-type="dfn" href="#dialogcontroller-accept" id="ref-for-dialogcontroller-accept">accept</a> to true.</p>
+      <p>Set <a data-link-type="dfn" href="#dialogcontroller-accept" id="ref-for-dialogcontroller-accept">accept</a> to <code>true</code>.</p>
      <li data-md>
       <p>Set <a data-link-type="dfn" href="#dialogcontroller-response" id="ref-for-dialogcontroller-response">response</a> to <var>response</var>.</p>
     </ol>
@@ -2348,14 +2347,14 @@ implementation of this isolation that can be implemented by all browsers.</stron
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="DialogController" data-dfn-type="method" data-export id="dom-dialogcontroller-cancel"><code>cancel()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Set <a data-link-type="dfn" href="#dialogcontroller-accept" id="ref-for-dialogcontroller-accept①">accept</a> to false.</p>
+      <p>Set <a data-link-type="dfn" href="#dialogcontroller-accept" id="ref-for-dialogcontroller-accept①">accept</a> to <code>false</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="dispatch-dialog">
     <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="fire a &quot;dialog&quot; event" data-noexport id="fire-a-dialog-event">fire a <code class="idl"><a data-link-type="idl" href="#dialogevent" id="ref-for-dialogevent">DialogEvent</a></code></dfn> <var>e</var> given <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe①③">controlledframe</a></code> element <var>target</var>, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage//#simple-dialogs" id="ref-for-simple-dialogs">simple-dialogs</a> type <var>dialogType</var>, and message <var>message</var>, run the following steps:</p>
     <ol>
      <li data-md>
-      <p>Assert that <var>e</var>["<code class="idl"><a data-link-type="idl" href="#dom-dialogevent-dialogmessage" id="ref-for-dom-dialogevent-dialogmessage">dialogMessage</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-dialogmessage-dialog" id="ref-for-dom-dialogmessage-dialog">dialog</a></code>"]["<a data-link-type="dfn" href="#dialogcontroller-accept" id="ref-for-dialogcontroller-accept②">accept</a>"] equals false.</p>
+      <p>Assert that <var>e</var>["<code class="idl"><a data-link-type="idl" href="#dom-dialogevent-dialogmessage" id="ref-for-dom-dialogevent-dialogmessage">dialogMessage</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-dialogmessage-dialog" id="ref-for-dom-dialogmessage-dialog">dialog</a></code>"]["<a data-link-type="dfn" href="#dialogcontroller-accept" id="ref-for-dialogcontroller-accept②">accept</a>"] equals <code>false</code>.</p>
      <li data-md>
       <p>Let <var>dialogMessage</var> be a new <code class="idl"><a data-link-type="idl" href="#dialogmessage" id="ref-for-dialogmessage②">DialogMessage</a></code> object.</p>
      <li data-md>
@@ -2536,19 +2535,19 @@ implementation of this isolation that can be implemented by all browsers.</stron
 };
 
 </pre>
-   <p>Each <code class="idl"><a data-link-type="idl" href="#permissionrequestcontrollerbase" id="ref-for-permissionrequestcontrollerbase⑧">PermissionRequestControllerBase</a></code> has a boolean value <dfn class="dfn-paneled" data-dfn-for="PermissionRequestControllerBase" data-dfn-type="dfn" data-noexport id="permissionrequestcontrollerbase-allow">allow</dfn>, which is initially false.</p>
+   <p>Each <code class="idl"><a data-link-type="idl" href="#permissionrequestcontrollerbase" id="ref-for-permissionrequestcontrollerbase⑧">PermissionRequestControllerBase</a></code> has a boolean value <dfn class="dfn-paneled" data-dfn-for="PermissionRequestControllerBase" data-dfn-type="dfn" data-noexport id="permissionrequestcontrollerbase-allow">allow</dfn>, which is initially <code>false</code>.</p>
    <div>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="PermissionRequestControllerBase" data-dfn-type="method" data-export id="dom-permissionrequestcontrollerbase-allow"><code>allow()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Set <a data-link-type="dfn" href="#permissionrequestcontrollerbase-allow" id="ref-for-permissionrequestcontrollerbase-allow">allow</a> to true.</p>
+      <p>Set <a data-link-type="dfn" href="#permissionrequestcontrollerbase-allow" id="ref-for-permissionrequestcontrollerbase-allow">allow</a> to <code>true</code>.</p>
     </ol>
    </div>
    <div>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="PermissionRequestControllerBase" data-dfn-type="method" data-export id="dom-permissionrequestcontrollerbase-cancel"><code>cancel()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Set <a data-link-type="dfn" href="#permissionrequestcontrollerbase-allow" id="ref-for-permissionrequestcontrollerbase-allow①">allow</a> to false.</p>
+      <p>Set <a data-link-type="dfn" href="#permissionrequestcontrollerbase-allow" id="ref-for-permissionrequestcontrollerbase-allow①">allow</a> to <code>false</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="dispatch-permissionrequest">
@@ -2968,7 +2967,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
        <li data-md>
         <ins>Let [<var>accept</var>, <var>response</var>] be the result of <a data-link-type="dfn" href="#fire-a-dialog-event" id="ref-for-fire-a-dialog-event②">fire a "dialog" event</a> with <var>embedderParent</var>, "prompt" and <var>message</var>.</ins>
        <li data-md>
-        <ins>If <var>accept</var> equals false, return null.</ins>
+        <ins>If <var>accept</var> equals <code>false</code>, return null.</ins>
        <li data-md>
         <ins>Return <var>response</var>.</ins>
       </ol>
@@ -3037,7 +3036,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
          </p>
          <p>
           1.
-          <ins>Let <var>isTopLevel</var> be false, if <var>currentNavigable</var> has a null <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent②">parent</a> set <var>isTopLevel</var> to true.</ins>
+          <ins>Let <var>isTopLevel</var> be <code>false</code>, if <var>currentNavigable</var> has a null <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent②">parent</a> set <var>isTopLevel</var> to <code>true</code>.</ins>
          </p>
          <p>
           1.
@@ -3054,7 +3053,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
      <li data-md>
       <p>Let <var>embedderParent</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable④">node navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①①">embedderParent</a>.</p>
      <li data-md>
-      <p>If <var>embedderParent</var> is not <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⓪">HTMLControlledFrameElement</a></code>, return true.</p>
+      <p>If <var>embedderParent</var> is not <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⓪">HTMLControlledFrameElement</a></code>, return <code>true</code>.</p>
      <li data-md>
       <p>Return the result of <a data-link-type="dfn" href="#fire-a-permissionrequest-event" id="ref-for-fire-a-permissionrequest-event">firing a "permissionrequest" event</a> with <var>embedderParent</var>, <var>permission</var>, <var>document</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url④">URL</a>, and <var>options</var>.</p>
     </ol>
@@ -3455,11 +3454,11 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set②">set</a> « "blocking",
   "requestBody", "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw③">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②②">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking">blocking</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking">blocking</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②">contains</a> "requestBody", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsbody" id="ref-for-webrequest-handler-config-requestsbody">requestsBody</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②">contains</a> "requestBody", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsbody" id="ref-for-webrequest-handler-config-requestsbody">requestsBody</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain③">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain③">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "beforeSendHeaders", then:</p>
@@ -3468,11 +3467,11 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset①">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set③">set</a> « "blocking",
   "requestHeaders", "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw④">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②③">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain④">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking①">blocking</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain④">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking①">blocking</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑤">contains</a> "requestHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders">requestsHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑤">contains</a> "requestHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders">requestsHeaders</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑥">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑥">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "sendHeaders", then:</p>
@@ -3481,9 +3480,9 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset②">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set④">set</a> « "requestHeaders",
   "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw⑤">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②④">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑦">contains</a> "requestHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①">requestsHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑦">contains</a> "requestHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①">requestsHeaders</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑧">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders②">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑧">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders②">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "headersReceived", then:</p>
@@ -3492,11 +3491,11 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset③">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set⑤">set</a> « "blocking",
   "responseHeaders", "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw⑥">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②⑤">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑨">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking②">blocking</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑨">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking②">blocking</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⓪">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders②">requestsHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⓪">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders②">requestsHeaders</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①①">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders③">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①①">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders③">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "authRequired", then:</p>
@@ -3505,13 +3504,13 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset④">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set⑥">set</a> « "asyncBlocking",
   "blocking", "responseHeaders", "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw⑦">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②⑥">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①②">contains</a> "asyncBlocking", then set <var>handlerConfig</var> <a data-link-type="dfn" href="#webrequest-handler-config-asyncblocking" id="ref-for-webrequest-handler-config-asyncblocking">asyncBlocking</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①②">contains</a> "asyncBlocking", then set <var>handlerConfig</var> <a data-link-type="dfn" href="#webrequest-handler-config-asyncblocking" id="ref-for-webrequest-handler-config-asyncblocking">asyncBlocking</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①③">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking③">blocking</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①③">contains</a> "blocking", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking③">blocking</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①④">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders③">requestsHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①④">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders③">requestsHeaders</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑤">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders④">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑤">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders④">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "beforeRedirect", then:</p>
@@ -3520,9 +3519,9 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset⑤">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set⑦">set</a> «
   "responseHeaders", "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw⑧">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②⑦">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑥">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders④">requestsHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑥">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders④">requestsHeaders</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑦">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑤">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑦">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑤">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "responseStarted", then:</p>
@@ -3531,9 +3530,9 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset⑥">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set⑧">set</a> «
   "responseHeaders", "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw⑨">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②⑧">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑧">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑤">requestsHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑧">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑤">requestsHeaders</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑨">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑥">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①⑨">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑥">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "completed", then:</p>
@@ -3542,9 +3541,9 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset⑦">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set⑨">set</a> «
   "responseHeaders", "extraHeaders" », then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①⓪">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②⑨">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②⓪">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑥">requestsHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②⓪">contains</a> "responseHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑥">requestsHeaders</a> to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②①">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑦">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②①">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑦">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>eventName</var> equals "errorOccurred", then:</p>
@@ -3553,7 +3552,7 @@ it is a member of.</p>
         <p>If <var>specSet</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-subset" id="ref-for-set-subset⑧">subset</a> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①⓪">set</a> « "extraHeaders" »,
   then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①①">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③⓪">TypeError</a></code>.</p>
        <li data-md>
-        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②②">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑧">requestsAllHeaders</a> to true.</p>
+        <p>If <var>specSet</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②②">contains</a> "extraHeaders", then set <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑧">requestsAllHeaders</a> to <code>true</code>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①②">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③①">TypeError</a></code>.</p>
@@ -3574,10 +3573,10 @@ it is a member of.</p>
       <p>For each <var>handlerConfig</var> in <var>handlerMap</var>[<var>event name</var>]:</p>
       <ol>
        <li data-md>
-        <p>If <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①">handler</a> equals <var>listener</var>, return true.</p>
+        <p>If <var>handlerConfig</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①">handler</a> equals <var>listener</var>, return <code>true</code>.</p>
       </ol>
      <li data-md>
-      <p>Return false.</p>
+      <p>Return <code>false</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="hasListeners()" data-algorithm-for="WebRequestEvent">
@@ -3588,7 +3587,7 @@ it is a member of.</p>
      <li data-md>
       <p>Let <var>event name</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧④">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①①">eventName</a>.</p>
      <li data-md>
-      <p>If <var>handlerMap</var>[<var>event name</var>] is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty④">empty</a>, return false, otherwise return true.</p>
+      <p>If <var>handlerMap</var>[<var>event name</var>] is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty④">empty</a>, return <code>false</code>, otherwise return <code>true</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="removeListener(listener)" data-algorithm-for="WebRequestEvent">
@@ -3681,7 +3680,7 @@ it is a member of.</p>
   to <var>requestBody</var>.</p>
         </ol>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking④">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking④">blocking</a> flag is <code>true</code>,
   then:</p>
         <ol>
          <li data-md>
@@ -3711,12 +3710,12 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequesteventdetails-object" id="ref-for-create-a-webrequesteventdetails-object①">create a WebRequestEventDetails object</a> given <var>request</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑦">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑦">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestbeforesendheadersdetails-requestheaders" id="ref-for-dom-webrequestbeforesendheadersdetails-requestheaders">requestHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence">convert a header list to an HttpHeader sequence</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders⑨">requestsAllHeaders</a>, and isRequest
-  equal to true.</p>
+  equal to <code>true</code>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑤">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑤">blocking</a> flag is <code>true</code>,
   then:</p>
         <ol>
          <li data-md>
@@ -3746,10 +3745,10 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequesteventdetails-object" id="ref-for-create-a-webrequesteventdetails-object②">create a WebRequestEventDetails object</a> given <var>request</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑧">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑧">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestsendheadersdetails-requestheaders" id="ref-for-dom-webrequestsendheadersdetails-requestheaders">requestHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence①">convert a header list to an HttpHeader sequence</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-header-list" id="ref-for-concept-request-header-list①">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⓪">requestsAllHeaders</a>, and isRequest
-  equal to true.</p>
+  equal to <code>true</code>.</p>
        <li data-md>
         <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler⑦">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑥">in parallel</a>.</p>
       </ol>
@@ -3766,12 +3765,12 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponseeventdetails-object" id="ref-for-create-a-webrequestresponseeventdetails-object">create a WebRequestResponseEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑨">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders⑨">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders">responseHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence②">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①①">requestsAllHeaders</a>, and isRequest
-  equal to false.</p>
+  equal to <code>false</code>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑥">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑥">blocking</a> flag is <code>true</code>,
   then:</p>
         <ol>
          <li data-md>
@@ -3800,7 +3799,7 @@ it is a member of.</p>
       <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-status" id="ref-for-concept-response-status①">status</a> is 401, then:</p>
       <ol>
        <li data-md>
-        <p>Let <var>isProxy</var> be false.</p>
+        <p>Let <var>isProxy</var> be <code>false</code>.</p>
        <li data-md>
         <p>Let <var>scheme</var> be the scheme from <var>response</var>’s <code>WWW-Authenticate</code> header,
   parsed as defined by the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> specification, or null if the header
@@ -3813,7 +3812,7 @@ it is a member of.</p>
       <p>Otherwise:</p>
       <ol>
        <li data-md>
-        <p>Let <var>isProxy</var> be true.</p>
+        <p>Let <var>isProxy</var> be <code>true</code>.</p>
        <li data-md>
         <p>Let <var>scheme</var> be the scheme from <var>response</var>’s <code>Proxy-Authenticate</code> header, parsed as defined by the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> specification, or null if
   the header is missing or invalid.</p>
@@ -3829,16 +3828,16 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponseeventdetails-object" id="ref-for-create-a-webrequestresponseeventdetails-object①">create a WebRequestResponseEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①⓪">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①⓪">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders①">responseHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence③">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list①">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①②">requestsAllHeaders</a>, and isRequest
-  equal to false.</p>
+  equal to <code>false</code>.</p>
         <ol>
          <li data-md>
           <p>Set <var>details</var> <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-challenger" id="ref-for-dom-webrequestauthrequireddetails-challenger">challenger</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-isproxy" id="ref-for-dom-webrequestauthrequireddetails-isproxy">isProxy</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-scheme" id="ref-for-dom-webrequestauthrequireddetails-scheme">scheme</a></code>, and <code class="idl"><a data-link-type="idl" href="#dom-webrequestauthrequireddetails-realm" id="ref-for-dom-webrequestauthrequireddetails-realm">realm</a></code> fields equal to <var>challenger</var>, <var>isProxy</var>, <var>scheme</var>, and <var>realm</var> respectively.</p>
         </ol>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑦">blocking</a> flag is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-blocking" id="ref-for-webrequest-handler-config-blocking⑦">blocking</a> flag is <code>true</code>,
   then:</p>
         <ol>
          <li data-md>
@@ -3847,7 +3846,7 @@ it is a member of.</p>
           <p>Return the result of calling <a data-link-type="dfn" href="#process-an-authrequired-response" id="ref-for-process-an-authrequired-response">process an authRequired response</a> given <var>result</var>.</p>
         </ol>
        <li data-md>
-        <p>Otherwise, if <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-asyncblocking" id="ref-for-webrequest-handler-config-asyncblocking①">asyncBlocking</a> flat is true, then:</p>
+        <p>Otherwise, if <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-asyncblocking" id="ref-for-webrequest-handler-config-asyncblocking①">asyncBlocking</a> flat is <code>true</code>, then:</p>
         <ol>
          <li data-md>
           <p>Let <var>result</var> be null.</p>
@@ -3889,10 +3888,10 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①①">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①①">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders②">responseHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence④">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list②">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①③">requestsAllHeaders</a>, and isRequest
-  equal to false.</p>
+  equal to <code>false</code>.</p>
        <li data-md>
         <p>Let <var>internalResponse</var> be <var>response</var>, if <var>response</var> is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-filtered-response" id="ref-for-concept-filtered-response">filtered response</a>; otherwise <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-internal-response" id="ref-for-concept-internal-response">internal response</a>.</p>
        <li data-md>
@@ -3913,10 +3912,10 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object①">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①②">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①②">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders③">responseHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑤">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list③">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①④">requestsAllHeaders</a>, and isRequest
-  equal to false.</p>
+  equal to <code>false</code>.</p>
        <li data-md>
         <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①④">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⓪">in parallel</a>.</p>
       </ol>
@@ -3933,10 +3932,10 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object②">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①③">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①③">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders④">responseHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑥">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list④">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⑤">requestsAllHeaders</a>, and isRequest
-  equal to false.</p>
+  equal to <code>false</code>.</p>
        <li data-md>
         <p>Call <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-handler" id="ref-for-webrequest-handler-config-handler①⑤">handler</a> given <var>details</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②①">in parallel</a>.</p>
       </ol>
@@ -3953,10 +3952,10 @@ it is a member of.</p>
        <li data-md>
         <p>Let <var>details</var> be the result of calling <a data-link-type="dfn" href="#create-a-webrequestresponsewithipeventdetails-object" id="ref-for-create-a-webrequestresponsewithipeventdetails-object③">create a WebRequestResponseWithIpEventDetails object</a> given <var>request</var> and <var>response</var>.</p>
        <li data-md>
-        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①④">requestsHeaders</a> is true,
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsheaders" id="ref-for-webrequest-handler-config-requestsheaders①④">requestsHeaders</a> is <code>true</code>,
   then set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders⑤">responseHeaders</a></code>"]
   to the result of calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑦">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list⑤">header list</a>, <var>config</var>’s <a data-link-type="dfn" href="#webrequest-handler-config-requestsallheaders" id="ref-for-webrequest-handler-config-requestsallheaders①⑥">requestsAllHeaders</a>, and isRequest
-  equal to false.</p>
+  equal to <code>false</code>.</p>
        <li data-md>
         <p>Set <var>config</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequesterroroccurreddetails-error" id="ref-for-dom-webrequesterroroccurreddetails-error">error</a></code> field to an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#implementation-defined" id="ref-for-implementation-defined①">implementation-defined</a> error message describing the error in <var>response</var>.</p>
        <li data-md>
@@ -3970,8 +3969,7 @@ it is a member of.</p>
      <li data-md>
       <p>Let <var>environmentSettingsObject</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①">client</a>.</p>
      <li data-md>
-      <p>Let <var>crossOriginIsolatedCapability</var> be <var>environmentSettingsObject</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-cross-origin-isolated-capability" id="ref-for-concept-settings-object-cross-origin-isolated-capability">cross-origin isolated capability</a>, or
-  false if <var>environmentSettingsObject</var> is null.</p>
+      <p>Let <var>crossOriginIsolatedCapability</var> be <var>environmentSettingsObject</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-cross-origin-isolated-capability" id="ref-for-concept-settings-object-cross-origin-isolated-capability">cross-origin isolated capability</a>, or <code>false</code> if <var>environmentSettingsObject</var> is null.</p>
      <li data-md>
       <p>Let <var>details</var> be a new <code class="idl"><a data-link-type="idl" href="#dictdef-webrequesteventdetails" id="ref-for-dictdef-webrequesteventdetails⑦">WebRequestEventDetails</a></code> with the following
   fields:</p>
@@ -4060,9 +4058,9 @@ it is a member of.</p>
         <p><var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-status-message" id="ref-for-concept-response-status-message">status message</a>.</p>
       </dl>
      <li data-md>
-      <p>If <var>requestsHeaders</var> is true, then set <var>details</var>[" <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders⑥">responseHeaders</a></code>"] to the result of
+      <p>If <var>requestsHeaders</var> is <code>true</code>, then set <var>details</var>[" <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponseeventdetails-responseheaders" id="ref-for-dom-webrequestresponseeventdetails-responseheaders⑥">responseHeaders</a></code>"] to the result of
   calling <a data-link-type="dfn" href="#convert-a-header-list-to-an-httpheader-sequence" id="ref-for-convert-a-header-list-to-an-httpheader-sequence⑧">convert a header list to an HttpHeader sequence</a> given <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-header-list" id="ref-for-concept-response-header-list⑥">header list</a>, <var>requestsAllHeaders</var>, and isRequest
-  equal to false.</p>
+  equal to <code>false</code>.</p>
      <li data-md>
       <p>Return <var>details</var>.</p>
     </ol>
@@ -4075,7 +4073,7 @@ it is a member of.</p>
      <li data-md>
       <p>Let <var>details</var> be the result of <a data-link-type="dfn" href="#create-a-webrequestresponseeventdetails-object" id="ref-for-create-a-webrequestresponseeventdetails-object②">creating a WebRequestResponseEventDetails object</a> given <var>request</var>, <var>response</var>, <var>requestsHeaders</var>, and <var>requestsAllHeaders</var>.</p>
      <li data-md>
-      <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-cache-state" id="ref-for-concept-response-cache-state">cache state</a> is "local", then set <var>details</var>[" <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponsewithipeventdetails-fromcache" id="ref-for-dom-webrequestresponsewithipeventdetails-fromcache">fromCache</a></code>"] to true.</p>
+      <p>If <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-cache-state" id="ref-for-concept-response-cache-state">cache state</a> is "local", then set <var>details</var>[" <code class="idl"><a data-link-type="idl" href="#dom-webrequestresponsewithipeventdetails-fromcache" id="ref-for-dom-webrequestresponsewithipeventdetails-fromcache">fromCache</a></code>"] to <code>true</code>.</p>
      <li data-md>
       <p>Set <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-webrequestresponsewithipeventdetails-ip" id="ref-for-dom-webrequestresponsewithipeventdetails-ip">ip</a></code>"] to the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#ip-address" id="ref-for-ip-address">ip address</a> from which <var>response</var> was received if the request
   involved a network request.</p>
@@ -4096,22 +4094,22 @@ it is a member of.</p>
       <p>For each <var>fetchHeader</var> in <var>fetchHeaders</var>:</p>
       <ol>
        <li data-md>
-        <p>If each of the following conditions are true, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue⑥">continue</a>:</p>
+        <p>If each of the following conditions are <code>true</code>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue⑥">continue</a>:</p>
         <ul>
          <li data-md>
-          <p><var>isRequest</var> is true</p>
+          <p><var>isRequest</var> is <code>true</code></p>
          <li data-md>
-          <p><var>requestsAllHeaders</var> is false</p>
+          <p><var>requestsAllHeaders</var> is <code>false</code></p>
          <li data-md>
           <p><var>fetchHeader</var>[0] is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header" id="ref-for-cors-safelisted-request-header">CORS-safelisted request-header</a></p>
         </ul>
        <li data-md>
-        <p>If each of the following conditions are true, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue⑦">continue</a>:</p>
+        <p>If each of the following conditions are <code>true</code>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue⑦">continue</a>:</p>
         <ul>
          <li data-md>
-          <p><var>isRequest</var> is false</p>
+          <p><var>isRequest</var> is <code>false</code></p>
          <li data-md>
-          <p><var>requestsAllHeaders</var> is false</p>
+          <p><var>requestsAllHeaders</var> is <code>false</code></p>
          <li data-md>
           <p><var>fetchHeader</var>[0] is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-safelisted-response-header-name" id="ref-for-cors-safelisted-response-header-name">CORS-safelisted response-header name</a></p>
         </ul>
@@ -4142,7 +4140,7 @@ it is a member of.</p>
       <p>For each <var>header</var> in <var>headers</var>:</p>
       <ol>
        <li data-md>
-        <p>If any of the following conditions are true, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①⑦">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③⑥">TypeError</a></code>:</p>
+        <p>If any of the following conditions are <code>true</code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①⑦">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③⑥">TypeError</a></code>:</p>
         <ul>
          <li data-md>
           <p><var>header</var>["name"] is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①⑦">string</a>.</p>
@@ -4206,7 +4204,7 @@ it is a member of.</p>
      <p>a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean①⑧">boolean</a></p>
    </dl>
    <div class="algorithm" data-algorithm="matches a URL pattern">
-     A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②⓪">string</a> <var>url</var> <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="matches-a-url-pattern">matches a URL pattern</dfn> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②①">string</a> <var>url pattern</var> if the following steps return true: 
+     A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②⓪">string</a> <var>url</var> <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="matches-a-url-pattern">matches a URL pattern</dfn> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②①">string</a> <var>url pattern</var> if the following steps return <code>true</code>: 
     <ol>
      <li data-md>
       <p><var>url</var> <var>url pattern</var> <span class="XXX">TODO: Spec this, ideally referring to
@@ -4246,13 +4244,12 @@ return an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#lis
        <li data-md>
         <p>Let <var>urls</var> be <var>filter</var>[<code class="idl"><a data-link-type="idl" href="#dom-requestfilter-urls" id="ref-for-dom-requestfilter-urls">urls</a></code>].</p>
        <li data-md>
-        <p>Let <var>is valid url</var> be true if <var>urls</var> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty⑥">empty</a>,
-false otherwise.</p>
+        <p>Let <var>is valid url</var> be <code>true</code> if <var>urls</var> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty⑥">empty</a>, <code>false</code> otherwise.</p>
        <li data-md>
         <p>For each <var>url pattern</var> in <var>urls</var>:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url②">URL</a> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern②">matches a URL pattern</a> given <var>url pattern</var>, set <var>is valid url</var> to true.</p>
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url②">URL</a> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern②">matches a URL pattern</a> given <var>url pattern</var>, set <var>is valid url</var> to <code>true</code>.</p>
         </ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑨">Append</a> <var>handlerConfig</var> to <var>valid handlers</var>.</p>
@@ -4277,7 +4274,7 @@ opaque string, randomly assigned at the request’s creation.</p>
      <ins>If <var>webRequestResult</var> is not null, then:</ins>
      <ol>
       <li data-md>
-       <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel">cancel</a></code>"] is true,
+       <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel">cancel</a></code>"] is <code>true</code>,
   then set <var>response</var> to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error">network error</a>.</ins>
       <li data-md>
        <ins>Otherwise, if <var>webRequestResult</var> ["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-redirecturl" id="ref-for-dom-blockingresponse-redirecturl">redirectUrl</a></code>"] is not an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②③">string</a>, then
@@ -4311,7 +4308,7 @@ opaque string, randomly assigned at the request’s creation.</p>
      <ins>If <var>webRequestResult</var> is not null, then:</ins>
      <ol>
       <li data-md>
-       <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel①">cancel</a></code>"] is true,
+       <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel①">cancel</a></code>"] is <code>true</code>,
   then set <var>response</var> to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error③">network error</a>.</ins>
       <li data-md>
        <ins>Otherwise, if <var>webRequestResult</var> ["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-requestheaders" id="ref-for-dom-blockingresponse-requestheaders">requestHeaders</a></code>"] is a non-empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①③">list</a>, then
@@ -4339,7 +4336,7 @@ opaque string, randomly assigned at the request’s creation.</p>
        <ins>If <var>webRequestResult</var> is not null, then:</ins>
        <ol>
         <li data-md>
-         <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel②">cancel</a></code>"] is true,
+         <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel②">cancel</a></code>"] is <code>true</code>,
   then set <var>response</var> to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑤">network error</a>.</ins>
         <li data-md>
          <ins>Otherwise, if <var>webRequestResult</var> ["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-redirecturl" id="ref-for-dom-blockingresponse-redirecturl②">redirectUrl</a></code>"] is not an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②④">string</a>, then
@@ -4354,13 +4351,13 @@ opaque string, randomly assigned at the request’s creation.</p>
    <ol start="16">
     <li data-md>
      <p>If response’s status is 401, httpRequest’s response tainting is not
-  "cors", includeCredentials is true, and request’s window is an
+  "cors", includeCredentials is <code>true</code>, and request’s window is an
   environment settings object, then:</p>
      <p>⋮</p>
      <ol start="3">
       <li data-md>
        <p>If request’s use-URL-credentials flag is unset or
-  isAuthenticationFetch is true, then:</p>
+  isAuthenticationFetch is <code>true</code>, then:</p>
        <ol>
         <li data-md>
          <p>If <var>fetchParams</var> is canceled, then return the appropriate network
@@ -4373,8 +4370,7 @@ opaque string, randomly assigned at the request’s creation.</p>
          <ins>If <var>webRequestResult</var> is not null, then:</ins>
          <ol>
           <li data-md>
-           <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel③">cancel</a></code>"] is
-  true, then set <var>response</var> to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑥">network error</a>.</ins>
+           <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel③">cancel</a></code>"] is <code>true</code>, then set <var>response</var> to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑥">network error</a>.</ins>
           <li data-md>
            <ins>
             Otherwise, if <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-authcredentials" id="ref-for-dom-blockingresponse-authcredentials①">authCredentials</a></code>"] is an <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object①">object</a></code>, then: 
@@ -4401,8 +4397,7 @@ opaque string, randomly assigned at the request’s creation.</p>
        <ins>If <var>webRequestResult</var> is not null, then:</ins>
        <ol>
         <li data-md>
-         <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel④">cancel</a></code>"] is
-  true, then set <var>response</var> to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑦">network error</a>.</ins>
+         <ins>If <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-cancel" id="ref-for-dom-blockingresponse-cancel④">cancel</a></code>"] is <code>true</code>, then set <var>response</var> to a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error" id="ref-for-concept-network-error⑦">network error</a>.</ins>
         <li data-md>
          <ins>
           Otherwise, if <var>webRequestResult</var>["<code class="idl"><a data-link-type="idl" href="#dom-blockingresponse-authcredentials" id="ref-for-dom-blockingresponse-authcredentials④">authCredentials</a></code>"] is an <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-object" id="ref-for-idl-object②">object</a></code>, then: 
@@ -4503,10 +4498,10 @@ revisited to align better with other Web APIs.</strong></p>
     <c- b>attribute</c-> <a data-link-type="idl-name" href="#onclickedevent" id="ref-for-onclickedevent"><c- n>OnClickedEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="attribute" data-export data-type="OnClickedEvent" id="dom-contextmenus-onclicked"><code><c- g>onClicked</c-></code></dfn>;
     <c- b>attribute</c-> <a data-link-type="idl-name" href="#onshowevent" id="ref-for-onshowevent"><c- n>OnShowEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="attribute" data-export data-type="OnShowEvent" id="dom-contextmenus-onshow"><code><c- g>onShow</c-></code></dfn>;
 
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise③⓪"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑤"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-create" id="ref-for-dom-contextmenus-create"><c- g>create</c-></a>(<a data-link-type="idl-name" href="#dictdef-contextmenuscreateproperties" id="ref-for-dictdef-contextmenuscreateproperties"><c- n>ContextMenusCreateProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/create(properties)" data-dfn-type="argument" data-export id="dom-contextmenus-create-properties-properties"><code><c- g>properties</c-></code></dfn>);
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise③①"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑥"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-remove" id="ref-for-dom-contextmenus-remove"><c- g>remove</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤⑥"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/remove(id)" data-dfn-type="argument" data-export id="dom-contextmenus-remove-id-id"><code><c- g>id</c-></code></dfn>);
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise③②"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑦"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-removeall" id="ref-for-dom-contextmenus-removeall"><c- g>removeAll</c-></a>();
-    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise③③"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑧"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-update" id="ref-for-dom-contextmenus-update"><c- g>update</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤⑦"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties), ContextMenus/update(id)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-id"><code><c- g>id</c-></code></dfn>, <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties①"><c- n>ContextMenusProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties), ContextMenus/update(id)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-properties"><code><c- g>properties</c-></code></dfn> = {});
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⑦"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑤"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-create" id="ref-for-dom-contextmenus-create"><c- g>create</c-></a>(<a data-link-type="idl-name" href="#dictdef-contextmenuscreateproperties" id="ref-for-dictdef-contextmenuscreateproperties"><c- n>ContextMenusCreateProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/create(properties)" data-dfn-type="argument" data-export id="dom-contextmenus-create-properties-properties"><code><c- g>properties</c-></code></dfn>);
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⑧"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑥"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-remove" id="ref-for-dom-contextmenus-remove"><c- g>remove</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤⑥"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/remove(id)" data-dfn-type="argument" data-export id="dom-contextmenus-remove-id-id"><code><c- g>id</c-></code></dfn>);
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⑨"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑦"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-removeall" id="ref-for-dom-contextmenus-removeall"><c- g>removeAll</c-></a>();
+    <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise②⓪"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑧"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-update" id="ref-for-dom-contextmenus-update"><c- g>update</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤⑦"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties), ContextMenus/update(id)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-id"><code><c- g>id</c-></code></dfn>, <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties①"><c- n>ContextMenusProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties), ContextMenus/update(id)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-properties"><code><c- g>properties</c-></code></dfn> = {});
 };
 </pre>
    <p>Each <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe②⑤">controlledframe</a></code> has a <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-contextmenus" id="ref-for-dom-htmlcontrolledframeelement-contextmenus">contextMenus</a></code> member, which is a <code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus①">ContextMenus</a></code> that manages a <dfn class="dfn-paneled" data-dfn-for="ContextMenus" data-dfn-type="dfn" data-lt="context menu map" data-noexport id="contextmenus-context-menu-map"> context menu <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map④">map</a> </dfn> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys" id="ref-for-map-getting-the-keys④">keys</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②⑤">strings</a> and whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values③">values</a> are <code class="idl"><a data-link-type="idl" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties②">ContextMenusProperties</a></code>.</p>
@@ -4515,7 +4510,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export id="dom-contextmenus-create"><code>create(<var>properties</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise③④">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①④">a new promise</a>.</p>
      <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②③">in parallel</a>:</p>
       <ol>
@@ -4536,7 +4531,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export id="dom-contextmenus-remove"><code>remove(<var>id</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise③⑤">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑤">a new promise</a>.</p>
      <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②④">in parallel</a>:</p>
       <ol>
@@ -4553,7 +4548,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export id="dom-contextmenus-removeall"><code>removeAll()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise③⑥">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑥">a new promise</a>.</p>
      <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⑤">in parallel</a>:</p>
       <ol>
@@ -4570,7 +4565,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="update(id, properties)|update(id)" id="dom-contextmenus-update"><code>update(<var>id</var>, <var>properties</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be a new <a data-link-type="dfn" href="https://webidl.spec.whatwg.org#idl-promise" id="ref-for-idl-promise③⑦">promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑦">a new promise</a>.</p>
      <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⑥">in parallel</a>:</p>
       <ol>
@@ -4640,50 +4635,50 @@ revisited to align better with other Web APIs.</strong></p>
       <p>If <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-context" id="ref-for-dom-contextmenusproperties-context①">context</a></code>"] is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty⑦">empty</a>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>result</var> be a boolean value that is initially false.</p>
+        <p>Let <var>result</var> be a boolean value that is initially <code>false</code>.</p>
        <li data-md>
         <p>For each <var>context</var> in <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-context" id="ref-for-dom-contextmenusproperties-context②">context</a></code>"]:</p>
         <ol>
          <li data-md>
-          <p>If <var>element</var> matches <var>context</var>, set <var>result</var> to true and break;</p>
+          <p>If <var>element</var> matches <var>context</var>, set <var>result</var> to <code>true</code> and break;</p>
         </ol>
         <p><span class="XXX">There is no standardized specifications for matching a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#htmlelement" id="ref-for-htmlelement②">HTMLElement</a></code> against a <code class="idl"><a data-link-type="idl" href="#enumdef-contexttype" id="ref-for-enumdef-contexttype②">ContextType</a></code>.</span></p>
        <li data-md>
-        <p>If <var>result</var> is false, return false.</p>
+        <p>If <var>result</var> is <code>false</code>, return <code>false</code>.</p>
       </ol>
      <li data-md>
       <p>If <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-documenturlpatterns" id="ref-for-dom-contextmenusproperties-documenturlpatterns①">documentUrlPatterns</a></code>"] is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty⑧">empty</a>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>result</var> be a boolean value that is initially false.</p>
+        <p>Let <var>result</var> be a boolean value that is initially <code>false</code>.</p>
        <li data-md>
         <p>For each <var>urlPattern</var> in <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-documenturlpatterns" id="ref-for-dom-contextmenusproperties-documenturlpatterns②">documentUrlPatterns</a></code>"]:</p>
         <ol>
          <li data-md>
-          <p>If <var>documentUrl</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern③">matches a URL pattern</a>, given <var>urlPattern</var>, set <var>result</var> to true and break;</p>
+          <p>If <var>documentUrl</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern③">matches a URL pattern</a>, given <var>urlPattern</var>, set <var>result</var> to <code>true</code> and break;</p>
         </ol>
        <li data-md>
-        <p>If <var>result</var> is false, return false.</p>
+        <p>If <var>result</var> is <code>false</code>, return <code>false</code>.</p>
       </ol>
      <li data-md>
       <p>If <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-targeturlpatterns" id="ref-for-dom-contextmenusproperties-targeturlpatterns①">targetUrlPatterns</a></code>"] is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty⑨">empty</a>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>result</var> be a boolean value that is initially false.</p>
+        <p>Let <var>result</var> be a boolean value that is initially <code>false</code>.</p>
        <li data-md>
         <p>For each <var>urlPattern</var> in <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-targeturlpatterns" id="ref-for-dom-contextmenusproperties-targeturlpatterns②">targetUrlPatterns</a></code>"]:</p>
         <ol>
          <li data-md>
-          <p>If <var>targetUrl</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern④">matches a URL pattern</a>, given <var>urlPattern</var>, set <var>result</var> to true and break;</p>
+          <p>If <var>targetUrl</var> <a data-link-type="dfn" href="#matches-a-url-pattern" id="ref-for-matches-a-url-pattern④">matches a URL pattern</a>, given <var>urlPattern</var>, set <var>result</var> to <code>true</code> and break;</p>
         </ol>
        <li data-md>
-        <p>If <var>result</var> is false, return false.</p>
+        <p>If <var>result</var> is <code>false</code>, return <code>false</code>.</p>
       </ol>
     </ol>
     <p class="note" role="note"><span class="marker">Note:</span> Different user agents may implement additional conditions.</p>
     <ol>
      <li data-md>
-      <p>Return true.</p>
+      <p>Return <code>true</code>.</p>
     </ol>
    </div>
    <p><code class="idl"><a data-link-type="idl" href="#contextmenusevent" id="ref-for-contextmenusevent②">ContextMenusEvent</a></code> represents a target to which an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events">event</a> can be <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①">dispatched</a> when a context menu interaction has occured.</p>
@@ -4714,9 +4709,9 @@ revisited to align better with other Web APIs.</strong></p>
      <li data-md>
       <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list②">event listener list</a> of the <code class="idl"><a data-link-type="idl" href="#contextmenusevent" id="ref-for-contextmenusevent⑥">ContextMenusEvent</a></code>.</p>
      <li data-md>
-      <p>If <var>callbackList</var>[<var>callback</var>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain③⓪">exists</a>, return true.</p>
+      <p>If <var>callbackList</var>[<var>callback</var>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain③⓪">exists</a>, return <code>true</code>.</p>
      <li data-md>
-      <p>Otherwise, return false.</p>
+      <p>Otherwise, return <code>false</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="hasListeners()" data-algorithm-for="ContextMenusEvent">
@@ -4725,9 +4720,9 @@ revisited to align better with other Web APIs.</strong></p>
      <li data-md>
       <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list③">event listener list</a> of the <code class="idl"><a data-link-type="idl" href="#contextmenusevent" id="ref-for-contextmenusevent⑦">ContextMenusEvent</a></code>.</p>
      <li data-md>
-      <p>If <var>callbackList</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-is-empty" id="ref-for-list-is-empty">is empty</a>, return false.</p>
+      <p>If <var>callbackList</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-is-empty" id="ref-for-list-is-empty">is empty</a>, return <code>false</code>.</p>
      <li data-md>
-      <p>Otherwise, return true.</p>
+      <p>Otherwise, return <code>true</code>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="dispatch(data)" data-algorithm-for="ContextMenusEvent">
@@ -7176,7 +7171,7 @@ let dfnPanelData = {
 "48438eb3": {"dfnID":"48438eb3","dfnText":"queue a global task","external":true,"refSections":[{"refs":[{"id":"ref-for-queue-a-global-task"}],"title":"3.2. Navigation methods"},{"refs":[{"id":"ref-for-queue-a-global-task\u2460"}],"title":"3.3. Scripting methods"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task"},
 "4861a5f1": {"dfnID":"4861a5f1","dfnText":"create a new browsing context and document","external":true,"refSections":[{"refs":[{"id":"ref-for-creating-a-new-browsing-context"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#creating-a-new-browsing-context"},
 "4b6086d7": {"dfnID":"4b6086d7","dfnText":"global object","external":true,"refSections":[{"refs":[{"id":"ref-for-global-object"}],"title":"3.2. Navigation methods"},{"refs":[{"id":"ref-for-global-object\u2460"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-global-object\u2461"}],"title":"3.6.13.2. [FETCH]"},{"refs":[{"id":"ref-for-global-object\u2462"}],"title":"3.6.13.3. [Permissions]"},{"refs":[{"id":"ref-for-global-object\u2463"},{"id":"ref-for-global-object\u2464"}],"title":"3.7.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-global-object\u2465"},{"id":"ref-for-global-object\u2466"}],"title":"4.1. WebRequest handler config"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#global-object"},
-"4bf1cac4": {"dfnID":"4bf1cac4","dfnText":"promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise\u2460\u2464"}],"title":"3.2. Navigation methods"},{"refs":[{"id":"ref-for-idl-promise\u2460\u2465"},{"id":"ref-for-idl-promise\u2460\u2466"},{"id":"ref-for-idl-promise\u2460\u2468"},{"id":"ref-for-idl-promise\u2461\u24ea"},{"id":"ref-for-idl-promise\u2461\u2460"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-promise\u2461\u2461"},{"id":"ref-for-idl-promise\u2461\u2462"},{"id":"ref-for-idl-promise\u2461\u2463"}],"title":"3.4. Configuration methods"},{"refs":[{"id":"ref-for-idl-promise\u2461\u2464"},{"id":"ref-for-idl-promise\u2461\u2465"},{"id":"ref-for-idl-promise\u2461\u2466"},{"id":"ref-for-idl-promise\u2461\u2467"}],"title":"3.4.1. Zoom"},{"refs":[{"id":"ref-for-idl-promise\u2461\u2468"}],"title":"3.5. Capture methods"},{"refs":[{"id":"ref-for-idl-promise\u2462\u2463"},{"id":"ref-for-idl-promise\u2462\u2464"},{"id":"ref-for-idl-promise\u2462\u2465"},{"id":"ref-for-idl-promise\u2462\u2466"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org#idl-promise"},
+"4bf1cac4": {"dfnID":"4bf1cac4","dfnText":"promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise\u2460\u2464"}],"title":"3.2. Navigation methods"}],"url":"https://webidl.spec.whatwg.org#idl-promise"},
 "4e40e56c": {"dfnID":"4e40e56c","dfnText":"inserted into a document","external":true,"refSections":[{"refs":[{"id":"ref-for-insert-an-element-into-a-document"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/infrastructure.html#insert-an-element-into-a-document"},
 "4f00e731": {"dfnID":"4f00e731","dfnText":"IsolatedContext","external":true,"refSections":[{"refs":[{"id":"ref-for-IsolatedContext"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-IsolatedContext\u2460"},{"id":"ref-for-IsolatedContext\u2461"}],"title":"3.6.1. consolemessage"},{"refs":[{"id":"ref-for-IsolatedContext\u2462"},{"id":"ref-for-IsolatedContext\u2463"},{"id":"ref-for-IsolatedContext\u2464"}],"title":"3.6.2. dialog"},{"refs":[{"id":"ref-for-IsolatedContext\u2465"},{"id":"ref-for-IsolatedContext\u2466"},{"id":"ref-for-IsolatedContext\u2467"}],"title":"3.6.3. newwindow"},{"refs":[{"id":"ref-for-IsolatedContext\u2468"},{"id":"ref-for-IsolatedContext\u2460\u24ea"},{"id":"ref-for-IsolatedContext\u2460\u2460"},{"id":"ref-for-IsolatedContext\u2460\u2461"},{"id":"ref-for-IsolatedContext\u2460\u2462"},{"id":"ref-for-IsolatedContext\u2460\u2463"},{"id":"ref-for-IsolatedContext\u2460\u2464"},{"id":"ref-for-IsolatedContext\u2460\u2465"},{"id":"ref-for-IsolatedContext\u2460\u2466"},{"id":"ref-for-IsolatedContext\u2460\u2467"}],"title":"3.6.4. permissionrequest"},{"refs":[{"id":"ref-for-IsolatedContext\u2460\u2468"},{"id":"ref-for-IsolatedContext\u2461\u24ea"}],"title":"3.6.5. sizechanged"},{"refs":[{"id":"ref-for-IsolatedContext\u2461\u2460"},{"id":"ref-for-IsolatedContext\u2461\u2461"}],"title":"3.6.6. zoomchange"},{"refs":[{"id":"ref-for-IsolatedContext\u2461\u2462"}],"title":"3.6.7. contentload"},{"refs":[{"id":"ref-for-IsolatedContext\u2461\u2463"},{"id":"ref-for-IsolatedContext\u2461\u2464"},{"id":"ref-for-IsolatedContext\u2461\u2465"},{"id":"ref-for-IsolatedContext\u2461\u2466"}],"title":"3.6.8. loadabort"},{"refs":[{"id":"ref-for-IsolatedContext\u2461\u2467"}],"title":"3.6.9. loadcommit"},{"refs":[{"id":"ref-for-IsolatedContext\u2461\u2468"}],"title":"3.6.10. loadstart"},{"refs":[{"id":"ref-for-IsolatedContext\u2462\u24ea"}],"title":"3.6.11. loadstop"},{"refs":[{"id":"ref-for-IsolatedContext\u2462\u2460"}],"title":"3.6.12. loadredirect"},{"refs":[{"id":"ref-for-IsolatedContext\u2462\u2461"},{"id":"ref-for-IsolatedContext\u2462\u2462"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-IsolatedContext\u2462\u2463"},{"id":"ref-for-IsolatedContext\u2462\u2464"},{"id":"ref-for-IsolatedContext\u2462\u2465"},{"id":"ref-for-IsolatedContext\u2462\u2466"}],"title":"5. Context Menus API"}],"url":"https://wicg.github.io/isolated-web-apps/isolated-contexts.html#IsolatedContext"},
 "50b05fad": {"dfnID":"50b05fad","dfnText":"method","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-method"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-concept-request-method\u2460"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-request-method"},
@@ -7294,7 +7289,7 @@ let dfnPanelData = {
 "bc7b9068": {"dfnID":"bc7b9068","dfnText":"clear","external":true,"refSections":[{"refs":[{"id":"ref-for-map-clear"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-map-clear\u2460"}],"title":"3.4. Configuration methods"},{"refs":[{"id":"ref-for-map-clear\u2461"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-clear"},
 "bd736ec6": {"dfnID":"bd736ec6","dfnText":"top-level traversable","external":true,"refSections":[{"refs":[{"id":"ref-for-top-level-traversable"}],"title":"3.6.13.1. [HTML]"},{"refs":[{"id":"ref-for-top-level-traversable\u2460"},{"id":"ref-for-top-level-traversable\u2461"}],"title":"3.7.1.1. [HTML]"},{"refs":[{"id":"ref-for-top-level-traversable\u2462"}],"title":"3.7.1.3. [STORAGE]"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable"},
 "bd7d36d0": {"dfnID":"bd7d36d0","dfnText":"interactive content","external":true,"refSections":[{"refs":[{"id":"ref-for-interactive-content-2"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#interactive-content-2"},
-"bdbd19d1": {"dfnID":"bdbd19d1","dfnText":"Promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise"},{"id":"ref-for-idl-promise\u2460"},{"id":"ref-for-idl-promise\u2461"},{"id":"ref-for-idl-promise\u2462"},{"id":"ref-for-idl-promise\u2463"},{"id":"ref-for-idl-promise\u2464"},{"id":"ref-for-idl-promise\u2465"},{"id":"ref-for-idl-promise\u2466"},{"id":"ref-for-idl-promise\u2467"},{"id":"ref-for-idl-promise\u2468"},{"id":"ref-for-idl-promise\u2460\u24ea"},{"id":"ref-for-idl-promise\u2460\u2460"},{"id":"ref-for-idl-promise\u2460\u2461"},{"id":"ref-for-idl-promise\u2460\u2462"},{"id":"ref-for-idl-promise\u2460\u2463"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-idl-promise\u2460\u2467"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-promise\u2462\u24ea"},{"id":"ref-for-idl-promise\u2462\u2460"},{"id":"ref-for-idl-promise\u2462\u2461"},{"id":"ref-for-idl-promise\u2462\u2462"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#idl-promise"},
+"bdbd19d1": {"dfnID":"bdbd19d1","dfnText":"Promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise"},{"id":"ref-for-idl-promise\u2460"},{"id":"ref-for-idl-promise\u2461"},{"id":"ref-for-idl-promise\u2462"},{"id":"ref-for-idl-promise\u2463"},{"id":"ref-for-idl-promise\u2464"},{"id":"ref-for-idl-promise\u2465"},{"id":"ref-for-idl-promise\u2466"},{"id":"ref-for-idl-promise\u2467"},{"id":"ref-for-idl-promise\u2468"},{"id":"ref-for-idl-promise\u2460\u24ea"},{"id":"ref-for-idl-promise\u2460\u2460"},{"id":"ref-for-idl-promise\u2460\u2461"},{"id":"ref-for-idl-promise\u2460\u2462"},{"id":"ref-for-idl-promise\u2460\u2463"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-idl-promise\u2460\u2465"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-idl-promise\u2460\u2466"},{"id":"ref-for-idl-promise\u2460\u2467"},{"id":"ref-for-idl-promise\u2460\u2468"},{"id":"ref-for-idl-promise\u2461\u24ea"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#idl-promise"},
 "bf14d219": {"dfnID":"bf14d219","dfnText":"completely loaded","external":true,"refSections":[{"refs":[{"id":"ref-for-completely-loaded"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/document-lifecycle.html#completely-loaded"},
 "bf63a402": {"dfnID":"bf63a402","dfnText":"navigable container","external":true,"refSections":[{"refs":[{"id":"ref-for-navigable-container"},{"id":"ref-for-navigable-container\u2460"}],"title":"5. Context Menus API"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#navigable-container"},
 "c2381df8": {"dfnID":"c2381df8","dfnText":"top","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-top"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-top"},
@@ -7353,7 +7348,7 @@ let dfnPanelData = {
 "d7edb843": {"dfnID":"d7edb843","dfnText":"urlencoded serializer","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-urlencoded-serializer"},{"id":"ref-for-concept-urlencoded-serializer\u2460"}],"title":"3.3. Scripting methods"}],"url":"https://url.spec.whatwg.org/#concept-urlencoded-serializer"},
 "d85a6c84": {"dfnID":"d85a6c84","dfnText":"header list","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-header-list"},{"id":"ref-for-concept-header-list\u2460"},{"id":"ref-for-concept-header-list\u2461"},{"id":"ref-for-concept-header-list\u2462"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-header-list"},
 "d8b963e8": {"dfnID":"d8b963e8","dfnText":"isomorphic decode","external":true,"refSections":[{"refs":[{"id":"ref-for-isomorphic-decode"},{"id":"ref-for-isomorphic-decode\u2460"},{"id":"ref-for-isomorphic-decode\u2461"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#isomorphic-decode"},
-"dacde8b5": {"dfnID":"dacde8b5","dfnText":"a new promise","external":true,"refSections":[{"refs":[{"id":"ref-for-a-new-promise"}],"title":"3.2. Navigation methods"}],"url":"https://webidl.spec.whatwg.org/#a-new-promise"},
+"dacde8b5": {"dfnID":"dacde8b5","dfnText":"a new promise","external":true,"refSections":[{"refs":[{"id":"ref-for-a-new-promise"}],"title":"3.2. Navigation methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460"},{"id":"ref-for-a-new-promise\u2461"},{"id":"ref-for-a-new-promise\u2462"},{"id":"ref-for-a-new-promise\u2463"},{"id":"ref-for-a-new-promise\u2464"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-a-new-promise\u2465"},{"id":"ref-for-a-new-promise\u2466"},{"id":"ref-for-a-new-promise\u2467"}],"title":"3.4. Configuration methods"},{"refs":[{"id":"ref-for-a-new-promise\u2468"},{"id":"ref-for-a-new-promise\u2460\u24ea"},{"id":"ref-for-a-new-promise\u2460\u2460"},{"id":"ref-for-a-new-promise\u2460\u2461"}],"title":"3.4.1. Zoom"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2462"}],"title":"3.5. Capture methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2463"},{"id":"ref-for-a-new-promise\u2460\u2464"},{"id":"ref-for-a-new-promise\u2460\u2465"},{"id":"ref-for-a-new-promise\u2460\u2466"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#a-new-promise"},
 "dae0bfde": {"dfnID":"dae0bfde","dfnText":"serialization of an origin","external":true,"refSections":[{"refs":[{"id":"ref-for-ascii-serialisation-of-an-origin"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/browsers.html#ascii-serialisation-of-an-origin"},
 "db8aa4d8": {"dfnID":"db8aa4d8","dfnText":"stream","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-body-stream"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-body-stream"},
 "dc1cd39b": {"dfnID":"dc1cd39b","dfnText":"URL (for request)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-url"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-concept-request-url\u2460"}],"title":"3.6.13.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-request-url\u2461"}],"title":"4.1. WebRequest handler config"},{"refs":[{"id":"ref-for-concept-request-url\u2462"}],"title":"8.1. Security"}],"url":"https://fetch.spec.whatwg.org/#concept-request-url"},
