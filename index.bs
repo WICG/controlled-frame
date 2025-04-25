@@ -3152,7 +3152,7 @@ Each {{WebRequestEvent}} has:
       1. Let |details| be the result of calling [=create a
           WebRequestEventDetails object=] given |request|.
 
-      1. If |config|'s [=WebRequest handler config/requestsBody=] is true and
+      1. If |config|'s [=WebRequest handler config/requestsBody=] is `true` and
           |request|'s [=request/body=] is not null, then:
 
           1. Let |requestBody| be an empty {{RequestBody}}.
@@ -3211,8 +3211,8 @@ Each {{WebRequestEvent}} has:
           1. If all [=map/keys=] in |result| are [=list/contained=] in the set
               « "cancel", "redirect" », then:
 
-              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
+              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
 
               1. If |result|["{{BlockingResponse/redirectUrl}}"] is a
                   [=valid URL string=] and
@@ -3223,7 +3223,7 @@ Each {{WebRequestEvent}} has:
 
           1. Decrement |pendingHandlerCount|.
 
-  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
       to equal 0, then [=queue a global task=] on the [=networking task source=]
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
@@ -3272,8 +3272,8 @@ Each {{WebRequestEvent}} has:
           1. If all [=map/keys=] in |result| are [=list/contained=] in the set
               « "cancel", "requestHeaders" », then:
 
-              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
+              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
 
               1. If |result|["{{BlockingResponse/requestHeaders}}"] is a
                   [=list=] whose [=list/size=] &gt; 0, then:
@@ -3287,7 +3287,7 @@ Each {{WebRequestEvent}} has:
 
           1. Decrement |pendingHandlerCount|.
 
-  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
       to equal 0, then [=queue a global task=] on the [=networking task source=]
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
@@ -3366,8 +3366,8 @@ Each {{WebRequestEvent}} has:
           1. If all [=map/keys=] in |result| are [=list/contained=] in the set
               « "cancel", "redirectUrl", "responseHeaders" », then:
 
-              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
+              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
 
               1. If |result|["{{BlockingResponse/redirectUrl}}"] is a
                   [=valid URL string=] and
@@ -3388,7 +3388,7 @@ Each {{WebRequestEvent}} has:
 
           1. Decrement |pendingHandlerCount|.
 
-  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
       to equal 0, then [=queue a global task=] on the [=networking task source=]
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
@@ -3466,7 +3466,7 @@ Each {{WebRequestEvent}} has:
           1. Let |result| be null.
 
           1. If |config|'s [=WebRequest handler config/asyncBlocking=] flag is
-              true, then:
+              `true`, then:
 
               1. Let |callback| be a [=function=] that takes a
                   {{BlockingResponse}} |blockingResponse| argument and when
@@ -3490,8 +3490,8 @@ Each {{WebRequestEvent}} has:
               dictionary [=list/containing=] two [=map/keys=] equal to
               "username" and "password", then:
 
-              1. If |result|["{{BlockingResponse/cancel}}"] is true, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to true.
+              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
+                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
 
               1. If |result|["{{BlockingResponse/authCredentials}}"] is defined
                   and |combinedResults|["{{BlockingResponse/authCredentials}}"]
@@ -3501,7 +3501,7 @@ Each {{WebRequestEvent}} has:
 
           1. Decrement |pendingHandlerCount|.
 
-  1. If |blocking| is true, then wait [=in parallel=] for |pendingHandlerCount|
+  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
       to equal 0, then [=queue a global task=] on the [=networking task source=]
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
@@ -3903,23 +3903,23 @@ Each {{WebRequestEvent}} has:
 
     1. Let |client| be |request|'s [=request/client=].
 
-    1. If |client| is null, return an empty [=list=] and false.
+    1. If |client| is null, return an empty [=list=] and `false`.
 
     1. If |client|'s corresponding [=global object=] is not a {{Window}},
-        return an empty [=list=] and false.
+        return an empty [=list=] and `false`.
 
     1. Let |navigable| be the [=/navigable=] that |client|'s [=global object=]
         is within.
 
     1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=]
-        and false.
+        and `false`.
 
     1. Let |controlledFrame| be the {{HTMLControlledFrameElement}}
         corresponding to |navigable|'s [=embedderParent=].
 
     1. Let |validHandlers| be an empty [=list=].
 
-    1. Let |blocking| be false.
+    1. Let |blocking| be `false`.
 
     1. Let |handlerMap| be |controlledFrame|'s
         {{HTMLControlledFrameElement/request}}'s [=WebRequest/handler map=].
@@ -3937,7 +3937,7 @@ Each {{WebRequestEvent}} has:
 
         1. Let |urls| be |filter|["{{RequestFilter/urls}}"].
 
-        1. Let |isValidUrl| be true if |urls| is [=list/empty=],
+        1. Let |isValidUrl| be `true` if |urls| is [=list/empty=],
             `false` otherwise.
 
         1. For each |urlPattern| in |urls|:
@@ -3945,11 +3945,11 @@ Each {{WebRequestEvent}} has:
             1. If |request|'s [=request/URL=] [=matches a URL pattern=] given
                 |urlPattern|, set |isValidUrl| to `true`.
 
-        1. If |isValidUrl| is false, then [=iteration/continue=].
+        1. If |isValidUrl| is `false`, then [=iteration/continue=].
 
         1. If |handlerConfig|'s [=WebRequest handler config/blocking=] or
-            [=WebRequest handler config/asyncBlocking=] are true, then set
-            |blocking| to true.
+            [=WebRequest handler config/asyncBlocking=] are `true`, then set
+            |blocking| to `true`.
 
         1. [=list/Append=] |handlerConfig| to |validHandlers|.
 
