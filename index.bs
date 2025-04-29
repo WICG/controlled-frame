@@ -3478,11 +3478,13 @@ Each {{WebRequestEvent}} has:
               1. Wait [=in parallel=] for |callback| to be invoked, and then
                   continue executing these steps.
 
-          1. Otherwise, set |result| to the result of calling |config|'s
-              [=WebRequest handler config/handler=] given |details|.
+          1. Otherwise:
 
-              Note: Any exceptions thrown by the handler are intentionally
-              ignored and will not affect the request.
+              1. Set |result| to the result of calling |config|'s
+                  [=WebRequest handler config/handler=] given |details|.
+
+                  Note: Any exceptions thrown by the handler are intentionally
+                  ignored and will not affect the request.
 
           1. If all [=map/keys=] in |result| are [=list/contained=] in the set
               « "cancel", "authCredentials" » and |result|["{{
@@ -3948,7 +3950,7 @@ Each {{WebRequestEvent}} has:
         1. If |isValidUrl| is `false`, then [=iteration/continue=].
 
         1. If |handlerConfig|'s [=WebRequest handler config/blocking=] or
-            [=WebRequest handler config/asyncBlocking=] are `true`, then set
+            [=WebRequest handler config/asyncBlocking=] is `true`, then set
             |blocking| to `true`.
 
         1. [=list/Append=] |handlerConfig| to |validHandlers|.
