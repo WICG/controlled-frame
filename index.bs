@@ -1183,9 +1183,9 @@ implementation of this isolation that can be implemented by all browsers.
       1. Let |document| be [=this=]'s [=embedded navigable=]'s
           [=active document=].
 
-      1. Let |status| be the result of [=injecting a script into a document=]
-          given |document|, |scriptString|, and the following algorithm that
-          accepts a [=completion record=] |completionRecord|:
+      1. [=Inject a script into a document=] given |document|, |scriptString|,
+          and the following algorithm that accepts a [=completion record=]
+          |completionRecord|:
 
           1. If |completionRecord| is a [=normal completion=], then:
 
