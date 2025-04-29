@@ -1184,17 +1184,18 @@ implementation of this isolation that can be implemented by all browsers.
           [=active document=].
 
       1. Let |status| be the result of [=injecting a script into a document=]
-          given |document| and |scriptString|.
+          given |document|, |scriptString|, and the following algorithm that
+          accepts a [=completion record=] |completionRecord|:
 
-      1. If |status| is a [=normal completion=], then:
+          1. If |completionRecord| is a [=normal completion=], then:
 
-          1. [=Resolve an embedder promise=] given [=this=], |result|, and
-              |status|.`[[Value]]`.
+              1. [=Resolve an embedder promise=] given [=this=], |result|, and
+                  |completionRecord|.`[[Value]]`.
 
-      1. Otherwise:
+          1. Otherwise:
 
-          1. [=Reject an embedder promise=] given [=this=], |result|, and
-              |status|.`[[Value]]`.
+              1. [=Reject an embedder promise=] given [=this=], |result|, and
+                  |completionRecord|.`[[Value]]`.
 
   1. If |details|["{{InjectDetails/code}}"] is defined, then run
       |executionSteps| given 0 and |details|["{{InjectDetails/code}}"].
@@ -1650,7 +1651,7 @@ dictionary ImageDetails {
 
       1. Let |optionsQuality| be |options|["quality"].
 
-  1. If |optionsQuality| is not an integer and is not between 0 and 100
+  1. If |optionsQuality| is not an integer or is not between 0 and 100
      inclusive, then [=reject an embedder promise=] given [=this=],
      |resultPromise|, and a {{TypeError}}, and abort these steps.
 
@@ -1913,9 +1914,11 @@ message |message|, run the following steps:
 1. Synchronously wait for |complete| to be `true`.
 
     Note: Blocking here is intentional as the alert, confirm, and prompt
-    dialogs represented by "dialog" events block the main thread.
+    dialogs represented by "dialog" events block the main thread, and the event
+    handlers we're calling here can affect the return values.
 
-1. Return |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"] and |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/response=]"].
+1. Return |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"]
+    and |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/response=]"].
 
 </div>
 
