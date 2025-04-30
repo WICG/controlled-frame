@@ -164,6 +164,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: create a classic script; url: creating-a-classic-script
             text: default script fetch options; url: default-script-fetch-options
             text: environment; url: environment
+            text: navigation and traversal task source; url: navigation-and-traversal-task-source
 
 spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     type: dfn
@@ -633,11 +634,11 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
   1. If |embeddedNavigable| is null, then [=resolve an embedder promise=] given
-      [=this=], |resultPromise|, and `false`.
+      [=this=], |resultPromise|, and `false`, and abort these steps.
 
   1. If |embeddedNavigable|'s [=active document=] is not [=fully active=],
       then [=resolve an embedder promise=] given [=this=], |resultPromise|,
-      and `false`.
+      and `false`, and abort these steps.
 
   1. [=Append the following session history traversal steps=] to
       |embeddedNavigable|:
@@ -648,7 +649,7 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
       1. Let |currentStepIndex| be the index of |embeddedNavigable|'s
           [=current session history step=] within |allSteps|.
 
-      1. Let |targetStepIndex| be |currentStepIndex| plus |delta|.
+      1. Let |targetStepIndex| be |currentStepIndex| + |delta|.
 
       1. If |allSteps|[|targetStepIndex|] does not [=list/exist=], then
           [=resolve an embedder promise=] given [=this=], |resultPromise|,
@@ -677,7 +678,7 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   1. If [=this=]'s [=embedded navigable=] is null, then return `false`.
 
   1. If [=this=]'s [=embedded navigable=]'s [=current session history step=]
-      is greater than 0, return `true`.
+      is &gt; 0, return `true`.
 
   1. Return `false`.
 
@@ -695,7 +696,7 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   1. Let |steps| be the result of [=getting all used history steps=]
       given [=this=]'s [=embedded navigable=].
 
-  1. If |step|+1 is less than the [=list/size=] of |steps|, then return `true`.
+  1. If |step| + 1 &lt; the [=list/size=] of |steps|, then return `true`.
 
   1. Return `false`.
 
@@ -730,31 +731,54 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>reload()</dfn> steps are:
 
-  1. If [=this=]'s [=embedded navigable=] is null, return.
+  1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
 
-  1. [=Reload=] [=this=]'s [=embedded navigable=] given a [=user navigation
-      involvement=] of "[=browser UI=]".
+  1. If |embeddedNavigable| is null, return.
+
+  1. [=Queue a global task=] on the [=navigation and traversal task source=] of
+      |embeddedNavigable|'s [=relevant global object=] that will [=reload=]
+      |embeddedNavigable| given a [=user navigation involvement=] of "[=none=]".
 
 </div>
 
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>stop()</dfn> steps are:
 
-  1. If [=this=]'s [=embedded navigable=] is null, return.
+  1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
 
-  1. [=Stop loading=] [=this=]'s [=embedded navigable=].
+  1. If |embeddedNavigable| is null, return.
+
+  1. [=Queue a global task=] on the [=navigation and traversal task source=] of
+      |embeddedNavigable|'s [=relevant global object=] that will
+      [=stop loading=] |embeddedNavigable|.
 
 </div>
 
 <div algorithm>
   To <dfn>resolve an embedder promise</dfn> given a <{controlledframe}>
-  |controlledframe|, a [=promise=] |promise|, and a |value|, run the following
-  steps:
+  |controlledframe|, a [=promise=] |promise|, and an optional |value|,
+  run the following steps:
 
-  1. Let |global| be |controlledframe|'s [=node document=]'s [=global object=].
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+      |controlledframe|'s [=relevant global object=] to [=resolve=] |promise|
+      with |value|.
 
-  1. [=Queue a global task=] on the [=DOM manipulation task source=] given
-      |global| to [=resolve=] |promise| with |value|.
+      Note: The [=relevant global object=] of |controlledframe| is the
+          **embedder's** {{Window}} object.
+
+</div>
+
+<div algorithm>
+  To <dfn>reject an embedder promise</dfn> given a <{controlledframe}>
+  |controlledframe|, a [=promise=] |promise|, and an optional |value|,
+  run the following steps:
+
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+      |controlledframe|'s [=relevant global object=] to [=reject=] |promise|
+      with |value|.
+
+      Note: The [=relevant global object=] of |controlledframe| is the
+          **embedder's** {{Window}} object.
 
 </div>
 
@@ -906,8 +930,9 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. Let |completionSteps| be the following algorithm, which takes a {{long}}
       |index| and a [=string=] or [=boolean=] |source|:
 
-      1. If |source| is not a [=string=], then [=reject=] |result| with a
-          {{TypeError}} and abort these steps.
+      1. If |source| is not a [=string=], then [=reject an embedder promise=]
+          given |controlledframe|, |result|, and {{TypeError}}, and abort
+          these steps.
 
       1. If |isCss|, then:
 
@@ -925,14 +950,15 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       1. Set |controlledframe|'s [=controlledframe/content script map
           =][|details|[{{ContentScriptDetails/name}}]] to |config|.
 
-      1. [=Resolve=] |result|.
+      1. [=Resolve an embedder promise=] given |controlledframe| and |result|.
 
   1. Let |injectionItems| be |details|["{{ContentScriptDetails/css}}"] if
       |isCss| is `true`, |details|["{{ContentScriptDetails/js}}"] otherwise.
 
   1. If |injectionItems|["{{InjectionItems/code}}"] and
       |injectionItems|["{{InjectionItems/files}}"] are both defined, or both
-      undefined, [=reject=] |result| with a {{TypeError}} and abort these steps.
+      undefined, [=reject an embedder promise=] given |controlledframe|,
+      |result|, and {{TypeError}}, and abort these steps.
 
   1. If |injectionItems|["{{InjectionItems/code}}"] is defined, then:
 
@@ -942,7 +968,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. Otherwise:
 
       1. If |injectionItems|["{{InjectionItems/files}}"] is [=list/empty=], then
-          [=reject=] |result| with a {{TypeError}} and abort these steps.
+          [=reject an embedder promise=] given |controlledframe|, |result|,
+          and {{TypeError}}, and abort these steps.
 
       1. [=list/For each=] |urlString| of |injectionItems|
           ["{{InjectionItems/files}}"]:
@@ -1010,8 +1037,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. [=list/For each=] |config| of |controlledframe|'s [=content script map=]:
 
       1. If the result of determining whether a [=content script config applies
-          to a document=] given |config|, |url|, and |isTopLevel| equals `false`,
-          then [=continue=].
+          to a document=] given |config|, |url|, and |isTopLevel| equals
+          `false`, then [=continue=].
 
       1. If |currentPhase| is equal to {{RunAt/document-start}} and |config|'s
           [=content script config/css=] is not [=list/empty=], then:
@@ -1028,8 +1055,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
           1. [=list/For each=] |scriptSource| of |config|'s
               [=content script config/js=]:
 
-              1. Run [=inject a script into a document=] given |document|
-                  and |scriptSource|.
+              1. Run [=inject a script into a document=] given |document|,
+                  |scriptSource|, and an empty algorithm.
 
 </div>
 
@@ -1042,7 +1069,9 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. [=Synchronously replace the rules of a CSSStyleSheet=] given |styleSheet|
       and |styleSource|.
 
-  1. [=Add a CSS style sheet=] given |document| and |styleSheet|.
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+      |document|'s [=global object=] to [=add a CSS style sheet=] given
+      |document| and |styleSheet|.
 
 </div>
 
@@ -1064,19 +1093,26 @@ Xray vision</a>. This algorithm should eventually describe a speccable
 implementation of this isolation that can be implemented by all browsers.
 
 <div algorithm>
-  To <dfn>inject a script into a document</dfn> given a {{Document}} |document|
-  and a [=string=] |scriptSource|, run the following steps:
+  To <dfn>inject a script into a document</dfn> given a {{Document}} |document|,
+  a [=string=] |scriptSource|, and an algorithm |completionSteps| that takes
+  a [=completion record=], run the following steps:
 
   1. Let |script| be the result of [=creating a classic script=] given
       |scriptSource|, |document|'s [=relevant settings object=], |document|'s
       [=Document/URL=], and the [=default script fetch options=].
 
-  1. Let |taskSource| be the [=DOM manipulation task source=] of |document|'s
-      [=global object=].
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+      |document|'s [=global object=] that will run the following step:
 
-  1. [=Queue a global task=] on |taskSource| that will run the following step:
+      1. Let |completionRecord| be the result of [=running a classic script=]
+          given |script|.
 
-      1. Return the result of [=running a classic script=] given |script|.
+      1. Let |controlledframe| be |document|'s [=node navigable=]'s
+          [=traversable navigable=]'s [=embedderParent=].
+
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |controlledframe|'s [=relevant global object=] that will run
+          |completionSteps| with |completionRecord|.
 
 </div>
 
@@ -1116,7 +1152,7 @@ implementation of this isolation that can be implemented by all browsers.
 
       1. [=map/Remove=] [=this=]'s [=content script map=][|name|].
 
-  1. [=Resolve=] |result|.
+  1. [=Resolve an embedder promise=] given [=this=] and |result|.
 
 </div>
 
@@ -1128,32 +1164,38 @@ implementation of this isolation that can be implemented by all browsers.
 
   1. Return |result| and run the remaining steps [=in parallel=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, [=reject=] |result| with a
-      {{TypeError}} and abort these steps.
+  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
+      promise=] given [=this=], |result|, and a {{TypeError}},
+      and abort these steps.
 
   1. If |details|["{{InjectDetails/code}}"] and
       |details|"[{{InjectDetails/file}}"] are either both defined or both
-      undefined, [=reject=] |result| with a {{TypeError}} and abort these steps.
+      undefined, then [=reject an embedder promise=] given [=this=], |result|,
+      and a {{TypeError}}, and abort these steps.
 
   1. Let |executionSteps| be the following algorithm that takes a {{long}} and
       a [=string=] or [=boolean=] |scriptString|:
 
-      1. If |scriptString| is not a [=string=], then [=reject=] |result| with a
-          {{TypeError}} and abort these steps.
+      1. If |scriptString| is not a [=string=], then [=reject an embedder
+          promise=] given [=this=], |result|, and a {{TypeError}},
+          and abort these steps.
 
       1. Let |document| be [=this=]'s [=embedded navigable=]'s
           [=active document=].
 
-      1. Let |status| be the result of [=injecting a script into a document=]
-          given |document| and |scriptString|.
+      1. [=Inject a script into a document=] given |document|, |scriptString|,
+          and the following algorithm that accepts a [=completion record=]
+          |completionRecord|:
 
-      1. If |status| is a [=normal completion=], then:
+          1. If |completionRecord| is a [=normal completion=], then:
 
-          1. [=Resolve=] |result| with |status|.`[[Value]]`.
+              1. [=Resolve an embedder promise=] given [=this=], |result|, and
+                  |completionRecord|.`[[Value]]`.
 
-      1. Otherwise:
+          1. Otherwise:
 
-          1. [=Reject=] |result| with |status|.`[[Value]]`.
+              1. [=Reject an embedder promise=] given [=this=], |result|, and
+                  |completionRecord|.`[[Value]]`.
 
   1. If |details|["{{InjectDetails/code}}"] is defined, then run
       |executionSteps| given 0 and |details|["{{InjectDetails/code}}"].
@@ -1169,20 +1211,23 @@ implementation of this isolation that can be implemented by all browsers.
 
   1. Let |result| be [=a new promise=].
 
-  1. Return |promise| and run the remaining steps [=in parallel=].
+  1. Return |result| and run the remaining steps [=in parallel=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, [=reject=] |promise| with a
-      {{TypeError}} and abort these steps.
+  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
+      promise=] given [=this=], |result|, and a {{TypeError}},
+      and abort these steps.
 
   1. If |details|["{{InjectDetails/code}}"] and
       |details|["{{InjectDetails/file}}"] are either both defined or both
-      undefined, [=reject=] |result| with a {{TypeError}} and abort these steps.
+      undefined, then [=reject an embedder promise=] given [=this=], |result|,
+      and a {{TypeError}}, and abort these steps.
 
   1. Let |executionSteps| be the following algorithm that takes a {{long}} and
       a [=string=] or [=boolean=] |styleString|:
 
-      1. If |styleString| is not a [=string=], then [=reject=] |result| with a
-          {{TypeError}} and abort these steps.
+      1. If |styleString| is not a [=string=], then [=reject an embedder
+          promise=] given [=this=], |result|, and a {{TypeError}},
+          and abort these steps.
 
       1. Let |document| be [=this=]'s [=embedded navigable=]'s
           [=active document=].
@@ -1190,7 +1235,7 @@ implementation of this isolation that can be implemented by all browsers.
       1. [=Inject a stylesheet into a document=] given |document| and
           |styleString|.
 
-      1. [=Resolve=] |promise|.
+      1. [=Resolve an embedder promise=] given [=this=] and |result|.
 
   1. If |details|["{{InjectDetails/code}}"] is defined, then run |executionSteps|
       given 0 and |details|["{{InjectDetails/code}}"].
@@ -1321,7 +1366,7 @@ dictionary ClearDataTypeSet {
 
           1. Clear |cache|.
 
-  1. [=Resolve=] |resultPromise|.
+  1. [=Resolve an embedder promise=] given [=this=] and |resultPromise|.
 
 </div>
 
@@ -1330,11 +1375,17 @@ dictionary ClearDataTypeSet {
   method steps are:
 
   1. Let |resultPromise| be [=a new promise=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject=]
-      |resultPromise| with a {{TypeError}} and abort these steps.
+
+  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
+      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
+      and abort these steps.
+
   1. Let |muteState| be the current audio mute state of embedded content.
-  1. Then, [=resolve=] |resultPromise| with |muteState|.
+
+  1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
+      and |muteState|.
 
 </div>
 
@@ -1343,11 +1394,17 @@ dictionary ClearDataTypeSet {
   method steps are:
 
   1. Let |resultPromise| be [=a new promise=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject=]
-      |resultPromise| with a {{TypeError}} and abort these steps.
+
+  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
+      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
+      and abort these steps.
+
   1. Let |muteState| be the current audio mute state for embedded content.
-  1. Then, [=resolve=] |resultPromise| with |muteState|.
+
+  1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
+      and |muteState|.
 
 </div>
 
@@ -1357,6 +1414,7 @@ dictionary ClearDataTypeSet {
 
   1. If [=this=]'s [=embedded navigable=] is null, then [=throw=] a
       {{TypeError}}.
+
   1. Change the audio mute state for embedded content to match |mute| state.
 
 </div>
@@ -1435,9 +1493,10 @@ The <dfn method for=HTMLControlledFrameElement>getZoomMode()</dfn> method steps 
 
 1. Let |p| be [=a new promise=].
 
-1. Return |p| and run the remaining steps [=in parallel=]:
+1. Return |p| and run the remaining steps [=in parallel=].
 
-      1. Resolve |p| with [=this=]'s [=HTMLControlledFrameElement/zoomMode=].
+1. [=Resolve an embedder promise=] given [=this=], |p|, and [=this=]'s
+    [=HTMLControlledFrameElement/zoomMode=].
 
 </div>
 
@@ -1447,33 +1506,22 @@ The <dfn method for=HTMLControlledFrameElement>setZoomMode(|zoomMode|)</dfn> met
 
 1. Let |p| be [=a new promise=].
 
-1. Return |p| and run the remaining steps [=in parallel=]:
+1. Return |p| and run the remaining steps [=in parallel=].
 
-      1. Let |currentZoomMode| be the result of {{HTMLControlledFrameElement/getZoomMode}} given [=this=].
+1. Let |currentZoomMode| be the result of {{HTMLControlledFrameElement/getZoomMode}} given [=this=].
 
-      1. If |currentZoomMode| equals |zoomMode|, resolve |p| with undefined.
+1. If |currentZoomMode| equals |zoomMode|, [=resolve an embedder promise=]
+    given [=this=] and |p|.
 
-      1. Set [=this=]'s [=HTMLControlledFrameElement/zoomMode=] to |zoomMode|.
+1. Set [=this=]'s [=HTMLControlledFrameElement/zoomMode=] to |zoomMode|.
 
-      1. If |zoomMode| is {{ZoomMode/per-origin}}:
+1. If |zoomMode| is {{ZoomMode/per-origin}}:
 
-            1. If [=current document has a per-origin zoom level=] given [=this=] is `true`:
-
-                  1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
-
-                  1. Set [=this=]'s [=currentZoom=] to the result of [=get the per-origin zoom level=] given [=this=].
-
-                  1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
-
-                        1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
-
-                        1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
-
-      1. If |zoomMode| is {{ZoomMode/disabled}}:
+      1. If [=current document has a per-origin zoom level=] given [=this=] is `true`:
 
             1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
 
-            1. Set [=this=]'s [=currentZoom=] to 1.0f.
+            1. Set [=this=]'s [=currentZoom=] to the result of [=get the per-origin zoom level=] given [=this=].
 
             1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
 
@@ -1481,7 +1529,19 @@ The <dfn method for=HTMLControlledFrameElement>setZoomMode(|zoomMode|)</dfn> met
 
                   1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
 
-      1. Resolve |p| with undefined.
+1. If |zoomMode| is {{ZoomMode/disabled}}:
+
+      1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+
+      1. Set [=this=]'s [=currentZoom=] to 1.0f.
+
+      1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+
+            1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+
+            1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+
+1. [=Resolve an embedder promise=] given [=this=] and |p|.
 
 </div>
 
@@ -1491,13 +1551,15 @@ The <dfn method for=HTMLControlledFrameElement>getZoom()</dfn> method steps are:
 
 1. Let |p| be [=a new promise=].
 
-1. Return |p| and run the remaining steps [=in parallel=]:
+1. Return |p| and run the remaining steps [=in parallel=].
 
-      1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
+1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
 
-      1. If |embeddedNavigable| is null, then [=reject=] |p| with a {{TypeError}} and abort these steps.
+1. If |embeddedNavigable| is null, then [=reject an embedder promise=] given
+    [=this=], |p|, and a {{TypeError}}, and abort these steps.
 
-      1. Resolve |p| with [=this=]'s [=currentZoom=].
+1. [=Resolve an embedder promise=] given [=this=], |p|, and [=this=]'s
+    [=currentZoom=].
 
 </div>
 
@@ -1507,43 +1569,45 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
 
 1. Let |p| be [=a new promise=].
 
-1. Return |p| and run the remaining steps [=in parallel=]:
+1. Return |p| and run the remaining steps [=in parallel=].
 
-      1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
+1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
 
-      1. If |embeddedNavigable| is null, then [=reject=] |p| with a {{TypeError}} and abort these steps.
+1. If |embeddedNavigable| is null, then [=reject an embedder promise=] given
+    [=this=], |p|, and a {{TypeError}}, and abort these steps.
 
-      1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/disabled}}:
+1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/disabled}}:
 
-            1. [=Reject=] |p| with a {{TypeError}} and abort these steps.
+      1. [=Reject an embedder promise=] given [=this=], |p|, and a
+          {{TypeError}}, and abort these steps.
 
-      1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-origin}}:
+1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-origin}}:
 
-            1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+      1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
 
-            1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
+      1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
 
-            1. [=Set the per-origin zoom level=] given [=this=] and |zoomFactor|. <span class='XXX'>TODO:update zoom of all Controlled Frames with the same partition and origin.</span>
+      1. [=Set the per-origin zoom level=] given [=this=] and |zoomFactor|. <span class='XXX'>TODO:update zoom of all Controlled Frames with the same partition and origin.</span>
 
-            1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+      1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
 
-                  1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+            1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
 
-                  1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+            1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
 
-      1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-view}}:
+1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-view}}:
 
-            1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+      1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
 
-            1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
+      1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
 
-            1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+      1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
 
-                  1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+            1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
 
-                  1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+            1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
 
-      1. Resolve |p| with undefined.
+1. [=Resolve an embedder promise=] given [=this=] and |p|.
 
 </div>
 
@@ -1564,26 +1628,40 @@ dictionary ImageDetails {
   method steps are:
 
   1. Let |resultPromise| be [=a new promise=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject=]
-      |resultPromise| with a {{TypeError}} and abort these steps.
+
+  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
+      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
+      and abort these steps.
+
   1. Let |optionsFormat| be "JPEG" by default.
+
   1. Let |optionsQuality| be 100 by default.
+
   1. If |options| has field "format":
+
       1. Let |optionsFormat| be |options|["format"].
-  1. If |optionsFormat| is an unrecognized format,
-     [=reject=] |resultPromise| with
-      a {{TypeError}} and abort these steps.
+
+  1. If |optionsFormat| is an unrecognized format, then [=reject an embedder
+      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
+      and abort these steps.
+
   1. If |options| has field "quality":
+
       1. Let |optionsQuality| be |options|["quality"].
-  1. If |optionsQuality| is not an integer and is not between 0 and 100
-     inclusive,
-     [=reject=] |resultPromise| with
-      a {{TypeError}} and abort these steps.
+
+  1. If |optionsQuality| is not an integer or is not between 0 and 100
+     inclusive, then [=reject an embedder promise=] given [=this=],
+     |resultPromise|, and a {{TypeError}}, and abort these steps.
+
   1. Create an image in format `optionsFormat` at quality `optionsQuality`
-     showing the visible region of
-     embedded content.
-  1. Then, [=resolve=] |resultPromise| containing the image data.
+     showing the visible region of embedded content.
+
+     <span class=XXX>Spec the type of the captured image.</span>
+
+  1. [=Resolve an embedder promise=] given [=this=], |resultPromise|, and
+      the image data.
 
 </div>
 
@@ -1593,6 +1671,7 @@ dictionary ImageDetails {
 
   1. If [=this=]'s [=embedded navigable=] is null, then [=throw=] a
       {{TypeError}}.
+
   1. Initiate the browser print page feature for embedded content.
 
 </div>
@@ -1732,7 +1811,8 @@ To <dfn data-lt='fire a "consolemessage" event'>fire a {{ConsoleMessageEvent}}</
 
 1. Set |e|'s {{ConsoleMessageEvent/consoleMessage}} to |consoleMessage|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -1799,13 +1879,15 @@ The <dfn method for=DialogController>cancel()</dfn> method steps are:
 
 <div algorithm=dispatch-dialog>
 
-To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given <{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and message |message|, run the following steps:
+To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given
+<{controlledframe}> element |target|, [=simple-dialogs=] type |dialogType|, and
+message |message|, run the following steps:
 
 1. Assert that |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"] equals `false`.
 
-1. Let |dialogMessage| be a new {{DialogMessage}} object.
+1. Let |dialogMessage| be a [=new=] {{DialogMessage}} object.
 
-1. Let |dialog| be a new {{DialogController}} object.
+1. Let |dialog| be a [=new=] {{DialogController}} object.
 
 1. Set the following fields of |dialogMessage|:
 
@@ -1820,9 +1902,23 @@ To <dfn data-lt='fire a "dialog" event'>fire a {{DialogEvent}}</dfn> |e| given <
 
 1. Set |e|'s {{DialogEvent/dialogMessage}} to |dialogMessage|.
 
-1. Dispatch |e| at |target|.
+1. Let |complete| be `false`.
 
-1. Return |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"] and |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/response=]"].
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to run the following steps:
+
+      1. [=Dispatch=] |e| at |target|.
+
+      1. Set |complete| to `true`.
+
+1. Synchronously wait for |complete| to be `true`.
+
+    Note: Blocking here is intentional as the alert, confirm, and prompt
+    dialogs represented by "dialog" events block the main thread, and the event
+    handlers we're calling here can affect the return values.
+
+1. Return |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/accept=]"]
+    and |e|["{{DialogEvent/dialogMessage}}"]["{{DialogMessage/dialog}}"]["[=DialogController/response=]"].
 
 </div>
 
@@ -1894,9 +1990,12 @@ The <dfn method for=NewWindowController>discard()</dfn> method steps are:
 
 <div algorithm=dispatch-newwindow>
 
-To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e| given <{controlledframe}> element |target|, string |url| (input of [=window open steps=]), string |target| (input of [=window open steps=]), and WindowOpenDisposition |windowOpenDisposition|, run the following steps:
+To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e|
+given <{controlledframe}> element |target|, string |url| (input of [=window
+open steps=]), string |target| (input of [=window open steps=]), and
+WindowOpenDisposition |windowOpenDisposition|, run the following steps:
 
-1. Let |newWindow| be a new {{NewWindow}} object.
+1. Let |newWindow| be a [=new=] {{NewWindow}} object.
 
 1. Set the following fields of |newWindow|:
 
@@ -1909,10 +2008,10 @@ To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e| g
       : {{NewWindow/windowOpenDisposition}}
       :: |windowOpenDisposition|
 
-
 1. Set |e|'s {{NewWindowEvent/newWindow}} to |newWindow|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2022,27 +2121,34 @@ The <dfn method for=PermissionRequestControllerBase>cancel()</dfn> method steps 
 
 <div algorithm=dispatch-permissionrequest>
 
-To <dfn data-lt='fire a "permissionrequest" event'>fire a {{PermissionRequestEvent}}</dfn> |e| given <{controlledframe}> element |target|, DOMString |type|, USVString |url|, and optional dictionary |options|, run the following steps:
+To <dfn data-lt='fire a "permissionrequest" event'>fire a
+{{PermissionRequestEvent}}</dfn> |e| given a [=/document=] |embeddedDocument|,
+<{controlledframe}> element |target|, DOMString |type|, USVString |url|, an
+optional dictionary |options|, and an algorithm |completionSteps| that takes
+a [=boolean=], run the following steps:
 
-1. Let |permissionRequest| be a new {{PermissionRequest}} object.
+1. Let |permissionRequest| be a [=new=] {{PermissionRequest}} object.
 
 1. If |type| is "media":
 
-    1. Let |requestController| be a new {{MediaPermissionRequestController}} with the following attributes:
+    1. Let |requestController| be a [=new=] {{MediaPermissionRequestController}}
+        with the following attributes:
 
           : {{MediaPermissionRequestController/url}}
           :: |url|
 
 1. If |type| is "geolocation":
 
-    1. Let |requestController| be a new {{GeolocationPermissionRequestController}} with the following attributes:
+    1. Let |requestController| be a [=new=]
+        {{GeolocationPermissionRequestController}} with the following attributes:
 
           : {{GeolocationPermissionRequestController/url}}
           :: |url|
 
 1. If |type| is "pointerLock":
 
-    1. Let |requestController| be a new {{PointerLockPermissionRequestController}} with the following attributes:
+    1. Let |requestController| be a [=new=]
+        {{PointerLockPermissionRequestController}} with the following attributes:
 
           : {{PointerLockPermissionRequestController/lastUnlockedBySelf}}
           :: |options|["lastUnlockedBySelf"]
@@ -2055,7 +2161,8 @@ To <dfn data-lt='fire a "permissionrequest" event'>fire a {{PermissionRequestEve
 
 1. If |type| is "download":
 
-    1. Let |requestController| be a new {{DownloadPermissionRequestController}} with the following attributes:
+    1. Let |requestController| be a [=new=]
+        {{DownloadPermissionRequestController}} with the following attributes:
 
           : {{DownloadPermissionRequestController/requestMethod}}
           :: |options|["requestMethod"]
@@ -2065,21 +2172,24 @@ To <dfn data-lt='fire a "permissionrequest" event'>fire a {{PermissionRequestEve
 
 1. If |type| is "filesystem":
 
-    1. Let |requestController| be a new {{FileSystemPermissionRequestController}} with the following attributes:
+    1. Let |requestController| be a [=new=]
+        {{FileSystemPermissionRequestController}} with the following attributes:
 
           : {{FileSystemPermissionRequestController/url}}
           :: |url|
 
 1. If |type| is "fullscreen":
 
-    1. Let |requestController| be a new {{FullscreenPermissionRequestController}} with the following attributes:
+    1. Let |requestController| be a [=new=]
+        {{FullscreenPermissionRequestController}} with the following attributes:
 
           : {{FullscreenPermissionRequestController/origin}}
           :: origin of |url|
 
 1. If |type| is "hid":
 
-    1. Let |requestController| be a new {{HidPermissionRequestController}} with the following attributes:
+    1. Let |requestController| be a [=new=] {{HidPermissionRequestController}}
+        with the following attributes:
 
           : {{HidPermissionRequestController/url}}
           :: |url|
@@ -2094,9 +2204,14 @@ To <dfn data-lt='fire a "permissionrequest" event'>fire a {{PermissionRequestEve
 
 1. Set |e|'s {{PermissionRequestEvent/permissionRequest}} to |permissionRequest|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to run the following steps:
 
-1. Return |e|["{{PermissionRequestEvent/permissionRequest}}"]["{{PermissionRequest/permission}}"]["[=PermissionRequestControllerBase/allow=]"].
+      1. [=Dispatch=] |e| at |target|.
+
+      1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+          |embeddedDocument|'s [=relevant global object=] that runs
+          |completionSteps| with |e|["{{PermissionRequestEvent/permissionRequest}}"]["{{PermissionRequest/permission}}"]["[=PermissionRequestControllerBase/allow=]"].
 
 </div>
 
@@ -2130,7 +2245,7 @@ dictionary SizeChangedEventInit: EventInit {
 
 To fire a {{SizeChangedEvent}} |e| given <{controlledframe}> element |target|, 4 non-negative numbers |oldWidth|, |oldHeight|, |newWidth|, |newHeight|:
 
-1. Let |sizeChange| be a new {{SizeChange}} object.
+1. Let |sizeChange| be a [=new=] {{SizeChange}} object.
 
 1. Set the following fields of |sizeChange|:
 
@@ -2148,7 +2263,8 @@ To fire a {{SizeChangedEvent}} |e| given <{controlledframe}> element |target|, 4
 
 1. Set |e|'s {{SizeChangedEvent/sizeChange}} to |sizeChange|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2180,7 +2296,7 @@ dictionary ZoomChangeEventInit: EventInit {
 
 To <dfn data-lt='Fire a "zoomchange" event'>fire a {{ZoomChangeEvent}}</dfn> |e| given <{controlledframe}> element |target|, 2 [=float=] numbers |oldZoomFactor|, |newZoomFactor|:
 
-1. Let |zoomChange| be a new {{ZoomChange}} object.
+1. Let |zoomChange| be a [=new=] {{ZoomChange}} object.
 
 1. Set the following fields of |zoomChange|:
 
@@ -2192,7 +2308,8 @@ To <dfn data-lt='Fire a "zoomchange" event'>fire a {{ZoomChangeEvent}}</dfn> |e|
 
 1. Set |e|'s {{ZoomChangeEvent/zoomChange}} to |zoomChange|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2214,9 +2331,11 @@ dictionary ContentLoadEventInit: EventInit {
 
 <div algorithm=dispatch-contentload>
 
-To <dfn data-lt='fire a "contentload" event'>fire a {{ContentLoadEvent}}</dfn> |e| given <{controlledframe}> element |target|, run the following steps:
+To <dfn data-lt='fire a "contentload" event'>fire a {{ContentLoadEvent}}</dfn>
+|e| given <{controlledframe}> element |target|, run the following steps:
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2259,9 +2378,11 @@ dictionary LoadAbortEventInit: EventInit {
 
 <div algorithm=dispatch-loadabort>
 
-To fire a {{LoadAbortEvent}} |e| given <{controlledframe}> element |target|, a USVString |url|, a boolean |isTopLevel|, a long |code|, and a DOMString |reason|, run the following steps:
+To fire a {{LoadAbortEvent}} |e| given <{controlledframe}> element |target|,
+a USVString |url|, a boolean |isTopLevel|, a long |code|, and a DOMString
+|reason|, run the following steps:
 
-1. Let |info| be a new {{LoadAbortInfo}} with the following attributes:
+1. Let |info| be a [=new=] {{LoadAbortInfo}} with the following attributes:
 
       : {{LoadInfo/url}}
       :: |url|
@@ -2277,7 +2398,8 @@ To fire a {{LoadAbortEvent}} |e| given <{controlledframe}> element |target|, a U
 
 1. Set |e|'s {{LoadAbortEvent/loadAbortInfo}} to |info|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2301,9 +2423,10 @@ dictionary LoadCommitEventInit: EventInit {
 
 <div algorithm=dispatch-loadcommit>
 
-To fire a {{LoadCommitEvent}} |e| given <{controlledframe}> element |target|, a USVString |url|, and a boolean |isTopLevel|, run the following steps:
+To fire a {{LoadCommitEvent}} |e| given <{controlledframe}> element |target|,
+a USVString |url|, and a boolean |isTopLevel|, run the following steps:
 
-1. Let |info| be a new {{LoadInfo}} with the following attributes:
+1. Let |info| be a [=new=] {{LoadInfo}} with the following attributes:
 
       : {{LoadInfo/url}}
       :: |url|
@@ -2313,7 +2436,8 @@ To fire a {{LoadCommitEvent}} |e| given <{controlledframe}> element |target|, a 
 
 1. Set |e|'s {{LoadCommitEvent/loadInfo}} to |info|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2337,9 +2461,10 @@ dictionary LoadStartEventInit: EventInit {
 
 <div algorithm=dispatch-loadstart>
 
-To fire a {{LoadStartEvent}} |e| given <{controlledframe}> element |target|, a USVString |url|, and a boolean |isTopLevel|, run the following steps:
+To fire a {{LoadStartEvent}} |e| given <{controlledframe}> element |target|,
+a USVString |url|, and a boolean |isTopLevel|, run the following steps:
 
-1. Let |info| be a new {{LoadInfo}} with the following attributes:
+1. Let |info| be a [=new=] {{LoadInfo}} with the following attributes:
 
       : {{LoadInfo/url}}
       :: |url|
@@ -2349,7 +2474,8 @@ To fire a {{LoadStartEvent}} |e| given <{controlledframe}> element |target|, a U
 
 1. Set |e|'s {{LoadStartEvent/loadInfo}} to |info|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2371,9 +2497,11 @@ dictionary LoadStopEventInit: EventInit {
 
 <div algorithm=dispatch-loadstop>
 
-To <dfn data-lt='fire a "loadstop" event'>fire a {{LoadStopEvent}}</dfn> |e| given <{controlledframe}> element |target|, run the following steps:
+To <dfn data-lt='fire a "loadstop" event'>fire a {{LoadStopEvent}}</dfn> |e|
+given <{controlledframe}> element |target|, run the following steps:
 
-1. [=Dispatch=] |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2397,9 +2525,11 @@ dictionary LoadRedirectEventInit: EventInit {
 
 <div algorithm=dispatch-loadredirect>
 
-To <dfn data-lt='fire a "loadredirect" event'>fire a {{LoadRedirectEvent}}</dfn> |e| given <{controlledframe}> element |target|, a USVString |oldUrl|, a USVString |newUrl|, and a boolean |isTopLevel|, run the following steps:
+To <dfn data-lt='fire a "loadredirect" event'>fire a {{LoadRedirectEvent}}</dfn>
+|e| given <{controlledframe}> element |target|, a USVString |oldUrl|, a
+USVString |newUrl|, and a boolean |isTopLevel|, run the following steps:
 
-1. Let |info| be a new {{LoadInfo}} with the following attributes:
+1. Let |info| be a [=new=] {{LoadInfo}} with the following attributes:
 
       : {{LoadRedirectInfo/oldUrl}}
       :: |oldUrl|
@@ -2412,7 +2542,8 @@ To <dfn data-lt='fire a "loadredirect" event'>fire a {{LoadRedirectEvent}}</dfn>
 
 1. Set |e|'s {{LoadRedirectEvent/loadRedirectInfo}} to |info|.
 
-1. Dispatch |e| at |target|.
+1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
 
 </div>
 
@@ -2426,17 +2557,23 @@ For [=alert=]:
 
 4. Set |message| to the result of optionally truncating message.
 
-5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
+5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s
+    [=Window/navigable=]'s [=embedderParent=].</ins>.
 
-6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, [=fire a "dialog" event=] with |embedderParent|, "alert" and |message|, and return.</ins>
+6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, then
+    [=fire a "dialog" event=] with |embedderParent|, "alert" and |message|,
+    and return.</ins>
 
 For [=confirm=]:
 
 3. Set |message| to the result of optionally truncating message.
 
-4. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
+4. <ins>Let |embedderParent| be <var ignore=''>window</var>'s
+    [=Window/navigable=]'s [=embedderParent=].</ins>.
 
-5. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, [=fire a "dialog" event=] with |embedderParent|, "confirm" and |message|, and return.</ins>
+5. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, then return
+    the result of [=firing a "dialog" event=] with |embedderParent|, "confirm",
+    and |message|.</ins>
 
 For [=prompt=]:
 
@@ -2444,9 +2581,10 @@ For [=prompt=]:
 
 5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
 
-6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:
+6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, then:</ins>
 
-      1. <ins>Let [|accept|, |response|] be the result of [=fire a "dialog" event=] with |embedderParent|, "prompt" and |message|.</ins>
+      1. <ins>Let |accept| and |response| be the results of [=firing a "dialog"
+          event=] with |embedderParent|, "prompt" and |message|.</ins>
 
       1. <ins>If |accept| equals `false`, return null.</ins>
 
@@ -2514,15 +2652,21 @@ For [=HTTP fetch=](loadredirect):
 
 Define new algorithm:
 
-<div>
+<div algorithm>
 
-To determine if a [=/Document=] |document| is <dfn data-lt='allowed by embedder to use'>allowed by embedder to use a permission</dfn> given DOMString |permission|, and optional dictionary |options|, run the following steps:
+To determine if a [=/Document=] |document| is
+<dfn data-lt='allowed by embedder to use'>allowed by embedder to use a
+permission</dfn> given DOMString |permission|, an optional dictionary
+|options|, and an algorithm |completionSteps| that takes a [=boolean=],
+run the following steps:
 
 1. Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].
 
 1. If |embedderParent| is not {{HTMLControlledFrameElement}}, return `true`.
 
-1. Return the result of [=firing a "permissionrequest" event=] with |embedderParent|, |permission|, |document|'s [=Document/URL=], and |options|.
+1. [=Fire a "permissionrequest" event=] with |document|,
+    |embedderParent|, |permission|, |document|'s [=Document/URL=], |options|, and
+    |completionSteps|.
 
 </div>
 
@@ -2536,7 +2680,13 @@ For [=request a position=] (geolocation):
 
       3. Terminate this algorithm.
 
-4. <ins>If |document| is not [=allowed by embedder to use=] the "geolocation" feature:</ins>
+4. <ins>Let |blockedByEmbedder| be `false`.</ins>
+
+5. <ins>Check if |document| is [=allowed by embedder to use=] the "geolocation"
+    feature given an algorithm that assigns its [=boolean=] argument to
+    |blockedByEmbedder| and continues with the remainder of these steps.</ins>
+
+6. <ins>If |blockedByEmbedder| is `true`, then:</ins>
 
       1. <ins>If watchId was passed, remove watchId from watchIDs.</ins>
 
@@ -2544,9 +2694,9 @@ For [=request a position=] (geolocation):
 
       1. <ins>Terminate this algorithm.</ins>
 
-5. <ins>Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].</ins>
+7. <ins>Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].</ins>
 
-6. <ins>If |embedderParent| is {{HTMLControlledFrameElement}}:</ins>
+8. <ins>If |embedderParent| is {{HTMLControlledFrameElement}}:</ins>
 
       1. Let |nodeDocument| be |embedderParent|'s [=node document=].
 
@@ -4232,17 +4382,17 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   1. Let |p| be [=a new promise=].
 
-  1. Run the following steps [=in parallel=]:
+  1. Return |p| and run the following steps [=in parallel=].
 
-      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-      1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
+  1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
 
-      1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |p| with a {{TypeError}} and abort these steps.
+  1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |p| with a {{TypeError}} and abort these steps.
 
-      1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
+  1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
 
-      1. [=Resolve=] |p| with undefined.
+  1. [=Resolve an embedder promise=] given [=this=] and |p|.
 
 </div>
 
@@ -4252,13 +4402,13 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   1. Let |p| be [=a new promise=].
 
-  1. Run the following steps [=in parallel=]:
+  1. Return |p| and run the following steps [=in parallel=].
 
-      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-      1. [=map/Remove=] |contextMenusMap|[|id|].
+  1. [=map/Remove=] |contextMenusMap|[|id|].
 
-      1. [=Resolve=] |p| with undefined.
+  1. [=Resolve an embedder promise=] given [=this=] and |p|.
 
 </div>
 
@@ -4268,13 +4418,13 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   1. Let |p| be [=a new promise=].
 
-  1. Run the following steps [=in parallel=]:
+  1. Return |p| and run the following steps [=in parallel=].
 
-    1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-    1. [=map/Clear=] |contextMenusMap|.
+  1. [=map/Clear=] |contextMenusMap|.
 
-    1. [=Resolve=] |p| with undefined.
+  1. [=Resolve an embedder promise=] given [=this=] and |p|.
 
 </div>
 
@@ -4284,15 +4434,15 @@ Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=Conte
 
   1. Let |p| be [=a new promise=].
 
-  1. Run the following steps [=in parallel=]:
+  1. Return |p| and run the following steps [=in parallel=].
 
-      1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
 
-      1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |p| with a {{TypeError}} and abort these steps.
+  1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |p| with a {{TypeError}} and abort these steps.
 
-      1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
+  1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
 
-      1. [=Resolve=] |p| with undefined.
+  1. [=Resolve an embedder promise=] given [=this=] and |p|.
 
 </div>
 
