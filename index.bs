@@ -1991,7 +1991,7 @@ The <dfn method for=NewWindowController>discard()</dfn> method steps are:
 <div algorithm=dispatch-newwindow>
 
 To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e|
-given <{controlledframe}> element |target|, string |url| (input of [=window
+given <{controlledframe}> element |controlledFrame|, string |url| (input of [=window
 open steps=]), string |target| (input of [=window open steps=]), and
 WindowOpenDisposition |windowOpenDisposition|, run the following steps:
 
@@ -2011,7 +2011,7 @@ WindowOpenDisposition |windowOpenDisposition|, run the following steps:
 1. Set |e|'s {{NewWindowEvent/newWindow}} to |newWindow|.
 
 1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
+    |controlledFrame|'s [=relevant global object=] to [=dispatch=] |e| at |controlledFrame|.
 
 </div>
 
@@ -4592,13 +4592,13 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
 <div algorithm='onshow-event'>
 
-To [= dispatch =] an {{ContextMenus/onShow}} [= event =] |event|:
+To [= dispatch =] an {{ContextMenus/onShow}} [= event =] |event|, given {{HTMLControlledFrameElement}} |controlledFrame|:
 
 1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of |event|.
 
 1. [=list/For each=] |callback| in |callbackList|:
 
-  1. Invoke |callback|.
+  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback|.
 
 </div>
 
@@ -4606,7 +4606,7 @@ To [= dispatch =] an {{ContextMenus/onShow}} [= event =] |event|:
 
 <div algorithm='onclicked-event'>
 
-To [=dispatch=] an {{ContextMenus/onClicked}} [=event=] |event|, given |element| as the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at, |menuItem| as the [=context menu item=] that was clicked.
+To [=dispatch=] an {{ContextMenus/onClicked}} [=event=] |event|, given {{HTMLControlledFrameElement}} |controlledFrame|, |element| as the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at, |menuItem| as the [=context menu item=] that was clicked.
 
 1. Let |id| be the [=map/key=] of the [=ContextMenus/context menu map=]'s [=map/entry=] that is associated with |menuItem|.
 
@@ -4660,9 +4660,11 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=] |event|, given |element|
 
 1. [=list/For each=] |callback| in |callbackList|:
 
-  1. Invoke |callback| with |info|.
+  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback| with |info|.
 
-1. If the {{ContextMenusProperties/onclick}} field of |properties| is not null, invoke {{ContextMenusProperties/onclick}} with |info|.
+1. If the {{ContextMenusProperties/onclick}} field of |properties| is not null:
+
+  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke {{ContextMenusProperties/onclick}} with |info|.
 
 </div>
 
