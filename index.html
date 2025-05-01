@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="b64e888e9b313d01e1298d84e1af01a8ed399d73" name="revision">
+  <meta content="2b1085f3dc7185c08b8d73b59d9d4994d3172e7d" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -4261,7 +4261,7 @@ it is a member of.</p>
          <li data-md>
           <p><var>requestsAllHeaders</var> is <code>false</code></p>
          <li data-md>
-          <p><var>fetchHeader</var>[0] is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header" id="ref-for-cors-safelisted-request-header">CORS-safelisted request-header</a></p>
+          <p><var>fetchHeader</var> is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header" id="ref-for-cors-safelisted-request-header">CORS-safelisted request-header</a></p>
         </ul>
        <li data-md>
         <p>If all of the following conditions are met, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue⑦">continue</a>:</p>
@@ -4644,7 +4644,7 @@ revisited to align better with other Web APIs.</strong></p>
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-contextmenusproperties"><code><c- g>ContextMenusProperties</c-></code></dfn> {
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean③②"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contextmenusproperties-checked"><code><c- g>checked</c-></code></dfn>;
-    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①⑤"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-contexttype" id="ref-for-enumdef-contexttype"><c- n>ContextType</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="sequence<ContextType>" id="dom-contextmenusproperties-context"><code><c- g>context</c-></code></dfn>;
+    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①⑤"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-contexttype" id="ref-for-enumdef-contexttype"><c- n>ContextType</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="sequence<ContextType>" id="dom-contextmenusproperties-contexts"><code><c- g>contexts</c-></code></dfn>;
     <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①⑥"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString②③"><c- b>USVString</c-></a>> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="sequence<USVString>" id="dom-contextmenusproperties-documenturlpatterns"><code><c- g>documentUrlPatterns</c-></code></dfn>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean③③"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="boolean" id="dom-contextmenusproperties-enabled"><code><c- g>enabled</c-></code></dfn>;
     (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤③"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long②⓪"><c- b>long</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusProperties" data-dfn-type="dict-member" data-export data-type="(DOMString or long)" id="dom-contextmenusproperties-parentid"><code><c- g>parentId</c-></code></dfn>;
@@ -4742,7 +4742,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p><em>This section is non-normative.</em></p>
     <p><code class="idl"><a data-link-type="idl" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties④">ContextMenusProperties</a></code> has the following fields:</p>
     <dl>
-     <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-context" id="ref-for-dom-contextmenusproperties-context">context</a></code>
+     <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-contexts" id="ref-for-dom-contextmenusproperties-contexts">contexts</a></code>
      <dd data-md>
       <p>A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①⑧">list</a> of different <code class="idl"><a data-link-type="idl" href="#enumdef-contexttype" id="ref-for-enumdef-contexttype①">ContextType</a></code>, used to control the conditions under which the <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-for-contextmenus-context-menu-item②">context menu item</a> is displayed.</p>
      <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-documenturlpatterns" id="ref-for-dom-contextmenusproperties-documenturlpatterns">documentUrlPatterns</a></code>
@@ -4789,12 +4789,12 @@ revisited to align better with other Web APIs.</strong></p>
         <p>If <var>element</var> is an instance of <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#htmlanchorelement" id="ref-for-htmlanchorelement">HTMLAnchorElement</a></code>, then set <var>targetUrl</var> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/links.html#attr-hyperlink-href" id="ref-for-attr-hyperlink-href">href</a> attribute of <var>element</var>.</p>
       </ol>
      <li data-md>
-      <p>If <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-context" id="ref-for-dom-contextmenusproperties-context①">context</a></code>"] is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty⑦">empty</a>:</p>
+      <p>If <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-contexts" id="ref-for-dom-contextmenusproperties-contexts①">contexts</a></code>"] is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty⑦">empty</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>matchesContext</var> be a boolean value that is initially <code>false</code>.</p>
        <li data-md>
-        <p>For each <var>context</var> in <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-context" id="ref-for-dom-contextmenusproperties-context②">context</a></code>"]:</p>
+        <p>For each <var>context</var> in <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperties-contexts" id="ref-for-dom-contextmenusproperties-contexts②">contexts</a></code>"]:</p>
         <ol>
          <li data-md>
           <p>If <var>element</var> matches <var>context</var>, set <var>matchesContext</var> to <code>true</code> and break;</p>
@@ -5430,7 +5430,6 @@ redirection")</p>
    <li><a href="#dictdef-contentscriptdetails">ContentScriptDetails</a><span>, in § 3.3</span>
    <li><a href="#controlledframe-content-script-map">content script map</a><span>, in § 3</span>
    <li><a href="#dom-htmlcontrolledframeelement-contentwindow">contentWindow</a><span>, in § 3</span>
-   <li><a href="#dom-contextmenusproperties-context">context</a><span>, in § 5</span>
    <li><a href="#contextmenus-context-menu">context menu</a><span>, in § 5</span>
    <li><a href="#contextmenus-context-menu-item">context menu item</a><span>, in § 5</span>
    <li><a href="#contextmenus-context-menu-map">context menu map</a><span>, in § 5</span>
@@ -5440,6 +5439,7 @@ redirection")</p>
    <li><a href="#dictdef-contextmenuscreateproperties">ContextMenusCreateProperties</a><span>, in § 5</span>
    <li><a href="#contextmenusevent">ContextMenusEvent</a><span>, in § 5</span>
    <li><a href="#dictdef-contextmenusproperties">ContextMenusProperties</a><span>, in § 5</span>
+   <li><a href="#dom-contextmenusproperties-contexts">contexts</a><span>, in § 5</span>
    <li><a href="#enumdef-contexttype">ContextType</a><span>, in § 5</span>
    <li><a href="#elementdef-controlledframe">controlledframe</a><span>, in § 3</span>
    <li><a href="#controlled-frame-zoom-map">Controlled Frame zoom map</a><span>, in § 3.4.1</span>
@@ -7026,7 +7026,7 @@ redirection")</p>
 
 <c- b>dictionary</c-> <a href="#dictdef-contextmenusproperties"><code><c- g>ContextMenusProperties</c-></code></a> {
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-contextmenusproperties-checked"><code><c- g>checked</c-></code></a>;
-    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-contexttype"><c- n>ContextType</c-></a>> <a data-type="sequence<ContextType>" href="#dom-contextmenusproperties-context"><code><c- g>context</c-></code></a>;
+    <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a data-link-type="idl-name" href="#enumdef-contexttype"><c- n>ContextType</c-></a>> <a data-type="sequence<ContextType>" href="#dom-contextmenusproperties-contexts"><code><c- g>contexts</c-></code></a>;
     <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString"><c- b>USVString</c-></a>> <a data-type="sequence<USVString>" href="#dom-contextmenusproperties-documenturlpatterns"><code><c- g>documentUrlPatterns</c-></code></a>;
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean" href="#dom-contextmenusproperties-enabled"><code><c- g>enabled</c-></code></a>;
     (<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-long"><c- b>long</c-></a>) <a data-type="(DOMString or long)" href="#dom-contextmenusproperties-parentid"><code><c- g>parentId</c-></code></a>;
@@ -7640,7 +7640,7 @@ let dfnPanelData = {
 "dom-contextmenusevent-removelistener": {"dfnID":"dom-contextmenusevent-removelistener","dfnText":"removeListener(callback)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenusevent-removelistener"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenusevent-removelistener"},
 "dom-contextmenusevent-removelistener-callback-callback": {"dfnID":"dom-contextmenusevent-removelistener-callback-callback","dfnText":"callback","external":false,"refSections":[],"url":"#dom-contextmenusevent-removelistener-callback-callback"},
 "dom-contextmenusproperties-checked": {"dfnID":"dom-contextmenusproperties-checked","dfnText":"checked","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenusproperties-checked"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenusproperties-checked"},
-"dom-contextmenusproperties-context": {"dfnID":"dom-contextmenusproperties-context","dfnText":"context","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenusproperties-context"},{"id":"ref-for-dom-contextmenusproperties-context\u2460"},{"id":"ref-for-dom-contextmenusproperties-context\u2461"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenusproperties-context"},
+"dom-contextmenusproperties-contexts": {"dfnID":"dom-contextmenusproperties-contexts","dfnText":"contexts","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenusproperties-contexts"},{"id":"ref-for-dom-contextmenusproperties-contexts\u2460"},{"id":"ref-for-dom-contextmenusproperties-contexts\u2461"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenusproperties-contexts"},
 "dom-contextmenusproperties-documenturlpatterns": {"dfnID":"dom-contextmenusproperties-documenturlpatterns","dfnText":"documentUrlPatterns","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenusproperties-documenturlpatterns"},{"id":"ref-for-dom-contextmenusproperties-documenturlpatterns\u2460"},{"id":"ref-for-dom-contextmenusproperties-documenturlpatterns\u2461"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenusproperties-documenturlpatterns"},
 "dom-contextmenusproperties-enabled": {"dfnID":"dom-contextmenusproperties-enabled","dfnText":"enabled","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenusproperties-enabled"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenusproperties-enabled"},
 "dom-contextmenusproperties-onclick": {"dfnID":"dom-contextmenusproperties-onclick","dfnText":"onclick","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenusproperties-onclick"},{"id":"ref-for-dom-contextmenusproperties-onclick\u2460"},{"id":"ref-for-dom-contextmenusproperties-onclick\u2461"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenusproperties-onclick"},
@@ -8551,7 +8551,7 @@ let refsData = {
 "#dom-contextmenusevent-haslisteners": {"displayText":"hasListeners()","export":true,"for_":["ContextMenusEvent"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"hasListeners()","type":"method","url":"#dom-contextmenusevent-haslisteners"},
 "#dom-contextmenusevent-removelistener": {"displayText":"removeListener(callback)","export":true,"for_":["ContextMenusEvent"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"removeListener(callback)","type":"method","url":"#dom-contextmenusevent-removelistener"},
 "#dom-contextmenusproperties-checked": {"displayText":"checked","export":true,"for_":["ContextMenusProperties"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"checked","type":"dict-member","url":"#dom-contextmenusproperties-checked"},
-"#dom-contextmenusproperties-context": {"displayText":"context","export":true,"for_":["ContextMenusProperties"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"context","type":"dict-member","url":"#dom-contextmenusproperties-context"},
+"#dom-contextmenusproperties-contexts": {"displayText":"contexts","export":true,"for_":["ContextMenusProperties"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"contexts","type":"dict-member","url":"#dom-contextmenusproperties-contexts"},
 "#dom-contextmenusproperties-documenturlpatterns": {"displayText":"documentUrlPatterns","export":true,"for_":["ContextMenusProperties"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"documentUrlPatterns","type":"dict-member","url":"#dom-contextmenusproperties-documenturlpatterns"},
 "#dom-contextmenusproperties-enabled": {"displayText":"enabled","export":true,"for_":["ContextMenusProperties"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"enabled","type":"dict-member","url":"#dom-contextmenusproperties-enabled"},
 "#dom-contextmenusproperties-onclick": {"displayText":"onclick","export":true,"for_":["ContextMenusProperties"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"onclick","type":"dict-member","url":"#dom-contextmenusproperties-onclick"},
