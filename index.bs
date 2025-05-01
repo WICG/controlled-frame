@@ -3965,7 +3965,7 @@ Each {{WebRequestEvent}} has:
 
           * |isRequest| is `true`
           * |requestsAllHeaders| is `false`
-          * |fetchHeader|[0] is not a [=CORS-safelisted request-header=]
+          * |fetchHeader| is not a [=CORS-safelisted request-header=]
 
       1. If all of the following conditions are met, then [=continue=]:
 
@@ -4374,7 +4374,7 @@ interface OnShowEvent : ContextMenusEvent {};
 
 dictionary ContextMenusProperties {
     boolean checked;
-    sequence<ContextType> context;
+    sequence<ContextType> contexts;
     sequence<USVString> documentUrlPatterns;
     boolean enabled;
     (DOMString or long) parentId;
@@ -4482,7 +4482,7 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
     {{ContextMenusProperties}} has the following fields:
 
-    : {{ContextMenusProperties/context}}
+    : {{ContextMenusProperties/contexts}}
     :: A [=list=] of different {{ContextType}}, used to control the conditions under which the [=context menu item=] is displayed.
 
     : {{ContextMenusProperties/documentUrlPatterns}}
@@ -4527,11 +4527,11 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
       1. If |element| is an instance of {{HTMLAnchorElement}}, then set |targetUrl| to the [=href=] attribute of |element|.
 
-  1. If |properties|["{{ContextMenusProperties/context}}"] is not [=list/empty=]:
+  1. If |properties|["{{ContextMenusProperties/contexts}}"] is not [=list/empty=]:
 
       1. Let |matchesContext| be a boolean value that is initially `false`.
 
-      1. For each |context| in |properties|["{{ContextMenusProperties/context}}"]:
+      1. For each |context| in |properties|["{{ContextMenusProperties/contexts}}"]:
 
           1. If |element| matches |context|, set |matchesContext| to `true` and break;
 
