@@ -4598,7 +4598,7 @@ To [= dispatch =] an {{ContextMenus/onShow}} [= event =] |event|, given {{HTMLCo
 
 1. [=list/For each=] |callback| in |callbackList|:
 
-  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback|.
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback|.
 
 </div>
 
@@ -4660,11 +4660,11 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=] |event|, given {{HTMLCon
 
 1. [=list/For each=] |callback| in |callbackList|:
 
-  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback| with |info|.
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback| with |info|.
 
 1. If the {{ContextMenusProperties/onclick}} field of |properties| is not null:
 
-  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |properties|["{{ContextMenusProperties/onclick}}"] with |info|.
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |properties|["{{ContextMenusProperties/onclick}}"] with |info|.
 
 </div>
 
