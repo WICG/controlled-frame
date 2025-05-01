@@ -2001,7 +2001,7 @@ The <dfn method for=NewWindowController>discard()</dfn> method steps are:
 <div algorithm=dispatch-newwindow>
 
 To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e|
-given <{controlledframe}> element |target|, string |url| (input of [=window
+given <{controlledframe}> element |controlledFrame|, string |url| (input of [=window
 open steps=]), string |target| (input of [=window open steps=]), and
 WindowOpenDisposition |windowOpenDisposition|, run the following steps:
 
@@ -2021,7 +2021,7 @@ WindowOpenDisposition |windowOpenDisposition|, run the following steps:
 1. Set |e|'s {{NewWindowEvent/newWindow}} to |newWindow|.
 
 1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-    |target|'s [=relevant global object=] to [=dispatch=] |e| at |target|.
+    |controlledFrame|'s [=relevant global object=] to [=dispatch=] |e| at |controlledFrame|.
 
 </div>
 
@@ -4343,12 +4343,12 @@ enum ItemType {
 
 dictionary OnClickData {
     boolean checked;
-    required boolean editable;
+    boolean editable;
     long frameId;
     USVString frameUrl;
     USVString linkUrl;
     DOMString mediaType;
-    required (DOMString or long) menuItemId;
+    (DOMString or long) menuItemId;
     USVString pageUrl;
     (DOMString or long) parentMenuId;
     DOMString selectionText;
@@ -4364,7 +4364,6 @@ interface ContextMenusEvent {
     undefined removeListener(ContextMenusCallback callback);
     boolean hasListener(ContextMenusCallback callback);
     boolean hasListeners();
-    undefined dispatch(any data);
 };
 
 [Exposed=Window, IsolatedContext]
@@ -4403,7 +4402,7 @@ interface ContextMenus {
 
 Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=/map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
 
-Note: Each [=map/entry=] of the [=context menu map=] represents a <dfn for=ContextMenus>context menu item</dfn>. These items can show up when the user opens the <dfn for=ContextMenus>context menu</dfn> on the embedded document.
+Each [=map/entry=] of the [=context menu map=] has the [=map/value=] |property| which represents a <dfn for=ContextMenus>context menu item</dfn>. A [=context menu item=] will be shown on the <dfn for=ContextMenus>context menu</dfn> if it is opened within the {{HTMLControlledFrameElement}} |controlledframe| and the result of [=determining whether the context menu item will be shown=] given |controlledframe| and |property| is true.
 
 <div algorithm>
 
@@ -4512,9 +4511,9 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
 </div>
 
-<div algorithm='show-menu-item'>
+<div algorithm>
 
-  When a [=ContextMenus/context menu=] is opened at {{HTMLElement}} |element| inside the embedded document, to return a boolean value for whether the [=ContextMenus/context menu item=] associated with a {{ContextMenusProperties}} |properties| will be shown:
+  To <dfn>determine whether the [=ContextMenus/context menu item=] will be shown</dfn> given a {{HTMLControlledFrameElement}} |element|, and a {{ContextMenusProperties}} |properties|:
 
   1. Let |documentUrl| be the [=Document/URL=] of the [=/document=] that |element| belongs to.
 
@@ -4530,37 +4529,37 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
 
   1. If |properties|["{{ContextMenusProperties/context}}"] is not [=list/empty=]:
 
-      1. Let |result| be a boolean value that is initially `false`.
+      1. Let |matchesContext| be a boolean value that is initially `false`.
 
       1. For each |context| in |properties|["{{ContextMenusProperties/context}}"]:
 
-          1. If |element| matches |context|, set |result| to `true` and break;
+          1. If |element| matches |context|, set |matchesContext| to `true` and break;
 
           <span class=XXX>There is no standardized specifications for matching a {{HTMLElement}} against a {{ContextType}}.</span>
 
-      1. If |result| is `false`, return `false`.
+      1. If |matchesContext| is `false`, return `false`.
 
   1. If |properties|["{{ContextMenusProperties/documentUrlPatterns}}"] is not [=list/empty=]:
 
-      1. Let |result| be a boolean value that is initially `false`.
+      1. Let |matchesDocumentUrl| be a boolean value that is initially `false`.
 
       1. For each |urlPattern| in |properties|["{{ContextMenusProperties/documentUrlPatterns}}"]:
 
-          1. If |documentUrl| [=matches a URL pattern=], given |urlPattern|, set |result| to `true` and break;
+          1. If |documentUrl| [=matches a URL pattern=], given |urlPattern|, set |matchesDocumentUrl| to `true` and break;
 
-      1. If |result| is `false`, return `false`.
+      1. If |matchesDocumentUrl| is `false`, return `false`.
 
   1. If |properties|["{{ContextMenusProperties/targetUrlPatterns}}"] is not [=list/empty=]:
 
-      1. Let |result| be a boolean value that is initially `false`.
+      1. Let |matchesTargetUrl| be a boolean value that is initially `false`.
 
       1. For each |urlPattern| in |properties|["{{ContextMenusProperties/targetUrlPatterns}}"]:
 
-          1. If |targetUrl| [=matches a URL pattern=], given |urlPattern|, set |result| to `true` and break;
+          1. If |targetUrl| [=matches a URL pattern=], given |urlPattern|, set |matchesTargetUrl| to `true` and break;
 
-      1. If |result| is `false`, return `false`.
+      1. If |matchesTargetUrl| is `false`, return `false`.
 
-  Note: Different user agents may implement additional conditions.
+  1. Note: Different user agents may implement additional conditions.
 
   1. Return `true`.
 
@@ -4574,9 +4573,7 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
   The <dfn method for=ContextMenusEvent>addListener(|callback|)</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
-
-  1. If |callbackList|[|callback|] [=list/exists=], return.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of [=this=].
 
   1. [=list/Append=] |callback| to |callbackList|.
 
@@ -4586,9 +4583,11 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
   The <dfn method for=ContextMenusEvent>removeListener(|callback|)</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of [=this=].
 
-  1. If |callbackList|[|callback|] [=list/exists=], [=list/remove=] |callback| from |callbackList|.
+  1. [=list/For each=] |listItem| in |callbackList|:
+
+    1. If |listItem| equals to |callback|, [=list/remove=] |listItem| from |callbackList|.
 
 </div>
 
@@ -4596,11 +4595,13 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
   The <dfn method for=ContextMenusEvent>hasListener(|callback|)</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of [=this=].
 
-  1. If |callbackList|[|callback|] [=list/exists=], return `true`.
+  1. [=list/For each=] |listItem| in |callbackList|:
 
-  1. Otherwise, return `false`.
+    1. If |listItem| equals to |callback|, return `true`.
+
+  1. Return `false`.
 
 </div>
 
@@ -4608,7 +4609,7 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
   The <dfn method for=ContextMenusEvent>hasListeners()</dfn> method steps are:
 
-  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
+  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of [=this=].
 
   1. If |callbackList| [=list/is empty=], return `false`.
 
@@ -4616,25 +4617,17 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
 </div>
 
-<div algorithm>
-
-  The <dfn method for=ContextMenusEvent>dispatch(|data|)</dfn> method steps are:
-
-  1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of the {{ContextMenusEvent}}.
-
-  1. [=list/For each=] |callback| in |callbackList|:
-
-      1. Invoke |callback| with |data|.
-
-</div>
-
 {{ContextMenus}} has the attribute {{ContextMenus/onShow}}, which is a {{ContextMenusEvent}} that is associated with [= contextmenu =] [= events =].
 
 <div algorithm='onshow-event'>
 
-To [= dispatched =] an {{ContextMenus/onShow}} [= event =]:
+To [= dispatch =] an {{ContextMenus/onShow}} [= event =] |event|, given {{HTMLControlledFrameElement}} |controlledFrame|:
 
-1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with no argument.
+1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of |event|.
+
+1. [=list/For each=] |callback| in |callbackList|:
+
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback|.
 
 </div>
 
@@ -4642,14 +4635,18 @@ To [= dispatched =] an {{ContextMenus/onShow}} [= event =]:
 
 <div algorithm='onclicked-event'>
 
-To [=dispatch=] an {{ContextMenus/onClicked}} [=event=], given |element| as the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at, |id| as the [=map/key=] of the [=ContextMenus/context menu map=]'s [=map/entry=] that is associated with the [=context menu item=].
+To [=dispatch=] an {{ContextMenus/onClicked}} [=event=] |event|, given {{HTMLControlledFrameElement}} |controlledFrame|, |element| as the {{HTMLElement}} inside the embedded document where the [=ContextMenus/context menu=] is opened at, |menuItem| as the [=context menu item=] that was clicked.
+
+1. Let |id| be the [=map/key=] of the [=ContextMenus/context menu map=]'s [=map/entry=] that is associated with |menuItem|.
+
+1. Let |properties| be the result of [=map/getting=] the [=map/value=] of the [=map/entry=] in [=ContextMenus/context menu map=] given the [=map/key=] |id|.
 
 1. Let |info| be a new {{OnClickData}}.
 
     1. Update the following fields of |info|:
 
         : {{OnClickData/editable}}
-        :: Whether |element| is editable. <span class=XXX>what is "editable"?</span>
+        :: Whether the |element| selected is editable, such as a text input.
 
         : {{OnClickData/frameId}}
         :: The [=navigable/frameId=] of the [= navigable container =] from which the [= contextmenu =] [= event =] is dispatched.
@@ -4677,7 +4674,7 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=], given |element| as the 
         :: One of "image", "video", or "audio", if any, based on |element|.
 
         : {{OnClickData/parentMenuId}}
-        :: The ID of the parent, if a parent exists.
+        :: |properties|["{{ContextMenusProperties/parentId}}"].
 
         : {{OnClickData/selectionText}}
         :: The text for the context selection, if any.
@@ -4688,11 +4685,15 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=], given |element| as the 
         : {{OnClickData/wasChecked}}
         :: The state of a checkbox or radio item before it was clicked.
 
-1. Invoke {{ContextMenus/onShow}}'s {{ContextMenusEvent/dispatch(data)}} with |info|.
+1. Let |callbackList| be the [=ContextMenusEvent/event listener list=] of |event|.
 
-1. Let |properties| be the result of [=map/getting=] the [=map/value=] of the [=map/entry=] in [=ContextMenus/context menu map=] given the [=map/key=] |id|.
+1. [=list/For each=] |callback| in |callbackList|:
 
-1. If the {{ContextMenusProperties/onclick}} field of |properties| is not null, invoke {{ContextMenusProperties/onclick}} with |info|.
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |callback| with |info|.
+
+1. If the {{ContextMenusProperties/onclick}} field of |properties| is not null:
+
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |properties|["{{ContextMenusProperties/onclick}}"] with |info|.
 
 </div>
 
