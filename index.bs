@@ -4664,7 +4664,7 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=] |event|, given {{HTMLCon
 
 1. If the {{ContextMenusProperties/onclick}} field of |properties| is not null:
 
-  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke {{ContextMenusProperties/onclick}} with |info|.
+  1. 1. [=Queue a global task=] on the [=DOM manipulation task source=] of |controlledFrame|'s [=relevant global object=] to invoke |properties|["{{ContextMenusProperties/onclick}}"] with |info|.
 
 </div>
 
