@@ -117,9 +117,12 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
                 text: step; url: she-step
                 text: URL; url: she-url
         urlPrefix: document-lifecycle.html
-            text: completely loaded; url: completely-loaded
-            text: stop loading; url: nav-stop
             text: completely finish loading; url: completely-finish-loading
+            text: completely loaded; url: completely-loaded
+            text: page showing; url: page-showing
+            text: salvageable; url: concept-document-salvageable
+            text: stop loading; url: nav-stop
+            text: unload counter; url: unload-counter
         urlPrefix: document-sequences.html
             text: browsing context group; url: browsing-context-group
             text: create a new browsing context and document; url: creating-a-new-browsing-context
@@ -153,6 +156,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: links.html
             text: href; url: attr-hyperlink-href
         urlPrefix: nav-history-apis.html
+            text: browsing context; for: window; url: window-bc
             text: navigable; for: window; url: window-navigable
         urlPrefix: system-state.html
             text: associated Navigator; url: associated-navigator
@@ -206,6 +210,11 @@ spec: geolocation; urlPrefix: https://www.w3.org/TR/geolocation/
     type: dfn
         text: request a position; url: dfn-request-a-position
 
+spec: nav-speculation; urlPrefix: https://wicg.github.io/nav-speculation/
+    type: dfn
+        urlPrefix: prerendering.html
+            text: prerendering navigable; url: prerendering-navigable
+
 text: match pattern; type: dfn; url: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns;
 </pre>
 
@@ -217,6 +226,7 @@ spec:html; type:dfn; for:/; text:browsing context
 spec:html; type:dfn; for:/; text:global object
 spec:html; type:dfn; for:/; text:top-level traversable
 spec:html; type:dfn; for:/; text:traversable navigable
+spec:html; type:dfn; for:environment settings object; text:cross-origin isolated capability
 spec:html; type:event; text:readystatechange
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; text:list
@@ -3799,15 +3809,15 @@ Each {{WebRequestEvent}} has:
 
   1. Let |environmentSettingsObject| be |request|'s [=request/client=].
 
-  1. Let |crossOriginIsolatedCapability| be |environmentSettingsObject|'s
-      [=environment settings object/cross-origin isolated capability=], or
-      `false` if |environmentSettingsObject| is null.
-
   1. Let |details| be a {{WebRequestEventDetails}} with the following
       fields:
       : {{WebRequestEventDetails/timeStamp}}
-      :: The [=coarsened shared current time=] given
-          |crossOriginIsolatedCapability|.
+      :: The [=current high resolution time=] given [=this=]'s
+          [=relevant global object=].
+
+          Note: This timestamp isn't coarsened because Controlled Frames are
+          only available within [=isolated contexts=], which always have the
+          [=cross-origin isolated capability=].
 
       : {{WebRequestEventDetails/url}}
       :: The last element of |request|'s [=request/URL list=].
@@ -3839,36 +3849,55 @@ Each {{WebRequestEvent}} has:
       1. Let |window| be |environmentSettingsObject|'s
           [=environment settings object/global object=].
 
+      1. Let |parentNavigable| be |window|'s [=Window/navigable=]'s
+          [=navigable/parent=].
+
       1. Update the following fields of |details|:
 
           : {{WebRequestEventDetails/documentId}}
           :: |environmentSettingsObject|'s [=environment/id=].
 
           : {{WebRequestEventDetails/documentLifecycle}}
-          :: <span class=XXX>It's unclear if {{DocumentLifecycle}} values map
-              to existing concepts.</span>
+          :: The result of [=getting the DocumentLifecycle of a Document=] given
+              |window|'s [=associated document=].
 
           : {{WebRequestEventDetails/frameId}}
           :: The [=navigable/frameId=] of |window|'s [=Window/navigable=].
 
           : {{WebRequestEventDetails/frameType}}
-          :: {{FrameType/"fenced_frame"}} if |window|'s {{Window/fence}} is
-              non-null, {{FrameType/"outermost_frame"}} if |window|'s
-              {{Window/top}} equals |window|, {{FrameType/"sub_frame"}}
-              otherwise.
+          :: {{FrameType/"fenced_frame"}} if |window|'s
+              [=window/browsing context=]'s [=fenced frame config instance=] is
+              non-null, {{FrameType/"outermost_frame"}} if |parentNavigable| is
+              null, {{FrameType/"sub_frame"}} otherwise.
 
-          1. If |window|'s {{Window/parent}} is not equal to |window|, then
-              update the following values of |details|:
+          1. If |parentNavigable| is not null, then update the following
+              values of |details|:
 
               : {{WebRequestEventDetails/parentDocumentId}}
-              :: The [=environment/id=] of |window|'s {{Window/parent}}'s
+              :: The [=environment/id=] of |parentNavigable|'s
                   [=active document=]'s [=relevant global object=].
 
               : {{WebRequestEventDetails/parentFrameId}}
-              :: The [=navigable/frameId=] of |window|'s {{Window/parent}}'s
-                  [=Window/navigable=].
+              :: The [=navigable/frameId=] of |parentNavigable|.
 
   1. Return |details|.
+
+</div>
+
+<div algorithm>
+  To <dfn>get the {{DocumentLifecycle}} of a {{Document}}</dfn> |document|,
+  run the following steps:
+
+  1. If |document|'s [=unload counter=] &gt; 0, then return
+      "{{DocumentLifecycle/pending_deletion}}".
+
+  1. If |document|'s [=node navigable=] is non-null and is a [=prerendering
+      navigable=], then return "{{DocumentLifecycle/prerender}}".
+
+  1. If |document| is [=salvageable=] and does not have its [=page showing=],
+      return "{{DocumentLifecycle/cached}}".
+
+  1. Return "{{DocumentLifecycle/active}}".
 
 </div>
 
