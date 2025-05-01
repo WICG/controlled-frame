@@ -1380,12 +1380,12 @@ dictionary ClearDataTypeSet {
 
 </div>
 
-Each [=traversable navigable=] holds a
-<dfn for="traversable navigable">muted</dfn> [=boolean=], which defaults to
-`false`. When [=traversable navigable/muted=] is `true`, the user agent must
-mute all audio streams originating from within the [=traversable navigable=].
-The [=traversable navigable/muted=] state should not be exposed to content
-within the [=traversable navigable=]; when [=traversable navigable/muted=] is
+Each [=embedded navigable=] holds a
+<dfn for="embedded navigable">muted</dfn> [=boolean=], which defaults to
+`false`. When [=embedded navigable/muted=] is `true`, the user agent must
+mute all audio streams originating from within the [=embedded navigable=].
+The [=embedded navigable/muted=] state should not be exposed to content
+within the [=embedded navigable=]; when [=embedded navigable/muted=] is
 `true`, volume state should not be changed in any script-visible way, but the
 underlying audio streams should not be audible to users.
 
@@ -1423,7 +1423,7 @@ underlying audio streams should not be audible to users.
       and abort these steps.
 
   1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
-      and [=this=]'s [=embedded navigable=]'s [=traversable navigable/muted=]
+      and [=this=]'s [=embedded navigable=]'s [=embedded navigable/muted=]
       flag.
 
 </div>
@@ -1435,7 +1435,7 @@ underlying audio streams should not be audible to users.
   1. If [=this=]'s [=embedded navigable=] is null, then [=throw=] a
       {{TypeError}}.
 
-  1. Set [=this=]'s [=embedded navigable=]'s [=traversable navigable/muted=]
+  1. Set [=this=]'s [=embedded navigable=]'s [=embedded navigable/muted=]
       flag to |mute|.
 
 </div>
