@@ -4491,7 +4491,7 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
     : {{ContextMenusProperties/targetUrlPatterns}}
     :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the target of the [=ContextMenus/context menu=] [=matches a url pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
 
-    Note: Target is the 'src' attribute of img/audio/video tags and the 'href' of anchor tags.
+    Note: Target is the "src" attribute of img/audio/video tags and the "href" of anchor tags.
 
     : {{ContextMenusProperties/parentId}}
     :: The ID of the parent [=ContextMenus/context menu item=]. The [=ContextMenus/context menu item=] may appear under a sub-menu of the parent.
