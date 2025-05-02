@@ -1401,12 +1401,12 @@ underlying audio streams should not be audible to users.
       promise=] given [=this=], |resultPromise|, and a {{TypeError}},
       and abort these steps.
 
-  1. Let |muteState| be `true` if any content, including in nested frames,
-      within [=this=]'s [=embedded navigable=] is currently sending audio to
-      the operating system, `false` otherwise.
+  1. Let |playingAudio| be `true` if any content, including in nested frames,
+      within [=this=]'s [=embedded navigable=] is currently playing audio,
+      `false` otherwise.
 
   1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
-      and |muteState|.
+      and |playingAudio|.
 
 </div>
 
