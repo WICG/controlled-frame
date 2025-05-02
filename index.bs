@@ -4483,13 +4483,15 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
     {{ContextMenusProperties}} has the following fields:
 
     : {{ContextMenusProperties/contexts}}
-    :: A [=list=] of different {{ContextType}}. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the context of the [=ContextMenus/context menu=] equals one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
+    :: A [=list=] of different {{ContextType}}. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the element that was clicked on to open the [=ContextMenus/context menu=] equals one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
 
     : {{ContextMenusProperties/documentUrlPatterns}}
     :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the embedded document [=matches a url pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
 
     : {{ContextMenusProperties/targetUrlPatterns}}
     :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the target of the [=ContextMenus/context menu=] [=matches a url pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
+
+    Note: Target is the 'src' attribute of img/audio/video tags and the 'href' of anchor tags.
 
     : {{ContextMenusProperties/parentId}}
     :: The ID of the parent [=ContextMenus/context menu item=]. The [=ContextMenus/context menu item=] may appear under a sub-menu of the parent.
