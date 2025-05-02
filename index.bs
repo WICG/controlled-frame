@@ -1380,6 +1380,15 @@ dictionary ClearDataTypeSet {
 
 </div>
 
+Each [=embedded navigable=] holds a
+<dfn for="embedded navigable">muted</dfn> [=boolean=], which defaults to
+`false`. When [=embedded navigable/muted=] is `true`, the user agent must
+mute all audio streams originating from within the [=embedded navigable=].
+The [=embedded navigable/muted=] state should not be exposed to content
+within the [=embedded navigable=]; when [=embedded navigable/muted=] is
+`true`, volume state should not be changed in any script-visible way, but the
+underlying audio streams should not be audible to users.
+
 <div algorithm>
   The <dfn method for=HTMLControlledFrameElement>getAudioState()</dfn>
   method steps are:
@@ -1392,10 +1401,12 @@ dictionary ClearDataTypeSet {
       promise=] given [=this=], |resultPromise|, and a {{TypeError}},
       and abort these steps.
 
-  1. Let |muteState| be the current audio mute state of embedded content.
+  1. Let |playingAudio| be `true` if any content, including in nested frames,
+      within [=this=]'s [=embedded navigable=] is currently playing audio,
+      `false` otherwise.
 
   1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
-      and |muteState|.
+      and |playingAudio|.
 
 </div>
 
@@ -1411,10 +1422,9 @@ dictionary ClearDataTypeSet {
       promise=] given [=this=], |resultPromise|, and a {{TypeError}},
       and abort these steps.
 
-  1. Let |muteState| be the current audio mute state for embedded content.
-
   1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
-      and |muteState|.
+      and [=this=]'s [=embedded navigable=]'s [=embedded navigable/muted=]
+      flag.
 
 </div>
 
@@ -1425,7 +1435,8 @@ dictionary ClearDataTypeSet {
   1. If [=this=]'s [=embedded navigable=] is null, then [=throw=] a
       {{TypeError}}.
 
-  1. Change the audio mute state for embedded content to match |mute| state.
+  1. Set [=this=]'s [=embedded navigable=]'s [=embedded navigable/muted=]
+      flag to |mute|.
 
 </div>
 
