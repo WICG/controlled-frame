@@ -464,43 +464,103 @@ are [=content script config=]s.
   The <dfn constructor for=HTMLControlledFrameElement>HTMLControlledFrameElement()</dfn>
   constructor steps are:
 
-  1. Let |webRequest| be [=this=]'s {{HTMLControlledFrameElement/request}}.
+  1. Let |webRequest| be a new {{WebRequest}}.
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onBeforeRequest}}] to
-      `"beforeRequest"` and |webRequest| respectively.
+  1. Let |onBeforeRequest| be a new {{WebRequestEvent}} with the following fields:
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onBeforeSendHeaders}}] to
-      `"beforeSendHeaders"` and |webRequest| respectively.
+      : [=WebRequestEvent/eventName=]
+      :: "`beforeRequest`"
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onSendHeaders}}] to
-      `"sendHeaders"` and |webRequest| respectively.
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onHeadersReceived}}] to
-      `"headersReceived"` and |webRequest| respectively.
+  1. Set |webRequest|'s {{WebRequest/onBeforeRequest}} to |onBeforeRequest|.
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onAuthRequired}}] to
-      `"authRequired"` and |webRequest| respectively.
+  1. Let |onBeforeSendHeaders| be a new {{WebRequestEvent}} with the following fields:
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onBeforeRedirect}}] to
-      `"beforeRedirect"` and |webRequest| respectively.
+      : [=WebRequestEvent/eventName=]
+      :: "`beforeSendHeaders`"
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onResponseStarted}}] to
-      `"responseStarted"` and |webRequest| respectively.
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onCompleted}}] to
-      `"completed"` and |webRequest| respectively.
+  1. Set |webRequest|'s {{WebRequest/onBeforeSendHeaders}} to |onBeforeSendHeaders|.
 
-  1. Set the [=WebRequestEvent/eventName=] and [=WebRequestEvent/webRequest=]
-      fields of |webRequest|[{{WebRequest/onErrorOccurred}}] to
-      `"errorOccurred"` and |webRequest| respectively.
+  1. Let |onSendHeaders| be a new {{WebRequestEvent}} with the following fields:
+
+      : [=WebRequestEvent/eventName=]
+      :: "`sendHeaders`"
+
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
+
+  1. Set |webRequest|'s {{WebRequest/onSendHeaders}} to |onSendHeaders|.
+
+  1. Let |onHeadersReceived| be a new {{WebRequestEvent}} with the following fields:
+
+      : [=WebRequestEvent/eventName=]
+      :: "`headersReceived`"
+
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
+
+  1. Set |webRequest|'s {{WebRequest/onHeadersReceived}} to |onHeadersReceived|.
+
+  1. Let |onAuthRequired| be a new {{WebRequestEvent}} with the following fields:
+
+      : [=WebRequestEvent/eventName=]
+      :: "`authRequired`"
+
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
+
+  1. Set |webRequest|'s {{WebRequest/onAuthRequired}} to |onAuthRequired|.
+
+  1. Let |onBeforeRedirect| be a new {{WebRequestEvent}} with the following fields:
+
+      : [=WebRequestEvent/eventName=]
+      :: "`beforeRedirect`"
+
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
+
+  1. Set |webRequest|'s {{WebRequest/onBeforeRedirect}} to |onBeforeRedirect|.
+
+  1. Let |onResponseStarted| be a new {{WebRequestEvent}} with the following fields:
+
+      : [=WebRequestEvent/eventName=]
+      :: "`responseStarted`"
+
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
+
+  1. Set |webRequest|'s {{WebRequest/onResponseStarted}} to |onResponseStarted|.
+
+  1. Let |onCompleted| be a new {{WebRequestEvent}} with the following fields:
+
+      : [=WebRequestEvent/eventName=]
+      :: "`completed`"
+
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
+
+  1. Set |webRequest|'s {{WebRequest/onCompleted}} to |onCompleted|.
+
+  1. Let |onErrorOccurred| be a new {{WebRequestEvent}} with the following fields:
+
+      : [=WebRequestEvent/eventName=]
+      :: "`errorOccurred`"
+
+      : [=WebRequestEvent/webRequest=]
+      :: |webRequest|
+
+  1. Set |webRequest|'s {{WebRequest/onErrorOccurred}} to |onErrorOccurred|.
+
+  1. Let |contextMenus| be a new {{ContextMenus}}.
+
+  1. Set [=this=]'s {{HTMLControlledFrameElement/contextMenus}} to |contextMenus|.
+
+  1. Set [=this=]'s {{HTMLControlledFrameElement/request}} to |webRequest|.
 
 </div>
 
