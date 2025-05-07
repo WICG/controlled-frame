@@ -556,11 +556,20 @@ are [=content script config=]s.
 
   1. Set |webRequest|'s {{WebRequest/onErrorOccurred}} to |onErrorOccurred|.
 
+  1. Set [=this=]'s {{HTMLControlledFrameElement/request}} to |webRequest|.
+
   1. Let |contextMenus| be a new {{ContextMenus}}.
+
+  1. Let |onClicked| be a new {{OnClickedEvent}}.
+
+  1. Set |contextMenus|'s {{ContextMenus/onClicked}} to |onClicked|.
+
+  1. Let |onShow| be a new {{OnShowEvent}}.
+
+  1. Set |contextMenus|'s {{ContextMenus/onShow}} to |onShow|.
 
   1. Set [=this=]'s {{HTMLControlledFrameElement/contextMenus}} to |contextMenus|.
 
-  1. Set [=this=]'s {{HTMLControlledFrameElement/request}} to |webRequest|.
 
 </div>
 
