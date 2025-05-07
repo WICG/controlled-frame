@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="df0bccd78942f8e3c1f57070066e2fada701111b" name="revision">
+  <meta content="e72c27328532119f2f6002e0bb454981d9c8d81c" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -789,7 +789,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-02">2 May 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-07">7 May 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1121,25 +1121,129 @@ which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="constructor" data-export data-lt="HTMLControlledFrameElement()|constructor()" id="dom-htmlcontrolledframeelement-htmlcontrolledframeelement"><code>HTMLControlledFrameElement()</code></dfn> constructor steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>webRequest</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-request" id="ref-for-dom-htmlcontrolledframeelement-request">request</a></code>.</p>
+      <p>Let <var>webRequest</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequest" id="ref-for-webrequest①">WebRequest</a></code>.</p>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onbeforerequest" id="ref-for-dom-webrequest-onbeforerequest">onBeforeRequest</a></code>] to <code>"beforeRequest"</code> and <var>webRequest</var> respectively.</p>
+      <p>Let <var>onBeforeRequest</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname">eventName</a>
+       <dd data-md>
+        <p>"<code>beforeRequest</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onbeforesendheaders" id="ref-for-dom-webrequest-onbeforesendheaders">onBeforeSendHeaders</a></code>] to <code>"beforeSendHeaders"</code> and <var>webRequest</var> respectively.</p>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onbeforerequest" id="ref-for-dom-webrequest-onbeforerequest">onBeforeRequest</a></code> to <var>onBeforeRequest</var>.</p>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname②">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest②">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onsendheaders" id="ref-for-dom-webrequest-onsendheaders">onSendHeaders</a></code>] to <code>"sendHeaders"</code> and <var>webRequest</var> respectively.</p>
+      <p>Let <var>onBeforeSendHeaders</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent①">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①">eventName</a>
+       <dd data-md>
+        <p>"<code>beforeSendHeaders</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname③">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest③">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onheadersreceived" id="ref-for-dom-webrequest-onheadersreceived">onHeadersReceived</a></code>] to <code>"headersReceived"</code> and <var>webRequest</var> respectively.</p>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onbeforesendheaders" id="ref-for-dom-webrequest-onbeforesendheaders">onBeforeSendHeaders</a></code> to <var>onBeforeSendHeaders</var>.</p>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname④">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest④">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onauthrequired" id="ref-for-dom-webrequest-onauthrequired">onAuthRequired</a></code>] to <code>"authRequired"</code> and <var>webRequest</var> respectively.</p>
+      <p>Let <var>onSendHeaders</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent②">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname②">eventName</a>
+       <dd data-md>
+        <p>"<code>sendHeaders</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest②">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑤">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑤">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onbeforeredirect" id="ref-for-dom-webrequest-onbeforeredirect">onBeforeRedirect</a></code>] to <code>"beforeRedirect"</code> and <var>webRequest</var> respectively.</p>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onsendheaders" id="ref-for-dom-webrequest-onsendheaders">onSendHeaders</a></code> to <var>onSendHeaders</var>.</p>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑥">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑥">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onresponsestarted" id="ref-for-dom-webrequest-onresponsestarted">onResponseStarted</a></code>] to <code>"responseStarted"</code> and <var>webRequest</var> respectively.</p>
+      <p>Let <var>onHeadersReceived</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent③">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname③">eventName</a>
+       <dd data-md>
+        <p>"<code>headersReceived</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest③">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑦">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑦">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-oncompleted" id="ref-for-dom-webrequest-oncompleted">onCompleted</a></code>] to <code>"completed"</code> and <var>webRequest</var> respectively.</p>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onheadersreceived" id="ref-for-dom-webrequest-onheadersreceived">onHeadersReceived</a></code> to <var>onHeadersReceived</var>.</p>
      <li data-md>
-      <p>Set the <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑧">eventName</a> and <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑧">webRequest</a> fields of <var>webRequest</var>[<code class="idl"><a data-link-type="idl" href="#dom-webrequest-onerroroccurred" id="ref-for-dom-webrequest-onerroroccurred">onErrorOccurred</a></code>] to <code>"errorOccurred"</code> and <var>webRequest</var> respectively.</p>
+      <p>Let <var>onAuthRequired</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent④">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname④">eventName</a>
+       <dd data-md>
+        <p>"<code>authRequired</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest④">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
+     <li data-md>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onauthrequired" id="ref-for-dom-webrequest-onauthrequired">onAuthRequired</a></code> to <var>onAuthRequired</var>.</p>
+     <li data-md>
+      <p>Let <var>onBeforeRedirect</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent⑤">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑤">eventName</a>
+       <dd data-md>
+        <p>"<code>beforeRedirect</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑤">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
+     <li data-md>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onbeforeredirect" id="ref-for-dom-webrequest-onbeforeredirect">onBeforeRedirect</a></code> to <var>onBeforeRedirect</var>.</p>
+     <li data-md>
+      <p>Let <var>onResponseStarted</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent⑥">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑥">eventName</a>
+       <dd data-md>
+        <p>"<code>responseStarted</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑥">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
+     <li data-md>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onresponsestarted" id="ref-for-dom-webrequest-onresponsestarted">onResponseStarted</a></code> to <var>onResponseStarted</var>.</p>
+     <li data-md>
+      <p>Let <var>onCompleted</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent⑦">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑦">eventName</a>
+       <dd data-md>
+        <p>"<code>completed</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑦">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
+     <li data-md>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-oncompleted" id="ref-for-dom-webrequest-oncompleted">onCompleted</a></code> to <var>onCompleted</var>.</p>
+     <li data-md>
+      <p>Let <var>onErrorOccurred</var> be a new <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent⑧">WebRequestEvent</a></code> with the following fields:</p>
+      <dl>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑧">eventName</a>
+       <dd data-md>
+        <p>"<code>errorOccurred</code>"</p>
+       <dt data-md><a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑧">webRequest</a>
+       <dd data-md>
+        <p><var>webRequest</var></p>
+      </dl>
+     <li data-md>
+      <p>Set <var>webRequest</var>’s <code class="idl"><a data-link-type="idl" href="#dom-webrequest-onerroroccurred" id="ref-for-dom-webrequest-onerroroccurred">onErrorOccurred</a></code> to <var>onErrorOccurred</var>.</p>
+     <li data-md>
+      <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-request" id="ref-for-dom-htmlcontrolledframeelement-request">request</a></code> to <var>webRequest</var>.</p>
+     <li data-md>
+      <p>Let <var>contextMenus</var> be a new <code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus①">ContextMenus</a></code>.</p>
+     <li data-md>
+      <p>Let <var>onClicked</var> be a new <code class="idl"><a data-link-type="idl" href="#onclickedevent" id="ref-for-onclickedevent">OnClickedEvent</a></code>.</p>
+     <li data-md>
+      <p>Set <var>contextMenus</var>’s <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onclicked" id="ref-for-dom-contextmenus-onclicked">onClicked</a></code> to <var>onClicked</var>.</p>
+     <li data-md>
+      <p>Let <var>onShow</var> be a new <code class="idl"><a data-link-type="idl" href="#onshowevent" id="ref-for-onshowevent">OnShowEvent</a></code>.</p>
+     <li data-md>
+      <p>Set <var>contextMenus</var>’s <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onshow" id="ref-for-dom-contextmenus-onshow">onShow</a></code> to <var>onShow</var>.</p>
+     <li data-md>
+      <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-contextmenus" id="ref-for-dom-htmlcontrolledframeelement-contextmenus">contextMenus</a></code> to <var>contextMenus</var>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.1" id="attributes"><span class="secno">3.1. </span><span class="content">Attributes</span><a class="self-link" href="#attributes"></a></h3>
@@ -1162,7 +1266,7 @@ storage based on the value of the <code class="idl"><a data-link-type="idl" href
      The <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition⑤">partition</a></code> IDL attribute setter steps are: 
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①①">embedded navigable</a> is not null, then:</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①①">embedded navigable</a> is not null, then:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw">Throw</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException">DOMException</a></code>.</p>
@@ -1177,18 +1281,18 @@ Frame’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id=
      The <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-src" id="ref-for-dom-htmlcontrolledframeelement-src⑤">src</a></code> IDL attribute setter steps are: 
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a> is not <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#in-a-document-tree" id="ref-for-in-a-document-tree">in a document tree</a>, then return.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③">this</a> is not <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#in-a-document-tree" id="ref-for-in-a-document-tree">in a document tree</a>, then return.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①③">embedded navigable</a> is null, then:</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①③">embedded navigable</a> is null, then:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="#initialize-a-controlledframe" id="ref-for-initialize-a-controlledframe①">Initialize a controlledframe</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④">this</a>.</p>
+        <p><a data-link-type="dfn" href="#initialize-a-controlledframe" id="ref-for-initialize-a-controlledframe①">Initialize a controlledframe</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤">this</a>.</p>
       </ol>
      <li data-md>
       <p>Otherwise:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="#navigate-a-controlledframe" id="ref-for-navigate-a-controlledframe①">Navigate a controlledframe</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤">this</a> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥">this</a>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-src" id="ref-for-dom-htmlcontrolledframeelement-src⑥">src</a></code>.</p>
+        <p><a data-link-type="dfn" href="#navigate-a-controlledframe" id="ref-for-navigate-a-controlledframe①">Navigate a controlledframe</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥">this</a> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-src" id="ref-for-dom-htmlcontrolledframeelement-src⑥">src</a></code>.</p>
       </ol>
     </ol>
    </div>
@@ -1240,10 +1344,10 @@ index was out of range.</p>
      <li data-md>
       <p>Let <var>embeddedNavigable</var> be <var>controlledframe</var>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①④">embedded navigable</a>.</p>
      <li data-md>
-      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a>, <var>resultPromise</var>, and <code>false</code>, and abort these steps.</p>
+      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧">this</a>, <var>resultPromise</var>, and <code>false</code>, and abort these steps.</p>
      <li data-md>
       <p>If <var>embeddedNavigable</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document①">active document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active" id="ref-for-fully-active">fully active</a>,
-  then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧">this</a>, <var>resultPromise</var>,
+  then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨">this</a>, <var>resultPromise</var>,
   and <code>false</code>, and abort these steps.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#tn-append-session-history-traversal-steps" id="ref-for-tn-append-session-history-traversal-steps">Append the following session history traversal steps</a> to <var>embeddedNavigable</var>:</p>
@@ -1255,14 +1359,14 @@ index was out of range.</p>
        <li data-md>
         <p>Let <var>targetStepIndex</var> be <var>currentStepIndex</var> + <var>delta</var>.</p>
        <li data-md>
-        <p>If <var>allSteps</var>[<var>targetStepIndex</var>] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">exist</a>, then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨">this</a>, <var>resultPromise</var>,
+        <p>If <var>allSteps</var>[<var>targetStepIndex</var>] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">exist</a>, then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪">this</a>, <var>resultPromise</var>,
   and <code>false</code>, and abort these steps.</p>
        <li data-md>
         <p>Let <var>result</var> be the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#apply-the-traverse-history-step" id="ref-for-apply-the-traverse-history-step">applying the traverse history step</a> <var>allSteps</var>[<var>targetStepIndex</var>] to <var>embeddedNavigable</var> given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#user-navigation-involvement" id="ref-for-user-navigation-involvement">user navigation involvement</a> of "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#uni-browser-ui" id="ref-for-uni-browser-ui">browser UI</a>".</p>
        <li data-md>
-        <p>If <var>result</var> is not equal to "<code>applied</code>", then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise③">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪">this</a>, <var>resultPromise</var>, and <code>false</code>.</p>
+        <p>If <var>result</var> is not equal to "<code>applied</code>", then <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise③">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①">this</a>, <var>resultPromise</var>, and <code>false</code>.</p>
        <li data-md>
-        <p>Otherwise, <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise④">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①">this</a>, <var>resultPromise</var>, and <code>true</code>.</p>
+        <p>Otherwise, <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise④">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②">this</a>, <var>resultPromise</var>, and <code>true</code>.</p>
       </ol>
     </ol>
    </div>
@@ -1273,9 +1377,9 @@ index was out of range.</p>
   Promise.</p>
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑤">embedded navigable</a> is null, then return <code>false</code>.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑤">embedded navigable</a> is null, then return <code>false</code>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑥">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-current-session-history-step" id="ref-for-tn-current-session-history-step①">current session history step</a> is > 0, return <code>true</code>.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①④">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑥">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-current-session-history-step" id="ref-for-tn-current-session-history-step①">current session history step</a> is > 0, return <code>true</code>.</p>
      <li data-md>
       <p>Return <code>false</code>.</p>
     </ol>
@@ -1284,11 +1388,11 @@ index was out of range.</p>
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-cangoforward"><code>canGoForward()</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①④">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑦">embedded navigable</a> is null, then return <code>false</code>.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑤">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑦">embedded navigable</a> is null, then return <code>false</code>.</p>
      <li data-md>
-      <p>Let <var>step</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑤">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑧">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-current-session-history-step" id="ref-for-tn-current-session-history-step②">current session history step</a>.</p>
+      <p>Let <var>step</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑥">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑧">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#tn-current-session-history-step" id="ref-for-tn-current-session-history-step②">current session history step</a>.</p>
      <li data-md>
-      <p>Let <var>steps</var> be the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#getting-all-used-history-steps" id="ref-for-getting-all-used-history-steps①">getting all used history steps</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑥">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑨">embedded navigable</a>.</p>
+      <p>Let <var>steps</var> be the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#getting-all-used-history-steps" id="ref-for-getting-all-used-history-steps①">getting all used history steps</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑦">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⑨">embedded navigable</a>.</p>
      <li data-md>
       <p>If <var>step</var> + 1 &lt; the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size">size</a> of <var>steps</var>, then return <code>true</code>.</p>
      <li data-md>
@@ -1299,7 +1403,7 @@ index was out of range.</p>
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-back"><code>back()</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Return the result of <a data-link-type="dfn" href="#delta-traverse-an-embedded-navigables-history" id="ref-for-delta-traverse-an-embedded-navigables-history">delta traverse an embedded navigable’s history</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑦">this</a> and -1.</p>
+      <p>Return the result of <a data-link-type="dfn" href="#delta-traverse-an-embedded-navigables-history" id="ref-for-delta-traverse-an-embedded-navigables-history">delta traverse an embedded navigable’s history</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑧">this</a> and -1.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="forward()" data-algorithm-for="HTMLControlledFrameElement">
@@ -1307,21 +1411,21 @@ index was out of range.</p>
   are: 
     <ol>
      <li data-md>
-      <p>Return the result of <a data-link-type="dfn" href="#delta-traverse-an-embedded-navigables-history" id="ref-for-delta-traverse-an-embedded-navigables-history①">delta traverse an embedded navigable’s history</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑧">this</a> and 1.</p>
+      <p>Return the result of <a data-link-type="dfn" href="#delta-traverse-an-embedded-navigables-history" id="ref-for-delta-traverse-an-embedded-navigables-history①">delta traverse an embedded navigable’s history</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑨">this</a> and 1.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="go(relativeIndex)" data-algorithm-for="HTMLControlledFrameElement">
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-go"><code>go(<var>relativeIndex</var>)</code></dfn> method steps  are: 
     <ol>
      <li data-md>
-      <p>Return the result of <a data-link-type="dfn" href="#delta-traverse-an-embedded-navigables-history" id="ref-for-delta-traverse-an-embedded-navigables-history②">delta traverse an embedded navigable’s history</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑨">this</a> and <var>relativeIndex</var>.</p>
+      <p>Return the result of <a data-link-type="dfn" href="#delta-traverse-an-embedded-navigables-history" id="ref-for-delta-traverse-an-embedded-navigables-history②">delta traverse an embedded navigable’s history</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⓪">this</a> and <var>relativeIndex</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="reload()" data-algorithm-for="HTMLControlledFrameElement">
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-reload"><code>reload()</code></dfn> steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⓪">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②⓪">embedded navigable</a>.</p>
+      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②①">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②⓪">embedded navigable</a>.</p>
      <li data-md>
       <p>If <var>embeddedNavigable</var> is null, return.</p>
      <li data-md>
@@ -1332,7 +1436,7 @@ index was out of range.</p>
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-stop"><code>stop()</code></dfn> steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②①">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②①">embedded navigable</a>.</p>
+      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②①">embedded navigable</a>.</p>
      <li data-md>
       <p>If <var>embeddedNavigable</var> is null, return.</p>
      <li data-md>
@@ -1694,16 +1798,16 @@ implementation of this isolation that can be implemented by all browsers.</stron
       <p>If <var>scriptNameList</var> is undefined, then:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-clear" id="ref-for-map-clear">Clear</a> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②②">this</a>’s <a data-link-type="dfn" href="#controlledframe-content-script-map" id="ref-for-controlledframe-content-script-map②">content script map</a>.</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-clear" id="ref-for-map-clear">Clear</a> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②③">this</a>’s <a data-link-type="dfn" href="#controlledframe-content-script-map" id="ref-for-controlledframe-content-script-map②">content script map</a>.</p>
       </ol>
      <li data-md>
       <p>Otherwise, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑦">for each</a> <var>name</var> of <var>scriptNameList</var>:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-remove" id="ref-for-map-remove">Remove</a> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②③">this</a>’s <a data-link-type="dfn" href="#controlledframe-content-script-map" id="ref-for-controlledframe-content-script-map③">content script map</a>[<var>name</var>].</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-remove" id="ref-for-map-remove">Remove</a> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②④">this</a>’s <a data-link-type="dfn" href="#controlledframe-content-script-map" id="ref-for-controlledframe-content-script-map③">content script map</a>[<var>name</var>].</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑥">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②④">this</a> and <var>result</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑥">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑤">this</a> and <var>result</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="executeScript(optional details)" data-algorithm-for="HTMLControlledFrameElement">
@@ -1714,21 +1818,21 @@ implementation of this isolation that can be implemented by all browsers.</stron
      <li data-md>
       <p>Return <var>result</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑤">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②②">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise③">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑥">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑥">TypeError</a></code>,
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑥">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②②">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise③">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑦">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑥">TypeError</a></code>,
   and abort these steps.</p>
      <li data-md>
       <p>If <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code">code</a></code>"] and <var>details</var>"[<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file">file</a></code>"] are either both defined or both
-  undefined, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise④">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑦">this</a>, <var>result</var>,
+  undefined, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise④">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑧">this</a>, <var>result</var>,
   and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑦">TypeError</a></code>, and abort these steps.</p>
      <li data-md>
       <p>Let <var>executionSteps</var> be the following algorithm that takes a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑥">long</a></code> and
   a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string⑨">string</a> or <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean⑥">boolean</a> <var>scriptString</var>:</p>
       <ol>
        <li data-md>
-        <p>If <var>scriptString</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①⓪">string</a>, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑤">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑧">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑧">TypeError</a></code>,
+        <p>If <var>scriptString</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①⓪">string</a>, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑤">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑨">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑧">TypeError</a></code>,
   and abort these steps.</p>
        <li data-md>
-        <p>Let <var>document</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑨">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②③">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document②">active document</a>.</p>
+        <p>Let <var>document</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⓪">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②③">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document②">active document</a>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="#inject-a-script-into-a-document" id="ref-for-inject-a-script-into-a-document①">Inject a script into a document</a> given <var>document</var>, <var>scriptString</var>,
   and the following algorithm that accepts a <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-completion-record-specification-type" id="ref-for-sec-completion-record-specification-type①">completion record</a> <var>completionRecord</var>:</p>
@@ -1737,20 +1841,20 @@ implementation of this isolation that can be implemented by all browsers.</stron
           <p>If <var>completionRecord</var> is a <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-completion-record-specification-type" id="ref-for-sec-completion-record-specification-type②">normal completion</a>, then:</p>
           <ol>
            <li data-md>
-            <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑦">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⓪">this</a>, <var>result</var>, and <var>completionRecord</var>.<code>[[Value]]</code>.</p>
+            <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑦">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③①">this</a>, <var>result</var>, and <var>completionRecord</var>.<code>[[Value]]</code>.</p>
           </ol>
          <li data-md>
           <p>Otherwise:</p>
           <ol>
            <li data-md>
-            <p><a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑥">Reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③①">this</a>, <var>result</var>, and <var>completionRecord</var>.<code>[[Value]]</code>.</p>
+            <p><a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑥">Reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③②">this</a>, <var>result</var>, and <var>completionRecord</var>.<code>[[Value]]</code>.</p>
           </ol>
         </ol>
       </ol>
      <li data-md>
       <p>If <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code①">code</a></code>"] is defined, then run <var>executionSteps</var> given 0 and <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code②">code</a></code>"].</p>
      <li data-md>
-      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item①">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③②">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file①">file</a></code>"], <code>false</code>, 0, and <var>executionSteps</var>.</p>
+      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item①">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③③">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file①">file</a></code>"], <code>false</code>, 0, and <var>executionSteps</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="insertCSS(optional details)" data-algorithm-for="HTMLControlledFrameElement">
@@ -1761,30 +1865,30 @@ implementation of this isolation that can be implemented by all browsers.</stron
      <li data-md>
       <p>Return <var>result</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel④">in parallel</a>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②④">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑦">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③④">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑨">TypeError</a></code>,
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③④">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②④">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑦">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑤">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑨">TypeError</a></code>,
   and abort these steps.</p>
      <li data-md>
       <p>If <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code③">code</a></code>"] and <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file②">file</a></code>"] are either both defined or both
-  undefined, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑧">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑤">this</a>, <var>result</var>,
+  undefined, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑧">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑥">this</a>, <var>result</var>,
   and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⓪">TypeError</a></code>, and abort these steps.</p>
      <li data-md>
       <p>Let <var>executionSteps</var> be the following algorithm that takes a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-long" id="ref-for-idl-long⑦">long</a></code> and
   a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①①">string</a> or <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean⑦">boolean</a> <var>styleString</var>:</p>
       <ol>
        <li data-md>
-        <p>If <var>styleString</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①②">string</a>, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑨">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑥">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①①">TypeError</a></code>,
+        <p>If <var>styleString</var> is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①②">string</a>, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise⑨">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑦">this</a>, <var>result</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①①">TypeError</a></code>,
   and abort these steps.</p>
        <li data-md>
-        <p>Let <var>document</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑦">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②⑤">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document③">active document</a>.</p>
+        <p>Let <var>document</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑧">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②⑤">embedded navigable</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document③">active document</a>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="#inject-a-stylesheet-into-a-document" id="ref-for-inject-a-stylesheet-into-a-document①">Inject a stylesheet into a document</a> given <var>document</var> and <var>styleString</var>.</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑧">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑧">this</a> and <var>result</var>.</p>
+        <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑧">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑨">this</a> and <var>result</var>.</p>
       </ol>
      <li data-md>
       <p>If <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code④">code</a></code>"] is defined, then run <var>executionSteps</var> given 0 and <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-code" id="ref-for-dom-injectdetails-code⑤">code</a></code>"].</p>
      <li data-md>
-      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item②">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③⑨">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file③">file</a></code>"], <code>false</code>, 0, and <var>executionSteps</var>.</p>
+      <p>Otherwise, <a data-link-type="dfn" href="#fetch-an-injection-item" id="ref-for-fetch-an-injection-item②">fetch an injection item</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⓪">this</a>, <var>details</var>["<code class="idl"><a data-link-type="idl" href="#dom-injectdetails-file" id="ref-for-dom-injectdetails-file③">file</a></code>"], <code>false</code>, 0, and <var>executionSteps</var>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.4" id="api-config"><span class="secno">3.4. </span><span class="content">Configuration methods</span><a class="self-link" href="#api-config"></a></h3>
@@ -1835,9 +1939,9 @@ implementation of this isolation that can be implemented by all browsers.</stron
         <p>Set <var>clearSince</var> to <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardataoptions-since" id="ref-for-dom-cleardataoptions-since①">since</a></code>"].</p>
       </ol>
      <li data-md>
-      <p>Let <var>embeddingOrigin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin">top-level origin</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⓪">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object②">relevant settings object</a>.</p>
+      <p>Let <var>embeddingOrigin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin">top-level origin</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④①">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object②">relevant settings object</a>.</p>
      <li data-md>
-      <p>Let <var>partition</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④①">this</a>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition⑦">partition</a></code>.</p>
+      <p>Let <var>partition</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④②">this</a>’s <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition⑦">partition</a></code>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>storageKey</var> → <var>shelf</var> of the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent" id="ref-for-user-agent②">user agent</a>’s <a data-link-type="dfn" href="https://storage.spec.whatwg.org#storage-shed" id="ref-for-storage-shed">storage shed</a>:</p>
       <ol>
@@ -1911,7 +2015,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
         </ol>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑨">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④②">this</a> and <var>resultPromise</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise⑨">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④③">this</a> and <var>resultPromise</var>.</p>
     </ol>
    </div>
    <p>Each <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②⑥">embedded navigable</a> holds a <dfn class="dfn-paneled" data-dfn-for="embedded navigable" data-dfn-type="dfn" data-noexport id="embedded-navigable-muted">muted</dfn> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean⑧">boolean</a>, which defaults to <code>false</code>. When <a data-link-type="dfn" href="#embedded-navigable-muted" id="ref-for-embedded-navigable-muted">muted</a> is <code>true</code>, the user agent must
@@ -1927,13 +2031,13 @@ underlying audio streams should not be audible to users.</p>
      <li data-md>
       <p>Return <var>resultPromise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑥">in parallel</a>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②⑨">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⓪">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④④">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①②">TypeError</a></code>,
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④④">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②⑨">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⓪">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑤">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①②">TypeError</a></code>,
   and abort these steps.</p>
      <li data-md>
       <p>Let <var>playingAudio</var> be <code>true</code> if any content, including in nested frames,
-  within <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑤">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③⓪">embedded navigable</a> is currently playing audio, <code>false</code> otherwise.</p>
+  within <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑥">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③⓪">embedded navigable</a> is currently playing audio, <code>false</code> otherwise.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⓪">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑥">this</a>, <var>resultPromise</var>,
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⓪">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑦">this</a>, <var>resultPromise</var>,
   and <var>playingAudio</var>.</p>
     </ol>
    </div>
@@ -1945,20 +2049,20 @@ underlying audio streams should not be audible to users.</p>
      <li data-md>
       <p>Return <var>resultPromise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑦">in parallel</a>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑦">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③①">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①①">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑧">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①③">TypeError</a></code>,
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑧">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③①">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①①">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑨">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①③">TypeError</a></code>,
   and abort these steps.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①①">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④⑨">this</a>, <var>resultPromise</var>,
-  and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⓪">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③②">embedded navigable</a>’s <a data-link-type="dfn" href="#embedded-navigable-muted" id="ref-for-embedded-navigable-muted③">muted</a> flag.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①①">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⓪">this</a>, <var>resultPromise</var>,
+  and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤①">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③②">embedded navigable</a>’s <a data-link-type="dfn" href="#embedded-navigable-muted" id="ref-for-embedded-navigable-muted③">muted</a> flag.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="setAudioMuted(mute)" data-algorithm-for="HTMLControlledFrameElement">
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-setaudiomuted"><code>setAudioMuted(<var>mute</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤①">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③③">embedded navigable</a> is null, then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①④">TypeError</a></code>.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③③">embedded navigable</a> is null, then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①④">TypeError</a></code>.</p>
      <li data-md>
-      <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③④">embedded navigable</a>’s <a data-link-type="dfn" href="#embedded-navigable-muted" id="ref-for-embedded-navigable-muted④">muted</a> flag to <var>mute</var>.</p>
+      <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤③">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③④">embedded navigable</a>’s <a data-link-type="dfn" href="#embedded-navigable-muted" id="ref-for-embedded-navigable-muted④">muted</a> flag to <var>mute</var>.</p>
     </ol>
    </div>
    <h4 class="heading settled" data-level="3.4.1" id="api-config-zoom"><span class="secno">3.4.1. </span><span class="content">Zoom</span><a class="self-link" href="#api-config-zoom"></a></h4>
@@ -2025,7 +2129,7 @@ underlying audio streams should not be audible to users.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑧">in parallel</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①②">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤③">this</a>, <var>p</var>, and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤④">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode">zoomMode</a>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①②">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤④">this</a>, <var>p</var>, and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑤">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode">zoomMode</a>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="setZoomMode(zoomMode)" data-algorithm-for="HTMLControlledFrameElement">
@@ -2036,28 +2140,28 @@ underlying audio streams should not be audible to users.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑨">in parallel</a>.</p>
      <li data-md>
-      <p>Let <var>currentZoomMode</var> be the result of <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-getzoommode" id="ref-for-dom-htmlcontrolledframeelement-getzoommode①">getZoomMode</a></code> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑤">this</a>.</p>
+      <p>Let <var>currentZoomMode</var> be the result of <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-getzoommode" id="ref-for-dom-htmlcontrolledframeelement-getzoommode①">getZoomMode</a></code> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑥">this</a>.</p>
      <li data-md>
-      <p>If <var>currentZoomMode</var> equals <var>zoomMode</var>, <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①③">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑥">this</a> and <var>p</var>.</p>
+      <p>If <var>currentZoomMode</var> equals <var>zoomMode</var>, <a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①③">resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑦">this</a> and <var>p</var>.</p>
      <li data-md>
-      <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑦">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode①">zoomMode</a> to <var>zoomMode</var>.</p>
+      <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑧">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode①">zoomMode</a> to <var>zoomMode</var>.</p>
      <li data-md>
       <p>If <var>zoomMode</var> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-per-origin" id="ref-for-dom-zoommode-per-origin②">per-origin</a></code>:</p>
       <ol>
        <li data-md>
-        <p>If <a data-link-type="dfn" href="#current-document-has-a-per-origin-zoom-level" id="ref-for-current-document-has-a-per-origin-zoom-level">current document has a per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑧">this</a> is <code>true</code>:</p>
+        <p>If <a data-link-type="dfn" href="#current-document-has-a-per-origin-zoom-level" id="ref-for-current-document-has-a-per-origin-zoom-level">current document has a per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑨">this</a> is <code>true</code>:</p>
         <ol>
          <li data-md>
-          <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤⑨">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom">currentZoom</a>.</p>
+          <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⓪">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom">currentZoom</a>.</p>
          <li data-md>
-          <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⓪">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①">currentZoom</a> to the result of <a data-link-type="dfn" href="#get-the-per-origin-zoom-level" id="ref-for-get-the-per-origin-zoom-level">get the per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥①">this</a>.</p>
+          <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥①">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①">currentZoom</a> to the result of <a data-link-type="dfn" href="#get-the-per-origin-zoom-level" id="ref-for-get-the-per-origin-zoom-level">get the per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥②">this</a>.</p>
          <li data-md>
-          <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥②">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom②">currentZoom</a>:</p>
+          <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥③">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom②">currentZoom</a>:</p>
           <ol>
            <li data-md>
-            <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥③">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥④">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom③">currentZoom</a>.</p>
+            <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥④">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑤">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom③">currentZoom</a>.</p>
            <li data-md>
-            <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑤">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑥">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom④">currentZoom</a>.</p>
+            <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑥">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑦">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom④">currentZoom</a>.</p>
           </ol>
         </ol>
       </ol>
@@ -2065,20 +2169,20 @@ underlying audio streams should not be audible to users.</p>
       <p>If <var>zoomMode</var> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-disabled" id="ref-for-dom-zoommode-disabled①">disabled</a></code>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑦">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑤">currentZoom</a>.</p>
+        <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑧">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑤">currentZoom</a>.</p>
        <li data-md>
-        <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑧">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑥">currentZoom</a> to 1.0f.</p>
+        <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑨">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑥">currentZoom</a> to 1.0f.</p>
        <li data-md>
-        <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥⑨">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑦">currentZoom</a>:</p>
+        <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⓪">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑦">currentZoom</a>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level①">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⓪">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦①">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑧">currentZoom</a>.</p>
+          <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level①">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦①">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦②">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑧">currentZoom</a>.</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event①">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦②">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦③">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑨">currentZoom</a>.</p>
+          <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event①">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦③">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦④">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom⑨">currentZoom</a>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①④">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦④">this</a> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①④">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑤">this</a> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="getZoom()" data-algorithm-for="HTMLControlledFrameElement">
@@ -2089,11 +2193,11 @@ underlying audio streams should not be audible to users.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⓪">in parallel</a>.</p>
      <li data-md>
-      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑤">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③⑧">embedded navigable</a>.</p>
+      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑥">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③⑧">embedded navigable</a>.</p>
      <li data-md>
-      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①②">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑥">this</a>, <var>p</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑤">TypeError</a></code>, and abort these steps.</p>
+      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①②">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑦">this</a>, <var>p</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑤">TypeError</a></code>, and abort these steps.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑤">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑦">this</a>, <var>p</var>, and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑧">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⓪">currentZoom</a>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑤">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑧">this</a>, <var>p</var>, and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑨">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⓪">currentZoom</a>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="setZoom(zoomFactor)" data-algorithm-for="HTMLControlledFrameElement">
@@ -2104,51 +2208,51 @@ underlying audio streams should not be audible to users.</p>
      <li data-md>
       <p>Return <var>p</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①①">in parallel</a>.</p>
      <li data-md>
-      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦⑨">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③⑨">embedded navigable</a>.</p>
+      <p>Let <var>embeddedNavigable</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⓪">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable③⑨">embedded navigable</a>.</p>
      <li data-md>
-      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①③">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⓪">this</a>, <var>p</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑥">TypeError</a></code>, and abort these steps.</p>
+      <p>If <var>embeddedNavigable</var> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①③">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧①">this</a>, <var>p</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑥">TypeError</a></code>, and abort these steps.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧①">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode②">ZoomMode</a> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-disabled" id="ref-for-dom-zoommode-disabled②">disabled</a></code>:</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧②">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode②">ZoomMode</a> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-disabled" id="ref-for-dom-zoommode-disabled②">disabled</a></code>:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①④">Reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧②">this</a>, <var>p</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑦">TypeError</a></code>, and abort these steps.</p>
+        <p><a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①④">Reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧③">this</a>, <var>p</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑦">TypeError</a></code>, and abort these steps.</p>
       </ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧③">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode③">ZoomMode</a> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-per-origin" id="ref-for-dom-zoommode-per-origin③">per-origin</a></code>:</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧④">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode③">ZoomMode</a> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-per-origin" id="ref-for-dom-zoommode-per-origin③">per-origin</a></code>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧④">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①①">currentZoom</a>.</p>
+        <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑤">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①①">currentZoom</a>.</p>
        <li data-md>
-        <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑤">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①②">currentZoom</a> to <var>zoomFactor</var>.</p>
+        <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑥">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①②">currentZoom</a> to <var>zoomFactor</var>.</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="#set-the-per-origin-zoom-level" id="ref-for-set-the-per-origin-zoom-level">Set the per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑥">this</a> and <var>zoomFactor</var>. <span class="XXX">TODO:update zoom of all Controlled Frames with the same partition and origin.</span></p>
+        <p><a data-link-type="dfn" href="#set-the-per-origin-zoom-level" id="ref-for-set-the-per-origin-zoom-level">Set the per-origin zoom level</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑦">this</a> and <var>zoomFactor</var>. <span class="XXX">TODO:update zoom of all Controlled Frames with the same partition and origin.</span></p>
        <li data-md>
-        <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑦">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①③">currentZoom</a>:</p>
+        <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑧">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①③">currentZoom</a>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level②">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑧">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑨">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①④">currentZoom</a>.</p>
+          <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level②">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑨">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⓪">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①④">currentZoom</a>.</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event②">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⓪">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨①">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑤">currentZoom</a>.</p>
+          <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event②">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨①">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨②">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑤">currentZoom</a>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨②">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode④">ZoomMode</a> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-per-view" id="ref-for-dom-zoommode-per-view①">per-view</a></code>:</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨③">this</a>’s <a data-link-type="dfn" href="#htmlcontrolledframeelement-zoommode" id="ref-for-htmlcontrolledframeelement-zoommode④">ZoomMode</a> is <code class="idl"><a data-link-type="idl" href="#dom-zoommode-per-view" id="ref-for-dom-zoommode-per-view①">per-view</a></code>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨③">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑥">currentZoom</a>.</p>
+        <p>Let <var>oldZoomFactor</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨④">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑥">currentZoom</a>.</p>
        <li data-md>
-        <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨④">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑦">currentZoom</a> to <var>zoomFactor</var>.</p>
+        <p>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑤">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑦">currentZoom</a> to <var>zoomFactor</var>.</p>
        <li data-md>
-        <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑤">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑧">currentZoom</a>:</p>
+        <p>If <var>oldZoomFactor</var> does not equal to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑥">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑧">currentZoom</a>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level③">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑥">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑦">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑨">currentZoom</a>.</p>
+          <p><a data-link-type="dfn" href="#apply-zoom-level" id="ref-for-apply-zoom-level③">Apply zoom level</a> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑦">this</a>’s embedded document given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑧">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom①⑨">currentZoom</a>.</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event③">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑧">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑨">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom②⓪">currentZoom</a>.</p>
+          <p><a data-link-type="dfn" href="#fire-a-zoomchange-event" id="ref-for-fire-a-zoomchange-event③">Fire a "zoomchange" event</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨⑨">this</a>, <var>oldZoomFactor</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⓪">this</a>’s <a data-link-type="dfn" href="#currentzoom" id="ref-for-currentzoom②⓪">currentZoom</a>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑥">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⓪">this</a> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑥">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪①">this</a> and <var>p</var>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.5" id="api-capture"><span class="secno">3.5. </span><span class="content">Capture methods</span><a class="self-link" href="#api-capture"></a></h3>
@@ -2166,7 +2270,7 @@ underlying audio streams should not be audible to users.</p>
      <li data-md>
       <p>Return <var>resultPromise</var> and run the remaining steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①②">in parallel</a>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪①">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable④⓪">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⑤">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪②">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑧">TypeError</a></code>,
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪②">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable④⓪">embedded navigable</a> is null, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⑤">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪③">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑧">TypeError</a></code>,
   and abort these steps.</p>
      <li data-md>
       <p>Let <var>optionsFormat</var> be "JPEG" by default.</p>
@@ -2179,7 +2283,7 @@ underlying audio streams should not be audible to users.</p>
         <p>Let <var>optionsFormat</var> be <var>options</var>["format"].</p>
       </ol>
      <li data-md>
-      <p>If <var>optionsFormat</var> is an unrecognized format, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⑥">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪③">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑨">TypeError</a></code>,
+      <p>If <var>optionsFormat</var> is an unrecognized format, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⑥">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪④">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①⑨">TypeError</a></code>,
   and abort these steps.</p>
      <li data-md>
       <p>If <var>options</var> has field "quality":</p>
@@ -2189,12 +2293,12 @@ underlying audio streams should not be audible to users.</p>
       </ol>
      <li data-md>
       <p>If <var>optionsQuality</var> is not an integer or is not between 0 and 100
- inclusive, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⑦">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪④">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②⓪">TypeError</a></code>, and abort these steps.</p>
+ inclusive, then <a data-link-type="dfn" href="#reject-an-embedder-promise" id="ref-for-reject-an-embedder-promise①⑦">reject an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑤">this</a>, <var>resultPromise</var>, and a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②⓪">TypeError</a></code>, and abort these steps.</p>
      <li data-md>
       <p>Create an image in format <code>optionsFormat</code> at quality <code>optionsQuality</code> showing the visible region of embedded content.</p>
       <p><span class="XXX">Spec the type of the captured image.</span></p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑦">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑤">this</a>, <var>resultPromise</var>, and
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑦">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑥">this</a>, <var>resultPromise</var>, and
   the image data.</p>
     </ol>
    </div>
@@ -2202,7 +2306,7 @@ underlying audio streams should not be audible to users.</p>
      The <dfn class="dfn-paneled idl-code" data-dfn-for="HTMLControlledFrameElement" data-dfn-type="method" data-export id="dom-htmlcontrolledframeelement-print"><code>print()</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑥">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable④①">embedded navigable</a> is null, then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw②">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②①">TypeError</a></code>.</p>
+      <p>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑦">this</a>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable④①">embedded navigable</a> is null, then <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw②">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror②①">TypeError</a></code>.</p>
      <li data-md>
       <p>Initiate the browser print page feature for embedded content.</p>
     </ol>
@@ -3468,26 +3572,26 @@ revisited to align better with other Web APIs.</strong></p>
 
 [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed③③"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://wicg.github.io/isolated-web-apps/isolated-contexts.html#IsolatedContext" id="ref-for-IsolatedContext③③"><c- g>IsolatedContext</c-></a>]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="webrequest"><code><c- g>WebRequest</c-></code></dfn> {
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforerequest"><code><c- g>onBeforeRequest</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforesendheaders"><code><c- g>onBeforeSendHeaders</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent②"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onsendheaders"><code><c- g>onSendHeaders</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent③"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onheadersreceived"><code><c- g>onHeadersReceived</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent④"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onauthrequired"><code><c- g>onAuthRequired</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑤"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforeredirect"><code><c- g>onBeforeRedirect</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑥"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onresponsestarted"><code><c- g>onResponseStarted</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑦"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-oncompleted"><code><c- g>onCompleted</c-></code></dfn>;
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑧"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onerroroccurred"><code><c- g>onErrorOccurred</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent⑨"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforerequest"><code><c- g>onBeforeRequest</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①⓪"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforesendheaders"><code><c- g>onBeforeSendHeaders</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①①"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onsendheaders"><code><c- g>onSendHeaders</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①②"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onheadersreceived"><code><c- g>onHeadersReceived</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①③"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onauthrequired"><code><c- g>onAuthRequired</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①④"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onbeforeredirect"><code><c- g>onBeforeRedirect</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①⑤"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onresponsestarted"><code><c- g>onResponseStarted</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①⑥"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-oncompleted"><code><c- g>onCompleted</c-></code></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#webrequestevent" id="ref-for-webrequestevent①⑦"><c- n>WebRequestEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="attribute" data-export data-readonly data-type="WebRequestEvent" id="dom-webrequest-onerroroccurred"><code><c- g>onErrorOccurred</c-></code></dfn>;
 
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⓪"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#dom-webrequest-handlerbehaviorchanged" id="ref-for-dom-webrequest-handlerbehaviorchanged"><c- g>handlerBehaviorChanged</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#callbackdef-handlerbehaviorchangedcallback" id="ref-for-callbackdef-handlerbehaviorchangedcallback"><c- n>HandlerBehaviorChangedCallback</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest/handlerBehaviorChanged(callback), WebRequest/handlerBehaviorChanged()" data-dfn-type="argument" data-export id="dom-webrequest-handlerbehaviorchanged-callback-callback"><code><c- g>callback</c-></code></dfn>);
 };
 </pre>
-   <p>Each <code class="idl"><a data-link-type="idl" href="#webrequest" id="ref-for-webrequest①">WebRequest</a></code> has a <dfn class="dfn-paneled" data-dfn-for="WebRequest" data-dfn-type="dfn" data-noexport id="webrequest-handler-map">handler map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map③">map</a> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys" id="ref-for-map-getting-the-keys②">keys</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①④">strings</a> and whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values②">values</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list⑥">lists</a> of <a data-link-type="dfn" href="#webrequest-handler-config" id="ref-for-webrequest-handler-config">WebRequest handler configs</a>.</p>
-   <p>Each <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent⑨">WebRequestEvent</a></code> has:</p>
+   <p>Each <code class="idl"><a data-link-type="idl" href="#webrequest" id="ref-for-webrequest②">WebRequest</a></code> has a <dfn class="dfn-paneled" data-dfn-for="WebRequest" data-dfn-type="dfn" data-noexport id="webrequest-handler-map">handler map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map③">map</a> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys" id="ref-for-map-getting-the-keys②">keys</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①④">strings</a> and whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values②">values</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list⑥">lists</a> of <a data-link-type="dfn" href="#webrequest-handler-config" id="ref-for-webrequest-handler-config">WebRequest handler configs</a>.</p>
+   <p>Each <code class="idl"><a data-link-type="idl" href="#webrequestevent" id="ref-for-webrequestevent①⑧">WebRequestEvent</a></code> has:</p>
    <ul>
     <li data-md>
      <p>An <dfn class="dfn-paneled" data-dfn-for="WebRequestEvent" data-dfn-type="dfn" data-noexport id="webrequestevent-eventname">eventName</dfn>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①⑤">string</a>.</p>
     <li data-md>
-     <p>A <dfn class="dfn-paneled" data-dfn-for="WebRequestEvent" data-dfn-type="dfn" data-noexport id="webrequestevent-webrequest">webRequest</dfn>, a <code class="idl"><a data-link-type="idl" href="#webrequest" id="ref-for-webrequest②">WebRequest</a></code> instance that
+     <p>A <dfn class="dfn-paneled" data-dfn-for="WebRequestEvent" data-dfn-type="dfn" data-noexport id="webrequestevent-webrequest">webRequest</dfn>, a <code class="idl"><a data-link-type="idl" href="#webrequest" id="ref-for-webrequest③">WebRequest</a></code> instance that
 it is a member of.</p>
    </ul>
    <div class="algorithm" data-algorithm="addListener(listener, filter, extraInfoSpec)" data-algorithm-for="WebRequestEvent">
@@ -3496,7 +3600,7 @@ it is a member of.</p>
      <li data-md>
       <p>Call <code class="idl"><a data-link-type="idl" href="#dom-webrequestevent-removelistener" id="ref-for-dom-webrequestevent-removelistener①">removeListener</a></code> with <var>listener</var>.</p>
      <li data-md>
-      <p>Let <var>eventName</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑦">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑨">eventName</a>.</p>
+      <p>Let <var>eventName</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑧">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname⑨">eventName</a>.</p>
      <li data-md>
       <p>Let <var>handlerConfig</var> be a new <a data-link-type="dfn" href="#webrequest-handler-config" id="ref-for-webrequest-handler-config①">WebRequest handler config</a> with the
   following <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item①">items</a>:</p>
@@ -3620,7 +3724,7 @@ it is a member of.</p>
      <li data-md>
       <p>Otherwise, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①②">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③①">TypeError</a></code>.</p>
      <li data-md>
-      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑧">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑨">webRequest</a>.</p>
+      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑨">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest⑨">webRequest</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append②">Append</a> <var>handlerConfig</var> to <var>handlerMap</var>[<var>eventName</var>].</p>
     </ol>
@@ -3629,9 +3733,9 @@ it is a member of.</p>
      The <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent" data-dfn-type="method" data-export id="dom-webrequestevent-haslistener"><code>hasListener(<var>listener</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map①">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪⑨">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①⓪">webRequest</a>.</p>
+      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map①">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⓪">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①⓪">webRequest</a>.</p>
      <li data-md>
-      <p>Let <var>event name</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⓪">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①⓪">eventName</a>.</p>
+      <p>Let <var>event name</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①①">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①⓪">eventName</a>.</p>
      <li data-md>
       <p>For each <var>handlerConfig</var> in <var>handlerMap</var>[<var>event name</var>]:</p>
       <ol>
@@ -3646,9 +3750,9 @@ it is a member of.</p>
      The <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent" data-dfn-type="method" data-export id="dom-webrequestevent-haslisteners"><code>hasListeners()</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map②">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①①">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①①">webRequest</a>.</p>
+      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map②">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①②">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①①">webRequest</a>.</p>
      <li data-md>
-      <p>Let <var>event name</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①②">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①①">eventName</a>.</p>
+      <p>Let <var>event name</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①③">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①①">eventName</a>.</p>
      <li data-md>
       <p>If <var>handlerMap</var>[<var>event name</var>] is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty④">empty</a>, return <code>false</code>, otherwise return <code>true</code>.</p>
     </ol>
@@ -3657,9 +3761,9 @@ it is a member of.</p>
      The <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequestEvent" data-dfn-type="method" data-export id="dom-webrequestevent-removelistener"><code>removeListener(<var>listener</var>)</code></dfn> method steps are: 
     <ol>
      <li data-md>
-      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map③">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①③">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①②">webRequest</a>.</p>
+      <p>Let <var>handlerMap</var> be the <a data-link-type="dfn" href="#webrequest-handler-map" id="ref-for-webrequest-handler-map③">handler map</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①④">this</a>’s <a data-link-type="dfn" href="#webrequestevent-webrequest" id="ref-for-webrequestevent-webrequest①②">webRequest</a>.</p>
      <li data-md>
-      <p>Let <var>event name</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①④">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①②">eventName</a>.</p>
+      <p>Let <var>event name</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑤">this</a>’s <a data-link-type="dfn" href="#webrequestevent-eventname" id="ref-for-webrequestevent-eventname①②">eventName</a>.</p>
      <li data-md>
       <p>Let <var>handlerConfigs</var> be <var>handlerMap</var>[<var>event name</var>].</p>
      <li data-md>
@@ -3671,7 +3775,7 @@ it is a member of.</p>
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①③">In parallel</a>, clear the HTTP cache associated with the partition
-  used by <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑨">environments</a> embedded within <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑤">this</a> HTMLControlledFrameElement.</p>
+  used by <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑨">environments</a> embedded within <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑥">this</a> HTMLControlledFrameElement.</p>
       <p class="note" role="note"><span class="marker">Note:</span> The behavior of event handlers registered through the WebRequest
   API will be reflected in the HTTP cache, which will no longer be valid if
   the behavior of the event handlers changed. The purpose of this method is
@@ -4120,7 +4224,7 @@ it is a member of.</p>
       <dl>
        <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-webrequesteventdetails-timestamp" id="ref-for-dom-webrequesteventdetails-timestamp">timeStamp</a></code>
        <dd data-md>
-        <p>The <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time">current high resolution time</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑥">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑨">relevant global object</a>.</p>
+        <p>The <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time">current high resolution time</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑦">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑨">relevant global object</a>.</p>
         <p class="note" role="note"><span class="marker">Note:</span> This timestamp isn’t coarsened because Controlled Frames are
   only available within <a data-link-type="dfn" href="https://wicg.github.io/isolated-web-apps/isolated-contexts.html#isolated-context" id="ref-for-isolated-context①">isolated contexts</a>, which always have the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-cross-origin-isolated-capability" id="ref-for-concept-settings-object-cross-origin-isolated-capability">cross-origin isolated capability</a>.</p>
        <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-webrequesteventdetails-url" id="ref-for-dom-webrequesteventdetails-url">url</a></code>
@@ -4664,8 +4768,8 @@ revisited to align better with other Web APIs.</strong></p>
 
 [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed③⑦"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://wicg.github.io/isolated-web-apps/isolated-contexts.html#IsolatedContext" id="ref-for-IsolatedContext③⑦"><c- g>IsolatedContext</c-></a>]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="contextmenus"><code><c- g>ContextMenus</c-></code></dfn> {
-    <c- b>attribute</c-> <a data-link-type="idl-name" href="#onclickedevent" id="ref-for-onclickedevent"><c- n>OnClickedEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="attribute" data-export data-type="OnClickedEvent" id="dom-contextmenus-onclicked"><code><c- g>onClicked</c-></code></dfn>;
-    <c- b>attribute</c-> <a data-link-type="idl-name" href="#onshowevent" id="ref-for-onshowevent"><c- n>OnShowEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="attribute" data-export data-type="OnShowEvent" id="dom-contextmenus-onshow"><code><c- g>onShow</c-></code></dfn>;
+    <c- b>attribute</c-> <a data-link-type="idl-name" href="#onclickedevent" id="ref-for-onclickedevent①"><c- n>OnClickedEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="attribute" data-export data-type="OnClickedEvent" id="dom-contextmenus-onclicked"><code><c- g>onClicked</c-></code></dfn>;
+    <c- b>attribute</c-> <a data-link-type="idl-name" href="#onshowevent" id="ref-for-onshowevent①"><c- n>OnShowEvent</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="attribute" data-export data-type="OnShowEvent" id="dom-contextmenus-onshow"><code><c- g>onShow</c-></code></dfn>;
 
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⑧"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②④"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-create" id="ref-for-dom-contextmenus-create"><c- g>create</c-></a>(<a data-link-type="idl-name" href="#dictdef-contextmenuscreateproperties" id="ref-for-dictdef-contextmenuscreateproperties"><c- n>ContextMenusCreateProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/create(properties)" data-dfn-type="argument" data-export id="dom-contextmenus-create-properties-properties"><code><c- g>properties</c-></code></dfn>);
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⑨"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑤"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-remove" id="ref-for-dom-contextmenus-remove"><c- g>remove</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤⑥"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/remove(id)" data-dfn-type="argument" data-export id="dom-contextmenus-remove-id-id"><code><c- g>id</c-></code></dfn>);
@@ -4673,7 +4777,7 @@ revisited to align better with other Web APIs.</strong></p>
     <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise②①"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined②⑦"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-contextmenus-update" id="ref-for-dom-contextmenus-update"><c- g>update</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤⑦"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties), ContextMenus/update(id)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-id"><code><c- g>id</c-></code></dfn>, <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties①"><c- n>ContextMenusProperties</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus/update(id, properties), ContextMenus/update(id)" data-dfn-type="argument" data-export id="dom-contextmenus-update-id-properties-properties"><code><c- g>properties</c-></code></dfn> = {});
 };
 </pre>
-   <p>Each <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe②⑥">controlledframe</a></code> has a <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-contextmenus" id="ref-for-dom-htmlcontrolledframeelement-contextmenus">contextMenus</a></code> member, which is a <code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus①">ContextMenus</a></code> that manages a <dfn class="dfn-paneled" data-dfn-for="ContextMenus" data-dfn-type="dfn" data-lt="context menu map" data-noexport id="contextmenus-context-menu-map"> context menu <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map④">map</a> </dfn> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys" id="ref-for-map-getting-the-keys⑧">keys</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②⑤">strings</a> and whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values③">values</a> are <code class="idl"><a data-link-type="idl" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties②">ContextMenusProperties</a></code>.</p>
+   <p>Each <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe②⑥">controlledframe</a></code> has a <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-contextmenus" id="ref-for-dom-htmlcontrolledframeelement-contextmenus①">contextMenus</a></code> member, which is a <code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus②">ContextMenus</a></code> that manages a <dfn class="dfn-paneled" data-dfn-for="ContextMenus" data-dfn-type="dfn" data-lt="context menu map" data-noexport id="contextmenus-context-menu-map"> context menu <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map④">map</a> </dfn> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys" id="ref-for-map-getting-the-keys⑧">keys</a> are <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string②⑤">strings</a> and whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values③">values</a> are <code class="idl"><a data-link-type="idl" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties②">ContextMenusProperties</a></code>.</p>
    <p>Each <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-entry" id="ref-for-map-entry">entry</a> of the <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map">context menu map</a> has the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-value" id="ref-for-map-value">value</a> <var>property</var> which represents a <dfn class="dfn-paneled" data-dfn-for="ContextMenus" data-dfn-type="dfn" data-noexport id="contextmenus-context-menu-item">context menu item</dfn>. A <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-for-contextmenus-context-menu-item">context menu item</a> will be shown on the <dfn class="dfn-paneled" data-dfn-for="ContextMenus" data-dfn-type="dfn" data-noexport id="contextmenus-context-menu">context menu</dfn> if it is opened within the <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⑤">HTMLControlledFrameElement</a></code> <var>controlledframe</var> and the result of <a data-link-type="dfn" href="#determine-whether-the-context-menu-item-will-be-shown" id="ref-for-determine-whether-the-context-menu-item-will-be-shown">determining whether the context menu item will be shown</a> given <var>controlledframe</var> and <var>property</var> is true.</p>
    <div class="algorithm" data-algorithm="create(properties)" data-algorithm-for="ContextMenus">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export id="dom-contextmenus-create"><code>create(<var>properties</var>)</code></dfn> method steps are:</p>
@@ -4683,7 +4787,7 @@ revisited to align better with other Web APIs.</strong></p>
      <li data-md>
       <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑨">in parallel</a>.</p>
      <li data-md>
-      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑦">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map①">context menu map</a>.</p>
+      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑧">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map①">context menu map</a>.</p>
      <li data-md>
       <p>Let <var>id</var> be the <var>properties</var>["<code class="idl"><a data-link-type="idl" href="#dom-onclickdata-menuitemid" id="ref-for-dom-onclickdata-menuitemid">menuItemId</a></code>"].</p>
      <li data-md>
@@ -4691,7 +4795,7 @@ revisited to align better with other Web APIs.</strong></p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set①">Set</a> <var>contextMenusMap</var>[<var>id</var>] to <var>properties</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑧">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑧">this</a> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑧">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑨">this</a> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="remove(id)" data-algorithm-for="ContextMenus">
@@ -4702,11 +4806,11 @@ revisited to align better with other Web APIs.</strong></p>
      <li data-md>
       <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⓪">in parallel</a>.</p>
      <li data-md>
-      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①⑨">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map②">context menu map</a>.</p>
+      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⓪">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map②">context menu map</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-remove" id="ref-for-map-remove①">Remove</a> <var>contextMenusMap</var>[<var>id</var>].</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑨">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⓪">this</a> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise①⑨">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②①">this</a> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="removeAll()" data-algorithm-for="ContextMenus">
@@ -4717,11 +4821,11 @@ revisited to align better with other Web APIs.</strong></p>
      <li data-md>
       <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②①">in parallel</a>.</p>
      <li data-md>
-      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②①">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map③">context menu map</a>.</p>
+      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②②">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map③">context menu map</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-clear" id="ref-for-map-clear②">Clear</a> <var>contextMenusMap</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②⓪">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②②">this</a> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②⓪">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②③">this</a> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="update(id, properties)" data-algorithm-for="ContextMenus">
@@ -4732,13 +4836,13 @@ revisited to align better with other Web APIs.</strong></p>
      <li data-md>
       <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②②">in parallel</a>.</p>
      <li data-md>
-      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②③">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map④">context menu map</a>.</p>
+      <p>Let <var>contextMenusMap</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②④">this</a>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map④">context menu map</a>.</p>
      <li data-md>
       <p>If <var>contextMenusMap</var>[<var>id</var>] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exist</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject⑤">reject</a> <var>p</var> with a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③④">TypeError</a></code> and abort these steps.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set②">Set</a> <var>contextMenusMap</var>[<var>id</var>] to <var>properties</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②①">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②④">this</a> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②①">Resolve an embedder promise</a> given <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑤">this</a> and <var>p</var>.</p>
     </ol>
    </div>
    <p>The <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values④">values</a> of the <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map⑤">context menu map</a>, which are <code class="idl"><a data-link-type="idl" href="#dictdef-contextmenusproperties" id="ref-for-dictdef-contextmenusproperties③">ContextMenusProperties</a></code> objects, control the conditions under which the <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-for-contextmenus-context-menu-item①">context menu items</a> are displayed, as well as the features and behaviors of the items.</p>
@@ -4850,7 +4954,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusEvent" data-dfn-type="method" data-export id="dom-contextmenusevent-addlistener"><code>addListener(<var>callback</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑤">this</a>.</p>
+      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑥">this</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①②">Append</a> <var>callback</var> to <var>callbackList</var>.</p>
     </ol>
@@ -4859,7 +4963,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusEvent" data-dfn-type="method" data-export id="dom-contextmenusevent-removelistener"><code>removeListener(<var>callback</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list①">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑥">this</a>.</p>
+      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list①">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑦">this</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>listItem</var> in <var>callbackList</var>:</p>
       <ol>
@@ -4872,7 +4976,7 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusEvent" data-dfn-type="method" data-export id="dom-contextmenusevent-haslistener"><code>hasListener(<var>callback</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list②">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑦">this</a>.</p>
+      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list②">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑧">this</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>listItem</var> in <var>callbackList</var>:</p>
       <ol>
@@ -4887,16 +4991,16 @@ revisited to align better with other Web APIs.</strong></p>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusEvent" data-dfn-type="method" data-export id="dom-contextmenusevent-haslisteners"><code>hasListeners()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list③">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑧">this</a>.</p>
+      <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list③">event listener list</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②⑨">this</a>.</p>
      <li data-md>
       <p>If <var>callbackList</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-is-empty" id="ref-for-list-is-empty">is empty</a>, return <code>false</code>.</p>
      <li data-md>
       <p>Otherwise, return <code>true</code>.</p>
     </ol>
    </div>
-   <p><code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus②">ContextMenus</a></code> has the attribute <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onshow" id="ref-for-dom-contextmenus-onshow">onShow</a></code>, which is a <code class="idl"><a data-link-type="idl" href="#contextmenusevent" id="ref-for-contextmenusevent④">ContextMenusEvent</a></code> that is associated with <a data-link-type="dfn" href="https://www.w3.org/TR/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu">contextmenu</a> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events①">events</a>.</p>
+   <p><code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus③">ContextMenus</a></code> has the attribute <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onshow" id="ref-for-dom-contextmenus-onshow①">onShow</a></code>, which is a <code class="idl"><a data-link-type="idl" href="#contextmenusevent" id="ref-for-contextmenusevent④">ContextMenusEvent</a></code> that is associated with <a data-link-type="dfn" href="https://www.w3.org/TR/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu">contextmenu</a> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events①">events</a>.</p>
    <div class="algorithm" data-algorithm="onshow-event">
-    <p>To <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①③">dispatch</a> an <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onshow" id="ref-for-dom-contextmenus-onshow①">onShow</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events②">event</a> <var>event</var>, given <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⑦">HTMLControlledFrameElement</a></code> <var>controlledFrame</var>:</p>
+    <p>To <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①③">dispatch</a> an <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onshow" id="ref-for-dom-contextmenus-onshow②">onShow</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events②">event</a> <var>event</var>, given <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⑦">HTMLControlledFrameElement</a></code> <var>controlledFrame</var>:</p>
     <ol>
      <li data-md>
       <p>Let <var>callbackList</var> be the <a data-link-type="dfn" href="#contextmenusevent-event-listener-list" id="ref-for-contextmenusevent-event-listener-list④">event listener list</a> of <var>event</var>.</p>
@@ -4906,9 +5010,9 @@ revisited to align better with other Web APIs.</strong></p>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③③">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⑦">DOM manipulation task source</a> of <var>controlledFrame</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③①">relevant global object</a> to invoke <var>callback</var>.</p>
     </ol>
    </div>
-   <p><code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus③">ContextMenus</a></code> has the attribute <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onclicked" id="ref-for-dom-contextmenus-onclicked">onClicked</a></code>, which is a <code class="idl"><a data-link-type="idl" href="#contextmenusevent" id="ref-for-contextmenusevent⑤">ContextMenusEvent</a></code> that is associated with <a data-link-type="dfn" href="https://www.w3.org/TR/uievents/#event-type-click" id="ref-for-event-type-click">click</a> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events③">events</a> on a <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-for-contextmenus-context-menu-item①①">context menu item</a>.</p>
+   <p><code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus④">ContextMenus</a></code> has the attribute <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onclicked" id="ref-for-dom-contextmenus-onclicked①">onClicked</a></code>, which is a <code class="idl"><a data-link-type="idl" href="#contextmenusevent" id="ref-for-contextmenusevent⑤">ContextMenusEvent</a></code> that is associated with <a data-link-type="dfn" href="https://www.w3.org/TR/uievents/#event-type-click" id="ref-for-event-type-click">click</a> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events③">events</a> on a <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-for-contextmenus-context-menu-item①①">context menu item</a>.</p>
    <div class="algorithm" data-algorithm="onclicked-event">
-    <p>To <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①④">dispatch</a> an <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onclicked" id="ref-for-dom-contextmenus-onclicked①">onClicked</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events④">event</a> <var>event</var>, given <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⑧">HTMLControlledFrameElement</a></code> <var>controlledFrame</var>, <var>element</var> as the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#htmlelement" id="ref-for-htmlelement②">HTMLElement</a></code> inside the embedded document where the <a data-link-type="dfn" href="#contextmenus-context-menu" id="ref-for-contextmenus-context-menu②">context menu</a> is opened at, <var>menuItem</var> as the <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-for-contextmenus-context-menu-item①②">context menu item</a> that was clicked.</p>
+    <p>To <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①④">dispatch</a> an <code class="idl"><a data-link-type="idl" href="#dom-contextmenus-onclicked" id="ref-for-dom-contextmenus-onclicked②">onClicked</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events④">event</a> <var>event</var>, given <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⑧">HTMLControlledFrameElement</a></code> <var>controlledFrame</var>, <var>element</var> as the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#htmlelement" id="ref-for-htmlelement②">HTMLElement</a></code> inside the embedded document where the <a data-link-type="dfn" href="#contextmenus-context-menu" id="ref-for-contextmenus-context-menu②">context menu</a> is opened at, <var>menuItem</var> as the <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-for-contextmenus-context-menu-item①②">context menu item</a> that was clicked.</p>
     <ol>
      <li data-md>
       <p>Let <var>id</var> be the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-key" id="ref-for-map-key">key</a> of the <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map⑥">context menu map</a>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-entry" id="ref-for-map-entry①">entry</a> that is associated with <var>menuItem</var>.</p>
@@ -7345,7 +7449,7 @@ let dfnPanelData = {
 "3f2ca4de": {"dfnID":"3f2ca4de","dfnText":"current URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-current-url"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-request-current-url"},
 "3f9264f8": {"dfnID":"3f9264f8","dfnText":"location URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response-location-url"}],"title":"3.6.13.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-response-location-url\u2460"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-response-location-url"},
 "3fca5a9e": {"dfnID":"3fca5a9e","dfnText":"map","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-map"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-ordered-map\u2460"}],"title":"3.4.1. Zoom"},{"refs":[{"id":"ref-for-ordered-map\u2461"}],"title":"3.6.3. newwindow"},{"refs":[{"id":"ref-for-ordered-map\u2462"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-ordered-map\u2463"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#ordered-map"},
-"4013a022": {"dfnID":"4013a022","dfnText":"this","external":true,"refSections":[{"refs":[{"id":"ref-for-this"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-this\u2460"},{"id":"ref-for-this\u2461"},{"id":"ref-for-this\u2462"},{"id":"ref-for-this\u2463"},{"id":"ref-for-this\u2464"},{"id":"ref-for-this\u2465"}],"title":"3.1. Attributes"},{"refs":[{"id":"ref-for-this\u2466"},{"id":"ref-for-this\u2467"},{"id":"ref-for-this\u2468"},{"id":"ref-for-this\u2460\u24ea"},{"id":"ref-for-this\u2460\u2460"},{"id":"ref-for-this\u2460\u2461"},{"id":"ref-for-this\u2460\u2462"},{"id":"ref-for-this\u2460\u2463"},{"id":"ref-for-this\u2460\u2464"},{"id":"ref-for-this\u2460\u2465"},{"id":"ref-for-this\u2460\u2466"},{"id":"ref-for-this\u2460\u2467"},{"id":"ref-for-this\u2460\u2468"},{"id":"ref-for-this\u2461\u24ea"},{"id":"ref-for-this\u2461\u2460"}],"title":"3.2. Navigation methods"},{"refs":[{"id":"ref-for-this\u2461\u2461"},{"id":"ref-for-this\u2461\u2462"},{"id":"ref-for-this\u2461\u2463"},{"id":"ref-for-this\u2461\u2464"},{"id":"ref-for-this\u2461\u2465"},{"id":"ref-for-this\u2461\u2466"},{"id":"ref-for-this\u2461\u2467"},{"id":"ref-for-this\u2461\u2468"},{"id":"ref-for-this\u2462\u24ea"},{"id":"ref-for-this\u2462\u2460"},{"id":"ref-for-this\u2462\u2461"},{"id":"ref-for-this\u2462\u2462"},{"id":"ref-for-this\u2462\u2463"},{"id":"ref-for-this\u2462\u2464"},{"id":"ref-for-this\u2462\u2465"},{"id":"ref-for-this\u2462\u2466"},{"id":"ref-for-this\u2462\u2467"},{"id":"ref-for-this\u2462\u2468"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-this\u2463\u24ea"},{"id":"ref-for-this\u2463\u2460"},{"id":"ref-for-this\u2463\u2461"},{"id":"ref-for-this\u2463\u2462"},{"id":"ref-for-this\u2463\u2463"},{"id":"ref-for-this\u2463\u2464"},{"id":"ref-for-this\u2463\u2465"},{"id":"ref-for-this\u2463\u2466"},{"id":"ref-for-this\u2463\u2467"},{"id":"ref-for-this\u2463\u2468"},{"id":"ref-for-this\u2464\u24ea"},{"id":"ref-for-this\u2464\u2460"},{"id":"ref-for-this\u2464\u2461"}],"title":"3.4. Configuration methods"},{"refs":[{"id":"ref-for-this\u2464\u2462"},{"id":"ref-for-this\u2464\u2463"},{"id":"ref-for-this\u2464\u2464"},{"id":"ref-for-this\u2464\u2465"},{"id":"ref-for-this\u2464\u2466"},{"id":"ref-for-this\u2464\u2467"},{"id":"ref-for-this\u2464\u2468"},{"id":"ref-for-this\u2465\u24ea"},{"id":"ref-for-this\u2465\u2460"},{"id":"ref-for-this\u2465\u2461"},{"id":"ref-for-this\u2465\u2462"},{"id":"ref-for-this\u2465\u2463"},{"id":"ref-for-this\u2465\u2464"},{"id":"ref-for-this\u2465\u2465"},{"id":"ref-for-this\u2465\u2466"},{"id":"ref-for-this\u2465\u2467"},{"id":"ref-for-this\u2465\u2468"},{"id":"ref-for-this\u2466\u24ea"},{"id":"ref-for-this\u2466\u2460"},{"id":"ref-for-this\u2466\u2461"},{"id":"ref-for-this\u2466\u2462"},{"id":"ref-for-this\u2466\u2463"},{"id":"ref-for-this\u2466\u2464"},{"id":"ref-for-this\u2466\u2465"},{"id":"ref-for-this\u2466\u2466"},{"id":"ref-for-this\u2466\u2467"},{"id":"ref-for-this\u2466\u2468"},{"id":"ref-for-this\u2467\u24ea"},{"id":"ref-for-this\u2467\u2460"},{"id":"ref-for-this\u2467\u2461"},{"id":"ref-for-this\u2467\u2462"},{"id":"ref-for-this\u2467\u2463"},{"id":"ref-for-this\u2467\u2464"},{"id":"ref-for-this\u2467\u2465"},{"id":"ref-for-this\u2467\u2466"},{"id":"ref-for-this\u2467\u2467"},{"id":"ref-for-this\u2467\u2468"},{"id":"ref-for-this\u2468\u24ea"},{"id":"ref-for-this\u2468\u2460"},{"id":"ref-for-this\u2468\u2461"},{"id":"ref-for-this\u2468\u2462"},{"id":"ref-for-this\u2468\u2463"},{"id":"ref-for-this\u2468\u2464"},{"id":"ref-for-this\u2468\u2465"},{"id":"ref-for-this\u2468\u2466"},{"id":"ref-for-this\u2468\u2467"},{"id":"ref-for-this\u2468\u2468"},{"id":"ref-for-this\u2460\u24ea\u24ea"}],"title":"3.4.1. Zoom"},{"refs":[{"id":"ref-for-this\u2460\u24ea\u2460"},{"id":"ref-for-this\u2460\u24ea\u2461"},{"id":"ref-for-this\u2460\u24ea\u2462"},{"id":"ref-for-this\u2460\u24ea\u2463"},{"id":"ref-for-this\u2460\u24ea\u2464"},{"id":"ref-for-this\u2460\u24ea\u2465"}],"title":"3.5. Capture methods"},{"refs":[{"id":"ref-for-this\u2460\u24ea\u2466"},{"id":"ref-for-this\u2460\u24ea\u2467"},{"id":"ref-for-this\u2460\u24ea\u2468"},{"id":"ref-for-this\u2460\u2460\u24ea"},{"id":"ref-for-this\u2460\u2460\u2460"},{"id":"ref-for-this\u2460\u2460\u2461"},{"id":"ref-for-this\u2460\u2460\u2462"},{"id":"ref-for-this\u2460\u2460\u2463"},{"id":"ref-for-this\u2460\u2460\u2464"},{"id":"ref-for-this\u2460\u2460\u2465"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-this\u2460\u2460\u2466"},{"id":"ref-for-this\u2460\u2460\u2467"},{"id":"ref-for-this\u2460\u2460\u2468"},{"id":"ref-for-this\u2460\u2461\u24ea"},{"id":"ref-for-this\u2460\u2461\u2460"},{"id":"ref-for-this\u2460\u2461\u2461"},{"id":"ref-for-this\u2460\u2461\u2462"},{"id":"ref-for-this\u2460\u2461\u2463"},{"id":"ref-for-this\u2460\u2461\u2464"},{"id":"ref-for-this\u2460\u2461\u2465"},{"id":"ref-for-this\u2460\u2461\u2466"},{"id":"ref-for-this\u2460\u2461\u2467"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#this"},
+"4013a022": {"dfnID":"4013a022","dfnText":"this","external":true,"refSections":[{"refs":[{"id":"ref-for-this"},{"id":"ref-for-this\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-this\u2461"},{"id":"ref-for-this\u2462"},{"id":"ref-for-this\u2463"},{"id":"ref-for-this\u2464"},{"id":"ref-for-this\u2465"},{"id":"ref-for-this\u2466"}],"title":"3.1. Attributes"},{"refs":[{"id":"ref-for-this\u2467"},{"id":"ref-for-this\u2468"},{"id":"ref-for-this\u2460\u24ea"},{"id":"ref-for-this\u2460\u2460"},{"id":"ref-for-this\u2460\u2461"},{"id":"ref-for-this\u2460\u2462"},{"id":"ref-for-this\u2460\u2463"},{"id":"ref-for-this\u2460\u2464"},{"id":"ref-for-this\u2460\u2465"},{"id":"ref-for-this\u2460\u2466"},{"id":"ref-for-this\u2460\u2467"},{"id":"ref-for-this\u2460\u2468"},{"id":"ref-for-this\u2461\u24ea"},{"id":"ref-for-this\u2461\u2460"},{"id":"ref-for-this\u2461\u2461"}],"title":"3.2. Navigation methods"},{"refs":[{"id":"ref-for-this\u2461\u2462"},{"id":"ref-for-this\u2461\u2463"},{"id":"ref-for-this\u2461\u2464"},{"id":"ref-for-this\u2461\u2465"},{"id":"ref-for-this\u2461\u2466"},{"id":"ref-for-this\u2461\u2467"},{"id":"ref-for-this\u2461\u2468"},{"id":"ref-for-this\u2462\u24ea"},{"id":"ref-for-this\u2462\u2460"},{"id":"ref-for-this\u2462\u2461"},{"id":"ref-for-this\u2462\u2462"},{"id":"ref-for-this\u2462\u2463"},{"id":"ref-for-this\u2462\u2464"},{"id":"ref-for-this\u2462\u2465"},{"id":"ref-for-this\u2462\u2466"},{"id":"ref-for-this\u2462\u2467"},{"id":"ref-for-this\u2462\u2468"},{"id":"ref-for-this\u2463\u24ea"}],"title":"3.3. Scripting methods"},{"refs":[{"id":"ref-for-this\u2463\u2460"},{"id":"ref-for-this\u2463\u2461"},{"id":"ref-for-this\u2463\u2462"},{"id":"ref-for-this\u2463\u2463"},{"id":"ref-for-this\u2463\u2464"},{"id":"ref-for-this\u2463\u2465"},{"id":"ref-for-this\u2463\u2466"},{"id":"ref-for-this\u2463\u2467"},{"id":"ref-for-this\u2463\u2468"},{"id":"ref-for-this\u2464\u24ea"},{"id":"ref-for-this\u2464\u2460"},{"id":"ref-for-this\u2464\u2461"},{"id":"ref-for-this\u2464\u2462"}],"title":"3.4. Configuration methods"},{"refs":[{"id":"ref-for-this\u2464\u2463"},{"id":"ref-for-this\u2464\u2464"},{"id":"ref-for-this\u2464\u2465"},{"id":"ref-for-this\u2464\u2466"},{"id":"ref-for-this\u2464\u2467"},{"id":"ref-for-this\u2464\u2468"},{"id":"ref-for-this\u2465\u24ea"},{"id":"ref-for-this\u2465\u2460"},{"id":"ref-for-this\u2465\u2461"},{"id":"ref-for-this\u2465\u2462"},{"id":"ref-for-this\u2465\u2463"},{"id":"ref-for-this\u2465\u2464"},{"id":"ref-for-this\u2465\u2465"},{"id":"ref-for-this\u2465\u2466"},{"id":"ref-for-this\u2465\u2467"},{"id":"ref-for-this\u2465\u2468"},{"id":"ref-for-this\u2466\u24ea"},{"id":"ref-for-this\u2466\u2460"},{"id":"ref-for-this\u2466\u2461"},{"id":"ref-for-this\u2466\u2462"},{"id":"ref-for-this\u2466\u2463"},{"id":"ref-for-this\u2466\u2464"},{"id":"ref-for-this\u2466\u2465"},{"id":"ref-for-this\u2466\u2466"},{"id":"ref-for-this\u2466\u2467"},{"id":"ref-for-this\u2466\u2468"},{"id":"ref-for-this\u2467\u24ea"},{"id":"ref-for-this\u2467\u2460"},{"id":"ref-for-this\u2467\u2461"},{"id":"ref-for-this\u2467\u2462"},{"id":"ref-for-this\u2467\u2463"},{"id":"ref-for-this\u2467\u2464"},{"id":"ref-for-this\u2467\u2465"},{"id":"ref-for-this\u2467\u2466"},{"id":"ref-for-this\u2467\u2467"},{"id":"ref-for-this\u2467\u2468"},{"id":"ref-for-this\u2468\u24ea"},{"id":"ref-for-this\u2468\u2460"},{"id":"ref-for-this\u2468\u2461"},{"id":"ref-for-this\u2468\u2462"},{"id":"ref-for-this\u2468\u2463"},{"id":"ref-for-this\u2468\u2464"},{"id":"ref-for-this\u2468\u2465"},{"id":"ref-for-this\u2468\u2466"},{"id":"ref-for-this\u2468\u2467"},{"id":"ref-for-this\u2468\u2468"},{"id":"ref-for-this\u2460\u24ea\u24ea"},{"id":"ref-for-this\u2460\u24ea\u2460"}],"title":"3.4.1. Zoom"},{"refs":[{"id":"ref-for-this\u2460\u24ea\u2461"},{"id":"ref-for-this\u2460\u24ea\u2462"},{"id":"ref-for-this\u2460\u24ea\u2463"},{"id":"ref-for-this\u2460\u24ea\u2464"},{"id":"ref-for-this\u2460\u24ea\u2465"},{"id":"ref-for-this\u2460\u24ea\u2466"}],"title":"3.5. Capture methods"},{"refs":[{"id":"ref-for-this\u2460\u24ea\u2467"},{"id":"ref-for-this\u2460\u24ea\u2468"},{"id":"ref-for-this\u2460\u2460\u24ea"},{"id":"ref-for-this\u2460\u2460\u2460"},{"id":"ref-for-this\u2460\u2460\u2461"},{"id":"ref-for-this\u2460\u2460\u2462"},{"id":"ref-for-this\u2460\u2460\u2463"},{"id":"ref-for-this\u2460\u2460\u2464"},{"id":"ref-for-this\u2460\u2460\u2465"},{"id":"ref-for-this\u2460\u2460\u2466"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-this\u2460\u2460\u2467"},{"id":"ref-for-this\u2460\u2460\u2468"},{"id":"ref-for-this\u2460\u2461\u24ea"},{"id":"ref-for-this\u2460\u2461\u2460"},{"id":"ref-for-this\u2460\u2461\u2461"},{"id":"ref-for-this\u2460\u2461\u2462"},{"id":"ref-for-this\u2460\u2461\u2463"},{"id":"ref-for-this\u2460\u2461\u2464"},{"id":"ref-for-this\u2460\u2461\u2465"},{"id":"ref-for-this\u2460\u2461\u2466"},{"id":"ref-for-this\u2460\u2461\u2467"},{"id":"ref-for-this\u2460\u2461\u2468"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#this"},
 "402ed79d": {"dfnID":"402ed79d","dfnText":"CEReactions","external":true,"refSections":[{"refs":[{"id":"ref-for-cereactions"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions"},
 "43ac8374": {"dfnID":"43ac8374","dfnText":"origin (for environment settings object)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-settings-object-origin"}],"title":"3.7.1.3. [STORAGE]"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin"},
 "449b55f1": {"dfnID":"449b55f1","dfnText":"source","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-body-source"},{"id":"ref-for-concept-body-source\u2460"},{"id":"ref-for-concept-body-source\u2461"},{"id":"ref-for-concept-body-source\u2462"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-body-source"},
@@ -7519,7 +7623,7 @@ let dfnPanelData = {
 "content-script-config-pendingfetchcount": {"dfnID":"content-script-config-pendingfetchcount","dfnText":"pendingFetchCount","external":false,"refSections":[{"refs":[{"id":"ref-for-content-script-config-pendingfetchcount"},{"id":"ref-for-content-script-config-pendingfetchcount\u2460"},{"id":"ref-for-content-script-config-pendingfetchcount\u2461"},{"id":"ref-for-content-script-config-pendingfetchcount\u2462"},{"id":"ref-for-content-script-config-pendingfetchcount\u2463"}],"title":"3.3. Scripting methods"}],"url":"#content-script-config-pendingfetchcount"},
 "content-script-config-runat": {"dfnID":"content-script-config-runat","dfnText":"runAt","external":false,"refSections":[{"refs":[{"id":"ref-for-content-script-config-runat"},{"id":"ref-for-content-script-config-runat\u2460"}],"title":"3.3. Scripting methods"}],"url":"#content-script-config-runat"},
 "contentloadevent": {"dfnID":"contentloadevent","dfnText":"ContentLoadEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-contentloadevent"}],"title":"3.6.7. contentload"}],"url":"#contentloadevent"},
-"contextmenus": {"dfnID":"contextmenus","dfnText":"ContextMenus","external":false,"refSections":[{"refs":[{"id":"ref-for-contextmenus"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-contextmenus\u2460"},{"id":"ref-for-contextmenus\u2461"},{"id":"ref-for-contextmenus\u2462"}],"title":"5. Context Menus API"}],"url":"#contextmenus"},
+"contextmenus": {"dfnID":"contextmenus","dfnText":"ContextMenus","external":false,"refSections":[{"refs":[{"id":"ref-for-contextmenus"},{"id":"ref-for-contextmenus\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-contextmenus\u2461"},{"id":"ref-for-contextmenus\u2462"},{"id":"ref-for-contextmenus\u2463"}],"title":"5. Context Menus API"}],"url":"#contextmenus"},
 "contextmenus-context-menu": {"dfnID":"contextmenus-context-menu","dfnText":"context menu","external":false,"refSections":[{"refs":[{"id":"ref-for-contextmenus-context-menu"},{"id":"ref-for-contextmenus-context-menu\u2460"},{"id":"ref-for-contextmenus-context-menu\u2461"}],"title":"5. Context Menus API"}],"url":"#contextmenus-context-menu"},
 "contextmenus-context-menu-item": {"dfnID":"contextmenus-context-menu-item","dfnText":"context menu item","external":false,"refSections":[{"refs":[{"id":"ref-for-contextmenus-context-menu-item"},{"id":"ref-for-contextmenus-context-menu-item\u2460"},{"id":"ref-for-contextmenus-context-menu-item\u2461"},{"id":"ref-for-contextmenus-context-menu-item\u2462"},{"id":"ref-for-contextmenus-context-menu-item\u2463"},{"id":"ref-for-contextmenus-context-menu-item\u2464"},{"id":"ref-for-contextmenus-context-menu-item\u2465"},{"id":"ref-for-contextmenus-context-menu-item\u2466"},{"id":"ref-for-contextmenus-context-menu-item\u2467"},{"id":"ref-for-contextmenus-context-menu-item\u2468"},{"id":"ref-for-contextmenus-context-menu-item\u2460\u24ea"},{"id":"ref-for-contextmenus-context-menu-item\u2460\u2460"},{"id":"ref-for-contextmenus-context-menu-item\u2460\u2461"},{"id":"ref-for-contextmenus-context-menu-item\u2460\u2462"}],"title":"5. Context Menus API"}],"url":"#contextmenus-context-menu-item"},
 "contextmenus-context-menu-map": {"dfnID":"contextmenus-context-menu-map","dfnText":" context menu map ","external":false,"refSections":[{"refs":[{"id":"ref-for-contextmenus-context-menu-map"},{"id":"ref-for-contextmenus-context-menu-map\u2460"},{"id":"ref-for-contextmenus-context-menu-map\u2461"},{"id":"ref-for-contextmenus-context-menu-map\u2462"},{"id":"ref-for-contextmenus-context-menu-map\u2463"},{"id":"ref-for-contextmenus-context-menu-map\u2464"},{"id":"ref-for-contextmenus-context-menu-map\u2465"},{"id":"ref-for-contextmenus-context-menu-map\u2466"}],"title":"5. Context Menus API"}],"url":"#contextmenus-context-menu-map"},
@@ -7632,8 +7736,8 @@ let dfnPanelData = {
 "dom-contentscriptdetails-runat": {"dfnID":"dom-contentscriptdetails-runat","dfnText":"runAt","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contentscriptdetails-runat"}],"title":"3.3. Scripting methods"}],"url":"#dom-contentscriptdetails-runat"},
 "dom-contextmenus-create": {"dfnID":"dom-contextmenus-create","dfnText":"create(properties)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-create"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-create"},
 "dom-contextmenus-create-properties-properties": {"dfnID":"dom-contextmenus-create-properties-properties","dfnText":"properties","external":false,"refSections":[],"url":"#dom-contextmenus-create-properties-properties"},
-"dom-contextmenus-onclicked": {"dfnID":"dom-contextmenus-onclicked","dfnText":"onClicked","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-onclicked"},{"id":"ref-for-dom-contextmenus-onclicked\u2460"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-onclicked"},
-"dom-contextmenus-onshow": {"dfnID":"dom-contextmenus-onshow","dfnText":"onShow","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-onshow"},{"id":"ref-for-dom-contextmenus-onshow\u2460"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-onshow"},
+"dom-contextmenus-onclicked": {"dfnID":"dom-contextmenus-onclicked","dfnText":"onClicked","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-onclicked"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-dom-contextmenus-onclicked\u2460"},{"id":"ref-for-dom-contextmenus-onclicked\u2461"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-onclicked"},
+"dom-contextmenus-onshow": {"dfnID":"dom-contextmenus-onshow","dfnText":"onShow","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-onshow"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-dom-contextmenus-onshow\u2460"},{"id":"ref-for-dom-contextmenus-onshow\u2461"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-onshow"},
 "dom-contextmenus-remove": {"dfnID":"dom-contextmenus-remove","dfnText":"remove(id)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-remove"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-remove"},
 "dom-contextmenus-remove-id-id": {"dfnID":"dom-contextmenus-remove-id-id","dfnText":"id","external":false,"refSections":[],"url":"#dom-contextmenus-remove-id-id"},
 "dom-contextmenus-removeall": {"dfnID":"dom-contextmenus-removeall","dfnText":"removeAll()","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-contextmenus-removeall"}],"title":"5. Context Menus API"}],"url":"#dom-contextmenus-removeall"},
@@ -7710,7 +7814,7 @@ let dfnPanelData = {
 "dom-htmlcontrolledframeelement-cleardata-options-types-options": {"dfnID":"dom-htmlcontrolledframeelement-cleardata-options-types-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-cleardata-options-types-options"},
 "dom-htmlcontrolledframeelement-cleardata-options-types-types": {"dfnID":"dom-htmlcontrolledframeelement-cleardata-options-types-types","dfnText":"types","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-cleardata-options-types-types"},
 "dom-htmlcontrolledframeelement-contentwindow": {"dfnID":"dom-htmlcontrolledframeelement-contentwindow","dfnText":"contentWindow","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-contentwindow"}],"title":"3. The controlledframe element"}],"url":"#dom-htmlcontrolledframeelement-contentwindow"},
-"dom-htmlcontrolledframeelement-contextmenus": {"dfnID":"dom-htmlcontrolledframeelement-contextmenus","dfnText":"contextMenus","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-contextmenus"}],"title":"5. Context Menus API"}],"url":"#dom-htmlcontrolledframeelement-contextmenus"},
+"dom-htmlcontrolledframeelement-contextmenus": {"dfnID":"dom-htmlcontrolledframeelement-contextmenus","dfnText":"contextMenus","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-contextmenus"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-contextmenus\u2460"}],"title":"5. Context Menus API"}],"url":"#dom-htmlcontrolledframeelement-contextmenus"},
 "dom-htmlcontrolledframeelement-executescript": {"dfnID":"dom-htmlcontrolledframeelement-executescript","dfnText":"executeScript(optional details)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-executescript"}],"title":"3. The controlledframe element"}],"url":"#dom-htmlcontrolledframeelement-executescript"},
 "dom-htmlcontrolledframeelement-executescript-details-details": {"dfnID":"dom-htmlcontrolledframeelement-executescript-details-details","dfnText":"details","external":false,"refSections":[],"url":"#dom-htmlcontrolledframeelement-executescript-details-details"},
 "dom-htmlcontrolledframeelement-forward": {"dfnID":"dom-htmlcontrolledframeelement-forward","dfnText":"forward()","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-forward"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-dom-htmlcontrolledframeelement-forward\u2460"}],"title":"3.2. Navigation methods"}],"url":"#dom-htmlcontrolledframeelement-forward"},
@@ -8022,8 +8126,8 @@ let dfnPanelData = {
 "newwindowcontroller-current-controlled-frame": {"dfnID":"newwindowcontroller-current-controlled-frame","dfnText":"current Controlled Frame","external":false,"refSections":[{"refs":[{"id":"ref-for-newwindowcontroller-current-controlled-frame"}],"title":"3.6.3. newwindow"}],"url":"#newwindowcontroller-current-controlled-frame"},
 "newwindowevent": {"dfnID":"newwindowevent","dfnText":"NewWindowEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-newwindowevent"}],"title":"3.6.3. newwindow"}],"url":"#newwindowevent"},
 "obtain-a-controlled-frame-storage-key": {"dfnID":"obtain-a-controlled-frame-storage-key","dfnText":"obtain a storage key for non-storage purposes","external":false,"refSections":[{"refs":[{"id":"ref-for-obtain-a-controlled-frame-storage-key"},{"id":"ref-for-obtain-a-controlled-frame-storage-key\u2460"},{"id":"ref-for-obtain-a-controlled-frame-storage-key\u2461"}],"title":"3.4.1. Zoom"}],"url":"#obtain-a-controlled-frame-storage-key"},
-"onclickedevent": {"dfnID":"onclickedevent","dfnText":"OnClickedEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-onclickedevent"}],"title":"5. Context Menus API"}],"url":"#onclickedevent"},
-"onshowevent": {"dfnID":"onshowevent","dfnText":"OnShowEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-onshowevent"}],"title":"5. Context Menus API"}],"url":"#onshowevent"},
+"onclickedevent": {"dfnID":"onclickedevent","dfnText":"OnClickedEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-onclickedevent"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-onclickedevent\u2460"}],"title":"5. Context Menus API"}],"url":"#onclickedevent"},
+"onshowevent": {"dfnID":"onshowevent","dfnText":"OnShowEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-onshowevent"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-onshowevent\u2460"}],"title":"5. Context Menus API"}],"url":"#onshowevent"},
 "permissionrequest": {"dfnID":"permissionrequest","dfnText":"PermissionRequest","external":false,"refSections":[{"refs":[{"id":"ref-for-permissionrequest"},{"id":"ref-for-permissionrequest\u2460"},{"id":"ref-for-permissionrequest\u2461"}],"title":"3.6.4. permissionrequest"}],"url":"#permissionrequest"},
 "permissionrequestcontrollerbase": {"dfnID":"permissionrequestcontrollerbase","dfnText":"PermissionRequestControllerBase","external":false,"refSections":[{"refs":[{"id":"ref-for-permissionrequestcontrollerbase"},{"id":"ref-for-permissionrequestcontrollerbase\u2460"},{"id":"ref-for-permissionrequestcontrollerbase\u2461"},{"id":"ref-for-permissionrequestcontrollerbase\u2462"},{"id":"ref-for-permissionrequestcontrollerbase\u2463"},{"id":"ref-for-permissionrequestcontrollerbase\u2464"},{"id":"ref-for-permissionrequestcontrollerbase\u2465"},{"id":"ref-for-permissionrequestcontrollerbase\u2466"},{"id":"ref-for-permissionrequestcontrollerbase\u2467"}],"title":"3.6.4. permissionrequest"}],"url":"#permissionrequestcontrollerbase"},
 "permissionrequestcontrollerbase-allow": {"dfnID":"permissionrequestcontrollerbase-allow","dfnText":"allow","external":false,"refSections":[{"refs":[{"id":"ref-for-permissionrequestcontrollerbase-allow"},{"id":"ref-for-permissionrequestcontrollerbase-allow\u2460"},{"id":"ref-for-permissionrequestcontrollerbase-allow\u2461"}],"title":"3.6.4. permissionrequest"}],"url":"#permissionrequestcontrollerbase-allow"},
@@ -8049,7 +8153,7 @@ let dfnPanelData = {
 "storage-key-origin": {"dfnID":"storage-key-origin","dfnText":"origin","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key-origin"}],"title":"3.7.1.3. [STORAGE]"}],"url":"#storage-key-origin"},
 "storage-key-partition": {"dfnID":"storage-key-partition","dfnText":"partition","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key-partition"},{"id":"ref-for-storage-key-partition\u2460"}],"title":"3.4. Configuration methods"}],"url":"#storage-key-partition"},
 "validate-and-resolve-contentscriptdetails": {"dfnID":"validate-and-resolve-contentscriptdetails","dfnText":"validate and resolve ContentScriptDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-validate-and-resolve-contentscriptdetails"}],"title":"3.3. Scripting methods"}],"url":"#validate-and-resolve-contentscriptdetails"},
-"webrequest": {"dfnID":"webrequest","dfnText":"WebRequest","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-webrequest\u2460"},{"id":"ref-for-webrequest\u2461"}],"title":"4. Web Request API"}],"url":"#webrequest"},
+"webrequest": {"dfnID":"webrequest","dfnText":"WebRequest","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest"},{"id":"ref-for-webrequest\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-webrequest\u2461"},{"id":"ref-for-webrequest\u2462"}],"title":"4. Web Request API"}],"url":"#webrequest"},
 "webrequest-handler-config": {"dfnID":"webrequest-handler-config","dfnText":"WebRequest handler config","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-handler-config"},{"id":"ref-for-webrequest-handler-config\u2460"}],"title":"4. Web Request API"}],"url":"#webrequest-handler-config"},
 "webrequest-handler-config-asyncblocking": {"dfnID":"webrequest-handler-config-asyncblocking","dfnText":"asyncBlocking","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-handler-config-asyncblocking"},{"id":"ref-for-webrequest-handler-config-asyncblocking\u2460"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequest-handler-config-asyncblocking\u2461"}],"title":"4.1. WebRequest handler config"}],"url":"#webrequest-handler-config-asyncblocking"},
 "webrequest-handler-config-blocking": {"dfnID":"webrequest-handler-config-blocking","dfnText":"blocking","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-handler-config-blocking"},{"id":"ref-for-webrequest-handler-config-blocking\u2460"},{"id":"ref-for-webrequest-handler-config-blocking\u2461"},{"id":"ref-for-webrequest-handler-config-blocking\u2462"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequest-handler-config-blocking\u2463"}],"title":"4.1. WebRequest handler config"}],"url":"#webrequest-handler-config-blocking"},
@@ -8059,7 +8163,7 @@ let dfnPanelData = {
 "webrequest-handler-config-requestsbody": {"dfnID":"webrequest-handler-config-requestsbody","dfnText":"requestsBody","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-handler-config-requestsbody"},{"id":"ref-for-webrequest-handler-config-requestsbody\u2460"}],"title":"4. Web Request API"}],"url":"#webrequest-handler-config-requestsbody"},
 "webrequest-handler-config-requestsheaders": {"dfnID":"webrequest-handler-config-requestsheaders","dfnText":"requestsHeaders","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-handler-config-requestsheaders"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2460"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2461"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2462"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2463"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2464"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2465"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2466"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2467"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2468"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2460\u24ea"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2460\u2460"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2460\u2461"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2460\u2462"},{"id":"ref-for-webrequest-handler-config-requestsheaders\u2460\u2463"}],"title":"4. Web Request API"}],"url":"#webrequest-handler-config-requestsheaders"},
 "webrequest-handler-map": {"dfnID":"webrequest-handler-map","dfnText":"handler map","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-handler-map"},{"id":"ref-for-webrequest-handler-map\u2460"},{"id":"ref-for-webrequest-handler-map\u2461"},{"id":"ref-for-webrequest-handler-map\u2462"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequest-handler-map\u2463"}],"title":"4.1. WebRequest handler config"}],"url":"#webrequest-handler-map"},
-"webrequestevent": {"dfnID":"webrequestevent","dfnText":"WebRequestEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestevent"},{"id":"ref-for-webrequestevent\u2460"},{"id":"ref-for-webrequestevent\u2461"},{"id":"ref-for-webrequestevent\u2462"},{"id":"ref-for-webrequestevent\u2463"},{"id":"ref-for-webrequestevent\u2464"},{"id":"ref-for-webrequestevent\u2465"},{"id":"ref-for-webrequestevent\u2466"},{"id":"ref-for-webrequestevent\u2467"},{"id":"ref-for-webrequestevent\u2468"}],"title":"4. Web Request API"}],"url":"#webrequestevent"},
+"webrequestevent": {"dfnID":"webrequestevent","dfnText":"WebRequestEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestevent"},{"id":"ref-for-webrequestevent\u2460"},{"id":"ref-for-webrequestevent\u2461"},{"id":"ref-for-webrequestevent\u2462"},{"id":"ref-for-webrequestevent\u2463"},{"id":"ref-for-webrequestevent\u2464"},{"id":"ref-for-webrequestevent\u2465"},{"id":"ref-for-webrequestevent\u2466"},{"id":"ref-for-webrequestevent\u2467"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-webrequestevent\u2468"},{"id":"ref-for-webrequestevent\u2460\u24ea"},{"id":"ref-for-webrequestevent\u2460\u2460"},{"id":"ref-for-webrequestevent\u2460\u2461"},{"id":"ref-for-webrequestevent\u2460\u2462"},{"id":"ref-for-webrequestevent\u2460\u2463"},{"id":"ref-for-webrequestevent\u2460\u2464"},{"id":"ref-for-webrequestevent\u2460\u2465"},{"id":"ref-for-webrequestevent\u2460\u2466"},{"id":"ref-for-webrequestevent\u2460\u2467"}],"title":"4. Web Request API"}],"url":"#webrequestevent"},
 "webrequestevent-eventname": {"dfnID":"webrequestevent-eventname","dfnText":"eventName","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestevent-eventname"},{"id":"ref-for-webrequestevent-eventname\u2460"},{"id":"ref-for-webrequestevent-eventname\u2461"},{"id":"ref-for-webrequestevent-eventname\u2462"},{"id":"ref-for-webrequestevent-eventname\u2463"},{"id":"ref-for-webrequestevent-eventname\u2464"},{"id":"ref-for-webrequestevent-eventname\u2465"},{"id":"ref-for-webrequestevent-eventname\u2466"},{"id":"ref-for-webrequestevent-eventname\u2467"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-webrequestevent-eventname\u2468"},{"id":"ref-for-webrequestevent-eventname\u2460\u24ea"},{"id":"ref-for-webrequestevent-eventname\u2460\u2460"},{"id":"ref-for-webrequestevent-eventname\u2460\u2461"}],"title":"4. Web Request API"}],"url":"#webrequestevent-eventname"},
 "webrequestevent-webrequest": {"dfnID":"webrequestevent-webrequest","dfnText":"webRequest","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestevent-webrequest"},{"id":"ref-for-webrequestevent-webrequest\u2460"},{"id":"ref-for-webrequestevent-webrequest\u2461"},{"id":"ref-for-webrequestevent-webrequest\u2462"},{"id":"ref-for-webrequestevent-webrequest\u2463"},{"id":"ref-for-webrequestevent-webrequest\u2464"},{"id":"ref-for-webrequestevent-webrequest\u2465"},{"id":"ref-for-webrequestevent-webrequest\u2466"},{"id":"ref-for-webrequestevent-webrequest\u2467"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-webrequestevent-webrequest\u2468"},{"id":"ref-for-webrequestevent-webrequest\u2460\u24ea"},{"id":"ref-for-webrequestevent-webrequest\u2460\u2460"},{"id":"ref-for-webrequestevent-webrequest\u2460\u2461"}],"title":"4. Web Request API"}],"url":"#webrequestevent-webrequest"},
 "zoomchange": {"dfnID":"zoomchange","dfnText":"ZoomChange","external":false,"refSections":[{"refs":[{"id":"ref-for-zoomchange"},{"id":"ref-for-zoomchange\u2460"},{"id":"ref-for-zoomchange\u2461"}],"title":"3.6.6. zoomchange"}],"url":"#zoomchange"},
