@@ -580,10 +580,10 @@ are [=content script config=]s.
 The {{HTMLControlledFrameElement/partition}} attribute takes an identifier
 specifying where data related to the Controlled Frame's instance should be
 stored. The identifier is composed of a string of alphanumeric characters.
-All data for the [=embedded navigable=] are stored in a [=storage shelf=]
+All data for the [=embedded navigable=] must be stored in a [=storage shelf=]
 keyed by this partition string along with the origin that created the data.
 
-By default, all data stored are held in an in-memory storage partition so
+By default, all data stored must be held in an in-memory storage partition so
 that when the last Controlled Frame element with a given
 {{HTMLControlledFrameElement/partition}} value is destroyed, the data is also
 destroyed. While the data is held in this partition, no data from the
