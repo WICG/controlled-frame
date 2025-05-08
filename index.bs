@@ -656,14 +656,10 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
   : {{HTMLControlledFrameElement/canGoBack()|canGoBack}}()
 
-  :: Returns `true` if the current
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
-     current session history entry</a> is not the first one in the navigation
-     history entry list. This means that there is a previous
-     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
-     session history entry</a> for this
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
-     navigable</a>.
+  :: Returns `true` if the [=current session history entry=] is not the first
+      one in the [=embedded navigable=]'s [=session history entries=]. This
+      means that there is a previous [=session history entry=] for the
+      [=/navigable=].
 
   : {{HTMLControlledFrameElement/forward()|forward}}()
 
@@ -679,14 +675,9 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
   : {{HTMLControlledFrameElement/canGoForward()|canGoForward}}()
 
-  :: Returns `true` if the current
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
-     current session history entry</a> is not the last one in the navigation
-     history entry list. This means that there is a next
-     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
-     session history entry</a> for this
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
-     navigable</a>.
+  :: Returns `true` if the [=current session history entry=] is not the last one
+      in the [=embedded navigable=]'s [=session history entries=]. This means
+      that there is a next [=session history entry=] for the [=/navigable=].
 
   : {{HTMLControlledFrameElement/go()|go}}()
 
