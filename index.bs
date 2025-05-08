@@ -976,11 +976,20 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
   1. If |details|["{{ContentScriptDetails/js}}"] and
       |details|["{{ContentScriptDetails/css}}"] are both defined, or both
-      undefined, then [=reject=] |result| with a {{TypeError}} and abort
-      these steps.
+      undefined, then [=reject=] |result| with a {{TypeError}} and return it.
 
   1. If |details|["{{ContentScriptDetails/matches}}"] is [=list/empty=], then
-      [=reject=] |result| with a {{TypeError}} and abort these steps.
+      [=reject=] |result| with a {{TypeError}} and return it.
+
+  1. Let |isCss| be a [=boolean=] equal to `true` if
+      |details|["{{ContentScriptDetails/css}}"] is defined, `false` otherwise.
+
+  1. Let |injectionItems| be |details|["{{ContentScriptDetails/css}}"] if
+      |isCss| is `true`, |details|["{{ContentScriptDetails/js}}"] otherwise.
+
+  1. If |injectionItems|["{{InjectionItems/code}}"] and
+      |injectionItems|["{{InjectionItems/files}}"] are both defined, or both
+      undefined, [=reject=] |result| with a {{TypeError}} and return it.
 
   1. Return |result| and run the remaining steps [=in parallel=].
 
@@ -1002,9 +1011,6 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       : [=content script config/runAt=]
       :: |details|["{{ContentScriptDetails/runAt}}"] if defined, otherwise
           {{RunAt/document-idle}}
-
-  1. Let |isCss| be a [=boolean=] equal to `true` if
-      |details|["{{ContentScriptDetails/css}}"] is defined, `false` otherwise.
 
   1. Let |completionSteps| be the following algorithm, which takes a {{long}}
       |index| and a [=string=] or [=boolean=] |source|:
@@ -1030,14 +1036,6 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
           =][|details|[{{ContentScriptDetails/name}}]] to |config|.
 
       1. [=Resolve an embedder promise=] given |controlledframe| and |result|.
-
-  1. Let |injectionItems| be |details|["{{ContentScriptDetails/css}}"] if
-      |isCss| is `true`, |details|["{{ContentScriptDetails/js}}"] otherwise.
-
-  1. If |injectionItems|["{{InjectionItems/code}}"] and
-      |injectionItems|["{{InjectionItems/files}}"] are both defined, or both
-      undefined, [=reject an embedder promise=] given |controlledframe|,
-      |result|, and {{TypeError}}, and abort these steps.
 
   1. If |injectionItems|["{{InjectionItems/code}}"] is defined, then:
 
