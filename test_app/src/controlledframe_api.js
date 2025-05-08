@@ -451,12 +451,12 @@ class ControlledFrameController {
     Log.info(`back = ${success ? 'successful' : 'unsuccessful'}`);
   }
 
-  #canGoBack(e) {
+  async #canGoBack(e) {
     if (typeof this.controlledFrame.canGoBack !== 'function') {
       Log.warn('canGoBack: API undefined');
       return;
     }
-    let canGoBack = this.controlledFrame.canGoBack();
+    let canGoBack = await this.controlledFrame.canGoBack();
     $('#can_go_back_chk').checked = canGoBack;
     Log.info(`canGoBack = ${canGoBack}`);
   }
@@ -470,12 +470,12 @@ class ControlledFrameController {
     Log.info(`forward = ${success ? 'successful' : 'unsuccessful'}`);
   }
 
-  #canGoForward(e) {
+  async #canGoForward(e) {
     if (typeof this.controlledFrame.canGoForward !== 'function') {
       Log.warn('canGoForward: API undefined');
       return;
     }
-    let canGoForward = this.controlledFrame.canGoForward();
+    let canGoForward = await this.controlledFrame.canGoForward();
     $('#can_go_forward_chk').checked = canGoForward;
     Log.info(`canGoForward = ${canGoForward}`);
   }
