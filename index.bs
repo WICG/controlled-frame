@@ -946,11 +946,12 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 <div algorithm>
   To <dfn>fetch an injection item</dfn> given a <{controlledframe}>
   |controlledframe|, a {{DOMString}} |urlString|, a [=boolean=] |isCss|, a
-  {{long}} |index|, and an algorithm |completionSteps|, run the following steps:
+  {{long}} |index|, and an algorithm |completionSteps| that takes a {{long}},
+  a {{boolean}}, and a {{DOMString}}, run the following steps:
 
   1. If |urlString| is not an [=valid URL string=], then:
 
-      1. Run |completionSteps| given 0 and `false`.
+      1. Run |completionSteps| given 0, `false`, and "".
 
       1. Return.
 
@@ -972,9 +973,9 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       [=byte sequence=] |contents|:
 
       1. If |response|'s [=response/status=] is not 200, or |contents| is null
-          or failure, then run |completionSteps| given 0 and `false`.
+          or failure, then run |completionSteps| given 0, `false`, and ""
 
-      1. Otherwise, run |completionSteps| given |index| and |contents|.
+      1. Otherwise, run |completionSteps| given |index|, `true`, and |contents|.
 
 </div>
 
@@ -1028,9 +1029,9 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
           {{RunAt/document-idle}}
 
   1. Let |completionSteps| be the following algorithm, which takes a {{long}}
-      |index| and a [=string=] or [=boolean=] |source|:
+      |index|, a [=boolean=] |success|, and a {{DOMString}} |source|:
 
-      1. If |source| is not a [=string=], then [=reject an embedder promise=]
+      1. If |success| is `false`, then [=reject an embedder promise=]
           given |controlledframe|, |result|, and {{TypeError}}, and abort
           these steps.
 
@@ -1054,7 +1055,7 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
   1. If |injectionItems|["{{InjectionItems/code}}"] is defined, then:
 
-      1. Run |completionSteps| given 0 and |injectionItems|
+      1. Run |completionSteps| given 0, `true`, and |injectionItems|
           ["{{InjectionItems/code}}"].
 
   1. Otherwise:
@@ -1314,12 +1315,11 @@ implementation of this isolation that can be implemented by all browsers.
       undefined, then [=reject an embedder promise=] given [=this=], |result|,
       and a {{TypeError}}, and abort these steps.
 
-  1. Let |executionSteps| be the following algorithm that takes a {{long}} and
-      a [=string=] or [=boolean=] |styleString|:
+  1. Let |executionSteps| be the following algorithm that takes a {{long}}, a
+      [=boolean=] |success|, and a {{DOMString}} |styleString|:
 
-      1. If |styleString| is not a [=string=], then [=reject an embedder
-          promise=] given [=this=], |result|, and a {{TypeError}},
-          and abort these steps.
+      1. If |success| is `false`, then [=reject an embedder promise=] given
+          [=this=], |result|, and a {{TypeError}}, and abort these steps.
 
       1. Let |document| be [=this=]'s [=embedded navigable=]'s
           [=active document=].
@@ -1329,8 +1329,8 @@ implementation of this isolation that can be implemented by all browsers.
 
       1. [=Resolve an embedder promise=] given [=this=] and |result|.
 
-  1. If |details|["{{InjectDetails/code}}"] is defined, then run |executionSteps|
-      given 0 and |details|["{{InjectDetails/code}}"].
+  1. If |details|["{{InjectDetails/code}}"] is defined, then run
+      |executionSteps| given 0, `true`, and |details|["{{InjectDetails/code}}"].
 
   1. Otherwise, [=fetch an injection item=] given [=this=],
       |details|["{{InjectDetails/file}}"], `false`, 0, and |executionSteps|.
