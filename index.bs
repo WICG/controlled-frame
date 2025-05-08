@@ -201,6 +201,7 @@ spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
         text: promise; url: idl-promise
         text: promise rejected; url: a-promise-rejected-with
         text: promise resolved; url: a-promise-resolved-with
+        text: getting a promise for waiting for all promises; url: waiting-for-all-promise
 
 spec: uievents; urlPrefix: https://www.w3.org/TR/uievents/
     type: dfn
@@ -1223,7 +1224,7 @@ implementation of this isolation that can be implemented by all browsers.
 
       1. [=list/Append=] |promise| to |promises|.
 
-  1. Return the result of calling {{Promise}}.{{Promise/all}} given |promises|.
+  1. Return the result of [=getting a promise for waiting for all promises=] given |promises|.
 
 </div>
 
@@ -1248,7 +1249,7 @@ implementation of this isolation that can be implemented by all browsers.
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>executeScript(optional |details|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>executeScript(|details|)</dfn>
   method steps are:
 
   1. Let |result| be [=a new promise=].
@@ -1297,7 +1298,7 @@ implementation of this isolation that can be implemented by all browsers.
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>insertCSS(optional |details|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>insertCSS(|details|)</dfn>
   method steps are:
 
   1. Let |result| be [=a new promise=].
@@ -1376,7 +1377,7 @@ dictionary ClearDataTypeSet {
 </div>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>clearData(optional |options|, optional |types|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>clearData(|options|, |types|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be [=a new promise=].
@@ -1726,7 +1727,7 @@ dictionary ImageDetails {
 </xmp>
 
 <div algorithm>
-  The <dfn method for=HTMLControlledFrameElement>captureVisibleRegion(optional |options|)</dfn>
+  The <dfn method for=HTMLControlledFrameElement>captureVisibleRegion(|options|)</dfn>
   method steps are:
 
   1. Let |resultPromise| be [=a new promise=].
