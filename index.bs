@@ -988,6 +988,10 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. Let |isCss| be a [=boolean=] equal to `true` if
       |details|["{{ContentScriptDetails/css}}"] is defined, `false` otherwise.
 
+  1. If |isCss| is `true` and |details|["{{ContentScriptDetails/runAt}}"] does
+      not equal "{{RunAt/document-start}}", then [=reject=] |result| with a
+      {{TypeError}} and return it.
+
   1. Let |injectionItems| be |details|["{{ContentScriptDetails/css}}"] if
       |isCss| is `true`, |details|["{{ContentScriptDetails/js}}"] otherwise.
 
@@ -1183,7 +1187,7 @@ implementation of this isolation that can be implemented by all browsers.
       [=Document/URL=], and the [=default script fetch options=].
 
   1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-      |document|'s [=global object=] that will run the following step:
+      |document|'s [=global object=] that will run the following steps:
 
       1. Let |completionRecord| be the result of [=running a classic script=]
           given |script|.
