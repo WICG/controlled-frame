@@ -911,12 +911,16 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       document.
 
   : <dfn>matches</dfn>
-  :: a [=list=] of [=string=]s containing patterns. Content will be injected
-      into pages whose [=Document/URL=] matches one of these patterns.
+  :: a [=list=] of [=string=]s containing patterns. Content may be injected
+      into the page if any of the [=list/items=] [=matches a URL pattern=] given
+      the [=Document/URL=] of the page.
 
   : <dfn>excludeMatches</dfn>
-  :: a [=list=] of [=string=]s containing patterns. Content will *not* be
-      injected into pages whose [=Document/URL=] matches one of these patterns.
+  :: a [=list=] of [=string=]s containing patterns. Content will not be injected
+      into the page if any of the [=list/items=] [=matches a URL pattern=] given
+      the [=Document/URL=] of the page. This overrides [=content script config/matches=];
+      if both lists have entries that matches a page's [=Document/URL=], the
+      content will not be injected into the page.
 
   : <dfn>allFrames</dfn>
   :: a [=boolean=] indicating whether content should be injected into all
@@ -4564,10 +4568,10 @@ The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperti
     :: A [=list=] of different {{ContextType}}. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the element that was clicked on to open the [=ContextMenus/context menu=] equals one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
 
     : {{ContextMenusProperties/documentUrlPatterns}}
-    :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the embedded document [=matches a url pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
+    :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the embedded document [=matches a URL pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
 
     : {{ContextMenusProperties/targetUrlPatterns}}
-    :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the target of the [=ContextMenus/context menu=] [=matches a url pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
+    :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the target of the [=ContextMenus/context menu=] [=matches a URL pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
 
     Note: Target is the "src" attribute of img/audio/video tags and the "href" of anchor tags.
 
