@@ -128,6 +128,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: create a new browsing context and document; url: creating-a-new-browsing-context
             text: creating a new auxiliary browsing context; url: creating-a-new-auxiliary-browsing-context
             text: current session history entry; url: nav-current-history-entry
+            text: destroy a top-level traversable; url: destroy-a-top-level-traversable
             text: navigable; for: /; url: navigable
             text: active WindowProxy; for: navigable; url: nav-wp
             text: initialize the navigable; url: initialize-the-navigable
@@ -393,7 +394,10 @@ are [=content script config=]s.
   When a <{controlledframe}> element |element| is [=removed from a document=],
   run the following steps:
 
-  1. TODO: destroy |element|'s [=embedded navigable=].
+  1. [=Destroy a top-level traversable=] given |element|'s
+      [=embedded navigable=].
+
+  1. Set |element|'s [=embedded navigable=] to null.
 
 </div>
 
@@ -652,14 +656,10 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
   : {{HTMLControlledFrameElement/canGoBack()|canGoBack}}()
 
-  :: Returns `true` if the current
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-current-history-entry">
-     current session history entry</a> is not the first one in the navigation
-     history entry list. This means that there is a previous
-     <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#session-history-entry">
-     session history entry</a> for this
-     <a href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">
-     navigable</a>.
+  :: Returns `true` if the [=current session history entry=] is not the first
+      one in the [=embedded navigable=]'s [=session history entries=]. This
+      means that there is a previous [=session history entry=] for the
+      [=/navigable=].
 
   : {{HTMLControlledFrameElement/forward()|forward}}()
 
@@ -672,6 +672,12 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
     Returns a promise that resolves to `true` if the page was successfully
     navigated forward, or `false` if the navigation failed or there was no next
     step.
+
+  : {{HTMLControlledFrameElement/canGoForward()|canGoForward}}()
+
+  :: Returns `true` if the [=current session history entry=] is not the last one
+      in the [=embedded navigable=]'s [=session history entries=]. This means
+      that there is a next [=session history entry=] for the [=/navigable=].
 
   : {{HTMLControlledFrameElement/go()|go}}()
 
@@ -2728,7 +2734,7 @@ For [=HTTP fetch=](loadredirect):
 
             1. <ins>Let |currentNavigable| be |window|'s associated [=Window/navigable=].
 
-            1. <ins>Let |embedderParent| be |currentNavigable|'s [top-level traversable=]'s [=embedderParent=].</ins>
+            1. <ins>Let |embedderParent| be |currentNavigable|'s [=top-level traversable=]'s [=embedderParent=].</ins>
 
             1. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
 
