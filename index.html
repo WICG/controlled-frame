@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="cf12441cf7bc81827604ab9be8b87c8ed0439640" name="revision">
+  <meta content="69f297a3093351b2ce3c474e3af4aed3d0f5f6e8" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -1250,16 +1250,16 @@ which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-
    <p>The <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition②">partition</a></code> attribute takes an identifier
 specifying where data related to the Controlled Frame’s instance should be
 stored. The identifier is composed of a string of alphanumeric characters.
-All data for the <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable⑧">embedded navigable</a> will be stored in a <a data-link-type="dfn" href="https://storage.spec.whatwg.org#storage-shelf" id="ref-for-storage-shelf">storage shelf</a> keyed by this partition string along with the origin that created the data.</p>
-   <p>By default, all data stored will be held in an in-memory storage partition so
+All data for the <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable⑧">embedded navigable</a> must be stored in a <a data-link-type="dfn" href="https://storage.spec.whatwg.org#storage-shelf" id="ref-for-storage-shelf">storage shelf</a> keyed by this partition string along with the origin that created the data.</p>
+   <p>By default, all data stored must be held in an in-memory storage partition so
 that when the last Controlled Frame element with a given <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition③">partition</a></code> value is destroyed, the data is also
 destroyed. While the data is held in this partition, no data from the
-Controlled Frame’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable⑨">embedded navigable</a> will persist.</p>
+Controlled Frame’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable⑨">embedded navigable</a> shall persist.</p>
    <p>If the partition attribute identifier contains the prefix "persist:", the user
-agent will use a disk-based storage environment rather than an in-memory
+agent must use a disk-based storage environment rather than an in-memory
 storage partition. Embedded content should not be able to detect whether its
 storage is in-memory or persistent.</p>
-   <p>If multiple Controlled Frames share the same partition identifier, all of their <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⓪">embedded navigable</a> instances will share the same storage partition.</p>
+   <p>If multiple Controlled Frames share the same partition identifier, all of their <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①⓪">embedded navigable</a> instances must share the same storage partition.</p>
    <p class="note" role="note"><span class="marker">Note:</span> The <a data-link-type="biblio" href="#biblio-storage" title="Storage Standard">[STORAGE]</a> specification is monkey patched below to partition
 storage based on the value of the <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition④">partition</a></code> attribute.</p>
    <div class="algorithm" data-algorithm="partition-setter">
