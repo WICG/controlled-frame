@@ -125,6 +125,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: unload counter; url: unload-counter
         urlPrefix: document-sequences.html
             text: browsing context group; url: browsing-context-group
+            text: browsing context group set; url: browsing-context-group-set
             text: create a new browsing context and document; url: creating-a-new-browsing-context
             text: creating a new auxiliary browsing context; url: creating-a-new-auxiliary-browsing-context
             text: current session history entry; url: nav-current-history-entry
@@ -1690,13 +1691,30 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
 
       1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
 
-      1. [=Set the per-origin zoom level=] given [=this=] and |zoomFactor|. <span class='XXX'>TODO:update zoom of all Controlled Frames with the same partition and origin.</span>
+      1. [=set/For each=] [=browsing context group=] |group| in the user agent's
+          [=browsing context group set=]:
 
-      1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+          1. [=set/For each=] [=top-level browsing context=] |browsingContext|
+              in |group|:
 
-            1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+              1. Let |embeddedDocument| be |browsingContext|'s
+                  [=active document=].
 
-            1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+              1. Let |embedder| be |embeddedDocument|'s [=node navigable=]'s
+                  [=embedderParent=].
+
+              1. If |embedder| is null, then [=continue=].
+
+              1. [=Set the per-origin zoom level=] given |embedder| and
+                  |zoomFactor|.
+
+              1. If |oldZoomFactor| does not equal |embedder|'s [=currentZoom=]:
+
+                    1. [=Apply zoom level=] to |embeddedDocument| given
+                        [=this=]'s [=currentZoom=].
+
+                    1. [=Fire a "zoomchange" event=] with |embedder|,
+                        |oldZoomFactor|, and |embedder|'s [=currentZoom=].
 
 1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-view}}:
 
@@ -1758,13 +1776,14 @@ dictionary ImageDetails {
      inclusive, then [=reject an embedder promise=] given [=this=],
      |resultPromise|, and a {{TypeError}}, and abort these steps.
 
-  1. Create an image in format `optionsFormat` at quality `optionsQuality`
-     showing the visible region of embedded content.
+  1. Let |imageData| be a an image showing the visible region of the embedded
+      content encoded in |optionsFormat| at quality |optionsQuality|.
 
-     <span class=XXX>Spec the type of the captured image.</span>
+    Note: The set of supported image formats is implementation-defined, but it
+    is recommended to support at least "JPEG" and "PNG".
 
   1. [=Resolve an embedder promise=] given [=this=], |resultPromise|, and
-      the image data.
+      a `data:` URL that contains |imageData|.
 
 </div>
 
