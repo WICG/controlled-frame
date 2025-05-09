@@ -1694,8 +1694,6 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
 
       1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
 
-      1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
-
       1. [=Set the per-origin zoom level=] given [=this=] and |zoomFactor|.
 
       1. [=set/For each=] [=browsing context group=] |group| in the user agent's
@@ -1724,9 +1722,11 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
                       [=embedded navigable=]'s [=active document=]'s
                       [=document/origin=]
 
-                  * |embedder|'s [=currentZoom=] does not equal |oldZoomFactor|
+                  * |embedder|'s [=currentZoom=] does not equal |zoomFactor|
 
               1. If |match| is `true`, then:
+
+                    1. Set |embedder|'s [=currentZoom=] to |zoomFactor|.
 
                     1. [=Apply zoom level=] to |embeddedDocument| given
                         |zoomFactor|.
