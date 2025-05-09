@@ -101,6 +101,11 @@ spec: console; urlPrefix: https://console.spec.whatwg.org/
             text: logger; for: /; url: logger
             text: formatter; for: /; url: formatter
 
+spec: dom; urlPrefix: https://dom.spec.whatwg.org/
+    type: dfn
+        urlPrefix: /
+            text: origin; for: document; url: concept-document-origin
+
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
         urlPrefix: /
@@ -1691,6 +1696,8 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
 
       1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
 
+      1. [=Set the per-origin zoom level=] given [=this=] and |zoomFactor|.
+
       1. [=set/For each=] [=browsing context group=] |group| in the user agent's
           [=browsing context group set=]:
 
@@ -1705,16 +1712,27 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
 
               1. If |embedder| is null, then [=continue=].
 
-              1. [=Set the per-origin zoom level=] given |embedder| and
-                  |zoomFactor|.
+              1. Let |match| be `true` if all of the following conditions are
+                  `true`:
 
-              1. If |oldZoomFactor| does not equal |embedder|'s [=currentZoom=]:
+                  * |embedder|'s [=ZoomMode=] is {{ZoomMode/per-origin}}
+
+                  * |embedder|'s {{HTMLControlledFrameElement/partition}} equals
+                      [=this=]'s {{HTMLControlledFrameElement/partition}}
+
+                  * |embeddedDocument|'s [=document/origin=] equals [=this=]'s
+                      [=embedded navigable=]'s [=active document=]'s
+                      [=document/origin=]
+
+                  * |embedder|'s [=currentZoom=] does not equal |oldZoomFactor|
+
+              1. If |match| is `true`, then:
 
                     1. [=Apply zoom level=] to |embeddedDocument| given
-                        [=this=]'s [=currentZoom=].
+                        |zoomFactor|.
 
                     1. [=Fire a "zoomchange" event=] with |embedder|,
-                        |oldZoomFactor|, and |embedder|'s [=currentZoom=].
+                        |oldZoomFactor|, and |zoomFactor|.
 
 1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-view}}:
 
@@ -1783,7 +1801,7 @@ dictionary ImageDetails {
     is recommended to support at least "JPEG" and "PNG".
 
   1. [=Resolve an embedder promise=] given [=this=], |resultPromise|, and
-      a `data:` URL that contains |imageData|.
+      a `data:` [=/URL=] that contains |imageData|.
 
 </div>
 
