@@ -828,8 +828,9 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   1. If |embeddedNavigable| is null, return.
 
   1. [=Queue a global task=] on the [=navigation and traversal task source=] of
-      |embeddedNavigable|'s [=relevant global object=] that will [=reload=]
-      |embeddedNavigable| given a [=user navigation involvement=] of "[=none=]".
+      |embeddedNavigable|'s [=node document=]'s [=relevant global object=] that
+      will [=reload=] |embeddedNavigable| given a
+      [=user navigation involvement=] of "[=none=]".
 
 </div>
 
@@ -841,8 +842,8 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   1. If |embeddedNavigable| is null, return.
 
   1. [=Queue a global task=] on the [=navigation and traversal task source=] of
-      |embeddedNavigable|'s [=relevant global object=] that will
-      [=stop loading=] |embeddedNavigable|.
+      |embeddedNavigable|'s [=node document=]'s [=relevant global object=] that
+      will [=stop loading=] |embeddedNavigable|.
 
 </div>
 
