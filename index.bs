@@ -458,7 +458,7 @@ are [=content script config=]s.
 
   1. If |urlString| is not an [=absolute-URL string=], return.
 
-  1. Let |url| be the result of running the [=URL parser=] given |urlString|.
+  1. Let |url| be the result of [=parsing a URL=] given |urlString| and |element|'s [=node document=].
 
   1. Let |historyHandling| be "{{NavigationHistoryBehavior/auto}}".
 
@@ -963,8 +963,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
   1. Let |request| be a new [=request=] with the following fields:
       : [=request/URL=]
-      :: The result of running the [=URL parser=] given |urlString| and
-          |controlledframe|'s [=node document=]'s [=document base URL=]
+      :: The result of [=parsing a URL=] given |urlString| and
+          |controlledframe|'s [=node document=].
       : [=request/method=]
       :: "`GET`"
       : [=request/destination=]
