@@ -4600,10 +4600,10 @@ which represents a <dfn for=ContextMenus>context menu item</dfn>. A
 |controlledframe| and |property| is true.
 
 Each {{ContextMenus}} has an associated <dfn for=ContextMenus>onClicked</dfn>,
-which is a {{OnClickedEvent}}.
+which is an {{OnClickedEvent}}.
 
 Each {{ContextMenus}} has an associated <dfn for=ContextMenus>onShow</dfn>,
-which is a {{OnShowEvent}}.
+which is an {{OnShowEvent}}.
 
 The <dfn attribute for=ContextMenus>onClicked</dfn> getter steps are to return
 [=this=]'s [=ContextMenus/onClicked=].
