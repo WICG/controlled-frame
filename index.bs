@@ -2509,10 +2509,7 @@ To <dfn data-lt='Fire a "zoomchange" event'>fire a {{ZoomChangeEvent}}</dfn> |e|
 
 [Exposed=Window, IsolatedContext]
 interface ContentLoadEvent : Event {
-  constructor(DOMString type, optional ContentLoadEventInit eventInitDict = {});
-};
-
-dictionary ContentLoadEventInit: EventInit {
+  constructor(DOMString type);
 };
 
 </xmp>
