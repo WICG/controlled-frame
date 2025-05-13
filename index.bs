@@ -387,6 +387,16 @@ Each <{controlledframe}> has a <dfn for=controlledframe>content script map</dfn>
 which is a [=/map=] whose [=map/keys=] are [=strings=] and whose [=map/values=]
 are [=content script config=]s.
 
+Each <{controlledframe}> has an associated
+<dfn for=controlledframe>contentWindow</dfn>, which is a {{WindowProxy}}
+or null.
+
+Each <{controlledframe}> has an associated
+<dfn for=controlledframe>request</dfn>, which is a {{WebRequest}}.
+
+Each <{controlledframe}> has an associated
+<dfn for=controlledframe>contextMenus</dfn>, which is a {{ContextMenus}}.
+
 <div algorithm=insertion>
   When a <{controlledframe}> element |element| is [=inserted into a document=]
   whose [=browsing context=] is non-null, run the following steps:
@@ -444,8 +454,8 @@ are [=content script config=]s.
           <a href="https://github.com/whatwg/html/issues/9030">issue</a>
           in the HTML Standard.
 
-  1. Set |element|'s {{HTMLControlledFrameElement/contentWindow}} to
-      |document|'s {{WindowProxy}}.
+  1. Set |element|'s [=controlledframe/contentWindow=] to |document|'s
+      {{WindowProxy}}.
 
   1. [=Navigate a controlledframe=] given |element| and |element|'s
       {{HTMLControlledFrameElement/src}}.
@@ -485,7 +495,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onBeforeRequest}} to |onBeforeRequest|.
+  1. Set |webRequest|'s [=WebRequest/onBeforeRequest=] to |onBeforeRequest|.
 
   1. Let |onBeforeSendHeaders| be a new {{WebRequestEvent}} with the following fields:
 
@@ -495,7 +505,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onBeforeSendHeaders}} to |onBeforeSendHeaders|.
+  1. Set |webRequest|'s [=WebRequest/onBeforeSendHeaders=] to |onBeforeSendHeaders|.
 
   1. Let |onSendHeaders| be a new {{WebRequestEvent}} with the following fields:
 
@@ -505,7 +515,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onSendHeaders}} to |onSendHeaders|.
+  1. Set |webRequest|'s [=WebRequest/onSendHeaders=] to |onSendHeaders|.
 
   1. Let |onHeadersReceived| be a new {{WebRequestEvent}} with the following fields:
 
@@ -515,7 +525,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onHeadersReceived}} to |onHeadersReceived|.
+  1. Set |webRequest|'s [=WebRequest/onHeadersReceived=] to |onHeadersReceived|.
 
   1. Let |onAuthRequired| be a new {{WebRequestEvent}} with the following fields:
 
@@ -525,7 +535,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onAuthRequired}} to |onAuthRequired|.
+  1. Set |webRequest|'s [=WebRequest/onAuthRequired=] to |onAuthRequired|.
 
   1. Let |onBeforeRedirect| be a new {{WebRequestEvent}} with the following fields:
 
@@ -535,7 +545,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onBeforeRedirect}} to |onBeforeRedirect|.
+  1. Set |webRequest|'s [=WebRequest/onBeforeRedirect=] to |onBeforeRedirect|.
 
   1. Let |onResponseStarted| be a new {{WebRequestEvent}} with the following fields:
 
@@ -545,7 +555,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onResponseStarted}} to |onResponseStarted|.
+  1. Set |webRequest|'s [=WebRequest/onResponseStarted=] to |onResponseStarted|.
 
   1. Let |onCompleted| be a new {{WebRequestEvent}} with the following fields:
 
@@ -555,7 +565,7 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onCompleted}} to |onCompleted|.
+  1. Set |webRequest|'s [=WebRequest/onCompleted=] to |onCompleted|.
 
   1. Let |onErrorOccurred| be a new {{WebRequestEvent}} with the following fields:
 
@@ -565,22 +575,21 @@ are [=content script config=]s.
       : [=WebRequestEvent/webRequest=]
       :: |webRequest|
 
-  1. Set |webRequest|'s {{WebRequest/onErrorOccurred}} to |onErrorOccurred|.
+  1. Set |webRequest|'s [=WebRequest/onErrorOccurred=] to |onErrorOccurred|.
 
-  1. Set [=this=]'s {{HTMLControlledFrameElement/request}} to |webRequest|.
+  1. Set [=this=]'s [=controlledframe/request=] to |webRequest|.
 
   1. Let |contextMenus| be a new {{ContextMenus}}.
 
   1. Let |onClicked| be a new {{OnClickedEvent}}.
 
-  1. Set |contextMenus|'s {{ContextMenus/onClicked}} to |onClicked|.
+  1. Set |contextMenus|'s [=ContextMenus/onClicked=] to |onClicked|.
 
   1. Let |onShow| be a new {{OnShowEvent}}.
 
-  1. Set |contextMenus|'s {{ContextMenus/onShow}} to |onShow|.
+  1. Set |contextMenus|'s [=ContextMenus/onShow=] to |onShow|.
 
-  1. Set [=this=]'s {{HTMLControlledFrameElement/contextMenus}} to |contextMenus|.
-
+  1. Set [=this=]'s [=controlledframe/contextMenus=] to |contextMenus|.
 
 </div>
 
@@ -642,6 +651,15 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
           {{HTMLControlledFrameElement/src}}.
 
 </div>
+
+The <dfn attribute for=HTMLControlledFrameElement>contentWindow</dfn> getter
+steps are to return [=this=]'s [=controlledframe/contentWindow=].
+
+The <dfn attribute for=HTMLControlledFrameElement>request</dfn> getter steps
+are to return [=this=]'s [=controlledframe/request=].
+
+The <dfn attribute for=HTMLControlledFrameElement>contextMenus</dfn> getter
+steps are to return [=this=]'s [=controlledframe/contextMenus=].
 
 <!-- ====================================================================== -->
 ## Navigation methods ## {#api-nav}
@@ -749,7 +767,7 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
       1. Let |result| be the result of [=applying the traverse history step=]
           |allSteps|[|targetStepIndex|] to |embeddedNavigable| given a
-          [=user navigation involvement=] of "[=browser UI=]".
+          [=user navigation involvement=] of "[=none=]".
 
       1. If |result| is not equal to "`applied`", then [=resolve an
           embedder promise=] given [=this=], |resultPromise|, and `false`.
@@ -961,7 +979,7 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
       1. Return.
 
-  1. Let |request| be a new [=request=] with the following fields:
+  1. Let |request| be a new [=/request=] with the following fields:
       : [=request/URL=]
       :: The result of running the [=URL parser=] given |urlString| and
           |controlledframe|'s [=node document=]'s [=document base URL=]
@@ -3206,9 +3224,46 @@ interface WebRequest {
 };
 </xmp>
 
-Each {{WebRequest}} has a <dfn for=WebRequest>handler map</dfn>, which is a
-[=/map=] whose [=map/keys=] are [=strings=] and whose [=map/values=] are
-[=lists=] of [=WebRequest handler configs=].
+Each {{WebRequest}} has an associated:
+ * <dfn for=WebRequest>handler map</dfn>, which is a
+    [=/map=] whose [=map/keys=] are [=strings=] and whose [=map/values=] are
+    [=lists=] of [=WebRequest handler configs=].
+ * <dfn for=WebRequest>onBeforeRequest</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onBeforeSendHeaders</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onSendHeaders</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onHeadersReceived</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onAuthRequired</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onBeforeRedirect</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onResponseStarted</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onCompleted</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>onErrorOccurred</dfn>, which is a {{WebRequestEvent}}.
+
+The <dfn attribute for=WebRequest>onBeforeRequest</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onBeforeRequest=].
+
+The <dfn attribute for=WebRequest>onBeforeSendHeaders</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onBeforeSendHeaders=].
+
+The <dfn attribute for=WebRequest>onSendHeaders</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onSendHeaders=].
+
+The <dfn attribute for=WebRequest>onHeadersReceived</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onHeadersReceived=].
+
+The <dfn attribute for=WebRequest>onAuthRequired</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onAuthRequired=].
+
+The <dfn attribute for=WebRequest>onBeforeRedirect</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onBeforeRedirect=].
+
+The <dfn attribute for=WebRequest>onResponseStarted</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onResponseStarted=].
+
+The <dfn attribute for=WebRequest>onCompleted</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onCompleted=].
+
+The <dfn attribute for=WebRequest>onErrorOccurred</dfn> getter steps
+are to return [=this=]'s [=WebRequest/onErrorOccurred=].
 
 Each {{WebRequestEvent}} has:
 
@@ -3422,7 +3477,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process beforeRequest events</dfn> given a [=request=] |request|,
+  To <dfn>process beforeRequest events</dfn> given a [=/request=] |request|,
   run the following steps:
 
   1. Let |configs| and |blocking| be the results of calling
@@ -3523,7 +3578,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process beforeSendHeaders events</dfn> given a [=request=] |request|,
+  To <dfn>process beforeSendHeaders events</dfn> given a [=/request=] |request|,
   run the following steps:
 
   1. Let |configs| and |blocking| be the results of calling
@@ -3587,7 +3642,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process sendHeaders events</dfn> given a [=request=] |request|,
+  To <dfn>process sendHeaders events</dfn> given a [=/request=] |request|,
   run the following steps:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
@@ -3616,7 +3671,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process headersReceived events</dfn> given a [=request=] |request|
+  To <dfn>process headersReceived events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
   1. Let |configs| and |blocking| be the results of calling
@@ -3688,7 +3743,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process authRequired events</dfn> given a [=request=] |request|
+  To <dfn>process authRequired events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
   1. Let |configs| and |blocking| be the results of calling
@@ -3803,7 +3858,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process beforeRedirect events</dfn> given a [=request=] |request|
+  To <dfn>process beforeRedirect events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
@@ -3840,7 +3895,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process responseStarted events</dfn> given a [=request=] |request|
+  To <dfn>process responseStarted events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
@@ -3870,7 +3925,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process completed events</dfn> given a [=request=] |request|
+  To <dfn>process completed events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
@@ -3900,7 +3955,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>process errorOccurred events</dfn> given a [=request=] |request|
+  To <dfn>process errorOccurred events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
   1. Let |configs| be the result of calling [=lookup registered WebRequest
@@ -3934,7 +3989,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>create a {{WebRequestEventDetails}} object</dfn> given a [=request=]
+  To <dfn>create a {{WebRequestEventDetails}} object</dfn> given a [=/request=]
   |request|, run the following steps:
 
   1. Let |environmentSettingsObject| be |request|'s [=request/client=].
@@ -4033,7 +4088,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a {{WebRequestResponseEventDetails}} object</dfn> given a
-  [=request=] |request|, a [=/response=] |response|, a [=boolean=]
+  [=/request=] |request|, a [=/response=] |response|, a [=boolean=]
   |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
   run the following steps:
 
@@ -4060,7 +4115,7 @@ Each {{WebRequestEvent}} has:
 
 <div algorithm>
   To <dfn>create a {{WebRequestResponseWithIpEventDetails}} object</dfn> given a
-  [=request=] |request|, a [=/response=] |response|,
+  [=/request=] |request|, a [=/response=] |response|,
   a [=boolean=] |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
   run the following steps:
 
@@ -4148,7 +4203,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>get a request's {{ResourceType}}</dfn> given a [=request=]
+  To <dfn>get a request's {{ResourceType}}</dfn> given a [=/request=]
   |request|, run the following steps:
 
   1. Return |request|'s [=request/initiator type=].
@@ -4209,7 +4264,7 @@ Each {{WebRequestEvent}} has:
 
   <div algorithm>
     To <dfn>lookup registered WebRequest handler configs</dfn> given a
-    [=string=] |eventName|, and a [=request=] |request|, run the
+    [=string=] |eventName|, and a [=/request=] |request|, run the
     following steps:
 
     1. Let |client| be |request|'s [=request/client=].
@@ -4272,7 +4327,7 @@ Each {{WebRequestEvent}} has:
 
 ### Fetch ### {#api-web-request-monkey-fetch}
 
-A [=request=] has an associated <dfn for=request>requestId</dfn>, which is an
+A [=/request=] has an associated <dfn for=request>requestId</dfn>, which is an
 opaque string, randomly assigned at the request's creation.
 
 The [=main fetch=] algorithm is monkey patched as follows:
@@ -4530,9 +4585,30 @@ interface ContextMenus {
 };
 </xmp>
 
-Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}} member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus> context menu [=/map=] </dfn> whose [=map/keys=] are [=strings=] and whose [=map/values=] are {{ContextMenusProperties}}.
+Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}}
+member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus>
+context menu [=/map=] </dfn> whose [=map/keys=] are [=strings=] and whose
+[=map/values=] are {{ContextMenusProperties}}.
 
-Each [=map/entry=] of the [=context menu map=] has the [=map/value=] |property| which represents a <dfn for=ContextMenus>context menu item</dfn>. A [=context menu item=] will be shown on the <dfn for=ContextMenus>context menu</dfn> if it is opened within the {{HTMLControlledFrameElement}} |controlledframe| and the result of [=determining whether the context menu item will be shown=] given |controlledframe| and |property| is true.
+Each [=map/entry=] of the [=context menu map=] has the [=map/value=] |property|
+which represents a <dfn for=ContextMenus>context menu item</dfn>. A
+[=context menu item=] will be shown on the
+<dfn for=ContextMenus>context menu</dfn> if it is opened within the
+{{HTMLControlledFrameElement}} |controlledframe| and the result of
+[=determining whether the context menu item will be shown=] given
+|controlledframe| and |property| is true.
+
+Each {{ContextMenus}} has an associated <dfn for=ContextMenus>onClicked</dfn>,
+which is a {{OnClickedEvent}}.
+
+Each {{ContextMenus}} has an associated <dfn for=ContextMenus>onShow</dfn>,
+which is a {{OnShowEvent}}.
+
+The <dfn attribute for=ContextMenus>onClicked</dfn> getter steps are to return
+[=this=]'s [=ContextMenus/onClicked=].
+
+The <dfn attribute for=ContextMenus>onShow</dfn> getter steps are to return
+[=this=]'s [=ContextMenus/onShow=].
 
 <div algorithm>
 
@@ -4749,7 +4825,8 @@ Each {{ContextMenusEvent}} has an <dfn for=ContextMenusEvent>event listener list
 
 </div>
 
-{{ContextMenus}} has the attribute {{ContextMenus/onShow}}, which is a {{ContextMenusEvent}} that is associated with [= contextmenu =] [= events =].
+{{ContextMenus}} has the attribute {{ContextMenus/onShow}}, which is a
+{{ContextMenusEvent}} that is associated with [=/contextmenu=] [=events=].
 
 <div algorithm='onshow-event'>
 
@@ -4781,10 +4858,10 @@ To [=dispatch=] an {{ContextMenus/onClicked}} [=event=] |event|, given {{HTMLCon
         :: Whether the |element| selected is editable, such as a text input.
 
         : {{OnClickData/frameId}}
-        :: The [=navigable/frameId=] of the [= navigable container =] from which the [= contextmenu =] [= event =] is dispatched.
+        :: The [=navigable/frameId=] of the [=navigable container=] from which the [=/contextmenu=] [=event=] is dispatched.
 
         : {{OnClickData/frameUrl}}
-        :: The [=Document/URL=] of the [= navigable container =] from which the [= contextmenu =] [= event =] is dispatched.
+        :: The [=Document/URL=] of the [= navigable container =] from which the [=/contextmenu=] [=event=] is dispatched.
 
         : {{OnClickData/menuItemId}}
         :: |id|.
