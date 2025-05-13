@@ -744,10 +744,10 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
   1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
   1. If |embeddedNavigable| is null, then [=resolve an embedder promise=] given
-      [=this=], |resultPromise|, and `false`, and abort these steps.
+      |controlledframe|, |resultPromise|, and `false`, and abort these steps.
 
   1. If |embeddedNavigable|'s [=active document=] is not [=fully active=],
-      then [=resolve an embedder promise=] given [=this=], |resultPromise|,
+      then [=resolve an embedder promise=] given |controlledframe|, |resultPromise|,
       and `false`, and abort these steps.
 
   1. [=Append the following session history traversal steps=] to
@@ -762,7 +762,7 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
       1. Let |targetStepIndex| be |currentStepIndex| + |delta|.
 
       1. If |allSteps|[|targetStepIndex|] does not [=list/exist=], then
-          [=resolve an embedder promise=] given [=this=], |resultPromise|,
+          [=resolve an embedder promise=] given |controlledframe|, |resultPromise|,
           and `false`, and abort these steps.
 
       1. Let |result| be the result of [=applying the traverse history step=]
@@ -770,9 +770,9 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
           [=user navigation involvement=] of "[=none=]".
 
       1. If |result| is not equal to "`applied`", then [=resolve an
-          embedder promise=] given [=this=], |resultPromise|, and `false`.
+          embedder promise=] given |controlledframe|, |resultPromise|, and `false`.
 
-      1. Otherwise, [=resolve an embedder promise=] given [=this=],
+      1. Otherwise, [=resolve an embedder promise=] given |controlledframe|,
           |resultPromise|, and `true`.
 
 </div>
@@ -1260,17 +1260,19 @@ implementation of this isolation that can be implemented by all browsers.
 
   1. Let |result| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |result| and run the remaining steps [=in parallel=].
 
   1. If |scriptNameList| is undefined, then:
 
-      1. [=map/Clear=] [=this=]'s [=content script map=].
+      1. [=map/Clear=] |controlledframe|'s [=content script map=].
 
   1. Otherwise, [=list/for each=] |name| of |scriptNameList|:
 
-      1. [=map/Remove=] [=this=]'s [=content script map=][|name|].
+      1. [=map/Remove=] |controlledframe|'s [=content script map=][|name|].
 
-  1. [=Resolve an embedder promise=] given [=this=] and |result|.
+  1. [=Resolve an embedder promise=] given |controlledframe| and |result|.
 
 </div>
 
@@ -1280,25 +1282,27 @@ implementation of this isolation that can be implemented by all browsers.
 
   1. Let |result| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |result| and run the remaining steps [=in parallel=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
-      promise=] given [=this=], |result|, and a {{TypeError}},
+  1. If |controlledframe|'s [=embedded navigable=] is null, then [=reject an
+      embedder promise=] given |controlledframe|, |result|, and a {{TypeError}},
       and abort these steps.
 
   1. If |details|["{{InjectDetails/code}}"] and
       |details|"[{{InjectDetails/file}}"] are either both defined or both
-      undefined, then [=reject an embedder promise=] given [=this=], |result|,
-      and a {{TypeError}}, and abort these steps.
+      undefined, then [=reject an embedder promise=] given |controlledframe|,
+      |result|, and a {{TypeError}}, and abort these steps.
 
   1. Let |executionSteps| be the following algorithm that takes a {{long}} and
       a [=string=] or [=boolean=] |scriptString|:
 
       1. If |scriptString| is not a [=string=], then [=reject an embedder
-          promise=] given [=this=], |result|, and a {{TypeError}},
+          promise=] given |controlledframe|, |result|, and a {{TypeError}},
           and abort these steps.
 
-      1. Let |document| be [=this=]'s [=embedded navigable=]'s
+      1. Let |document| be |controlledframe|'s [=embedded navigable=]'s
           [=active document=].
 
       1. [=Inject a script into a document=] given |document|, |scriptString|,
@@ -1307,18 +1311,18 @@ implementation of this isolation that can be implemented by all browsers.
 
           1. If |completionRecord| is a [=normal completion=], then:
 
-              1. [=Resolve an embedder promise=] given [=this=], |result|, and
-                  |completionRecord|.`[[Value]]`.
+              1. [=Resolve an embedder promise=] given |controlledframe|,
+                  |result|, and |completionRecord|.`[[Value]]`.
 
           1. Otherwise:
 
-              1. [=Reject an embedder promise=] given [=this=], |result|, and
-                  |completionRecord|.`[[Value]]`.
+              1. [=Reject an embedder promise=] given |controlledframe|,
+                  |result|, and |completionRecord|.`[[Value]]`.
 
   1. If |details|["{{InjectDetails/code}}"] is defined, then run
       |executionSteps| given 0 and |details|["{{InjectDetails/code}}"].
 
-  1. Otherwise, [=fetch an injection item=] given [=this=],
+  1. Otherwise, [=fetch an injection item=] given |controlledframe|,
       |details|["{{InjectDetails/file}}"], `false`, 0, and |executionSteps|.
 
 </div>
@@ -1329,35 +1333,38 @@ implementation of this isolation that can be implemented by all browsers.
 
   1. Let |result| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |result| and run the remaining steps [=in parallel=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
-      promise=] given [=this=], |result|, and a {{TypeError}},
-      and abort these steps.
+  1. If |controlledframe|'s [=embedded navigable=] is null, then
+      [=reject an embedder promise=] given |controlledframe|, |result|, and a
+      {{TypeError}}, and abort these steps.
 
   1. If |details|["{{InjectDetails/code}}"] and
       |details|["{{InjectDetails/file}}"] are either both defined or both
-      undefined, then [=reject an embedder promise=] given [=this=], |result|,
-      and a {{TypeError}}, and abort these steps.
+      undefined, then [=reject an embedder promise=] given |controlledframe|,
+      |result|, and a {{TypeError}}, and abort these steps.
 
   1. Let |executionSteps| be the following algorithm that takes a {{long}}, a
       [=boolean=] |success|, and a {{DOMString}} |styleString|:
 
       1. If |success| is `false`, then [=reject an embedder promise=] given
-          [=this=], |result|, and a {{TypeError}}, and abort these steps.
+          |controlledframe|, |result|, and a {{TypeError}}, and abort these
+          steps.
 
-      1. Let |document| be [=this=]'s [=embedded navigable=]'s
+      1. Let |document| be |controlledframe|'s [=embedded navigable=]'s
           [=active document=].
 
       1. [=Inject a stylesheet into a document=] given |document| and
           |styleString|.
 
-      1. [=Resolve an embedder promise=] given [=this=] and |result|.
+      1. [=Resolve an embedder promise=] given |controlledframe| and |result|.
 
   1. If |details|["{{InjectDetails/code}}"] is defined, then run
       |executionSteps| given 0, `true`, and |details|["{{InjectDetails/code}}"].
 
-  1. Otherwise, [=fetch an injection item=] given [=this=],
+  1. Otherwise, [=fetch an injection item=] given |controlledframe|,
       |details|["{{InjectDetails/file}}"], `false`, 0, and |executionSteps|.
 
 </div>
@@ -1407,6 +1414,8 @@ dictionary ClearDataTypeSet {
 
   1. Let |resultPromise| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
 
   1. Let |clearSince| be 0.
@@ -1414,10 +1423,11 @@ dictionary ClearDataTypeSet {
   1. If |options|["{{ClearDataOptions/since}}"] is set:
       1. Set |clearSince| to |options|["{{ClearDataOptions/since}}"].
 
-  1. Let |embeddingOrigin| be the [=environment/top-level origin=] of [=this=]'s
-      [=relevant settings object=].
+  1. Let |embeddingOrigin| be the [=environment/top-level origin=] of
+      |controlledframe|'s [=relevant settings object=].
 
-  1. Let |partition| be [=this=]'s {{HTMLControlledFrameElement/partition}}.
+  1. Let |partition| be |controlledframe|'s
+      {{HTMLControlledFrameElement/partition}}.
 
   1. [=map/For each=] |storageKey| &rightarrow; |shelf| of the [=user agent=]'s
       [=storage shed=]:
@@ -1483,7 +1493,8 @@ dictionary ClearDataTypeSet {
 
           1. Clear |cache|.
 
-  1. [=Resolve an embedder promise=] given [=this=] and |resultPromise|.
+  1. [=Resolve an embedder promise=] given |controlledframe| and
+      |resultPromise|.
 
 </div>
 
@@ -1502,17 +1513,19 @@ underlying audio streams should not be audible to users.
 
   1. Let |resultPromise| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
-      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
-      and abort these steps.
+  1. If |controlledframe|'s [=embedded navigable=] is null, then [=reject an
+      embedder promise=] given |controlledframe|, |resultPromise|, and a
+      {{TypeError}}, and abort these steps.
 
   1. Let |playingAudio| be `true` if any content, including in nested frames,
-      within [=this=]'s [=embedded navigable=] is currently playing audio,
-      `false` otherwise.
+      within |controlledframe|'s [=embedded navigable=] is currently playing
+      audio, `false` otherwise.
 
-  1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
+  1. [=Resolve an embedder promise=] given |controlledframe|, |resultPromise|,
       and |playingAudio|.
 
 </div>
@@ -1523,15 +1536,17 @@ underlying audio streams should not be audible to users.
 
   1. Let |resultPromise| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
-      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
-      and abort these steps.
+  1. If |controlledframe|'s [=embedded navigable=] is null, then [=reject an
+      embedder promise=] given |controlledframe|, |resultPromise|, and a
+      {{TypeError}}, and abort these steps.
 
-  1. [=Resolve an embedder promise=] given [=this=], |resultPromise|,
-      and [=this=]'s [=embedded navigable=]'s [=embedded navigable/muted=]
-      flag.
+  1. [=Resolve an embedder promise=] given |controlledframe|, |resultPromise|,
+      and |controlledframe|'s [=embedded navigable=]'s
+      [=embedded navigable/muted=] flag.
 
 </div>
 
@@ -1621,10 +1636,12 @@ The <dfn method for=HTMLControlledFrameElement>getZoomMode()</dfn> method steps 
 
 1. Let |p| be [=a new promise=].
 
+1. Let |controlledframe| be [=this=].
+
 1. Return |p| and run the remaining steps [=in parallel=].
 
-1. [=Resolve an embedder promise=] given [=this=], |p|, and [=this=]'s
-    [=HTMLControlledFrameElement/zoomMode=].
+1. [=Resolve an embedder promise=] given |controlledframe|, |p|, and
+    |controlledframe|'s [=HTMLControlledFrameElement/zoomMode=].
 
 </div>
 
@@ -1634,42 +1651,44 @@ The <dfn method for=HTMLControlledFrameElement>setZoomMode(|zoomMode|)</dfn> met
 
 1. Let |p| be [=a new promise=].
 
+1. Let |controlledframe| be [=this=].
+
 1. Return |p| and run the remaining steps [=in parallel=].
 
-1. Let |currentZoomMode| be the result of {{HTMLControlledFrameElement/getZoomMode}} given [=this=].
+1. Let |currentZoomMode| be the result of {{HTMLControlledFrameElement/getZoomMode}} given |controlledframe|.
 
 1. If |currentZoomMode| equals |zoomMode|, [=resolve an embedder promise=]
-    given [=this=] and |p|.
+    given |controlledframe| and |p|.
 
-1. Set [=this=]'s [=HTMLControlledFrameElement/zoomMode=] to |zoomMode|.
+1. Set |controlledframe|'s [=HTMLControlledFrameElement/zoomMode=] to |zoomMode|.
 
 1. If |zoomMode| is {{ZoomMode/per-origin}}:
 
-      1. If [=current document has a per-origin zoom level=] given [=this=] is `true`:
+      1. If [=current document has a per-origin zoom level=] given |controlledframe| is `true`:
 
-            1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+            1. Let |oldZoomFactor| be |controlledframe|'s [=currentZoom=].
 
-            1. Set [=this=]'s [=currentZoom=] to the result of [=get the per-origin zoom level=] given [=this=].
+            1. Set |controlledframe|'s [=currentZoom=] to the result of [=get the per-origin zoom level=] given |controlledframe|.
 
-            1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+            1. If |oldZoomFactor| does not equal to |controlledframe|'s [=currentZoom=]:
 
-                  1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+                  1. [=Apply zoom level=] to |controlledframe|'s embedded document given |controlledframe|'s [=currentZoom=].
 
-                  1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+                  1. [=Fire a "zoomchange" event=] with |controlledframe|, |oldZoomFactor|, |controlledframe|'s [=currentZoom=].
 
 1. If |zoomMode| is {{ZoomMode/disabled}}:
 
-      1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+      1. Let |oldZoomFactor| be |controlledframe|'s [=currentZoom=].
 
-      1. Set [=this=]'s [=currentZoom=] to 1.0f.
+      1. Set |controlledframe|'s [=currentZoom=] to 1.0f.
 
-      1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+      1. If |oldZoomFactor| does not equal to |controlledframe|'s [=currentZoom=]:
 
-            1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+            1. [=Apply zoom level=] to |controlledframe|'s embedded document given |controlledframe|'s [=currentZoom=].
 
-            1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+            1. [=Fire a "zoomchange" event=] with |controlledframe|, |oldZoomFactor|, |controlledframe|'s [=currentZoom=].
 
-1. [=Resolve an embedder promise=] given [=this=] and |p|.
+1. [=Resolve an embedder promise=] given |controlledframe| and |p|.
 
 </div>
 
@@ -1679,15 +1698,17 @@ The <dfn method for=HTMLControlledFrameElement>getZoom()</dfn> method steps are:
 
 1. Let |p| be [=a new promise=].
 
+1. Let |controlledframe| be [=this=].
+
 1. Return |p| and run the remaining steps [=in parallel=].
 
-1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
+1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
 1. If |embeddedNavigable| is null, then [=reject an embedder promise=] given
-    [=this=], |p|, and a {{TypeError}}, and abort these steps.
+    |controlledframe|, |p|, and a {{TypeError}}, and abort these steps.
 
-1. [=Resolve an embedder promise=] given [=this=], |p|, and [=this=]'s
-    [=currentZoom=].
+1. [=Resolve an embedder promise=] given |controlledframe|, |p|, and
+    |controlledframe|'s [=currentZoom=].
 
 </div>
 
@@ -1697,23 +1718,26 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
 
 1. Let |p| be [=a new promise=].
 
+1. Let |controlledframe| be [=this=].
+
 1. Return |p| and run the remaining steps [=in parallel=].
 
-1. Let |embeddedNavigable| be [=this=]'s [=embedded navigable=].
+1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
 1. If |embeddedNavigable| is null, then [=reject an embedder promise=] given
-    [=this=], |p|, and a {{TypeError}}, and abort these steps.
+    |controlledframe|, |p|, and a {{TypeError}}, and abort these steps.
 
-1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/disabled}}:
+1. If |controlledframe|'s [=ZoomMode=] is {{ZoomMode/disabled}}:
 
-      1. [=Reject an embedder promise=] given [=this=], |p|, and a
+      1. [=Reject an embedder promise=] given |controlledframe|, |p|, and a
           {{TypeError}}, and abort these steps.
 
-1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-origin}}:
+1. If |controlledframe|'s [=ZoomMode=] is {{ZoomMode/per-origin}}:
 
-      1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+      1. Let |oldZoomFactor| be |controlledframe|'s [=currentZoom=].
 
-      1. [=Set the per-origin zoom level=] given [=this=] and |zoomFactor|.
+      1. [=Set the per-origin zoom level=] given |controlledframe| and
+          |zoomFactor|.
 
       1. [=set/For each=] [=browsing context group=] |group| in the user agent's
           [=browsing context group set=]:
@@ -1735,11 +1759,11 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
                   * |embedder|'s [=ZoomMode=] is {{ZoomMode/per-origin}}
 
                   * |embedder|'s {{HTMLControlledFrameElement/partition}} equals
-                      [=this=]'s {{HTMLControlledFrameElement/partition}}
+                      |controlledframe|'s {{HTMLControlledFrameElement/partition}}
 
-                  * |embeddedDocument|'s [=document/origin=] equals [=this=]'s
-                      [=embedded navigable=]'s [=active document=]'s
-                      [=document/origin=]
+                  * |embeddedDocument|'s [=document/origin=] equals
+                      |controlledframe|'s [=embedded navigable=]'s
+                      [=active document=]'s [=document/origin=]
 
                   * |embedder|'s [=currentZoom=] does not equal |zoomFactor|
 
@@ -1753,19 +1777,22 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
                     1. [=Fire a "zoomchange" event=] with |embedder|,
                         |oldZoomFactor|, and |zoomFactor|.
 
-1. If [=this=]'s [=ZoomMode=] is {{ZoomMode/per-view}}:
+1. If |controlledframe|'s [=ZoomMode=] is {{ZoomMode/per-view}}:
 
-      1. Let |oldZoomFactor| be [=this=]'s [=currentZoom=].
+      1. Let |oldZoomFactor| be |controlledframe|'s [=currentZoom=].
 
-      1. Set [=this=]'s [=currentZoom=] to |zoomFactor|.
+      1. Set |controlledframe|'s [=currentZoom=] to |zoomFactor|.
 
-      1. If |oldZoomFactor| does not equal to [=this=]'s [=currentZoom=]:
+      1. If |oldZoomFactor| does not equal to |controlledframe|'s
+          [=currentZoom=]:
 
-            1. [=Apply zoom level=] to [=this=]'s embedded document given [=this=]'s [=currentZoom=].
+            1. [=Apply zoom level=] to |controlledframe|'s embedded document
+                given |controlledframe|'s [=currentZoom=].
 
-            1. [=Fire a "zoomchange" event=] with [=this=], |oldZoomFactor|, [=this=]'s [=currentZoom=].
+            1. [=Fire a "zoomchange" event=] with |controlledframe|,
+                |oldZoomFactor|, |controlledframe|'s [=currentZoom=].
 
-1. [=Resolve an embedder promise=] given [=this=] and |p|.
+1. [=Resolve an embedder promise=] given |controlledframe| and |p|.
 
 </div>
 
@@ -1787,11 +1814,13 @@ dictionary ImageDetails {
 
   1. Let |resultPromise| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |resultPromise| and run the remaining steps [=in parallel=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, then [=reject an embedder
-      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
-      and abort these steps.
+  1. If |controlledframe|'s [=embedded navigable=] is null, then [=reject an
+      embedder promise=] given |controlledframe|, |resultPromise|, and a
+      {{TypeError}}, and abort these steps.
 
   1. Let |optionsFormat| be "JPEG" by default.
 
@@ -1802,7 +1831,7 @@ dictionary ImageDetails {
       1. Let |optionsFormat| be |options|["format"].
 
   1. If |optionsFormat| is an unrecognized format, then [=reject an embedder
-      promise=] given [=this=], |resultPromise|, and a {{TypeError}},
+      promise=] given |controlledframe|, |resultPromise|, and a {{TypeError}},
       and abort these steps.
 
   1. If |options| has field "quality":
@@ -1810,7 +1839,7 @@ dictionary ImageDetails {
       1. Let |optionsQuality| be |options|["quality"].
 
   1. If |optionsQuality| is not an integer or is not between 0 and 100
-     inclusive, then [=reject an embedder promise=] given [=this=],
+     inclusive, then [=reject an embedder promise=] given |controlledframe|,
      |resultPromise|, and a {{TypeError}}, and abort these steps.
 
   1. Let |imageData| be a an image showing the visible region of the embedded
@@ -1819,8 +1848,8 @@ dictionary ImageDetails {
     Note: The set of supported image formats is implementation-defined, but it
     is recommended to support at least "JPEG" and "PNG".
 
-  1. [=Resolve an embedder promise=] given [=this=], |resultPromise|, and
-      a `data:` [=/URL=] that contains |imageData|.
+  1. [=Resolve an embedder promise=] given |controlledframe|, |resultPromise|,
+      and a `data:` [=/URL=] that contains |imageData|.
 
 </div>
 
@@ -3463,9 +3492,11 @@ Each {{WebRequestEvent}} has:
   The <dfn method for=WebRequest>handlerBehaviorChanged(|callback|)</dfn>
   method steps are:
 
+  1. Let |controlledframe| be [=this=].
+
   1. [=In parallel=], clear the HTTP cache associated with the partition
-      used by [=environments=] embedded within [=this=]
-      HTMLControlledFrameElement.
+      used by [=environments=] embedded within the |controlledframe|
+      {{HTMLControlledFrameElement}}.
 
       Note: The behavior of event handlers registered through the WebRequest
       API will be reflected in the HTTP cache, which will no longer be valid if
@@ -4617,17 +4648,21 @@ The <dfn attribute for=ContextMenus>onShow</dfn> getter steps are to return
 
   1. Let |p| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |p| and run the following steps [=in parallel=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be |controlledframe|'s [=ContextMenus/context menu
+      map=].
 
   1. Let |id| be the |properties|["{{OnClickData/menuItemId}}"].
 
-  1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |p| with a {{TypeError}} and abort these steps.
+  1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |p| with a
+      {{TypeError}} and abort these steps.
 
   1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
 
-  1. [=Resolve an embedder promise=] given [=this=] and |p|.
+  1. [=Resolve an embedder promise=] given |controlledframe| and |p|.
 
 </div>
 
@@ -4637,13 +4672,16 @@ The <dfn attribute for=ContextMenus>onShow</dfn> getter steps are to return
 
   1. Let |p| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |p| and run the following steps [=in parallel=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be |controlledframe|'s [=ContextMenus/context menu
+      map=].
 
   1. [=map/Remove=] |contextMenusMap|[|id|].
 
-  1. [=Resolve an embedder promise=] given [=this=] and |p|.
+  1. [=Resolve an embedder promise=] given |controlledframe| and |p|.
 
 </div>
 
@@ -4653,13 +4691,16 @@ The <dfn attribute for=ContextMenus>onShow</dfn> getter steps are to return
 
   1. Let |p| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |p| and run the following steps [=in parallel=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be |controlledframe|'s [=ContextMenus/context menu
+      map=].
 
   1. [=map/Clear=] |contextMenusMap|.
 
-  1. [=Resolve an embedder promise=] given [=this=] and |p|.
+  1. [=Resolve an embedder promise=] given |controlledframe| and |p|.
 
 </div>
 
@@ -4669,19 +4710,26 @@ The <dfn attribute for=ContextMenus>onShow</dfn> getter steps are to return
 
   1. Let |p| be [=a new promise=].
 
+  1. Let |controlledframe| be [=this=].
+
   1. Return |p| and run the following steps [=in parallel=].
 
-  1. Let |contextMenusMap| be [=this=]'s [=ContextMenus/context menu map=].
+  1. Let |contextMenusMap| be |controlledframe|'s [=ContextMenus/context menu
+      map=].
 
-  1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |p| with a {{TypeError}} and abort these steps.
+  1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |p| with a
+      {{TypeError}} and abort these steps.
 
   1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
 
-  1. [=Resolve an embedder promise=] given [=this=] and |p|.
+  1. [=Resolve an embedder promise=] given |controlledframe| and |p|.
 
 </div>
 
-The [=map/values=] of the [=context menu map=], which are {{ContextMenusProperties}} objects, control the conditions under which the [=context menu items=] are displayed, as well as the features and behaviors of the items.
+The [=map/values=] of the [=context menu map=], which are
+    {{ContextMenusProperties}} objects, control the conditions under which the
+    [=context menu items=] are displayed, as well as the features and behaviors
+    of the items.
 
 <div class='note'>
 
