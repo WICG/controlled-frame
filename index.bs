@@ -882,12 +882,12 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 // One of |code| or |file| must be specified but not both.
 dictionary InjectDetails {
   DOMString code;
-  DOMString file;
+  USVString file;
 };
 
 dictionary InjectionItems {
   DOMString code;
-  sequence<DOMString> files;
+  sequence<USVString> files;
 };
 
 enum RunAt {
@@ -951,7 +951,7 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
 <div algorithm>
   To <dfn>fetch an injection item</dfn> given a <{controlledframe}>
-  |controlledframe|, a {{DOMString}} |urlString|, a [=boolean=] |isCss|, a
+  |controlledframe|, a {{USVString}} |urlString|, a [=boolean=] |isCss|, a
   {{long}} |index|, and an algorithm |completionSteps| that takes a {{long}},
   a {{boolean}}, and a {{DOMString}}, run the following steps:
 
