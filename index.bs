@@ -1426,8 +1426,8 @@ dictionary ClearDataTypeSet {
 
   1. Let |clearSince| be 0.
 
-  1. If |options|["{{ClearDataOptions/since}}"] is set:
-      1. Set |clearSince| to |options|["{{ClearDataOptions/since}}"].
+  1. If |options|["{{ClearDataOptions/since}}"] is defined, set |clearSince| to
+      options|["{{ClearDataOptions/since}}"].
 
   1. Let |embeddingOrigin| be the [=environment/top-level origin=] of
       |controlledframe|'s [=relevant settings object=].
