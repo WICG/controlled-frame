@@ -171,6 +171,8 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: alert; url:dom-alert
             text: confirm; url:dom-confirm
             text: prompt; url:dom-prompt
+        urlPrefix: urls-and-fetching.html
+            text: matches about:blank; url:matches-about:blank
         urlPrefix: webappapis.html
             text: create a classic script; url: creating-a-classic-script
             text: default script fetch options; url: default-script-fetch-options
@@ -1109,10 +1111,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. If |isTopLevel| is `false`, and |config|'s
       [=content script config/allFrames=] is `false`, then return `false`.
 
-  1. If the result of <a lt="urlencoded serializer">serializing</a> |url| with
-      [=URL serializer/exclude fragment=] equal to `true` is equal to
-      "about:blank", and |config|'s [=content script config/matchAboutBlank=]
-      is `false`, then return `false`.
+  1. If |url| [=matches about:blank=] and |config|'s
+      [=content script config/matchAboutBlank=] is `false`, then return `false`.
 
   1. Let |urlString| be the result of <a lt="urlencoded serializer">
       serializing</a> |url|.
