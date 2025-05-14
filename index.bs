@@ -200,6 +200,11 @@ spec: storage; urlPrefix: https://storage.spec.whatwg.org
         text: storage shed; url: storage-shed
         text: storage shelf; url: storage-shelf
 
+spec: url; urlPrefix: https://url.spec.whatwg.org/
+    type: dfn
+        urlPrefix: /
+            text: serialize an URL; url: concept-url-serializer
+
 spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
     type: dfn
         text: Web IDL Standard; url: introduction
@@ -2714,16 +2719,16 @@ dictionary LoadRedirectEventInit: EventInit {
 <div algorithm=dispatch-loadredirect>
 
 To <dfn data-lt='fire a "loadredirect" event'>fire a {{LoadRedirectEvent}}</dfn>
-|e| given <{controlledframe}> element |target|, a USVString |oldUrl|, a
-USVString |newUrl|, and a boolean |isTopLevel|, run the following steps:
+|e| given <{controlledframe}> element |target|, an [=/URL=] |oldUrl|, an
+[=/URL=] |newUrl|, and a boolean |isTopLevel|, run the following steps:
 
 1. Let |info| be a [=new=] {{LoadInfo}} with the following attributes:
 
       : {{LoadRedirectInfo/oldUrl}}
-      :: |oldUrl|
+      :: The result of [=serializing an URL=] given |oldUrl|
 
       : {{LoadRedirectInfo/newUrl}}
-      :: |newUrl|
+      :: The result of [=serializing an URL=] given |newUrl|
 
       : {{LoadRedirectInfo/isTopLevel}}
       :: |isTopLevel|
