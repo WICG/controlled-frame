@@ -632,6 +632,21 @@ Each <{controlledframe}> has an associated
 
 </div>
 
+A <dfn>match pattern</dfn> is a {{USVString}} that represents a group of URLs.
+It follows the structure of a [=/URL=] with wildcards (`"*"`) in supported
+locations.
+
+<div algorithm>
+  A {{USVString}} <var ignore>url</var> <dfn>matches a [=match pattern=]</dfn>
+  <var ignore>pattern</var> if the following steps return `true`:
+
+  Issue: Match patterns should have a formal specification.
+  <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">
+  Documentation</a> exists on MDN, and all browsers that support Web Extensions
+  will already have a Match Pattern implementation that can be reused here.
+
+</div>
+
 <!-- ====================================================================== -->
 ## Attributes ## {#attributes}
 <!-- ====================================================================== -->
@@ -946,24 +961,24 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   :: a {{long}} representing the number of pending script/style fetches.
 
   : <dfn>js</dfn>
-  :: a [=list=] of [=string=]s containing JavaScript that will be injected into
-      a document.
+  :: a [=list=] of {{DOMString}}s containing JavaScript that will be injected
+      into a document.
 
   : <dfn>css</dfn>
-  :: a [=list=] of [=string=]s containing CSS that will be injected into a
+  :: a [=list=] of {{DOMString}}s containing CSS that will be injected into a
       document.
 
   : <dfn>matches</dfn>
-  :: a [=list=] of [=string=]s containing patterns.
+  :: a [=list=] of {{USVString}}s containing [=match patterns=].
 
       Note: Content may be injected into a page if any of the patterns
-      [=match a URL pattern=] given the [=Document/URL=] of the page.
+      [=matches a match pattern=] given the [=Document/URL=] of the page.
 
   : <dfn>excludeMatches</dfn>
-  :: a [=list=] of [=string=]s containing patterns.
+  :: a [=list=] of {{USVString}}s containing [=match patterns=].
 
       Note: Content will not be injected into a page if any patterns
-      [=match a URL pattern=] given the [=Document/URL=] of the page. This
+      [=matches a match pattern=] given the [=Document/URL=] of the page. This
       overrides [=content script config/matches=]; if both lists have entries
       that matches a page's [=Document/URL=], the content will not be injected
       into the page.
@@ -1134,13 +1149,13 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. [=list/For each=] |pattern| of |config|'s
       [=content script config/matches=]:
 
-      1. If |urlString| [=matches a URL pattern=] |pattern|, then set
+      1. If |urlString| [=matches a match pattern=] |pattern|, then set
           |match| to `true`.
 
   1. [=list/For each=] |pattern| of |config|'s
       [=content script config/excludeMatches=]:
 
-      1. If |urlString| [=matches a URL pattern=] |pattern|, then set
+      1. If |urlString| [=matches a match pattern=] |pattern|, then set
           |match| to `false`.
 
   1. Return |match|.
@@ -1189,7 +1204,7 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
 <div algorithm>
   To <dfn>inject a stylesheet into a document</dfn> given a {{Document}}
-  |document| and a [=string=] |styleSource|, run the following steps:
+  |document| and a {{DOMString}} |styleSource|, run the following steps:
 
   1. Let |styleSheet| be a new [=CSS style sheet=] object.
 
@@ -1221,7 +1236,7 @@ implementation of this isolation that can be implemented by all browsers.
 
 <div algorithm>
   To <dfn>inject a script into a document</dfn> given a {{Document}} |document|,
-  a [=string=] |scriptSource|, and an algorithm |completionSteps| that takes
+  a {{DOMString}} |scriptSource|, and an algorithm |completionSteps| that takes
   a [=completion record=], run the following steps:
 
   1. Let |script| be the result of [=creating a classic script=] given
@@ -1305,9 +1320,9 @@ implementation of this isolation that can be implemented by all browsers.
       |result|, and a {{TypeError}}, and abort these steps.
 
   1. Let |executionSteps| be the following algorithm that takes a {{long}} and
-      a [=string=] or [=boolean=] |scriptString|:
+      a {{DOMString}} or [=boolean=] |scriptString|:
 
-      1. If |scriptString| is not a [=string=], then [=reject an embedder
+      1. If |scriptString| is not a {{DOMString}}, then [=reject an embedder
           promise=] given |controlledframe|, |result|, and a {{TypeError}},
           and abort these steps.
 
@@ -3014,7 +3029,7 @@ Storage keys are re-defined as follows:
 
 A <dfn>storage key</dfn> is a [=tuple=] consisting of an
 <dfn for="storage key">embedding origin</dfn> (an [=/origin=] or null), a
-<dfn for="storage key">partition</dfn> (a [=string=] or null), and an
+<dfn for="storage key">partition</dfn> (a {{DOMString}} or null), and an
 <dfn for="storage key">origin</dfn> (an [=/origin=]).
 
 Note: This definition will need to be expanded to include the embedded content's
@@ -3311,7 +3326,7 @@ are to return [=this=]'s [=WebRequest/onErrorOccurred=].
 
 Each {{WebRequestEvent}} has:
 
- * An <dfn for=WebRequestEvent>eventName</dfn>, a [=string=].
+ * An <dfn for=WebRequestEvent>eventName</dfn>, a {{DOMString}}.
  * A <dfn for=WebRequestEvent>webRequest</dfn>, a {{WebRequest}} instance that
     it is a member of.
 
@@ -4060,7 +4075,7 @@ Each {{WebRequestEvent}} has:
       :: The [=serialization of an origin=] given |request|'s [=request/origin=].
 
          Note: An opaque origin will result in {{WebRequestEventDetails/initiator}}
-         being set to the [=string=] "null".
+         being set to the {{DOMString}} "null".
 
       : {{WebRequestEventDetails/type}}
       :: The result of calling [=get a request's ResourceType=] given |request|.
@@ -4233,10 +4248,10 @@ Each {{WebRequestEvent}} has:
 
       1. If any of the following conditions are `true`, [=throw=] a {{TypeError}}:
 
-          * |header|["name"] is not a [=string=].
+          * |header|["name"] is not a {{DOMString}}.
 
-          * |header|["value"] is not a [=string=] or |header|["binaryValue"] is
-              not an [=list=] of {{Number}}s.
+          * |header|["value"] is not a {{DOMString}} or |header|["binaryValue"]
+              is not an [=list=] of {{Number}}s.
 
       1. Let |value| be |header|["value"] if it exists, or the [=isomorphic
           decoding=] of |header|["binaryValue"] otherwise.
@@ -4260,7 +4275,7 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>create a redirect response</dfn> given a [=string=] |redirectUrl|,
+  To <dfn>create a redirect response</dfn> given a {{DOMString}} |redirectUrl|,
   return a [=/response=] with the following fields:
 
   : [=response/status=]
@@ -4300,17 +4315,8 @@ Each {{WebRequestEvent}} has:
   </dl>
 
   <div algorithm>
-    A [=string=] |url| <dfn>matches a URL pattern</dfn> [=string=] |url pattern|
-    if the following steps return `true`:
-
-    1. |url| |url pattern| <span class=XXX>TODO: Spec this, ideally referring to
-        a not-yet-defined <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">
-        Match pattern</a> spec.</span>
-  </div>
-
-  <div algorithm>
     To <dfn>lookup registered WebRequest handler configs</dfn> given a
-    [=string=] |eventName|, and a [=/request=] |request|, run the
+    {{DOMString}} |eventName|, and a [=/request=] |request|, run the
     following steps:
 
     1. Let |client| be |request|'s [=request/client=].
@@ -4354,7 +4360,7 @@ Each {{WebRequestEvent}} has:
 
         1. For each |urlPattern| in |urls|:
 
-            1. If |request|'s [=request/URL=] [=matches a URL pattern=] given
+            1. If |request|'s [=request/URL=] [=matches a match pattern=] given
                 |urlPattern|, set |isValidUrl| to `true`.
 
         1. If |isValidUrl| is `false`, then [=iteration/continue=].
@@ -4391,8 +4397,8 @@ The [=main fetch=] algorithm is monkey patched as follows:
           then set |response| to a [=network error=].</ins>
 
       1. <ins>Otherwise, if |webRequestResult|
-          ["{{BlockingResponse/redirectUrl}}"] is not an empty [=string=], then
-          set |response| to the result of [=creating a redirect response=]
+          ["{{BlockingResponse/redirectUrl}}"] is not an empty {{DOMString}},
+          then set |response| to the result of [=creating a redirect response=]
           given |webRequestResult|["{{BlockingResponse/redirectUrl}}"].</ins>
 
 
@@ -4463,9 +4469,10 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkey patched as follows:
               then set |response| to a [=network error=].</ins>
 
           1. <ins>Otherwise, if |webRequestResult|
-              ["{{BlockingResponse/redirectUrl}}"] is not an empty [=string=], then
-              set |forwardResponse| to the result of [=creating a redirect response=]
-              given |webRequestResult|["{{BlockingResponse/redirectUrl}}"].</ins>
+              ["{{BlockingResponse/redirectUrl}}"] is not an empty
+              {{DOMString}}, then set |forwardResponse| to the result of
+              [=creating a redirect response=] given
+              |webRequestResult|["{{BlockingResponse/redirectUrl}}"].</ins>
 
           1. <ins>Otherwise, if |webRequestResult|
               ["{{BlockingResponse/responseHeaders}}"] is a non-empty [=list=], then
@@ -4752,13 +4759,25 @@ The [=map/values=] of the [=context menu map=], which are
     {{ContextMenusProperties}} has the following fields:
 
     : {{ContextMenusProperties/contexts}}
-    :: A [=list=] of different {{ContextType}}. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the element that was clicked on to open the [=ContextMenus/context menu=] equals one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
+    :: A [=list=] of different {{ContextType}}. If it is not [=list/empty=],
+        then the [=context menu item=] will not be shown unless the element that
+        was clicked on to open the [=ContextMenus/context menu=] equals one of
+        the [=list=] [=list/items=]. If it is [=list/empty=], then this check
+        is ignored.
 
     : {{ContextMenusProperties/documentUrlPatterns}}
-    :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the embedded document [=matches a URL pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
+    :: A [=list=] of strings that are [=match patterns=]. If it is not
+        [=list/empty=], then the [=context menu item=] will not be shown unless
+        the [=/URL=] of the embedded document [=matches a match pattern=] with
+        one of the [=list=] [=list/items=]. If it is [=list/empty=], then this
+        check is ignored.
 
     : {{ContextMenusProperties/targetUrlPatterns}}
-    :: A [=list=] of strings that are [=match patterns=]. If it is not [=list/empty=], then the [=context menu item=] will not be shown unless the [=/URL=] of the target of the [=ContextMenus/context menu=] [=matches a URL pattern=] with one of the [=list=] [=list/items=]. If it is [=list/empty=], then this check is ignored.
+    :: A [=list=] of strings that are [=match patterns=]. If it is not
+        [=list/empty=], then the [=context menu item=] will not be shown unless
+        the [=/URL=] of the target of the [=ContextMenus/context menu=]
+        [=matches a match pattern=] with one of the [=list=] [=list/items=]. If
+        it is [=list/empty=], then this check is ignored.
 
     Note: Target is the "src" attribute of img/audio/video tags and the "href" of anchor tags.
 
@@ -4816,7 +4835,7 @@ The [=map/values=] of the [=context menu map=], which are
 
       1. For each |urlPattern| in |properties|["{{ContextMenusProperties/documentUrlPatterns}}"]:
 
-          1. If |documentUrl| [=matches a URL pattern=], given |urlPattern|, set |matchesDocumentUrl| to `true` and break;
+          1. If |documentUrl| [=matches a match pattern=], given |urlPattern|, set |matchesDocumentUrl| to `true` and break;
 
       1. If |matchesDocumentUrl| is `false`, return `false`.
 
@@ -4826,7 +4845,7 @@ The [=map/values=] of the [=context menu map=], which are
 
       1. For each |urlPattern| in |properties|["{{ContextMenusProperties/targetUrlPatterns}}"]:
 
-          1. If |targetUrl| [=matches a URL pattern=], given |urlPattern|, set |matchesTargetUrl| to `true` and break;
+          1. If |targetUrl| [=matches a match pattern=], given |urlPattern|, set |matchesTargetUrl| to `true` and break;
 
       1. If |matchesTargetUrl| is `false`, return `false`.
 
