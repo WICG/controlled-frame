@@ -1167,19 +1167,16 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
           [=content script config/css=] is not [=list/empty=], then:
 
           1. [=list/For each=] |styleSource| of |config|'s
-              [=content script config/css=]:
-
-              1. Run [=inject a stylesheet into a document=] given |document|
-                  and |styleSource|.
+              [=content script config/css=], run [=inject a stylesheet into a
+              document=] given |document| and |styleSource|.
 
       1. Otherwise, if |currentPhase| equals |config|'s
           [=content script config/runAt=], then:
 
           1. [=list/For each=] |scriptSource| of |config|'s
-              [=content script config/js=]:
-
-              1. Run [=inject a script into a document=] given |document|,
-                  |scriptSource|, and an empty algorithm.
+              [=content script config/js=], run [=inject a script into a
+              document=] given |document|, |scriptSource|, and an empty
+              algorithm.
 
 </div>
 
