@@ -1264,7 +1264,7 @@ implementation of this isolation that can be implemented by all browsers.
 
   1. Return |result| and run the remaining steps [=in parallel=].
 
-  1. If |scriptNameList| is undefined, then:
+  1. If |scriptNameList| is null, then:
 
       1. [=map/Clear=] |controlledframe|'s [=content script map=].
 
