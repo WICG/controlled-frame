@@ -954,16 +954,19 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       document.
 
   : <dfn>matches</dfn>
-  :: a [=list=] of [=string=]s containing patterns. Content may be injected
-      into the page if any of the [=list/items=] [=matches a URL pattern=] given
-      the [=Document/URL=] of the page.
+  :: a [=list=] of [=string=]s containing patterns.
+
+      Note: Content may be injected into a page if any of the patterns
+      [=match a URL pattern=] given the [=Document/URL=] of the page.
 
   : <dfn>excludeMatches</dfn>
-  :: a [=list=] of [=string=]s containing patterns. Content will not be injected
-      into the page if any of the [=list/items=] [=matches a URL pattern=] given
-      the [=Document/URL=] of the page. This overrides [=content script config/matches=];
-      if both lists have entries that matches a page's [=Document/URL=], the
-      content will not be injected into the page.
+  :: a [=list=] of [=string=]s containing patterns.
+
+      Note: Content will not be injected into a page if any patterns
+      [=match a URL pattern=] given the [=Document/URL=] of the page. This
+      overrides [=content script config/matches=]; if both lists have entries
+      that matches a page's [=Document/URL=], the content will not be injected
+      into the page.
 
   : <dfn>allFrames</dfn>
   :: a [=boolean=] indicating whether content should be injected into all
@@ -1584,20 +1587,28 @@ enum ZoomMode {
 
 The user agent holds a <dfn>Controlled Frame zoom map</dfn> which is a [=/map=] whose [=map/keys=] are [=tuples=], and [=map/values=] are [=floats=].
 
-Each {{HTMLControlledFrameElement}} holds a {{ZoomMode}} <dfn for=HTMLControlledFrameElement>zoomMode</dfn>, which is defaulted to {{ZoomMode/per-origin}}, but can have the following values:
-
-      : {{ZoomMode/per-origin}}
-      :: Zoom changes will persist in the embedded document's [=Document/origin=], i.e. all other {{HTMLControlledFrameElement}} in the same {{HTMLControlledFrameElement/partition}} that are navigated to that same [=/origin=] will be zoomed as well.
-
-      : {{ZoomMode/per-view}}
-      :: Zoom changes only take effect in this {{HTMLControlledFrameElement}}, and zoom changes in other {{HTMLControlledFrameElement}} will not affect the zooming of this {{HTMLControlledFrameElement}}.
-
-      : {{ZoomMode/disabled}}
-      :: Disables all zooming in the {{HTMLControlledFrameElement}}. The content will revert to the default zoom level, and all attempted zoom changes will be ignored.
+Each {{HTMLControlledFrameElement}} holds a {{ZoomMode}} <dfn for=HTMLControlledFrameElement>zoomMode</dfn>, which is defaulted to {{ZoomMode/per-origin}}.
 
 Each {{HTMLControlledFrameElement}} holds a float number <dfn>currentZoom</dfn>, initially set to 1.0f.
 
 How <dfn data-lt='apply zoom level'>zoom level is applied</dfn> to a [=/document=] given [=float=] <var ignore=''>zoomLevel</var> is specific to the implementation.
+
+<div class='note'>
+
+  <em>This section is non-normative.</em>
+
+  The valid {{ZoomMode}} values behave as follows:
+
+  : {{ZoomMode/per-origin}}
+  :: Zoom changes will persist in the embedded document's [=Document/origin=], i.e. all other {{HTMLControlledFrameElement}} in the same {{HTMLControlledFrameElement/partition}} that are navigated to that same [=/origin=] will be zoomed as well.
+
+  : {{ZoomMode/per-view}}
+  :: Zoom changes only take effect in this {{HTMLControlledFrameElement}}, and zoom changes in other {{HTMLControlledFrameElement}} will not affect the zooming of this {{HTMLControlledFrameElement}}.
+
+  : {{ZoomMode/disabled}}
+  :: Disables all zooming in the {{HTMLControlledFrameElement}}. The content will revert to the default zoom level, and all attempted zoom changes will be ignored.
+
+</div>
 
 <div algorithm>
 
