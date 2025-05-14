@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="ea026ec1a92733f196d61ce06666a0de6fb74080" name="revision">
+  <meta content="f5676dd1a2b1b6602647cb5f0c5d3d219187d8a2" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -1958,11 +1958,8 @@ implementation of this isolation that can be implemented by all browsers.</stron
      <li data-md>
       <p>Let <var>clearSince</var> be 0.</p>
      <li data-md>
-      <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardataoptions-since" id="ref-for-dom-cleardataoptions-since">since</a></code>"] is set:</p>
-      <ol>
-       <li data-md>
-        <p>Set <var>clearSince</var> to <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardataoptions-since" id="ref-for-dom-cleardataoptions-since①">since</a></code>"].</p>
-      </ol>
+      <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-cleardataoptions-since" id="ref-for-dom-cleardataoptions-since">since</a></code>"] is defined, set <var>clearSince</var> to
+  options|["<code class="idl"><a data-link-type="idl" href="#dom-cleardataoptions-since" id="ref-for-dom-cleardataoptions-since①">since</a></code>"].</p>
      <li data-md>
       <p>Let <var>embeddingOrigin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin">top-level origin</a> of <var>controlledframe</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object②">relevant settings object</a>.</p>
      <li data-md>
