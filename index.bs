@@ -594,6 +594,38 @@ Each <{controlledframe}> has an associated
 </div>
 
 <!-- ====================================================================== -->
+## Common infrastructure ## {#common-infrastructure}
+<!-- ====================================================================== -->
+
+<div algorithm>
+  To <dfn>resolve an embedder promise</dfn> given a <{controlledframe}>
+  |controlledframe|, a [=promise=] |promise|, and an optional |value|,
+  run the following steps:
+
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+      |controlledframe|'s [=relevant global object=] to [=resolve=] |promise|
+      with |value|.
+
+      Note: The [=relevant global object=] of |controlledframe| is the
+          **embedder's** {{Window}} object.
+
+</div>
+
+<div algorithm>
+  To <dfn>reject an embedder promise</dfn> given a <{controlledframe}>
+  |controlledframe|, a [=promise=] |promise|, and an optional |value|,
+  run the following steps:
+
+  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
+      |controlledframe|'s [=relevant global object=] to [=reject=] |promise|
+      with |value|.
+
+      Note: The [=relevant global object=] of |controlledframe| is the
+          **embedder's** {{Window}} object.
+
+</div>
+
+<!-- ====================================================================== -->
 ## Attributes ## {#attributes}
 <!-- ====================================================================== -->
 
@@ -862,34 +894,6 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
   1. [=Queue a global task=] on the [=navigation and traversal task source=] of
       |embeddedNavigable|'s [=node document=]'s [=relevant global object=] that
       will [=stop loading=] |embeddedNavigable|.
-
-</div>
-
-<div algorithm>
-  To <dfn>resolve an embedder promise</dfn> given a <{controlledframe}>
-  |controlledframe|, a [=promise=] |promise|, and an optional |value|,
-  run the following steps:
-
-  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-      |controlledframe|'s [=relevant global object=] to [=resolve=] |promise|
-      with |value|.
-
-      Note: The [=relevant global object=] of |controlledframe| is the
-          **embedder's** {{Window}} object.
-
-</div>
-
-<div algorithm>
-  To <dfn>reject an embedder promise</dfn> given a <{controlledframe}>
-  |controlledframe|, a [=promise=] |promise|, and an optional |value|,
-  run the following steps:
-
-  1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-      |controlledframe|'s [=relevant global object=] to [=reject=] |promise|
-      with |value|.
-
-      Note: The [=relevant global object=] of |controlledframe| is the
-          **embedder's** {{Window}} object.
 
 </div>
 
