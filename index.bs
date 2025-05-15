@@ -303,8 +303,8 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd>[=Nothing=].</dd>
  <dt>[=Content attributes=]:</dt>
  <dd>[=Global attributes=]</dd>
- <dd><code>{{src}}</code> — Content source URL to embed</dd>
- <dd><code>{{partition}}</code> — Partition name to hold data related to this content</dd>
+ <dd><{HTMLControlledFrameElement/src}> — Content source URL to embed</dd>
+ <dd><{HTMLControlledFrameElement/partition}> — Partition name to hold data related to this content</dd>
  <dt>[=Accessibility considerations=]:</dt>
  <dd><a href="https://w3c.github.io/html-aria/#el-iframe">For authors</a>.</dd>
  <dd><a href="https://w3c.github.io/html-aam/#el-iframe">For implementers</a>.</dd>
@@ -359,7 +359,7 @@ interface HTMLControlledFrameElement : HTMLElement {
     Promise<undefined> captureVisibleRegion(optional ImageDetails options = {});
     undefined print();
 
-    // Events:
+    // Events.
     attribute EventHandler onconsolemessage;
     attribute EventHandler oncontentload;
     attribute EventHandler ondialog;
@@ -384,31 +384,37 @@ The Controlled Frame element is exposed to any {{Document}} with the
 "`controlled-frame`" [=policy-controlled feature=] whose
 [=environment settings object=] is an [=isolated context=].
 
-The IDL attributes {{HTMLControlledFrameElement/src}} and
-{{HTMLControlledFrameElement/partition}} must [=reflect=] the respective content
-attributes of the same name.
+The IDL attributes <dfn attribute for=HTMLControlledFrameElement>`src`</dfn> and
+<dfn attribute for=HTMLControlledFrameElement>partition</dfn> must [=reflect=]
+the respective content attributes of the same name.
 
-Each <{controlledframe}> has an <dfn for=controlledframe>embedded navigable</dfn>,
-which is either a [=traversable navigable=] with a non-null [=embedderParent=],
-or null. It is initially null.
+Each <{controlledframe}> has an associated:
+ * <dfn for=controlledframe>embedded navigable</dfn>, a
+    [=traversable navigable=] with a non-null [=embedderParent=], or null.
+    It is initially null.
 
-Note: The [=embedded navigable=] appears as a top-level traversable with a
-null [=navigable/parent=]. Content within the [=embedded navigable=] cannot
-detect that it is embedded.
+    Note: The [=embedded navigable=] appears as a top-level traversable with a
+    null [=navigable/parent=]. Content within the [=embedded navigable=] cannot
+    detect that it is embedded.
 
-Each <{controlledframe}> has a <dfn for=controlledframe>content script map</dfn>,
-which is a [=/map=] whose [=map/keys=] are [=strings=] and whose [=map/values=]
-are [=content script config=]s.
+ * <dfn for=controlledframe>content script map</dfn>, a [=/map=] whose
+    [=map/keys=] are {{DOMString}}s and whose [=map/values=] are
+    [=content script config=]s.
 
-Each <{controlledframe}> has an associated
-<dfn for=controlledframe>contentWindow</dfn>, which is a {{WindowProxy}}
-or null.
+ * <dfn for=controlledframe>contentWindow</dfn>, a {{WindowProxy}} or null.
 
-Each <{controlledframe}> has an associated
-<dfn for=controlledframe>request</dfn>, which is a {{WebRequest}}.
+ * <dfn for=controlledframe>request</dfn>, a {{WebRequest}}.
 
-Each <{controlledframe}> has an associated
-<dfn for=controlledframe>contextMenus</dfn>, which is a {{ContextMenus}}.
+ * <dfn for=controlledframe>contextMenus</dfn>, a {{ContextMenus}}.
+
+The <dfn attribute for=HTMLControlledFrameElement>contentWindow</dfn> getter
+steps are to return [=this=]'s [=controlledframe/contentWindow=].
+
+The <dfn attribute for=HTMLControlledFrameElement>request</dfn> getter steps
+are to return [=this=]'s [=controlledframe/request=].
+
+The <dfn attribute for=HTMLControlledFrameElement>contextMenus</dfn> getter
+steps are to return [=this=]'s [=controlledframe/contextMenus=].
 
 <div algorithm=insertion>
   When a <{controlledframe}> element |element| is [=inserted into a document=]
@@ -657,11 +663,12 @@ locations.
 ## Attributes ## {#attributes}
 <!-- ====================================================================== -->
 
-The {{HTMLControlledFrameElement/partition}} attribute takes an identifier
-specifying where data related to the Controlled Frame's instance should be
-stored. The identifier is composed of a string of alphanumeric characters.
-All data for the [=embedded navigable=] must be stored in a [=storage shelf=]
-keyed by this partition string along with the origin that created the data.
+The <dfn element-attr for=HTMLControlledFrameElement>partition</dfn> attribute
+takes an identifier specifying where data related to the Controlled Frame's
+instance should be stored. The identifier is composed of a string of
+alphanumeric characters. All data for the [=embedded navigable=] must be stored
+in a [=storage shelf=] keyed by this partition string along with the origin
+that created the data.
 
 By default, all data stored must be held in an in-memory storage partition so
 that when the last Controlled Frame element with a given
@@ -688,11 +695,11 @@ attribute.
 
       1. [=Throw=] a "{{NotSupportedError}}" {{DOMException}}.
 
-      1. Do not change the value of {{HTMLControlledFrameElement/partition}}.
+  1. Set [=this=]'s <{HTMLControlledFrameElement/partition}> to the given value.
 
 </div>
 
-The {{HTMLControlledFrameElement/src}} attribute reflects the Controlled
+The <dfn element-attr for=HTMLControlledFrameElement>src</dfn> attribute reflects the Controlled
 Frame's [=embedded navigable=]'s [=current session history entry=]'s
 [=session history entry/URL=].
 
@@ -707,19 +714,9 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
   1. Otherwise:
 
-      1. [=Navigate a controlledframe=] given [=this=] and [=this=]'s
-          {{HTMLControlledFrameElement/src}}.
+      1. [=Navigate a controlledframe=] given [=this=] and the given value.
 
 </div>
-
-The <dfn attribute for=HTMLControlledFrameElement>contentWindow</dfn> getter
-steps are to return [=this=]'s [=controlledframe/contentWindow=].
-
-The <dfn attribute for=HTMLControlledFrameElement>request</dfn> getter steps
-are to return [=this=]'s [=controlledframe/request=].
-
-The <dfn attribute for=HTMLControlledFrameElement>contextMenus</dfn> getter
-steps are to return [=this=]'s [=controlledframe/contextMenus=].
 
 <!-- ====================================================================== -->
 ## Navigation methods ## {#api-nav}
@@ -1922,47 +1919,47 @@ dictionary ImageDetails {
     <th>[=Event handler event types=]</th>
   </tr>
   <tr>
-    <td>{{onconsolemessage}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onconsolemessage</dfn></td>
     <td>consolemessage</td>
   </tr>
   <tr>
-    <td>{{oncontentload}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>oncontentload</dfn></td>
     <td>contentload</td>
   </tr>
   <tr>
-    <td>{{ondialog}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>ondialog</dfn></td>
     <td>dialog</td>
   </tr>
   <tr>
-    <td>{{onloadabort}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onloadabort</dfn></td>
     <td>loadabort</td>
   </tr>
   <tr>
-    <td>{{onloadcommit}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onloadcommit</dfn></td>
     <td>loadcommit</td>
   </tr>
   <tr>
-    <td>{{onloadstart}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onloadstart</dfn></td>
     <td>loadstart</td>
   </tr>
   <tr>
-    <td>{{onloadstop}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onloadstop</dfn></td>
     <td>loadstop</td>
   </tr>
   <tr>
-    <td>{{onnewwindow}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onnewwindow</dfn></td>
     <td>newwindow</td>
   </tr>
   <tr>
-    <td>{{onpermissionrequest}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onpermissionrequest</dfn></td>
     <td>permissionrequest</td>
   </tr>
   <tr>
-    <td>{{onsizechanged}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onsizechanged</dfn></td>
     <td>sizechanged</td>
   </tr>
   <tr>
-    <td>{{onzoomchange}}</td>
+    <td><dfn attribute for=HTMLControlledFrameElement>onzoomchange</dfn></td>
     <td>zoomchange</td>
   </tr>
 </table>
@@ -3300,7 +3297,7 @@ interface WebRequest {
 
 Each {{WebRequest}} has an associated:
  * <dfn for=WebRequest>handler map</dfn>, which is a
-    [=/map=] whose [=map/keys=] are [=strings=] and whose [=map/values=] are
+    [=/map=] whose [=map/keys=] are {{DOMString}}s and whose [=map/values=] are
     [=lists=] of [=WebRequest handler configs=].
  * <dfn for=WebRequest>onBeforeRequest</dfn>, which is a {{WebRequestEvent}}.
  * <dfn for=WebRequest>onBeforeSendHeaders</dfn>, which is a {{WebRequestEvent}}.
@@ -4655,7 +4652,7 @@ interface ContextMenus {
 
 Each <{controlledframe}> has a {{HTMLControlledFrameElement/contextMenus}}
 member, which is a {{ContextMenus}} that manages a <dfn for=ContextMenus>
-context menu [=/map=] </dfn> whose [=map/keys=] are [=strings=] and whose
+context menu [=/map=] </dfn> whose [=map/keys=] are {{DOMString}}s and whose
 [=map/values=] are {{ContextMenusProperties}}.
 
 Each [=map/entry=] of the [=context menu map=] has the [=map/value=] |property|
