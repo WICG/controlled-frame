@@ -303,8 +303,8 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd>[=Nothing=].</dd>
  <dt>[=Content attributes=]:</dt>
  <dd>[=Global attributes=]</dd>
- <dd><code>{{src}}</code> — Content source URL to embed</dd>
- <dd><code>{{partition}}</code> — Partition name to hold data related to this content</dd>
+ <dd><{HTMLControlledFrameElement/src}> — Content source URL to embed</dd>
+ <dd><{HTMLControlledFrameElement/partition}> — Partition name to hold data related to this content</dd>
  <dt>[=Accessibility considerations=]:</dt>
  <dd><p class=XXX>Screen readers should be able to traverse into
  the embedded content similar to how a reader can traverse into iframes and
@@ -379,9 +379,9 @@ The Controlled Frame element is exposed to any {{Document}} with the
 "`controlled-frame`" [=policy-controlled feature=] whose
 [=environment settings object=] is an [=isolated context=].
 
-The IDL attributes {{HTMLControlledFrameElement/src}} and
-{{HTMLControlledFrameElement/partition}} must [=reflect=] the respective content
-attributes of the same name.
+The IDL attributes <dfn attribute for=HTMLControlledFrameElement>`src`</dfn> and
+<dfn attribute for=HTMLControlledFrameElement>partition</dfn> must [=reflect=]
+the respective content attributes of the same name.
 
 Each <{controlledframe}> has an associated:
  * <dfn for=controlledframe>embedded navigable</dfn>, a
@@ -658,11 +658,12 @@ locations.
 ## Attributes ## {#attributes}
 <!-- ====================================================================== -->
 
-The {{HTMLControlledFrameElement/partition}} attribute takes an identifier
-specifying where data related to the Controlled Frame's instance should be
-stored. The identifier is composed of a string of alphanumeric characters.
-All data for the [=embedded navigable=] must be stored in a [=storage shelf=]
-keyed by this partition string along with the origin that created the data.
+The <dfn element-attr for=HTMLControlledFrameElement>partition</dfn> attribute
+takes an identifier specifying where data related to the Controlled Frame's
+instance should be stored. The identifier is composed of a string of
+alphanumeric characters. All data for the [=embedded navigable=] must be stored
+in a [=storage shelf=] keyed by this partition string along with the origin
+that created the data.
 
 By default, all data stored must be held in an in-memory storage partition so
 that when the last Controlled Frame element with a given
@@ -689,11 +690,11 @@ attribute.
 
       1. [=Throw=] a "{{NotSupportedError}}" {{DOMException}}.
 
-      1. Do not change the value of {{HTMLControlledFrameElement/partition}}.
+  1. Set [=this=]'s <{HTMLControlledFrameElement/partition}> to the given value.
 
 </div>
 
-The {{HTMLControlledFrameElement/src}} attribute reflects the Controlled
+The <dfn element-attr for=HTMLControlledFrameElement>src</dfn> attribute reflects the Controlled
 Frame's [=embedded navigable=]'s [=current session history entry=]'s
 [=session history entry/URL=].
 
@@ -708,8 +709,7 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
 
   1. Otherwise:
 
-      1. [=Navigate a controlledframe=] given [=this=] and [=this=]'s
-          {{HTMLControlledFrameElement/src}}.
+      1. [=Navigate a controlledframe=] given [=this=] and the given value.
 
 </div>
 
