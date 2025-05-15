@@ -971,14 +971,14 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   : <dfn>matches</dfn>
   :: a [=list=] of {{USVString}}s containing [=match patterns=].
 
-      Note: Content may be injected into a page if any of the patterns
-      [=matches a match pattern=] given the [=Document/URL=] of the page.
+      Note: Content may be injected into a document if its [=Document/URL=]
+      <a href="#matches-a-match-pattern">matches</a> any of these patterns.
 
   : <dfn>excludeMatches</dfn>
   :: a [=list=] of {{USVString}}s containing [=match patterns=].
 
-      Note: Content will not be injected into a page if any patterns
-      [=matches a match pattern=] given the [=Document/URL=] of the page. This
+      Note: Content will not be injected into a document if its [=Document/URL=]
+      <a href="#matches-a-match-pattern">matches</a> any of these patterns. This
       overrides [=content script config/matches=]; if both lists have entries
       that matches a page's [=Document/URL=], the content will not be injected
       into the page.
