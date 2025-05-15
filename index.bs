@@ -187,6 +187,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
             text: fetch response handover; url: fetch-finale
             text: main fetch; url: main-fetch
             text: request; for: fetch params; url: fetch-params-request
+            text: window; for: request; url: concept-request-window
 
 spec: infra; urlPrefix: https://infra.spec.whatwg.org
     type: dfn
@@ -2939,7 +2940,8 @@ For [=request a position=] (geolocation):
 
       1. <ins>Return the result of [=request a position=] with |embedderGeolocation|, <var ignore=''>successCallback</var>, <var ignore=''>errorCallback</var>, <var ignore=''>options</var>, and <var ignore=''>whatchId</var>.</ins>
 
-<span class='XXX'>TODO: patch other permission request sites similar to geolocation.</span>
+Note: Other permissions will be monkey-patched similarly to geolocation. But the
+    details are elided in this document for brevity.
 
 #### [[Console]] #### {#events-monkey-patches-console}
 
