@@ -988,6 +988,11 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   {{long}} |index|, and an algorithm |completionSteps| that takes a {{long}},
   a {{boolean}}, and a {{DOMString}}, run the following steps:
 
+  Note: We can't use [=fetch a classic script=] here because the fetch needs to
+  use |controlledframe|'s [=relevant settings object=], but the
+  [=classic script=] we eventually execute needs to use the
+  [=embedded navigable=]'s [=active document=]'s [=relevant settings object=].
+
   1. If |urlString| is not an [=valid URL string=], then:
 
       1. Run |completionSteps| given 0, `false`, and "".
@@ -1003,7 +1008,7 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       : [=request/destination=]
       :: "`style`" if |isCss| is `true`, "`script`" otherwise
       : [=request/client=]
-      :: |controlledframe|'s [=node document=]'s [=relevant settings object=]
+      :: |controlledframe|'s [=relevant settings object=]
       : [=request/mode=]
       :: "`cors`"
 
@@ -1223,6 +1228,9 @@ implementation of this isolation that can be implemented by all browsers.
   To <dfn>inject a script into a document</dfn> given a {{Document}} |document|,
   a [=string=] |scriptSource|, and an algorithm |completionSteps| that takes
   a [=completion record=], run the following steps:
+
+  Note: `document.currentScript` is intentionally not set while executing
+  |scriptSource|.
 
   1. Let |script| be the result of [=creating a classic script=] given
       |scriptSource|, |document|'s [=relevant settings object=], |document|'s
