@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="a7b9e8ebf5ccf72b15cda5397be89955ba4025b2" name="revision">
+  <meta content="48e2e7187c6e54d5de952560f260212ae4530106" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -3248,7 +3248,7 @@ and <var>message</var>.</ins>
      <p>If internalResponse’s status is a redirect status:</p>
      <ol>
       <li data-md>
-       <ins>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-window" id="ref-for-concept-request-window">window</a> <var>window</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#global-object" id="ref-for-global-object②">global object</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window③">Window</a></code> object:</ins>
+       <ins>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org//#concept-request-window" id="ref-for-concept-request-window">window</a> <var>window</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#global-object" id="ref-for-global-object②">global object</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window③">Window</a></code> object:</ins>
        <ol>
         <li data-md>
          <ins>Let <var>currentNavigable</var> be <var>window</var>’s associated <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable③">navigable</a>. </ins>
@@ -3342,7 +3342,8 @@ feature given an algorithm that assigns its <a data-link-type="dfn" href="https:
        <ins>Return the result of <a data-link-type="dfn" href="https://www.w3.org/TR/geolocation/#dfn-request-a-position" id="ref-for-dfn-request-a-position①">request a position</a> with <var>embedderGeolocation</var>, <var>successCallback</var>, <var>errorCallback</var>, <var>options</var>, and <var>whatchId</var>.</ins>
      </ol>
    </ol>
-   <p><span class="XXX">TODO: patch other permission request sites similar to geolocation.</span></p>
+   <p class="note" role="note"><span class="marker">Note:</span> Other permissions will be monkey-patched similarly to geolocation. But the
+    details are elided in this document for brevity.</p>
    <h5 class="heading settled" data-level="3.7.13.4" id="events-monkey-patches-console"><span class="secno">3.7.13.4. </span><span class="content"><a data-link-type="biblio" href="#biblio-console" title="Console Standard">[Console]</a></span><a class="self-link" href="#events-monkey-patches-console"></a></h5>
    <p>For <a data-link-type="dfn" href="https://console.spec.whatwg.org//#logger" id="ref-for-logger">Logger</a>:</p>
    <ol>
@@ -4764,7 +4765,7 @@ opaque string, randomly assigned at the request’s creation.</p>
         <li data-md>
          <ins>If <var>username</var> and <var>password</var> are null, then set them to</ins>
           the result of prompting the end user for a username and password,
-  respectively, in <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-window" id="ref-for-concept-request-window①">window</a>. 
+  respectively, in <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org//#concept-request-window" id="ref-for-concept-request-window①">window</a>. 
        </ol>
      </ol>
     <li data-md>
@@ -6396,7 +6397,7 @@ redirection")</p>
      <li><span class="dfn-paneled" id="dc1cd39b">URL <small>(for request)</small></span>
      <li><span class="dfn-paneled" id="3268a8eb">URL <small>(for response)</small></span>
      <li><span class="dfn-paneled" id="ae56d57e">URL list</span>
-     <li><span class="dfn-paneled" id="1ab127d6">window</span>
+     <li><span class="dfn-paneled" id="34231354">window</span>
     </ul>
    <li>
     <a data-link-type="biblio">[FileAPI]</a> defines the following terms:
@@ -7600,7 +7601,6 @@ let dfnPanelData = {
 "16d07e10": {"dfnID":"16d07e10","dfnText":"for each (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"},{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2462"},{"id":"ref-for-list-iterate\u2460\u2463"},{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
 "17555c59": {"dfnID":"17555c59","dfnText":"prompt","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-prompt"}],"title":"3.7.13.1. [HTML]"}],"url":"https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-prompt"},
 "18e7dde9": {"dfnID":"18e7dde9","dfnText":"load","external":true,"refSections":[{"refs":[{"id":"ref-for-event-load"}],"title":"3.7. Events"}],"url":"https://html.spec.whatwg.org/multipage/indices.html#event-load"},
-"1ab127d6": {"dfnID":"1ab127d6","dfnText":"window","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-window"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-request-window\u2460"}],"title":"4.2.1. Fetch"}],"url":"https://fetch.spec.whatwg.org/#concept-request-window"},
 "1bba3db7": {"dfnID":"1bba3db7","dfnText":"parent","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-parent"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-nav-parent\u2460"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-nav-parent\u2461"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-nav-parent\u2462"}],"title":"3.8.1.1. [HTML]"},{"refs":[{"id":"ref-for-nav-parent\u2463"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent"},
 "1c1b8187": {"dfnID":"1c1b8187","dfnText":"completely finish loading","external":true,"refSections":[{"refs":[{"id":"ref-for-completely-finish-loading"}],"title":"3.7.13.1. [HTML]"}],"url":"https://html.spec.whatwg.org/multipage/document-lifecycle.html#completely-finish-loading"},
 "1f8cac9a": {"dfnID":"1f8cac9a","dfnText":"URL","external":true,"refSections":[{"refs":[{"id":"ref-for-she-url"}],"title":"3.2. Attributes"}],"url":"https://html.spec.whatwg.org/multipage/browsing-the-web.html#she-url"},
@@ -7625,6 +7625,7 @@ let dfnPanelData = {
 "31db57e6": {"dfnID":"31db57e6","dfnText":"keys","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-keys"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-map-getting-the-keys\u2460"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-map-getting-the-keys\u2461"},{"id":"ref-for-map-getting-the-keys\u2462"},{"id":"ref-for-map-getting-the-keys\u2463"},{"id":"ref-for-map-getting-the-keys\u2464"},{"id":"ref-for-map-getting-the-keys\u2465"},{"id":"ref-for-map-getting-the-keys\u2466"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-map-getting-the-keys\u2467"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-keys"},
 "3268a8eb": {"dfnID":"3268a8eb","dfnText":"URL (for response)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response-url"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-response-url"},
 "3349d69f": {"dfnID":"3349d69f","dfnText":"associated Document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-window"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window"},
+"34231354": {"dfnID":"34231354","dfnText":"window","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-window"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-request-window\u2460"}],"title":"4.2.1. Fetch"}],"url":"https://fetch.spec.whatwg.org//#concept-request-window"},
 "347e8fe9": {"dfnID":"347e8fe9","dfnText":"URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-url"},{"id":"ref-for-concept-document-url\u2460"},{"id":"ref-for-concept-document-url\u2461"},{"id":"ref-for-concept-document-url\u2462"},{"id":"ref-for-concept-document-url\u2463"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-document-url\u2464"}],"title":"3.7.13.3. [Permissions]"},{"refs":[{"id":"ref-for-concept-document-url\u2465"},{"id":"ref-for-concept-document-url\u2466"},{"id":"ref-for-concept-document-url\u2467"}],"title":"5. Context Menus API"}],"url":"https://dom.spec.whatwg.org/#concept-document-url"},
 "34d2343e": {"dfnID":"34d2343e","dfnText":"user navigation involvement","external":true,"refSections":[{"refs":[{"id":"ref-for-user-navigation-involvement"},{"id":"ref-for-user-navigation-involvement\u2460"}],"title":"3.3. Navigation methods"}],"url":"https://html.spec.whatwg.org/multipage/browsing-the-web.html#user-navigation-involvement"},
 "35972864": {"dfnID":"35972864","dfnText":"active document","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-document"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-nav-document\u2460"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-nav-document\u2461"},{"id":"ref-for-nav-document\u2462"},{"id":"ref-for-nav-document\u2463"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-nav-document\u2464"},{"id":"ref-for-nav-document\u2465"},{"id":"ref-for-nav-document\u2466"},{"id":"ref-for-nav-document\u2467"},{"id":"ref-for-nav-document\u2468"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-nav-document\u2460\u24ea"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document"},
@@ -9203,7 +9204,6 @@ let refsData = {
 "https://fetch.spec.whatwg.org/#concept-request-origin": {"displayText":"origin","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"origin","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-origin"},
 "https://fetch.spec.whatwg.org/#concept-request-url": {"displayText":"URL","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"url","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-url"},
 "https://fetch.spec.whatwg.org/#concept-request-url-list": {"displayText":"URL list","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"url list","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-url-list"},
-"https://fetch.spec.whatwg.org/#concept-request-window": {"displayText":"window","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"window","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-window"},
 "https://fetch.spec.whatwg.org/#concept-response": {"displayText":"response","export":true,"for_":[],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"response","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-response"},
 "https://fetch.spec.whatwg.org/#concept-response-cache-state": {"displayText":"cache state","export":true,"for_":["response"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"cache state","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-response-cache-state"},
 "https://fetch.spec.whatwg.org/#concept-response-header-list": {"displayText":"header list","export":true,"for_":["response"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"header list","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-response-header-list"},
@@ -9219,6 +9219,7 @@ let refsData = {
 "https://fetch.spec.whatwg.org/#request-initiator-type": {"displayText":"initiator type","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"initiator type","type":"dfn","url":"https://fetch.spec.whatwg.org/#request-initiator-type"},
 "https://fetch.spec.whatwg.org//#concept-http-network-fetch": {"displayText":"HTTP-network fetch","export":true,"for_":[],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"http-network fetch","type":"dfn","url":"https://fetch.spec.whatwg.org//#concept-http-network-fetch"},
 "https://fetch.spec.whatwg.org//#concept-http-network-or-cache-fetch": {"displayText":"HTTP-network-or-cache fetch","export":true,"for_":[],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"http-network-or-cache fetch","type":"dfn","url":"https://fetch.spec.whatwg.org//#concept-http-network-or-cache-fetch"},
+"https://fetch.spec.whatwg.org//#concept-request-window": {"displayText":"window","export":true,"for_":["request"],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"window","type":"dfn","url":"https://fetch.spec.whatwg.org//#concept-request-window"},
 "https://fetch.spec.whatwg.org//#fetch-finale": {"displayText":"fetch response handover","export":true,"for_":[],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"fetch response handover","type":"dfn","url":"https://fetch.spec.whatwg.org//#fetch-finale"},
 "https://fetch.spec.whatwg.org//#fetch-params-request": {"displayText":"request","export":true,"for_":["fetch params"],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"request","type":"dfn","url":"https://fetch.spec.whatwg.org//#fetch-params-request"},
 "https://fetch.spec.whatwg.org//#main-fetch": {"displayText":"main fetch","export":true,"for_":[],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"main fetch","type":"dfn","url":"https://fetch.spec.whatwg.org//#main-fetch"},
