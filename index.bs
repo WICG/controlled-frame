@@ -988,8 +988,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   {{long}} |index|, and an algorithm |completionSteps| that takes a {{long}},
   a {{boolean}}, and a {{DOMString}}, run the following steps:
 
-  Note: We can't use [=fetch a classic script=] here because the fetch needs to
-  use |controlledframe|'s [=relevant settings object=], but the
+  Note: [=Fetch a classic script=] cannot be used here because the fetch needs
+  to use |controlledframe|'s [=relevant settings object=], but the
   [=classic script=] we eventually execute needs to use the
   [=embedded navigable=]'s [=active document=]'s [=relevant settings object=].
 
