@@ -990,8 +990,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
   Note: [=Fetch a classic script=] cannot be used here because the fetch needs
   to use |controlledframe|'s [=relevant settings object=], but the
-  [=classic script=] we eventually execute needs to use the
-  [=embedded navigable=]'s [=active document=]'s [=relevant settings object=].
+  [=classic script=] is executed using the [=embedded navigable=]'s
+  [=active document=]'s [=relevant settings object=].
 
   1. If |urlString| is not an [=valid URL string=], then:
 
