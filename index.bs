@@ -980,8 +980,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       Note: Content will not be injected into a document if its [=Document/URL=]
       <a href="#matches-a-match-pattern">matches</a> any of these patterns. This
       overrides [=content script config/matches=]; if both lists have entries
-      that matches a page's [=Document/URL=], the content will not be injected
-      into the page.
+      that a document's [=Document/URL=] matches, the content will not be
+      injected into the document.
 
   : <dfn>allFrames</dfn>
   :: a [=boolean=] indicating whether content should be injected into all
