@@ -305,9 +305,14 @@ patching specifications for some parts of this Controlled Frame specification.
  <dd><code>{{src}}</code> — Content source URL to embed</dd>
  <dd><code>{{partition}}</code> — Partition name to hold data related to this content</dd>
  <dt>[=Accessibility considerations=]:</dt>
- <dd><p class=XXX>Screen readers should be able to traverse into
- the embedded content similar to how a reader can traverse into iframes and
- other related embedded content.</p></dd>
+ <dd><a href="https://w3c.github.io/html-aria/#el-iframe">For authors</a>.</dd>
+ <dd><a href="https://w3c.github.io/html-aam/#el-iframe">For implementers</a>.</dd>
+ <dd>
+
+    Note: These link to the accessibility definitions of the <{iframe}> element.
+    From an accessibility perspective, a <{controlledframe}> should behave the
+    same as an <{iframe}>.
+ </dd>
  <dt>[=DOM interface=]:</dt>
  <dd>
 <xmp class=idl>
