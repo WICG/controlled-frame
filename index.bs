@@ -136,6 +136,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: current session history entry; url: nav-current-history-entry
             text: close a top-level traversable; url: close-a-top-level-traversable
             text: destroy a top-level traversable; url: destroy-a-top-level-traversable
+            text: is popup; url: is-popup
             text: navigable; for: /; url: navigable
             text: active WindowProxy; for: navigable; url: nav-wp
             text: initialize the navigable; url: initialize-the-navigable
@@ -2826,18 +2827,6 @@ For [=window open steps=]:
 2. <ins>Let |embedderParent| be <var ignore=''>sourceDocument</var>'s [=node
     navigable=]'s [=embedderParent=].</ins>
 
-<del>1. If the event loop's termination nesting level is nonzero, then return
-    null.</del>
-
-3. <ins>If the event loop's termination nesting level is nonzero:</ins>
-
-      1. <ins>If |embedderParent| is not null:</ins>
-
-            1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, |url|,
-                |target|, null, and |windowOpenDisposition|.</ins>
-
-      1. <ins>Return null.<ins>
-
 ...
 
 <del>14. If |targetNavigable| is null, then return null.</del>
@@ -2866,9 +2855,9 @@ For [=window open steps=]:
           result of checking if a popup window is requested, given
           tokenizedFeatures.
 
-      1. <ins>If |targetNavigable|'s active browsing context's is popup is true,
-          set |windowOpenDisposition| to "{{WindowOpenDisposition/new_popup}}".
-          </ins>
+      1. <ins>If |targetNavigable|'s [=active browsing context=]'s [=is popup=]
+          is true, set |windowOpenDisposition| to
+          "{{WindowOpenDisposition/new_popup}}".</ins>
 
       ...
 
