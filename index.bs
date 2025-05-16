@@ -2856,7 +2856,7 @@ For [=window open steps=]:
           tokenizedFeatures.
 
       1. <ins>If |targetNavigable|'s [=active browsing context=]'s [=is popup=]
-          is true, set |windowOpenDisposition| to
+          is `true`, set |windowOpenDisposition| to
           "{{WindowOpenDisposition/new_popup}}".</ins>
 
       ...
