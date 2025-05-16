@@ -3137,7 +3137,6 @@ enum ResourceType {
   "csp_report",
   "media",
   "websocket",
-  "webbundle",
   "other",
 };
 
@@ -4279,10 +4278,44 @@ Each {{WebRequestEvent}} has:
   To <dfn>get a request's {{ResourceType}}</dfn> given a [=/request=]
   |request|, run the following steps:
 
-  1. Return |request|'s [=request/initiator type=].
+  1. If |request|'s [=request/url=]'s [=url/scheme=] equals `"ws"` or `"wss"`,
+      then return "{{ResourceType/websocket}}".
 
-      <p class=XXX>TODO: [=request/initiator type=] doesn't exactly map to
-      {{ResourceType}}. Define this mapping.</p>
+  1. If |request|'s [=request/initiator=] equals `"fetch"` or
+      `"xmlhttprequest"`, then return "{{ResourceType/xmlhttprequest}}".
+
+  1. If |request|'s [=request/destination=] equals `"document"`,
+      then return "{{ResourceType/main_frame}}".
+
+  1. If |request|'s [=request/destination=] equals `"frame"` or `"iframe"`,
+      then return "{{ResourceType/sub_frame}}".
+
+  1. If |request|'s [=request/destination=] equals `"style"` or `"xslt"`,
+      then return "{{ResourceType/stylesheet}}".
+
+  1. If |request|'s [=request/destination=] equals `"script"`, `"json"`,
+      `"audioworklet"`, `"paintworklet"`, `"serviceworker"`, `"sharedworker"`,
+      or `"worker"`, then return "{{ResourceType/script}}".
+
+  1. If |request|'s [=request/destination=] equals `"image"`,
+      then return "{{ResourceType/image}}".
+
+  1. If |request|'s [=request/destination=] equals `"font"`,
+      then return "{{ResourceType/font}}".
+
+  1. If |request|'s [=request/destination=] equals `"object"` or `"embed"`,
+      then return "{{ResourceType/object}}".
+
+  1. If |request|'s [=request/destination=] equals `"audio"`, `"track"`, or
+      `"video"`, then return "{{ResourceType/media}}".
+
+  1. If |request|'s [=request/destination=] equals `"report"`,
+      then return "{{ResourceType/csp_report}}".
+
+  1. If |request|'s [=request/destination=] equals `""` and |request|'s
+      [=request/keepalive=] is `true`, then return "{{ResourceType/ping}}".
+
+  1. Return "{{ResourceType/other}}".
 
 </div>
 
