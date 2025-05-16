@@ -134,7 +134,9 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: create a new browsing context and document; url: creating-a-new-browsing-context
             text: creating a new auxiliary browsing context; url: creating-a-new-auxiliary-browsing-context
             text: current session history entry; url: nav-current-history-entry
+            text: close a top-level traversable; url: close-a-top-level-traversable
             text: destroy a top-level traversable; url: destroy-a-top-level-traversable
+            text: is popup; url: is-popup
             text: navigable; for: /; url: navigable
             text: active WindowProxy; for: navigable; url: nav-wp
             text: initialize the navigable; url: initialize-the-navigable
@@ -1976,7 +1978,7 @@ The interactive events:
 
 The UI-change events:
 
-- {{onsizechanged}} - fired when the embedded web content has been resized via autosize. Only fires if autosize is enabled. <span class='XXX'>spec autosize</span>
+- {{onsizechanged}} - fired when the embedded web content has been resized via autosize. Only fires if autosize is enabled.
 
 - {{onzoomchange}}
 
@@ -2171,7 +2173,7 @@ enum WindowOpenDisposition {
 
 [Exposed=Window, IsolatedContext]
 interface NewWindowController {
-  undefined attach(HTMLControlledFrameElement controlledFrame);
+  undefined attach(HTMLControlledFrameElement newControlledFrame);
   undefined discard();
 };
 
@@ -2195,19 +2197,16 @@ dictionary NewWindowEventInit: EventInit {
 
 </xmp>
 
-Each {{NewWindowController}} has reference to the <dfn for=NewWindowController>current Controlled Frame</dfn>.
+Each {{NewWindowController}} has reference to a <dfn for=NewWindowController>
+target [=/navigable=]</dfn>, which is initially null.
 
 <div>
 
-The <dfn method for=NewWindowController>attach(|controlledFrame|)</dfn> method steps are:
+The <dfn method for=NewWindowController>attach(|newControlledFrame|)</dfn>
+method steps are:
 
-      1. Set |controlledFrame|'s {{HTMLControlledFrameElement/src}} to {{NewWindow/targetUrl}}.
-
-      1. Set |controlledFrame|'s [=embedded navigable=]'s [=navigable/active window=]'s {{Window/opener}} to [=current Controlled Frame=]'s [=embedded navigable=]'s [=navigable/active WindowProxy=].
-
-      Note: This is not quite correct because the {{HTMLControlledFrameElement/src}} setter will cause the [=embedded navigable=] to [=/navigate=], which is an asynchronous operation.
-
-      <span class='XXX'>TODO: revisit this algorithm.</span>
+      1. Set |newControlledFrame|'s [=embedded navigable=] to [=this=]'s
+          [=NewWindowController/target navigable=].
 
 </div>
 
@@ -2215,20 +2214,30 @@ The <dfn method for=NewWindowController>attach(|controlledFrame|)</dfn> method s
 
 The <dfn method for=NewWindowController>discard()</dfn> method steps are:
 
-1. Do nothing.
+1. If [=this=]'s [=NewWindowController/target navigable=] is not null, then
+    [=close a top-level traversable=] given [=this=]'s
+    [=NewWindowController/target navigable=].
 
 </div>
 
 <div algorithm=dispatch-newwindow>
 
 To <dfn data-lt='fire a "newwindow" event'>fire a {{NewWindowEvent}}</dfn> |e|
-given <{controlledframe}> element |controlledFrame|, string |url| (input of [=window
-open steps=]), string |target| (input of [=window open steps=]), and
-WindowOpenDisposition |windowOpenDisposition|, run the following steps:
+given <{controlledframe}> element |controlledFrame|, {{USVString}} |url|,
+{{DOMString}} |target|, [=/navigable=] |targetNavigable|, and
+{{WindowOpenDisposition}} |windowOpenDisposition|, run the following steps:
+
+1. Let |controller| be a [=new=] {{NewWindowController}} object.
+
+1. Set |controller|'s [=NewWindowController/target navigable=] to
+    |targetNavigable|.
 
 1. Let |newWindow| be a [=new=] {{NewWindow}} object.
 
 1. Set the following fields of |newWindow|:
+
+      : {{NewWindow/window}}
+      :: |controller|
 
       : {{NewWindow/targetUrl}}
       :: |url|
@@ -2242,15 +2251,8 @@ WindowOpenDisposition |windowOpenDisposition|, run the following steps:
 1. Set |e|'s {{NewWindowEvent/newWindow}} to |newWindow|.
 
 1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-    |controlledFrame|'s [=relevant global object=] to [=dispatch=] |e| at |controlledFrame|.
-
-</div>
-
-<div>
-
-To <dfn>get window open disposition</dfn> given [=/document=]<var ignore=''>sourceDocument</var>, a DOMString <var ignore=''>target</var>, and a [=/map=]<var ignore=''>tokenizedFeatures</var>, run the following steps:
-
-<span class=XXX>TODO: define how we {{WindowOpenDisposition}}</span>
+    |controlledFrame|'s [=relevant global object=] to [=dispatch=] |e| at
+    |controlledFrame|.
 
 </div>
 
@@ -2820,17 +2822,66 @@ For [=prompt=]:
 
 For [=window open steps=]:
 
-14. If targetNavigable is null, then return null.
+1. <ins>Let |windowOpenDisposition| be "{{WindowOpenDisposition/ignore}}".</ins>
 
-15. <ins>Let |embedderParent| be <var ignore=''>sourceDocument</var>'s [=node navigable=]'s [=embedderParent=].</ins>
+2. <ins>Let |embedderParent| be <var ignore=''>sourceDocument</var>'s [=node
+    navigable=]'s [=embedderParent=].</ins>
 
-16. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
+...
 
-      1. <ins>Let |windowOpenDisposition| be the result of [=get window open disposition=].</ins>
+<del>14. If |targetNavigable| is null, then return null.</del>
 
-      1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, <var ignore=''>url</var>, <var ignore=''>target</var>, and |windowOpenDisposition|.</ins>
+14. <ins>If |targetNavigable| is null:</ins>
 
-      1. <ins>Return null.</ins>
+      1. <ins>If |embedderParent| is not null:</ins>
+
+            1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, |url|,
+                |target|, |targetNavigable|, and |windowOpenDisposition|.</ins>
+
+      1. <ins>Return null.<ins>
+
+15. If windowType is either "new and unrestricted" or "new with no opener",
+    then:
+
+      1. <ins>Set |windowOpenDisposition| to one of
+          "{{WindowOpenDisposition/new_background_tab}}",
+          "{{WindowOpenDisposition/new_foreground_tab}}",
+          or "{{WindowOpenDisposition/new_window}}".</ins>
+
+      Note: The value depends on the behavior support of the user agent and user
+          settings.
+
+      1. Set |targetNavigable|'s active browsing context's is popup to the
+          result of checking if a popup window is requested, given
+          tokenizedFeatures.
+
+      1. <ins>If |targetNavigable|'s [=active browsing context=]'s [=is popup=]
+          is `true`, set |windowOpenDisposition| to
+          "{{WindowOpenDisposition/new_popup}}".</ins>
+
+      ...
+
+16. Otherwise:
+
+      1. <ins>Set |windowOpenDisposition| to
+          "{{WindowOpenDisposition/current_tab}}".</ins>
+
+      ...
+
+Note: Step 15 and 16 also [=/navigate=] |targetNavigable|; during navigation,
+    |windowOpenDisposition| may also be updated. For example, if navigation is
+    prevented, |windowOpenDisposition| may be set to
+    "{{WindowOpenDisposition/ignore}}". If the navigation response resulted in
+    download, then |windowOpenDisposition| may be set to
+    "{{WindowOpenDisposition/save_to_disk}}".
+
+1. <ins>If |embedderParent| is not null:</ins>
+
+       1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, |url|,
+           |target|, |targetNavigable|, and |windowOpenDisposition|.</ins>
+
+
+
 
 For [=completely finish loading=]:
 
