@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="409d267d00cec76d17a6b75362b2a920ee89e8c0" name="revision">
+  <meta content="c5832de39d85527b5235c948495d16887d652ebe" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -789,7 +789,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-15">15 May 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-16">16 May 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -3510,7 +3510,6 @@ revisited to align better with other Web APIs.</strong></p>
   <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-csp_report"><code><c- s>"csp_report"</c-></code></dfn>,
   <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-media"><code><c- s>"media"</c-></code></dfn>,
   <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-websocket"><code><c- s>"websocket"</c-></code></dfn>,
-  <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-webbundle"><code><c- s>"webbundle"</c-></code></dfn>,
   <dfn class="dfn-paneled idl-code" data-dfn-for="ResourceType" data-dfn-type="enum-value" data-export id="dom-resourcetype-other"><code><c- s>"other"</c-></code></dfn>,
 };
 
@@ -4553,8 +4552,40 @@ it is a member of.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-a-requests-resourcetype">get a request’s <code class="idl"><a data-link-type="idl" href="#enumdef-resourcetype" id="ref-for-enumdef-resourcetype②">ResourceType</a></code></dfn> given a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request①③">request</a> <var>request</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Return <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#request-initiator-type" id="ref-for-request-initiator-type">initiator type</a>.</p>
-      <p class="XXX">TODO: <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#request-initiator-type" id="ref-for-request-initiator-type①">initiator type</a> doesn’t exactly map to <code class="idl"><a data-link-type="idl" href="#enumdef-resourcetype" id="ref-for-enumdef-resourcetype③">ResourceType</a></code>. Define this mapping.</p>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url②">url</a>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme">scheme</a> equals <code>"ws"</code> or <code>"wss"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-websocket" id="ref-for-dom-resourcetype-websocket">websocket</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-initiator" id="ref-for-concept-request-initiator">initiator</a> equals <code>"fetch"</code> or <code>"xmlhttprequest"</code>, then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-xmlhttprequest" id="ref-for-dom-resourcetype-xmlhttprequest">xmlhttprequest</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination①">destination</a> equals <code>"document"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-main_frame" id="ref-for-dom-resourcetype-main_frame">main_frame</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination②">destination</a> equals <code>"frame"</code> or <code>"iframe"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-sub_frame" id="ref-for-dom-resourcetype-sub_frame">sub_frame</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination③">destination</a> equals <code>"style"</code> or <code>"xslt"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-stylesheet" id="ref-for-dom-resourcetype-stylesheet">stylesheet</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination④">destination</a> equals <code>"script"</code>, <code>"json"</code>, <code>"audioworklet"</code>, <code>"paintworklet"</code>, <code>"serviceworker"</code>, <code>"sharedworker"</code>,
+  or <code>"worker"</code>, then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-script" id="ref-for-dom-resourcetype-script">script</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination⑤">destination</a> equals <code>"image"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-image" id="ref-for-dom-resourcetype-image">image</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination⑥">destination</a> equals <code>"font"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-font" id="ref-for-dom-resourcetype-font">font</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination⑦">destination</a> equals <code>"object"</code> or <code>"embed"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-object" id="ref-for-dom-resourcetype-object">object</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination⑧">destination</a> equals <code>"audio"</code>, <code>"track"</code>, or <code>"video"</code>, then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-media" id="ref-for-dom-resourcetype-media">media</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination⑨">destination</a> equals <code>"report"</code>,
+  then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-csp_report" id="ref-for-dom-resourcetype-csp_report">csp_report</a></code>".</p>
+     <li data-md>
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination①⓪">destination</a> equals <code>""</code> and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#request-keepalive-flag" id="ref-for-request-keepalive-flag">keepalive</a> is <code>true</code>, then return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-ping" id="ref-for-dom-resourcetype-ping">ping</a></code>".</p>
+     <li data-md>
+      <p>Return "<code class="idl"><a data-link-type="idl" href="#dom-resourcetype-other" id="ref-for-dom-resourcetype-other">other</a></code>".</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="create a redirect response">
@@ -4635,7 +4666,7 @@ return an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#lis
         <p>For each <var>urlPattern</var> in <var>urls</var>:</p>
         <ol>
          <li data-md>
-          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url②">URL</a> <a data-link-type="dfn" href="#matches-a-match-pattern" id="ref-for-matches-a-match-pattern②">matches a match pattern</a> given <var>urlPattern</var>, set <var>isValidUrl</var> to <code>true</code>.</p>
+          <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url③">URL</a> <a data-link-type="dfn" href="#matches-a-match-pattern" id="ref-for-matches-a-match-pattern②">matches a match pattern</a> given <var>urlPattern</var>, set <var>isValidUrl</var> to <code>true</code>.</p>
         </ol>
        <li data-md>
         <p>If <var>isValidUrl</var> is <code>false</code>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue①⓪">continue</a>.</p>
@@ -5327,7 +5358,7 @@ or 'isolated-app:'</b></p>
    <p>Planned mitigation:</p>
    <ul>
     <li data-md>
-     <p>Controlled Frame will only work when the navigable’s "src" <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url③">URL</a> has an 'https:' scheme.</p>
+     <p>Controlled Frame will only work when the navigable’s "src" <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url④">URL</a> has an 'https:' scheme.</p>
    </ul>
    <p><b>Malicious Controlled Frame could access the embedder’s running process (eg.
 Spectre attack)</b></p>
@@ -6279,7 +6310,6 @@ redirection")</p>
    <li><a href="#dom-httpheader-value">value</a><span>, in § 4</span>
    <li><a href="#dom-contexttype-video">"video"</a><span>, in § 5</span>
    <li><a href="#dom-onclickdata-waschecked">wasChecked</a><span>, in § 5</span>
-   <li><a href="#dom-resourcetype-webbundle">"webbundle"</a><span>, in § 4</span>
    <li><a href="#webrequest">WebRequest</a><span>, in § 4</span>
    <li><a href="#webrequestevent-webrequest">webRequest</a><span>, in § 4</span>
    <li><a href="#dictdef-webrequestauthcredentials">WebRequestAuthCredentials</a><span>, in § 4</span>
@@ -6392,8 +6422,9 @@ redirection")</p>
      <li><span class="dfn-paneled" id="732ac656">HTTP-network fetch</span>
      <li><span class="dfn-paneled" id="b8a5b03f">HTTP-network-or-cache fetch</span>
      <li><span class="dfn-paneled" id="8acee9c8">HTTP-redirect fetch</span>
-     <li><span class="dfn-paneled" id="7b0b4fa0">initiator type</span>
+     <li><span class="dfn-paneled" id="fa4ea124">initiator</span>
      <li><span class="dfn-paneled" id="9a95489b">internal response</span>
+     <li><span class="dfn-paneled" id="8394d1b7">keepalive</span>
      <li><span class="dfn-paneled" id="3f9264f8">location URL</span>
      <li><span class="dfn-paneled" id="8270dcd6">main fetch</span>
      <li><span class="dfn-paneled" id="50b05fad">method</span>
@@ -6639,6 +6670,7 @@ redirection")</p>
      <li><span class="dfn-paneled" id="b85ee3be">host</span>
      <li><span class="dfn-paneled" id="0ee1989a">IP address</span>
      <li><span class="dfn-paneled" id="852ada56">port</span>
+     <li><span class="dfn-paneled" id="3a711be7">scheme</span>
      <li><span class="dfn-paneled" id="fa29b95f">serialize an URL</span>
      <li><span class="dfn-paneled" id="dcffbccd">URL</span>
      <li><span class="dfn-paneled" id="d7edb843">urlencoded serializer</span>
@@ -7134,7 +7166,6 @@ redirection")</p>
   <a href="#dom-resourcetype-csp_report"><code><c- s>"csp_report"</c-></code></a>,
   <a href="#dom-resourcetype-media"><code><c- s>"media"</c-></code></a>,
   <a href="#dom-resourcetype-websocket"><code><c- s>"websocket"</c-></code></a>,
-  <a href="#dom-resourcetype-webbundle"><code><c- s>"webbundle"</c-></code></a>,
   <a href="#dom-resourcetype-other"><code><c- s>"other"</c-></code></a>,
 };
 
@@ -7647,7 +7678,8 @@ let dfnPanelData = {
 "3758d275": {"dfnID":"3758d275","dfnText":"formatter","external":true,"refSections":[{"refs":[{"id":"ref-for-formatter"},{"id":"ref-for-formatter\u2460"}],"title":"3.7.13.4. [Console]"}],"url":"https://console.spec.whatwg.org//#formatter"},
 "3837aa06": {"dfnID":"3837aa06","dfnText":"stop loading","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-stop"}],"title":"3.3. Navigation methods"}],"url":"https://html.spec.whatwg.org/multipage/document-lifecycle.html#nav-stop"},
 "38c8ba2c": {"dfnID":"38c8ba2c","dfnText":"embedded content","external":true,"refSections":[{"refs":[{"id":"ref-for-embedded-content-category"},{"id":"ref-for-embedded-content-category\u2460"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#embedded-content-category"},
-"3ae34c95": {"dfnID":"3ae34c95","dfnText":"destination","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-destination"}],"title":"3.4. Scripting methods"}],"url":"https://fetch.spec.whatwg.org/#concept-request-destination"},
+"3a711be7": {"dfnID":"3a711be7","dfnText":"scheme","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-url-scheme"}],"title":"4. Web Request API"}],"url":"https://url.spec.whatwg.org/#concept-url-scheme"},
+"3ae34c95": {"dfnID":"3ae34c95","dfnText":"destination","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-destination"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-request-destination\u2460"},{"id":"ref-for-concept-request-destination\u2461"},{"id":"ref-for-concept-request-destination\u2462"},{"id":"ref-for-concept-request-destination\u2463"},{"id":"ref-for-concept-request-destination\u2464"},{"id":"ref-for-concept-request-destination\u2465"},{"id":"ref-for-concept-request-destination\u2466"},{"id":"ref-for-concept-request-destination\u2467"},{"id":"ref-for-concept-request-destination\u2468"},{"id":"ref-for-concept-request-destination\u2460\u24ea"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-request-destination"},
 "3b90bdcd": {"dfnID":"3b90bdcd","dfnText":"resolve","external":true,"refSections":[{"refs":[{"id":"ref-for-resolve"}],"title":"3.1. Common infrastructure"}],"url":"https://webidl.spec.whatwg.org/#resolve"},
 "3c915747": {"dfnID":"3c915747","dfnText":"contexts in which this element can be used","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-contexts"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#concept-element-contexts"},
 "3de9e659": {"dfnID":"3de9e659","dfnText":"byte sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-byte-sequence"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-byte-sequence\u2460"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#byte-sequence"},
@@ -7713,7 +7745,6 @@ let dfnPanelData = {
 "762869d3": {"dfnID":"762869d3","dfnText":"scalar value string","external":true,"refSections":[{"refs":[{"id":"ref-for-scalar-value-string"}],"title":"4. Web Request API"}],"url":"https://infra.spec.whatwg.org/#scalar-value-string"},
 "76919410": {"dfnID":"76919410","dfnText":"obtain a storage key for non-storage purposes","external":true,"refSections":[{"refs":[{"id":"ref-for-obtain-a-storage-key-for-non-storage-purposes"}],"title":"3.8.1.3. [STORAGE]"}],"url":"https://storage.spec.whatwg.org/#obtain-a-storage-key-for-non-storage-purposes"},
 "77b4c09a": {"dfnID":"77b4c09a","dfnText":"assert","external":true,"refSections":[{"refs":[{"id":"ref-for-assert"}],"title":"3. The controlledframe element"}],"url":"https://infra.spec.whatwg.org/#assert"},
-"7b0b4fa0": {"dfnID":"7b0b4fa0","dfnText":"initiator type","external":true,"refSections":[{"refs":[{"id":"ref-for-request-initiator-type"},{"id":"ref-for-request-initiator-type\u2460"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#request-initiator-type"},
 "7d4424b2": {"dfnID":"7d4424b2","dfnText":"remove (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-remove"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-map-remove\u2460"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-remove"},
 "7e2262f2": {"dfnID":"7e2262f2","dfnText":"CORS-safelisted response-header name","external":true,"refSections":[{"refs":[{"id":"ref-for-cors-safelisted-response-header-name"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#cors-safelisted-response-header-name"},
 "7e4332e2": {"dfnID":"7e4332e2","dfnText":"replace","external":true,"refSections":[{"refs":[{"id":"ref-for-navigationhistorybehavior-replace"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigationhistorybehavior-replace"},
@@ -7722,6 +7753,7 @@ let dfnPanelData = {
 "806c30aa": {"dfnID":"806c30aa","dfnText":"step","external":true,"refSections":[{"refs":[{"id":"ref-for-she-step"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/browsing-the-web.html#she-step"},
 "8270dcd6": {"dfnID":"8270dcd6","dfnText":"main fetch","external":true,"refSections":[{"refs":[{"id":"ref-for-main-fetch"}],"title":"4.2.1. Fetch"}],"url":"https://fetch.spec.whatwg.org//#main-fetch"},
 "82ca3efc": {"dfnID":"82ca3efc","dfnText":"TypeError","external":true,"refSections":[{"refs":[{"id":"ref-for-exceptiondef-typeerror"},{"id":"ref-for-exceptiondef-typeerror\u2460"},{"id":"ref-for-exceptiondef-typeerror\u2461"},{"id":"ref-for-exceptiondef-typeerror\u2462"},{"id":"ref-for-exceptiondef-typeerror\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2464"},{"id":"ref-for-exceptiondef-typeerror\u2465"},{"id":"ref-for-exceptiondef-typeerror\u2466"},{"id":"ref-for-exceptiondef-typeerror\u2467"},{"id":"ref-for-exceptiondef-typeerror\u2468"},{"id":"ref-for-exceptiondef-typeerror\u2460\u24ea"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2460"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2461"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2460\u2462"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2464"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2460\u2465"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2466"},{"id":"ref-for-exceptiondef-typeerror\u2460\u2467"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2460\u2468"},{"id":"ref-for-exceptiondef-typeerror\u2461\u24ea"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2460"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2461"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2461\u2462"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2464"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2465"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2466"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2467"},{"id":"ref-for-exceptiondef-typeerror\u2461\u2468"},{"id":"ref-for-exceptiondef-typeerror\u2462\u24ea"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2460"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2461"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2462"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2462\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2462\u2464"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#exceptiondef-typeerror"},
+"8394d1b7": {"dfnID":"8394d1b7","dfnText":"keepalive","external":true,"refSections":[{"refs":[{"id":"ref-for-request-keepalive-flag"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#request-keepalive-flag"},
 "84b4fbe4": {"dfnID":"84b4fbe4","dfnText":"add a CSS style sheet","external":true,"refSections":[{"refs":[{"id":"ref-for-add-a-css-style-sheet"}],"title":"3.4. Scripting methods"}],"url":"https://drafts.csswg.org/cssom-1/#add-a-css-style-sheet"},
 "852ada56": {"dfnID":"852ada56","dfnText":"port","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-url-port"}],"title":"4. Web Request API"}],"url":"https://url.spec.whatwg.org/#concept-url-port"},
 "85394472": {"dfnID":"85394472","dfnText":"Document","external":true,"refSections":[{"refs":[{"id":"ref-for-document"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-document\u2460"},{"id":"ref-for-document\u2461"},{"id":"ref-for-document\u2462"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-document\u2463"}],"title":"3.8.1.1. [HTML]"},{"refs":[{"id":"ref-for-document\u2464"}],"title":"4. Web Request API"}],"url":"https://dom.spec.whatwg.org/#document"},
@@ -7864,7 +7896,7 @@ let dfnPanelData = {
 "dacde8b5": {"dfnID":"dacde8b5","dfnText":"a new promise","external":true,"refSections":[{"refs":[{"id":"ref-for-a-new-promise"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460"},{"id":"ref-for-a-new-promise\u2461"},{"id":"ref-for-a-new-promise\u2462"},{"id":"ref-for-a-new-promise\u2463"},{"id":"ref-for-a-new-promise\u2464"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-a-new-promise\u2465"},{"id":"ref-for-a-new-promise\u2466"},{"id":"ref-for-a-new-promise\u2467"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-a-new-promise\u2468"},{"id":"ref-for-a-new-promise\u2460\u24ea"},{"id":"ref-for-a-new-promise\u2460\u2460"},{"id":"ref-for-a-new-promise\u2460\u2461"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2462"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2463"},{"id":"ref-for-a-new-promise\u2460\u2464"},{"id":"ref-for-a-new-promise\u2460\u2465"},{"id":"ref-for-a-new-promise\u2460\u2466"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#a-new-promise"},
 "dae0bfde": {"dfnID":"dae0bfde","dfnText":"serialization of an origin","external":true,"refSections":[{"refs":[{"id":"ref-for-ascii-serialisation-of-an-origin"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/browsers.html#ascii-serialisation-of-an-origin"},
 "db8aa4d8": {"dfnID":"db8aa4d8","dfnText":"stream","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-body-stream"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-body-stream"},
-"dc1cd39b": {"dfnID":"dc1cd39b","dfnText":"URL (for request)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-url"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-request-url\u2460"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-request-url\u2461"}],"title":"4.1. WebRequest handler config"},{"refs":[{"id":"ref-for-concept-request-url\u2462"}],"title":"8.1. Security"}],"url":"https://fetch.spec.whatwg.org/#concept-request-url"},
+"dc1cd39b": {"dfnID":"dc1cd39b","dfnText":"URL (for request)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-url"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-request-url\u2460"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-request-url\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-concept-request-url\u2462"}],"title":"4.1. WebRequest handler config"},{"refs":[{"id":"ref-for-concept-request-url\u2463"}],"title":"8.1. Security"}],"url":"https://fetch.spec.whatwg.org/#concept-request-url"},
 "dca2de17": {"dfnID":"dca2de17","dfnText":"DOMException","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMException"}],"title":"3.2. Attributes"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMException"},
 "dcffbccd": {"dfnID":"dcffbccd","dfnText":"URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-url"}],"title":"3.1. Common infrastructure"},{"refs":[{"id":"ref-for-concept-url\u2460"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-url\u2461"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-concept-url\u2462"},{"id":"ref-for-concept-url\u2463"}],"title":"3.7.12. loadredirect"},{"refs":[{"id":"ref-for-concept-url\u2464"},{"id":"ref-for-concept-url\u2465"}],"title":"5. Context Menus API"}],"url":"https://url.spec.whatwg.org/#concept-url"},
 "de82addd": {"dfnID":"de82addd","dfnText":"filtered response","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-filtered-response"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-filtered-response"},
@@ -8157,20 +8189,19 @@ let dfnPanelData = {
 "dom-requestbody-raw": {"dfnID":"dom-requestbody-raw","dfnText":"raw","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-requestbody-raw"},{"id":"ref-for-dom-requestbody-raw\u2460"},{"id":"ref-for-dom-requestbody-raw\u2461"}],"title":"4. Web Request API"}],"url":"#dom-requestbody-raw"},
 "dom-requestfilter-types": {"dfnID":"dom-requestfilter-types","dfnText":"types","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-requestfilter-types"}],"title":"4.1. WebRequest handler config"}],"url":"#dom-requestfilter-types"},
 "dom-requestfilter-urls": {"dfnID":"dom-requestfilter-urls","dfnText":"urls","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-requestfilter-urls"}],"title":"4.1. WebRequest handler config"}],"url":"#dom-requestfilter-urls"},
-"dom-resourcetype-csp_report": {"dfnID":"dom-resourcetype-csp_report","dfnText":"\"csp_report\"","external":false,"refSections":[],"url":"#dom-resourcetype-csp_report"},
-"dom-resourcetype-font": {"dfnID":"dom-resourcetype-font","dfnText":"\"font\"","external":false,"refSections":[],"url":"#dom-resourcetype-font"},
-"dom-resourcetype-image": {"dfnID":"dom-resourcetype-image","dfnText":"\"image\"","external":false,"refSections":[],"url":"#dom-resourcetype-image"},
-"dom-resourcetype-main_frame": {"dfnID":"dom-resourcetype-main_frame","dfnText":"\"main_frame\"","external":false,"refSections":[],"url":"#dom-resourcetype-main_frame"},
-"dom-resourcetype-media": {"dfnID":"dom-resourcetype-media","dfnText":"\"media\"","external":false,"refSections":[],"url":"#dom-resourcetype-media"},
-"dom-resourcetype-object": {"dfnID":"dom-resourcetype-object","dfnText":"\"object\"","external":false,"refSections":[],"url":"#dom-resourcetype-object"},
-"dom-resourcetype-other": {"dfnID":"dom-resourcetype-other","dfnText":"\"other\"","external":false,"refSections":[],"url":"#dom-resourcetype-other"},
-"dom-resourcetype-ping": {"dfnID":"dom-resourcetype-ping","dfnText":"\"ping\"","external":false,"refSections":[],"url":"#dom-resourcetype-ping"},
-"dom-resourcetype-script": {"dfnID":"dom-resourcetype-script","dfnText":"\"script\"","external":false,"refSections":[],"url":"#dom-resourcetype-script"},
-"dom-resourcetype-stylesheet": {"dfnID":"dom-resourcetype-stylesheet","dfnText":"\"stylesheet\"","external":false,"refSections":[],"url":"#dom-resourcetype-stylesheet"},
-"dom-resourcetype-sub_frame": {"dfnID":"dom-resourcetype-sub_frame","dfnText":"\"sub_frame\"","external":false,"refSections":[],"url":"#dom-resourcetype-sub_frame"},
-"dom-resourcetype-webbundle": {"dfnID":"dom-resourcetype-webbundle","dfnText":"\"webbundle\"","external":false,"refSections":[],"url":"#dom-resourcetype-webbundle"},
-"dom-resourcetype-websocket": {"dfnID":"dom-resourcetype-websocket","dfnText":"\"websocket\"","external":false,"refSections":[],"url":"#dom-resourcetype-websocket"},
-"dom-resourcetype-xmlhttprequest": {"dfnID":"dom-resourcetype-xmlhttprequest","dfnText":"\"xmlhttprequest\"","external":false,"refSections":[],"url":"#dom-resourcetype-xmlhttprequest"},
+"dom-resourcetype-csp_report": {"dfnID":"dom-resourcetype-csp_report","dfnText":"\"csp_report\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-csp_report"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-csp_report"},
+"dom-resourcetype-font": {"dfnID":"dom-resourcetype-font","dfnText":"\"font\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-font"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-font"},
+"dom-resourcetype-image": {"dfnID":"dom-resourcetype-image","dfnText":"\"image\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-image"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-image"},
+"dom-resourcetype-main_frame": {"dfnID":"dom-resourcetype-main_frame","dfnText":"\"main_frame\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-main_frame"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-main_frame"},
+"dom-resourcetype-media": {"dfnID":"dom-resourcetype-media","dfnText":"\"media\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-media"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-media"},
+"dom-resourcetype-object": {"dfnID":"dom-resourcetype-object","dfnText":"\"object\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-object"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-object"},
+"dom-resourcetype-other": {"dfnID":"dom-resourcetype-other","dfnText":"\"other\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-other"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-other"},
+"dom-resourcetype-ping": {"dfnID":"dom-resourcetype-ping","dfnText":"\"ping\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-ping"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-ping"},
+"dom-resourcetype-script": {"dfnID":"dom-resourcetype-script","dfnText":"\"script\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-script"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-script"},
+"dom-resourcetype-stylesheet": {"dfnID":"dom-resourcetype-stylesheet","dfnText":"\"stylesheet\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-stylesheet"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-stylesheet"},
+"dom-resourcetype-sub_frame": {"dfnID":"dom-resourcetype-sub_frame","dfnText":"\"sub_frame\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-sub_frame"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-sub_frame"},
+"dom-resourcetype-websocket": {"dfnID":"dom-resourcetype-websocket","dfnText":"\"websocket\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-websocket"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-websocket"},
+"dom-resourcetype-xmlhttprequest": {"dfnID":"dom-resourcetype-xmlhttprequest","dfnText":"\"xmlhttprequest\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-resourcetype-xmlhttprequest"}],"title":"4. Web Request API"}],"url":"#dom-resourcetype-xmlhttprequest"},
 "dom-runat-document-end": {"dfnID":"dom-runat-document-end","dfnText":"\"document-end\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-runat-document-end"}],"title":"3.8.1.1. [HTML]"}],"url":"#dom-runat-document-end"},
 "dom-runat-document-idle": {"dfnID":"dom-runat-document-idle","dfnText":"\"document-idle\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-runat-document-idle"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-dom-runat-document-idle\u2460"}],"title":"3.8.1.1. [HTML]"}],"url":"#dom-runat-document-idle"},
 "dom-runat-document-start": {"dfnID":"dom-runat-document-start","dfnText":"\"document-start\"","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-runat-document-start"},{"id":"ref-for-dom-runat-document-start\u2460"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-dom-runat-document-start\u2461"}],"title":"3.8.1.1. [HTML]"}],"url":"#dom-runat-document-start"},
@@ -8278,7 +8309,7 @@ let dfnPanelData = {
 "enumdef-frametype": {"dfnID":"enumdef-frametype","dfnText":"FrameType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-frametype"}],"title":"4. Web Request API"}],"url":"#enumdef-frametype"},
 "enumdef-itemtype": {"dfnID":"enumdef-itemtype","dfnText":"ItemType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-itemtype"}],"title":"5. Context Menus API"}],"url":"#enumdef-itemtype"},
 "enumdef-permissiontype": {"dfnID":"enumdef-permissiontype","dfnText":"PermissionType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-permissiontype"}],"title":"3.7.4. permissionrequest"}],"url":"#enumdef-permissiontype"},
-"enumdef-resourcetype": {"dfnID":"enumdef-resourcetype","dfnText":"ResourceType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-resourcetype"},{"id":"ref-for-enumdef-resourcetype\u2460"},{"id":"ref-for-enumdef-resourcetype\u2461"},{"id":"ref-for-enumdef-resourcetype\u2462"}],"title":"4. Web Request API"}],"url":"#enumdef-resourcetype"},
+"enumdef-resourcetype": {"dfnID":"enumdef-resourcetype","dfnText":"ResourceType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-resourcetype"},{"id":"ref-for-enumdef-resourcetype\u2460"},{"id":"ref-for-enumdef-resourcetype\u2461"}],"title":"4. Web Request API"}],"url":"#enumdef-resourcetype"},
 "enumdef-runat": {"dfnID":"enumdef-runat","dfnText":"RunAt","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-runat"},{"id":"ref-for-enumdef-runat\u2460"},{"id":"ref-for-enumdef-runat\u2461"}],"title":"3.4. Scripting methods"}],"url":"#enumdef-runat"},
 "enumdef-windowopendisposition": {"dfnID":"enumdef-windowopendisposition","dfnText":"WindowOpenDisposition","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-windowopendisposition"},{"id":"ref-for-enumdef-windowopendisposition\u2460"}],"title":"3.7.3. newwindow"}],"url":"#enumdef-windowopendisposition"},
 "enumdef-zoommode": {"dfnID":"enumdef-zoommode","dfnText":"ZoomMode","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-zoommode"},{"id":"ref-for-enumdef-zoommode\u2460"}],"title":"3.5.1. Zoom"}],"url":"#enumdef-zoommode"},
@@ -8291,6 +8322,7 @@ let dfnPanelData = {
 "f8de33a3": {"dfnID":"f8de33a3","dfnText":"long","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-long"},{"id":"ref-for-idl-long\u2460"},{"id":"ref-for-idl-long\u2461"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-idl-long\u2462"},{"id":"ref-for-idl-long\u2463"},{"id":"ref-for-idl-long\u2464"},{"id":"ref-for-idl-long\u2465"},{"id":"ref-for-idl-long\u2466"},{"id":"ref-for-idl-long\u2467"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-idl-long\u2468"},{"id":"ref-for-idl-long\u2460\u24ea"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-idl-long\u2460\u2460"}],"title":"3.7.1. consolemessage"},{"refs":[{"id":"ref-for-idl-long\u2460\u2461"}],"title":"3.7.8. loadabort"},{"refs":[{"id":"ref-for-idl-long\u2460\u2462"},{"id":"ref-for-idl-long\u2460\u2463"},{"id":"ref-for-idl-long\u2460\u2464"},{"id":"ref-for-idl-long\u2460\u2465"},{"id":"ref-for-idl-long\u2460\u2466"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-idl-long\u2460\u2467"},{"id":"ref-for-idl-long\u2460\u2468"},{"id":"ref-for-idl-long\u2461\u24ea"},{"id":"ref-for-idl-long\u2461\u2460"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#idl-long"},
 "f937b7b6": {"dfnID":"f937b7b6","dfnText":"continue","external":true,"refSections":[{"refs":[{"id":"ref-for-iteration-continue"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-iteration-continue\u2460"},{"id":"ref-for-iteration-continue\u2461"},{"id":"ref-for-iteration-continue\u2462"},{"id":"ref-for-iteration-continue\u2463"},{"id":"ref-for-iteration-continue\u2464"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-iteration-continue\u2465"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-iteration-continue\u2466"},{"id":"ref-for-iteration-continue\u2467"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-iteration-continue\u2468"},{"id":"ref-for-iteration-continue\u2460\u24ea"}],"title":"4.1. WebRequest handler config"}],"url":"https://infra.spec.whatwg.org/#iteration-continue"},
 "fa29b95f": {"dfnID":"fa29b95f","dfnText":"serialize an URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-url-serializer"},{"id":"ref-for-concept-url-serializer\u2460"}],"title":"3.7.12. loadredirect"}],"url":"https://url.spec.whatwg.org//#concept-url-serializer"},
+"fa4ea124": {"dfnID":"fa4ea124","dfnText":"initiator","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-initiator"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-request-initiator"},
 "fa5ee9c5": {"dfnID":"fa5ee9c5","dfnText":"creation URL","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-environment-creation-url"}],"title":"3.8.1.3. [STORAGE]"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-creation-url"},
 "fbadcbc4": {"dfnID":"fbadcbc4","dfnText":"nothing","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-content-nothing"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#concept-content-nothing"},
 "fe2a6718": {"dfnID":"fe2a6718","dfnText":"HTMLAudioElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmlaudioelement"}],"title":"5. Context Menus API"}],"url":"https://html.spec.whatwg.org/multipage/media.html#htmlaudioelement"},
@@ -9010,6 +9042,19 @@ let refsData = {
 "#dom-requestbody-raw": {"displayText":"raw","export":true,"for_":["RequestBody"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"raw","type":"dict-member","url":"#dom-requestbody-raw"},
 "#dom-requestfilter-types": {"displayText":"types","export":true,"for_":["RequestFilter"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"types","type":"dict-member","url":"#dom-requestfilter-types"},
 "#dom-requestfilter-urls": {"displayText":"urls","export":true,"for_":["RequestFilter"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"urls","type":"dict-member","url":"#dom-requestfilter-urls"},
+"#dom-resourcetype-csp_report": {"displayText":"\"csp_report\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"csp_report\"","type":"enum-value","url":"#dom-resourcetype-csp_report"},
+"#dom-resourcetype-font": {"displayText":"\"font\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"font\"","type":"enum-value","url":"#dom-resourcetype-font"},
+"#dom-resourcetype-image": {"displayText":"\"image\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"image\"","type":"enum-value","url":"#dom-resourcetype-image"},
+"#dom-resourcetype-main_frame": {"displayText":"\"main_frame\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"main_frame\"","type":"enum-value","url":"#dom-resourcetype-main_frame"},
+"#dom-resourcetype-media": {"displayText":"\"media\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"media\"","type":"enum-value","url":"#dom-resourcetype-media"},
+"#dom-resourcetype-object": {"displayText":"\"object\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"object\"","type":"enum-value","url":"#dom-resourcetype-object"},
+"#dom-resourcetype-other": {"displayText":"\"other\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"other\"","type":"enum-value","url":"#dom-resourcetype-other"},
+"#dom-resourcetype-ping": {"displayText":"\"ping\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"ping\"","type":"enum-value","url":"#dom-resourcetype-ping"},
+"#dom-resourcetype-script": {"displayText":"\"script\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"script\"","type":"enum-value","url":"#dom-resourcetype-script"},
+"#dom-resourcetype-stylesheet": {"displayText":"\"stylesheet\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"stylesheet\"","type":"enum-value","url":"#dom-resourcetype-stylesheet"},
+"#dom-resourcetype-sub_frame": {"displayText":"\"sub_frame\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"sub_frame\"","type":"enum-value","url":"#dom-resourcetype-sub_frame"},
+"#dom-resourcetype-websocket": {"displayText":"\"websocket\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"websocket\"","type":"enum-value","url":"#dom-resourcetype-websocket"},
+"#dom-resourcetype-xmlhttprequest": {"displayText":"\"xmlhttprequest\"","export":true,"for_":["ResourceType"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"xmlhttprequest\"","type":"enum-value","url":"#dom-resourcetype-xmlhttprequest"},
 "#dom-runat-document-end": {"displayText":"\"document-end\"","export":true,"for_":["RunAt"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"document-end\"","type":"enum-value","url":"#dom-runat-document-end"},
 "#dom-runat-document-idle": {"displayText":"\"document-idle\"","export":true,"for_":["RunAt"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"document-idle\"","type":"enum-value","url":"#dom-runat-document-idle"},
 "#dom-runat-document-start": {"displayText":"\"document-start\"","export":true,"for_":["RunAt"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"\"document-start\"","type":"enum-value","url":"#dom-runat-document-start"},
@@ -9216,6 +9261,7 @@ let refsData = {
 "https://fetch.spec.whatwg.org/#concept-request-current-url": {"displayText":"current URL","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"current url","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-current-url"},
 "https://fetch.spec.whatwg.org/#concept-request-destination": {"displayText":"destination","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"destination","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-destination"},
 "https://fetch.spec.whatwg.org/#concept-request-header-list": {"displayText":"header list","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"header list","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-header-list"},
+"https://fetch.spec.whatwg.org/#concept-request-initiator": {"displayText":"initiator","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"initiator","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-initiator"},
 "https://fetch.spec.whatwg.org/#concept-request-method": {"displayText":"method","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"method","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-method"},
 "https://fetch.spec.whatwg.org/#concept-request-mode": {"displayText":"mode","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"mode","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-mode"},
 "https://fetch.spec.whatwg.org/#concept-request-origin": {"displayText":"origin","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"origin","type":"dfn","url":"https://fetch.spec.whatwg.org/#concept-request-origin"},
@@ -9233,7 +9279,7 @@ let refsData = {
 "https://fetch.spec.whatwg.org/#determine-the-network-partition-key": {"displayText":"determine the network partition key","export":true,"for_":[],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"determine the network partition key","type":"dfn","url":"https://fetch.spec.whatwg.org/#determine-the-network-partition-key"},
 "https://fetch.spec.whatwg.org/#process-response-end-of-body": {"displayText":"processResponseConsumeBody","export":true,"for_":["fetch"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"processresponseconsumebody","type":"dfn","url":"https://fetch.spec.whatwg.org/#process-response-end-of-body"},
 "https://fetch.spec.whatwg.org/#proxy-authentication-entry": {"displayText":"proxy-authentication entry","export":true,"for_":[],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"proxy-authentication entry","type":"dfn","url":"https://fetch.spec.whatwg.org/#proxy-authentication-entry"},
-"https://fetch.spec.whatwg.org/#request-initiator-type": {"displayText":"initiator type","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"initiator type","type":"dfn","url":"https://fetch.spec.whatwg.org/#request-initiator-type"},
+"https://fetch.spec.whatwg.org/#request-keepalive-flag": {"displayText":"keepalive","export":true,"for_":["request"],"level":"1","normative":true,"shortname":"fetch","spec":"fetch","status":"current","text":"keepalive","type":"dfn","url":"https://fetch.spec.whatwg.org/#request-keepalive-flag"},
 "https://fetch.spec.whatwg.org//#concept-http-network-fetch": {"displayText":"HTTP-network fetch","export":true,"for_":[],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"http-network fetch","type":"dfn","url":"https://fetch.spec.whatwg.org//#concept-http-network-fetch"},
 "https://fetch.spec.whatwg.org//#concept-http-network-or-cache-fetch": {"displayText":"HTTP-network-or-cache fetch","export":true,"for_":[],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"http-network-or-cache fetch","type":"dfn","url":"https://fetch.spec.whatwg.org//#concept-http-network-or-cache-fetch"},
 "https://fetch.spec.whatwg.org//#concept-request-window": {"displayText":"window","export":true,"for_":["request"],"level":"","normative":true,"shortname":"fetch","spec":"fetch","status":"anchor-block","text":"window","type":"dfn","url":"https://fetch.spec.whatwg.org//#concept-request-window"},
@@ -9405,6 +9451,7 @@ let refsData = {
 "https://url.spec.whatwg.org/#concept-url-fragment": {"displayText":"fragment","export":true,"for_":["url"],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"fragment","type":"dfn","url":"https://url.spec.whatwg.org/#concept-url-fragment"},
 "https://url.spec.whatwg.org/#concept-url-host": {"displayText":"host","export":true,"for_":["url"],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"host","type":"dfn","url":"https://url.spec.whatwg.org/#concept-url-host"},
 "https://url.spec.whatwg.org/#concept-url-port": {"displayText":"port","export":true,"for_":["url"],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"port","type":"dfn","url":"https://url.spec.whatwg.org/#concept-url-port"},
+"https://url.spec.whatwg.org/#concept-url-scheme": {"displayText":"scheme","export":true,"for_":["url"],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"scheme","type":"dfn","url":"https://url.spec.whatwg.org/#concept-url-scheme"},
 "https://url.spec.whatwg.org/#concept-urlencoded-serializer": {"displayText":"urlencoded serializer","export":true,"for_":[],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"urlencoded serializer","type":"dfn","url":"https://url.spec.whatwg.org/#concept-urlencoded-serializer"},
 "https://url.spec.whatwg.org/#ip-address": {"displayText":"IP address","export":true,"for_":[],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"ip address","type":"dfn","url":"https://url.spec.whatwg.org/#ip-address"},
 "https://url.spec.whatwg.org/#valid-url-string": {"displayText":"valid URL string","export":true,"for_":[],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"valid url string","type":"dfn","url":"https://url.spec.whatwg.org/#valid-url-string"},
