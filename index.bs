@@ -245,6 +245,7 @@ spec:html; type:dfn; for:/; text:global object
 spec:html; type:dfn; for:/; text:top-level traversable
 spec:html; type:dfn; for:/; text:traversable navigable
 spec:html; type:dfn; for:environment settings object; text:cross-origin isolated capability
+spec:html; type:element; text:audio
 spec:html; type:event; text:readystatechange
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; text:list
@@ -4743,9 +4744,9 @@ Each [=map/entry=] of the [=context menu map=] has the [=map/value=] |property|
 which represents a <dfn for=ContextMenus>context menu item</dfn>. A
 [=context menu item=] will be shown on the
 <dfn for=ContextMenus>context menu</dfn> if it is opened within the
-{{HTMLControlledFrameElement}} |controlledframe| and the result of
-[=determining whether the context menu item will be shown=] given
-|controlledframe| and |property| is true.
+<{controlledframe}> |controlledframe| and the result of [=determining
+whether the context menu item will be shown=] given |controlledframe|, the
+[=ContextMenus/context menu=], and |property| equals `true`.
 
 Each {{ContextMenus}} has an associated <dfn for=ContextMenus>onClicked</dfn>,
 which is an {{OnClickedEvent}}.
@@ -4899,9 +4900,16 @@ The [=map/values=] of the [=context menu map=], which are
 
 <div algorithm>
 
-  To <dfn>determine whether the [=ContextMenus/context menu item=] will be shown</dfn> given a {{HTMLControlledFrameElement}} |element|, and a {{ContextMenusProperties}} |properties|:
+  To <dfn>determine whether the [=ContextMenus/context menu item=] will be shown
+  </dfn> given a <{controlledframe}> element |controlledframe|, a
+  [=ContextMenus/context menu=] |menu|, and a {{ContextMenusProperties}}
+  |properties|:
 
-  1. Let |documentUrl| be the [=Document/URL=] of the [=/document=] that |element| belongs to.
+  1. Let |element| be the {{HTMLElement}} that |menu| is opened at or null if
+      there is none.
+
+  1. Let |documentUrl| be the [=Document/URL=] of |controlledFrame|'s embedded
+      document.
 
   1. Let |targetUrl| be an empty string.
 
@@ -4919,11 +4927,47 @@ The [=map/values=] of the [=context menu map=], which are
 
       1. For each |context| in |properties|["{{ContextMenusProperties/contexts}}"]:
 
-          1. If |element| matches |context|, set |matchesContext| to `true` and break;
-
-          <span class=XXX>There is no standardized specifications for matching a {{HTMLElement}} against a {{ContextType}}.</span>
+          1. If the context of |menu| matches |context|, set |matchesContext| to `true` and break;
 
       1. If |matchesContext| is `false`, return `false`.
+
+<div class='note'>
+
+<em>This section is non-normative.</em>
+
+{{ContextType}}s represent the context of a context menu, can be following values:
+
+    : {{ContextType/frame}}
+    :: Applies when the user context-clicks in a nested frame, such as an <{iframe}>.
+
+    : {{ContextType/selection}}
+    :: Applies when part of the document is selected.
+
+    : {{ContextType/link}}
+    :: Applies when the user context-clicks on a link.
+
+    : {{ContextType/editable}}
+    :: Applies when the user context-clicks an editable element, like a
+        <{textarea}>.
+
+    : {{ContextType/image}}
+    :: Applies when the user context-clicks an image.
+
+    : {{ContextType/video}}
+    :: Applies when the user context-clicks a <{video}> element.
+
+    : {{ContextType/audio}}
+    :: Applies when the user context-clicks an <{audio}> element.
+
+    : {{ContextType/page}}
+    :: Applies when the user context-clicks in the page, but none of the other
+        page contexts apply (for example, the click is not on an image or a
+        nested iframe or a link).
+
+    : {{ContextType/all}}
+    :: Specifying 'all' is equivalent to the combination of all other contexts.
+
+</div>
 
   1. If |properties|["{{ContextMenusProperties/documentUrlPatterns}}"] is not [=list/empty=]:
 
