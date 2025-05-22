@@ -4908,7 +4908,7 @@ The [=map/values=] of the [=context menu map=], which are
   1. Let |element| be the {{HTMLElement}} that |menu| is opened at or null if
       there is none.
 
-  1. Let |documentUrl| be the [=Document/URL=] of |controlledFrame|'s embedded
+  1. Let |documentUrl| be the [=Document/URL=] of |controlledframe|'s embedded
       document.
 
   1. Let |targetUrl| be an empty string.
