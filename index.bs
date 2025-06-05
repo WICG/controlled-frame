@@ -186,6 +186,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
         urlPrefix: /
             text: HTTP-network fetch; url: concept-http-network-fetch
             text: HTTP-network-or-cache fetch; url: concept-http-network-or-cache-fetch
+            text: append; for: Headers; url: concept-headers-append
             text: fetch response handover; url: fetch-finale
             text: main fetch; url: main-fetch
             text: request; for: fetch params; url: fetch-params-request
@@ -507,99 +508,7 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
   The <dfn constructor for=HTMLControlledFrameElement>HTMLControlledFrameElement()</dfn>
   constructor steps are:
 
-  1. Let |webRequest| be a new {{WebRequest}}.
-
-  1. Let |onBeforeRequest| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`beforeRequest`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onBeforeRequest=] to |onBeforeRequest|.
-
-  1. Let |onBeforeSendHeaders| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`beforeSendHeaders`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onBeforeSendHeaders=] to |onBeforeSendHeaders|.
-
-  1. Let |onSendHeaders| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`sendHeaders`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onSendHeaders=] to |onSendHeaders|.
-
-  1. Let |onHeadersReceived| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`headersReceived`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onHeadersReceived=] to |onHeadersReceived|.
-
-  1. Let |onAuthRequired| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`authRequired`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onAuthRequired=] to |onAuthRequired|.
-
-  1. Let |onBeforeRedirect| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`beforeRedirect`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onBeforeRedirect=] to |onBeforeRedirect|.
-
-  1. Let |onResponseStarted| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`responseStarted`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onResponseStarted=] to |onResponseStarted|.
-
-  1. Let |onCompleted| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`completed`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onCompleted=] to |onCompleted|.
-
-  1. Let |onErrorOccurred| be a new {{WebRequestEvent}} with the following fields:
-
-      : [=WebRequestEvent/eventName=]
-      :: "`errorOccurred`"
-
-      : [=WebRequestEvent/webRequest=]
-      :: |webRequest|
-
-  1. Set |webRequest|'s [=WebRequest/onErrorOccurred=] to |onErrorOccurred|.
-
-  1. Set [=this=]'s [=controlledframe/request=] to |webRequest|.
+  1. Set [=this=]'s [=controlledframe/request=] to a [=new=] {{WebRequest}}.
 
   1. Let |contextMenus| be a new {{ContextMenus}}.
 
@@ -644,6 +553,14 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
 
       Note: The [=relevant global object=] of |controlledframe| is the
           **embedder's** {{Window}} object.
+
+</div>
+
+<div algorithm>
+  A {{USVString}} <var ignore>url</var> <dfn>matches a {{URLPattern}}</dfn>
+  <var ignore>pattern</var> if the following steps return `true`:
+
+  TODO: spec this
 
 </div>
 
@@ -3164,21 +3081,10 @@ To <dfn>get an [=environment=]'s [=embedderParent=]</dfn> given an
 # Web Request API # {#api-web-request}
 <!-- ====================================================================== -->
 
-Advisement: This API is based on the
-<a href="https://developer.chrome.com/docs/extensions/reference/api/webRequest">
-WebRequest API</a>, which is available through the &lt;webview&gt; element in
-<a href="https://developer.chrome.com/docs/apps/overview">Chrome Apps</a>. It
-is exposed to Controlled Frame with minimum modification to make efficient use
-of prior art. As a result, this API does not fully adhere to Web Platform best
-practices, particularly around naming conventions and event handling. If there
-is future cross-browser interest in Controlled Frame, this API should be
-revisited to align better with other Web APIs.
-
-
 <xmp class="idl">
 enum ResourceType {
-  "main_frame",
-  "sub_frame",
+  "main-frame",
+  "sub-frame",
   "stylesheet",
   "script",
   "image",
@@ -3186,78 +3092,58 @@ enum ResourceType {
   "object",
   "xmlhttprequest",
   "ping",
-  "csp_report",
+  "csp-report",
   "media",
   "websocket",
   "other",
 };
 
-callback interface WebRequestEventListener {
-  BlockingResponse? handleEvent(WebRequestEventDetails details);
+enum RequestedHeaders {
+  "none",
+  "cors",
+  "all",
 };
 
-dictionary RequestFilter {
-  sequence<ResourceType> types;
-  sequence<USVString> urls;
-};
-
-enum ExtraInfoSpec {
-  "asyncBlocking",
-  "blocking",
-  "extraHeaders",
-  "requestHeaders",
-  "responseHeaders",
+dictionary WebRequestInterceptorOptions {
+  required sequence<HeadersInit> urlPatterns;
+  sequence<ResourceType> resourceTypes;
+  boolean blocking;
+  boolean includeRequestBody;
+  RequestedHeaders includeHeaders;
 };
 
 [Exposed=Window, IsolatedContext]
-interface WebRequestEvent {
-  undefined addListener(WebRequestEventListener listener,
-                        optional RequestFilter filter = {},
-                        optional sequence<ExtraInfoSpec> extraInfoSpec);
-  boolean hasListener(WebRequestEventListener listener);
-  boolean hasListeners();
-  undefined removeListener(WebRequestEventListener listener);
+interface WebRequest {
+  WebRequestInterceptor createWebRequestInterceptor(
+      WebRequestInterceptorOptions options);
+
+  Promise<undefined> handlerBehaviorChanged();
 };
 
-dictionary WebRequestAuthCredentials {
-  required DOMString username;
-  required DOMString password;
-};
-
-dictionary BlockingResponse {
-  WebRequestAuthCredentials authCredentials;
-  boolean cancel;
-  USVString redirectUrl;
-  sequence<HttpHeader> requestHeaders;
-  sequence<HttpHeader> responseHeaders;
+[Exposed=Window, IsolatedContext]
+interface WebRequestInterceptor : EventTarget {
+  attribute EventHandler onauthrequired;
+  attribute EventHandler onbeforeredirect;
+  attribute EventHandler onbeforerequest;
+  attribute EventHandler onbeforesendheaders;
+  attribute EventHandler oncompleted;
+  attribute EventHandler onerroroccurred;
+  attribute EventHandler onheadersreceived;
+  attribute EventHandler onsendheaders;
+  attribute EventHandler onresponsestarted;
 };
 
 enum DocumentLifecycle {
   "prerender",
   "active",
   "cached",
-  "pending_deletion",
+  "pending-deletion",
 };
 
 enum FrameType {
-  "outermost_frame",
-  "fenced_frame",
-  "sub_frame",
-};
-
-dictionary WebRequestEventDetails {
-  DOMString documentId;
-  DocumentLifecycle documentLifecycle;
-  required long frameId;
-  FrameType frameType;
-  USVString initiator;
-  required DOMString method;
-  DOMString parentDocumentId;
-  required long parentFrameId;
-  required DOMString requestId;
-  required long timeStamp;
-  required ResourceType type;
-  required USVString url;
+  "outermost-frame",
+  "fenced-frame",
+  "sub-frame",
 };
 
 dictionary UploadData {
@@ -3271,312 +3157,148 @@ dictionary RequestBody {
   sequence<UploadData> raw;
 };
 
-dictionary WebRequestBeforeRequestDetails : WebRequestEventDetails {
-  RequestBody requestBody;
+dictionary WebRequestRequest {
+  USVString initiator;
+  required DOMString method;
+  required DOMString id;
+  required ResourceType type;
+  required USVString url;
+  Headers headers;
+  RequestBody body;
 };
-
-dictionary HttpHeader {
-  required DOMString name;
-  DOMString value;
-  sequence<byte> binaryValue;
-};
-
-dictionary WebRequestBeforeSendHeadersDetails : WebRequestEventDetails {
-  sequence<HttpHeader> requestHeaders;
-};
-
-dictionary WebRequestSendHeadersDetails : WebRequestEventDetails {
-  sequence<HttpHeader> requestHeaders;
-};
-
-dictionary WebRequestResponseEventDetails : WebRequestEventDetails {
-  required long statusCode;
-  required DOMString statusLine;
-  sequence<HttpHeader> responseHeaders;
-};
-
-dictionary WebRequestHeadersReceivedDetails : WebRequestResponseEventDetails {};
 
 dictionary AuthChallenger {
   DOMString host;
   long port;
 };
 
-dictionary WebRequestAuthRequiredDetails : WebRequestResponseEventDetails {
+dictionary WebRequestAuthDetails {
   required AuthChallenger challenger;
   required boolean isProxy;
   required DOMString scheme;
   DOMString realm;
 };
 
-dictionary WebRequestResponseWithIpEventDetails : WebRequestResponseEventDetails {
-  required boolean fromCache;
+dictionary WebRequestResponse {
+  required long statusCode;
+  required DOMString statusLine;
+  boolean fromCache;
+  Headers headers;
   DOMString ip;
+  USVString redirectURL;
+  WebRequestAuthDetails auth;
 };
-
-dictionary WebRequestBeforeRedirectDetails : WebRequestResponseWithIpEventDetails {
-  required USVString redirectUrl;
-};
-
-dictionary WebRequestResponseStartedDetails : WebRequestResponseWithIpEventDetails {};
-
-dictionary WebRequestCompletedDetails : WebRequestResponseWithIpEventDetails {};
-
-dictionary WebRequestErrorOccurredDetails : WebRequestEventDetails {
-  required DOMString error;
-  required boolean fromCache;
-  DOMString ip;
-};
-
-callback HandlerBehaviorChangedCallback = undefined ();
 
 [Exposed=Window, IsolatedContext]
-interface WebRequest {
-  readonly attribute WebRequestEvent onBeforeRequest;
-  readonly attribute WebRequestEvent onBeforeSendHeaders;
-  readonly attribute WebRequestEvent onSendHeaders;
-  readonly attribute WebRequestEvent onHeadersReceived;
-  readonly attribute WebRequestEvent onAuthRequired;
-  readonly attribute WebRequestEvent onBeforeRedirect;
-  readonly attribute WebRequestEvent onResponseStarted;
-  readonly attribute WebRequestEvent onCompleted;
-  readonly attribute WebRequestEvent onErrorOccurred;
-
-  undefined handlerBehaviorChanged(optional HandlerBehaviorChangedCallback callback);
+interface WebRequestEvent : Event {
+  readonly attribute DOMString documentId;
+  readonly attribute DocumentLifecycle documentLifecycle;
+  readonly attribute long frameId;
+  readonly attribute FrameType frameType;
+  readonly attribute DOMString parentDocumentId;
+  readonly attribute long parentFrameId;
+  readonly attribute WebRequestRequest request;
 };
+
+dictionary WebRequestAuthCredentials {
+  required DOMString username;
+  required DOMString password;
+};
+
+dictionary WebRequestAuthOptions {
+  AbortSignal signal;
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestAuthRequiredEvent : WebRequestEvent {
+  readonly attribute WebRequestResponse response;
+
+  undefined setCredentials(
+    (WebRequestAuthCredentials or Promise<WebRequestAuthCredentials>) credentials,
+    optional WebRequestAuthOptions options = {});
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestBeforeRedirectEvent : WebRequestEvent {
+  readonly attribute WebRequestResponse response;
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestBeforeRequestEvent : WebRequestEvent {
+  undefined redirect(USVString redirectURL);
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestBeforeSendHeadersEvent : WebRequestEvent {
+  undefined setRequestHeaders(Headers requestHeaders);
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestCompletedEvent : WebRequestEvent {
+  readonly attribute WebRequestResponse response;
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestErrorOccurredEvent : WebRequestEvent {
+  readonly attribute DOMString error;
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestHeadersReceivedEvent : WebRequestEvent {
+  readonly attribute WebRequestResponse response;
+
+  undefined redirect(USVString redirectURL);
+  undefined setResponseHeaders(Headers responseHeaders);
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestResponseStartedEvent : WebRequestEvent {
+  readonly attribute WebRequestResponse response;
+};
+
+[Exposed=Window, IsolatedContext]
+interface WebRequestSendHeadersEvent : WebRequestEvent {};
 </xmp>
 
 Each {{WebRequest}} has an associated:
- * <dfn for=WebRequest>handler map</dfn>, which is a
-    [=/map=] whose [=map/keys=] are {{DOMString}}s and whose [=map/values=] are
-    [=lists=] of [=WebRequest handler configs=].
- * <dfn for=WebRequest>onBeforeRequest</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onBeforeSendHeaders</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onSendHeaders</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onHeadersReceived</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onAuthRequired</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onBeforeRedirect</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onResponseStarted</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onCompleted</dfn>, which is a {{WebRequestEvent}}.
- * <dfn for=WebRequest>onErrorOccurred</dfn>, which is a {{WebRequestEvent}}.
+ * <dfn for=WebRequest>interceptors</dfn>, which is a [=list=] of
+    {{WebRequestInterceptor}}s.
 
-The <dfn attribute for=WebRequest>onBeforeRequest</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onBeforeRequest=].
-
-The <dfn attribute for=WebRequest>onBeforeSendHeaders</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onBeforeSendHeaders=].
-
-The <dfn attribute for=WebRequest>onSendHeaders</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onSendHeaders=].
-
-The <dfn attribute for=WebRequest>onHeadersReceived</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onHeadersReceived=].
-
-The <dfn attribute for=WebRequest>onAuthRequired</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onAuthRequired=].
-
-The <dfn attribute for=WebRequest>onBeforeRedirect</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onBeforeRedirect=].
-
-The <dfn attribute for=WebRequest>onResponseStarted</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onResponseStarted=].
-
-The <dfn attribute for=WebRequest>onCompleted</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onCompleted=].
-
-The <dfn attribute for=WebRequest>onErrorOccurred</dfn> getter steps
-are to return [=this=]'s [=WebRequest/onErrorOccurred=].
-
-Each {{WebRequestEvent}} has:
-
- * An <dfn for=WebRequestEvent>eventName</dfn>, a {{DOMString}}.
- * A <dfn for=WebRequestEvent>webRequest</dfn>, a {{WebRequest}} instance that
-    it is a member of.
+Each {{WebRequestInterceptor}} has an associated:
+  <div dfn-for=WebRequestInterceptor>
+    * <dfn>urlPatterns</dfn>, which is a [=list=] of {{URLPattern}}s.
+    * <dfn>resourceTypes</dfn>, which is a [=list=] of {{ResourceType}}s.
+    * <dfn>blocking</dfn>, which is a [=boolean=].
+    * <dfn>includeRequestBody</dfn>, which is a [=boolean=].
+    * <dfn>includeHeaders</dfn>, which is a {{RequestedHeaders}}.
+  </div>
 
 <div algorithm>
-  The <dfn method for=WebRequestEvent>addListener(|listener|, |filter|,
-  |extraInfoSpec|)</dfn> method steps are:
-
-  1. Call {{WebRequestEvent/removeListener}} with |listener|.
-
-  1. Let |eventName| be [=this=]'s [=WebRequestEvent/eventName=].
-
-  1. Let |handlerConfig| be a new [=WebRequest handler config=] with the
-      following [=struct/items=]:
-
-      : [=WebRequest handler config/handler=]
-      :: |listener|
-
-      : [=WebRequest handler config/filter=]
-      :: |filter|
-
-  1. Let |specSet| be a [=set=] containing the items in |extraInfoSpec|.
-
-  1. If |eventName| equals "beforeRequest", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
-          "requestBody", "extraHeaders" », then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
-          [=WebRequest handler config/blocking=] to `true`.
-
-      1. If |specSet| [=set/contains=] "requestBody", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsBody=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "beforeSendHeaders", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
-          "requestHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
-          [=WebRequest handler config/blocking=] to `true`.
-
-      1. If |specSet| [=set/contains=] "requestHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsHeaders=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "sendHeaders", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] « "requestHeaders",
-          "extraHeaders" », then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "requestHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsHeaders=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "headersReceived", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] « "blocking",
-          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
-          [=WebRequest handler config/blocking=] to `true`.
-
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsHeaders=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "authRequired", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] « "asyncBlocking",
-          "blocking", "responseHeaders", "extraHeaders" », then [=throw=]
-          a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "asyncBlocking", then set |handlerConfig|
-          [=WebRequest handler config/asyncBlocking=] to `true`.
-
-      1. If |specSet| [=set/contains=] "blocking", then set |handlerConfig|'s
-          [=WebRequest handler config/blocking=] to `true`.
-
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsHeaders=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "beforeRedirect", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] «
-          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsHeaders=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "responseStarted", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] «
-          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsHeaders=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "completed", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] «
-          "responseHeaders", "extraHeaders" », then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "responseHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsHeaders=] to `true`.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, if |eventName| equals "errorOccurred", then:
-
-      1. If |specSet| is not a [=set/subset=] of the [=set=] « "extraHeaders" »,
-          then [=throw=] a {{TypeError}}.
-
-      1. If |specSet| [=set/contains=] "extraHeaders", then set |handlerConfig|'s
-          [=WebRequest handler config/requestsAllHeaders=] to `true`.
-
-  1. Otherwise, [=throw=] a {{TypeError}}.
-
-  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
-      [=WebRequestEvent/webRequest=].
-
-  1. [=list/Append=] |handlerConfig| to |handlerMap|[|eventName|].
-
-</div>
-
-<div algorithm>
-  The <dfn method for=WebRequestEvent>hasListener(|listener|)</dfn>
+  The <dfn method for=WebRequest>createWebRequestInterceptor(|options|)</dfn>
   method steps are:
 
-  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
-      [=WebRequestEvent/webRequest=].
+  1. Let |interceptor| be a [=new=] {{WebRequestInterceptor}} object.
 
-  1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
+  1. Set the following fields on |interceptor|:
 
-  1. For each |handlerConfig| in |handlerMap|[|event name|]:
+    :  [=WebRequestInterceptor/urlPatterns=]
+    :: |options|["{{WebRequestInterceptorOptions/urlPatterns}}"]
 
-      1. If |handlerConfig|'s [=WebRequest handler config/handler=] equals
-          |listener|, return `true`.
+    :  [=WebRequestInterceptor/resourceTypes=]
+    :: |options|["{{WebRequestInterceptorOptions/resourceTypes}}"]
 
-  1. Return `false`.
+    :  [=WebRequestInterceptor/blocking=]
+    :: |options|["{{WebRequestInterceptorOptions/blocking}}"]
 
-</div>
+    :  [=WebRequestInterceptor/includeRequestBody=]
+    :: |options|["{{WebRequestInterceptorOptions/includeRequestBody}}"]
 
-<div algorithm>
-  The <dfn method for=WebRequestEvent>hasListeners()</dfn> method steps are:
+    :  [=WebRequestInterceptor/includeHeaders=]
+    :: |options|["{{WebRequestInterceptorOptions/includeHeaders}}"]
 
-  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
-      [=WebRequestEvent/webRequest=].
+  1. [=list/Append=] |interceptor| to [=this=]'s [=WebRequest/interceptors=].
 
-  1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
-
-  1. If |handlerMap|[|event name|] is
-      [=list/empty=], return `false`, otherwise return `true`.
-
-</div>
-
-<div algorithm>
-  The <dfn method for=WebRequestEvent>removeListener(|listener|)</dfn>
-  method steps are:
-
-  1. Let |handlerMap| be the [=WebRequest/handler map=] of [=this=]'s
-      [=WebRequestEvent/webRequest=].
-
-  1. Let |event name| be [=this=]'s [=WebRequestEvent/eventName=].
-
-  1. Let |handlerConfigs| be |handlerMap|[|event name|].
-
-  1. [=list/Remove=] all items from |handlerConfigs| whose
-      [=WebRequest handler config/handler=] equals |listener|.
+  1. Return |interceptor|.
 
 </div>
 
@@ -3601,28 +3323,362 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
+  To get the <dfn>applicable {{WebRequestInterceptor}}s</dfn> for a [=/request=]
+  |request|, run the following steps:
+
+  1. Let |client| be |request|'s [=request/client=].
+
+  1. If |client| is null, return an empty [=list=] and `false`.
+
+  1. Let |window| be the [=owning Window of an environment settings object=]
+      given |client|.
+
+  1. If |window| is null then return an empty [=list=] and `false`.
+
+  1. Let |navigable| be |window|'s [=node navigable=].
+
+  1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=]
+      and `false`.
+
+  1. Let |controlledFrame| be the {{HTMLControlledFrameElement}}
+      corresponding to |navigable|'s [=embedderParent=].
+
+  1. Let |applicableInterceptors| be an empty [=list=].
+
+  1. Let |blocking| be `false`.
+
+  1. For each |interceptor| in |controlledFrame|'s [=controlledframe/request=]'s
+      [=WebRequest/interceptors=]:
+
+      1. If |request| should not be [=WebRequestInterceptor/intercepted=]
+          by |interceptor|, then [=iteration/continue=].
+
+      1. [=list/Append=] |interceptor| to |applicableInterceptors|.
+
+      1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`, then
+          set |blocking| to `true`.
+
+    1. Return |applicableInterceptors| and |blocking|.
+
+</div>
+
+<div algorithm>
+  To determine if a [=/request=] |request| should be
+  <dfn for=WebRequestInterceptor>intercepted</dfn> by a
+  {{WebRequestInterceptor}}, run the following steps:
+
+    1. Let |types| be |interceptor|'s [=WebRequestInterceptor/resourceTypes=].
+
+    1. If |types| is not [=list/empty=] and |types| does not
+        [=list/contain=] the result of calling [=get a request's
+        ResourceType=] given |request|, then return `false`.
+
+    1. Let |urlPatterns| be |interceptor|'s
+        [=WebRequestInterceptor/urlPatterns=].
+
+    1. For each |urlPattern| in |urlPatterns|:
+
+        1. If |request|'s [=request/URL=] [=matches a URLPattern=] given
+            |urlPattern|, then return `true`.
+
+    1. Return `false`.
+
+</div>
+
+<div algorithm>
+  To get the <dfn>owning {{Window}} of an [=environment settings object=]</dfn>
+  given an [=environment settings object=] |environment|, run the
+  following steps:
+
+  1. Let |global| be |environment|'s [=environment settings object/
+      global object=].
+
+  1. If |global| is a {{Window}} object, then return |global|.
+
+  1. If |global| is a {{DedicatedWorkerGlobalScope}} object, then:
+
+      1. Let |owner| be |global|.
+
+      1. While |owner| is a {{DedicatedWorkerGlobalScope}} object:
+
+          1. Let |owner| be |owner|'s [=WorkerGlobalScope/owner set=][0].
+
+      1. If |owner| is a {{Document}} object, then return |owner|'s
+          [=relevant global object=].
+
+  1. Return null.
+
+</div>
+
+## Events ## {#api-web-request-events}
+
+{{WebRequestInterceptor}} fires the following events:
+
+<table>
+  <tr>
+    <th>Event name</th>
+    <th>Interface</th>
+    <th>Fired when...</th>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>authrequired</dfn></td>
+    <td>{{WebRequestAuthRequiredEvent}}</td>
+    <td>
+      an [=WebRequestInterceptor/intercepted=] [=/request=] receives a
+      [=/response=] with an HTTP 401 (Unauthorized) 407 (Proxy Authentication
+      Required) [=response/status=].
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>beforeredirect</dfn></td>
+    <td>{{WebRequestBeforeRedirectEvent}}</td>
+    <td>
+      an [=WebRequestInterceptor/intercepted=] [=/request=] receives a redirect
+      [=/response=].
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>beforerequest</dfn></td>
+    <td>{{WebRequestBeforeRequestEvent}}</td>
+    <td>
+      an [=WebRequestInterceptor/intercepted=] [=/request=] is about to start
+      being processed.
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>beforesendheaders</dfn></td>
+    <td>{{WebRequestBeforeSendHeadersEvent}}</td>
+    <td>
+      the request headers of an [=WebRequestInterceptor/intercepted=]
+      [=/request=] are about to be sent.
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>completed</dfn></td>
+    <td>{{WebRequestCompletedEvent}}</td>
+    <td>
+      an [=WebRequestInterceptor/intercepted=] [=/request=] completed.
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>erroroccurred</dfn></td>
+    <td>{{WebRequestErrorOccurredEvent}}</td>
+    <td>
+      an error occurred when processing an [=WebRequestInterceptor/intercepted=]
+      [=/request=].
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>headersreceived</dfn></td>
+    <td>{{WebRequestHeadersReceivedEvent}}</td>
+    <td>
+      an [=WebRequestInterceptor/intercepted=] [=/request=] receives
+      response headers.
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>sendheaders</dfn></td>
+    <td>{{WebRequestSendHeadersEvent}}</td>
+    <td>
+      an [=WebRequestInterceptor/intercepted=] [=/request=] sends its request
+      headers.
+    </td>
+  </tr>
+  <tr>
+    <td><dfn for=WebRequestInterceptor>responsestarted</dfn></td>
+    <td>{{WebRequestResponseStartedEvent}}</td>
+    <td>
+      an [=WebRequestInterceptor/intercepted=] [=/request=] has begun
+      receiving its [=/response=].
+    </td>
+  </tr>
+</table>
+
+{{WebRequestInterceptor}} supports the following [=event handlers=] (and their
+corresponding [=event handler event types=]) as [=event handler IDL attributes=]:
+
+<table>
+  <tr>
+    <th>[=Event handlers=]</th>
+    <th>[=Event handler event types=]</th>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onauthrequired</dfn></td>
+    <td>[=WebRequestInterceptor/authrequired=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onbeforeredirect</dfn></td>
+    <td>[=WebRequestInterceptor/beforeredirect=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onbeforerequest</dfn></td>
+    <td>[=WebRequestInterceptor/beforerequest=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onbeforesendheaders</dfn></td>
+    <td>[=WebRequestInterceptor/beforesendheaders=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>oncompleted</dfn></td>
+    <td>[=WebRequestInterceptor/completed=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onerroroccurred</dfn></td>
+    <td>[=WebRequestInterceptor/erroroccurred=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onheadersreceived</dfn></td>
+    <td>[=WebRequestInterceptor/headersreceived=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onsendheaders</dfn></td>
+    <td>[=WebRequestInterceptor/sendheaders=]</td>
+  </tr>
+  <tr>
+    <td><dfn attribute for=WebRequestInterceptor>onresponsestarted</dfn></td>
+    <td>[=WebRequestInterceptor/responsestarted=]</td>
+  </tr>
+</table>
+
+Each {{WebRequestAuthRequiredEvent}} has an associated:
+  <div dfn-for=WebRequestAuthRequiredEvent>
+    * <dfn>cancel</dfn>, a [=boolean=], initially `false`.
+    * <dfn>authCredentials</dfn>, a {{WebRequestAuthCredentials}},
+        {{Promise}}<{{WebRequestAuthCredentials}}>, or null, initially null.
+    * <dfn>options</dfn>, a {{WebRequestAuthOptions}}, initially «».
+  </div>
+
+<div algorithm>
+  {{WebRequestAuthRequiredEvent}}'s
+  <dfn method for=WebRequestAuthRequiredEvent>setCredentials(|credentials|, |options|)</dfn>
+  method steps are:
+    1. Set [=this=]'s [=WebRequestAuthRequiredEvent/authCredentials=] to
+        |credentials|.
+    1. Set [=this=]'s [=WebRequestAuthRequiredEvent/options=] to
+        |options|.
+
+</div>
+
+<div algorithm>
+  {{WebRequestAuthRequiredEvent}}'s
+  <dfn method for=WebRequestAuthRequiredEvent>preventDefault()</dfn>
+  method steps are to set [=this=]'s [=WebRequestAuthRequiredEvent/cancel=]
+  to `true`.
+</div>
+
+Each {{WebRequestBeforeRequestEvent}} has an associated:
+  <div dfn-for=WebRequestBeforeRequestEvent>
+    * <dfn>cancel</dfn>, a [=boolean=], initially `false`.
+    * <dfn>redirectURL</dfn>, a {{USVString}}, initially "".
+  </div>
+
+<div algorithm>
+  {{WebRequestBeforeRequestEvent}}'s
+  <dfn method for=WebRequestBeforeRequestEvent>redirect(|redirectURL|)</dfn>
+  method steps are to set [=this=]'s [=WebRequestBeforeRequestEvent/redirectURL=]
+  to |redirectURL|.
+</div>
+
+<div algorithm>
+  {{WebRequestBeforeRequestEvent}}'s
+  <dfn method for=WebRequestBeforeRequestEvent>preventDefault()</dfn>
+  method steps are to set [=this=]'s [=WebRequestBeforeRequestEvent/cancel=]
+  to `true`.
+</div>
+
+Each {{WebRequestBeforeSendHeadersEvent}} has an associated:
+  <div dfn-for=WebRequestBeforeSendHeadersEvent>
+    * <dfn>cancel</dfn>, a [=boolean=], initially `false`.
+    * <dfn>requestHeaders</dfn>, a {{Headers}} or null, initially null.
+  </div>
+
+<div algorithm>
+  {{WebRequestBeforeSendHeadersEvent}}'s
+  <dfn method for=WebRequestBeforeSendHeadersEvent>setRequestHeaders(|requestHeaders|)</dfn>
+  method steps are to set [=this=]'s
+  [=WebRequestBeforeSendHeadersEvent/requestHeaders=] to |requestHeaders|.
+</div>
+
+<div algorithm>
+  {{WebRequestBeforeSendHeadersEvent}}'s
+  <dfn method for=WebRequestBeforeSendHeadersEvent>preventDefault()</dfn>
+  method steps are to set [=this=]'s [=WebRequestBeforeSendHeadersEvent/cancel=]
+  to `true`.
+</div>
+
+Each {{WebRequestHeadersReceivedEvent}} has an associated:
+  <div dfn-for=WebRequestHeadersReceivedEvent>
+    * <dfn>cancel</dfn>, a [=boolean=], initially `false`.
+    * <dfn>redirectURL</dfn>, a {{USVString}}, initially "".
+    * <dfn>responseHeaders</dfn>, a {{Headers}} or null, initially null.
+  </div>
+
+<div algorithm>
+  {{WebRequestHeadersReceivedEvent}}'s
+  <dfn method for=WebRequestHeadersReceivedEvent>redirect(|redirectURL|)</dfn>
+  method steps are to set [=this=]'s
+  [=WebRequestHeadersReceivedEvent/redirectURL=] to |redirectURL|.
+</div>
+
+<div algorithm>
+  {{WebRequestHeadersReceivedEvent}}'s
+  <dfn method for=WebRequestHeadersReceivedEvent>setResponseHeaders(|responseHeaders|)</dfn>
+  method steps are to set [=this=]'s
+  [=WebRequestHeadersReceivedEvent/responseHeaders=] to |responseHeaders|.
+</div>
+
+<div algorithm>
+  {{WebRequestHeadersReceivedEvent}}'s
+  <dfn method for=WebRequestHeadersReceivedEvent>preventDefault()</dfn>
+  method steps are to set [=this=]'s [=WebRequestHeadersReceivedEvent/cancel=]
+  to `true`.
+</div>
+
+A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
+[=struct/items=]:
+<dl dfn-for="WebRequestEvent result">
+  : <dfn>cancel</dfn>
+  :: a [=boolean=], initially `false`
+
+  : <dfn>redirectURL</dfn>
+  :: a {{USVString}}, initially ""
+
+  : <dfn>authCredentials</dfn>
+  :: a {{WebRequestAuthCredentials}} or null, initially null
+
+  : <dfn>requestHeaders</dfn>
+  :: a [=header list=], initially «»
+
+  : <dfn>responseHeaders</dfn>
+  :: a [=header list=], initially «»
+
+</dl>
+
+<div algorithm>
   To <dfn>process beforeRequest events</dfn> given a [=/request=] |request|,
   run the following steps:
 
-  1. Let |configs| and |blocking| be the results of calling
-      [=lookup registered WebRequest handler configs=] given "beforeRequest",
-      and |request|.
+  1. Let |interceptors| and |blocking| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+  1. Let |result| be a [=WebRequestEvent result=].
 
-  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestEventDetails object=] given |request|.
+      1. Let |event| be a [=new=] {{WebRequestBeforeRequestEvent}} named
+          [=WebRequestInterceptor/beforerequest=].
 
-      1. If |config|'s [=WebRequest handler config/requestsBody=] is `true` and
-          |request|'s [=request/body=] is not null, then:
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          "{{RequestedHeaders/none}}".
+
+      1. If |interceptor|'s [=WebRequestInterceptor/includeRequestBody=] is
+          `true` and |request|'s [=request/body=] is not null, then:
 
           1. Let |requestBody| be an empty {{RequestBody}}.
 
@@ -3663,32 +3719,23 @@ Each {{WebRequestEvent}} has:
                           1. [=list/Append=] |entry|[1] to
                               |formData|[|entry|[0]].
 
-                  1. Set |details|["{{RequestBody/formData}}"] to |formData|.
+                  1. Set |requestBody|["{{RequestBody/formData}}"] to |formData|.
 
-          1. Set |details|["{{WebRequestBeforeRequestDetails/requestBody}}"]
-              to |requestBody|.
+          1. Set |event|["{{WebRequestEvent/request}}"]["{{
+              WebRequestRequest/body}}"] to |requestBody|.
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
 
-          1. Let |result| be the result of calling |config|'s [=WebRequest
-              handler config/handler=] given |details|.
+          1. [=Dispatch=] |event| to |interceptor|.
 
-              Note: Any exceptions thrown by the handler are intentionally
-              ignored and will not affect the request.
+          1. If |event|'s [=WebRequestBeforeRequestEvent/cancel=] is `true`,
+              then set |result|'s [=WebRequestEvent result/cancel=] to `true`.
 
-          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
-              « "cancel", "redirect" », then:
-
-              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
-
-              1. If |result|["{{BlockingResponse/redirectUrl}}"] is a
-                  [=valid URL string=] and
-                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] is
-                  undefined, then set
-                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] to
-                  |result|["{{BlockingResponse/redirectUrl}}"].
+          1. If |event|'s [=WebRequestBeforeRequestEvent/redirectURL=] is not
+              null and |result|'s [=WebRequestEvent result/redirectURL=] is "",
+              then set |result|'s [=WebRequestEvent result/redirectURL=] to
+              [=event=]'s [=WebRequestBeforeRequestEvent/redirectURL=].
 
           1. Decrement |pendingHandlerCount|.
 
@@ -3697,7 +3744,7 @@ Each {{WebRequestEvent}} has:
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
 
-  1. Return |combinedResults|.
+  1. Return |result|.
 
 </div>
 
@@ -3705,54 +3752,44 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeSendHeaders events</dfn> given a [=/request=] |request|,
   run the following steps:
 
-  1. Let |configs| and |blocking| be the results of calling
-      [=lookup registered WebRequest handler configs=] given
-      "beforeSendHeaders", and |request|.
+  1. Let |interceptors| and |blocking| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+  1. Let |result| be a [=WebRequestEvent result=].
 
-  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestEventDetails object=] given |request|.
+      1. Let |event| be a [=new=] {{WebRequestBeforeSendHeadersEvent}} named
+          [=WebRequestInterceptor/beforesendheaders=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestBeforeSendHeadersDetails/requestHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |request|'s [=request/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `true`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          |interceptor|'s [=WebRequestInterceptor/includeHeaders=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
 
-          1. Let |result| be the result of calling |config|'s [=WebRequest
-              handler config/handler=] given |details|.
+          1. [=Dispatch=] |event| to |interceptor|.
 
-              Note: Any exceptions thrown by the handler are intentionally
-              ignored and will not affect the request.
+          1. If |event|'s [=WebRequestBeforeSendHeadersEvent/cancel=] is `true`,
+              then set |result|'s [=WebRequestEvent result/cancel=] to `true`.
 
-          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
-              « "cancel", "requestHeaders" », then:
+          1. If |event|'s [=WebRequestBeforeSendHeadersEvent/requestHeaders=]
+              is not null, then:
 
-              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
+              1. If |result|'s [=WebRequestEvent result/requestHeaders=] is
+                  null, then set it to a [=new=] {{Headers}}.
 
-              1. If |result|["{{BlockingResponse/requestHeaders}}"] is a
-                  [=list=] whose [=list/size=] &gt; 0, then:
+              1. For each |header| in |event|'s
+                  [=WebRequestBeforeSendHeadersEvent/requestHeaders=]:
 
-                  1. Set |combinedResults|["{{BlockingResponse/requestHeaders}}"]
-                      to [] if it is not defined.
-
-                  1. [=list/Append=] the contents of
-                      |result|["{{BlockingResponse/requestHeaders}}"] to
-                      |combinedResults|["{{BlockingResponse/requestHeaders}}"].
+                  1. [=Headers/Append=] |header| to |result|'s [=WebRequestEvent
+                      result/requestHeaders=].
 
           1. Decrement |pendingHandlerCount|.
 
@@ -3761,7 +3798,7 @@ Each {{WebRequestEvent}} has:
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
 
-  1. Return |combinedResults|.
+  1. Return |result|.
 
 </div>
 
@@ -3769,28 +3806,23 @@ Each {{WebRequestEvent}} has:
   To <dfn>process sendHeaders events</dfn> given a [=/request=] |request|,
   run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "sendHeaders", and |request|.
+  1. Let |interceptors| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestEventDetails object=] given |request|.
+      1. Let |event| be a [=new=] {{WebRequestSendHeadersEvent}} named
+          [=WebRequestInterceptor/sendheaders=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestSendHeadersDetails/requestHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |request|'s [=request/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `true`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          |interceptor|'s [=WebRequestInterceptor/includeHeaders=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will call |config|'s [=WebRequest handler
-          config/handler=] given |details|.
+          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -3798,62 +3830,54 @@ Each {{WebRequestEvent}} has:
   To <dfn>process headersReceived events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |configs| and |blocking| be the results of calling
-      [=lookup registered WebRequest handler configs=] given
-      "headersReceived", and |request|.
+  1. Let |interceptors| and |blocking| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+  1. Let |result| be a [=WebRequestEvent result=].
 
-  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestResponseEventDetails object=] given |request| and
-          |response|.
+      1. Let |event| be a [=new=] {{WebRequestHeadersReceivedEvent}} named
+          [=WebRequestInterceptor/headersreceived=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `false`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          "{{RequestedHeaders/none}}".
+
+      1. Set |event|["{{WebRequestHeadersReceivedEvent/response}}"] to the
+          result of [=creating a WebRequestResponse object=] given |request|,
+          |response|, and |interceptor|'s
+          [=WebRequestInterceptor/includeHeaders=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
 
-          1. Let |result| be the result of calling |config|'s [=WebRequest
-              handler config/handler=] given |details|.
+          1. [=Dispatch=] |event| to |interceptor|.
 
-              Note: Any exceptions thrown by the handler are intentionally
-              ignored and will not affect the request.
+          1. If |event|'s [=WebRequestHeadersReceivedEvent/cancel=] is `true`,
+              then set |result|'s [=WebRequestEvent result/cancel=] to `true`.
 
-          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
-              « "cancel", "redirectUrl", "responseHeaders" », then:
+          1. If |event|'s [=WebRequestHeadersReceivedEvent/redirectURL=] is not
+              null and |result|'s [=WebRequestEvent result/redirectURL=] is "",
+              then set |result|'s [=WebRequestEvent result/redirectURL=] to
+              [=event=]'s [=WebRequestHeadersReceivedEvent/redirectURL=].
 
-              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
+          1. If |event|'s [=WebRequestHeadersReceivedEvent/responseHeaders=]
+              is not null, then:
 
-              1. If |result|["{{BlockingResponse/redirectUrl}}"] is a
-                  [=valid URL string=] and
-                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] is
-                  undefined, then set
-                  |combinedResults|["{{BlockingResponse/redirectUrl}}"] to
-                  |result|["{{BlockingResponse/redirectUrl}}"].
+              1. If |result|'s [=WebRequestEvent result/responseHeaders=] is
+                  null, then set it to a [=new=] {{Headers}}.
 
-              1. If |result|["{{BlockingResponse/responseHeaders}}"] is a
-                  [=list=] whose [=list/size=] &gt; 0, then:
+              1. For each |header| in |event|'s
+                  [=WebRequestHeadersReceivedEvent/responseHeaders=]:
 
-                  1. Set |combinedResults|["{{BlockingResponse/responseHeaders}}"]
-                      to [] if it is not defined.
-
-                  1. [=list/Append=] the contents of
-                      |result|["{{BlockingResponse/responseHeaders}}"] to
-                      |combinedResults|["{{BlockingResponse/responseHeaders}}"].
+                  1. [=Headers/Append=] |header| to |result|'s [=WebRequestEvent
+                      result/responseHeaders=].
 
           1. Decrement |pendingHandlerCount|.
 
@@ -3862,17 +3886,13 @@ Each {{WebRequestEvent}} has:
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
 
-  1. Return |combinedResults|.
+  1. Return |result|.
 
 </div>
 
 <div algorithm>
   To <dfn>process authRequired events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
-
-  1. Let |configs| and |blocking| be the results of calling
-      [=lookup registered WebRequest handler configs=] given
-      "authRequired", and |request|.
 
   1. Let |challenger| be an {{AuthChallenger}} with {{AuthChallenger/host}} and
       {{AuthChallenger/port}} equal to the [=url/host=] and [=url/port=] of
@@ -3902,73 +3922,79 @@ Each {{WebRequestEvent}} has:
 
   1. If |scheme| is null, then return null.
 
-  1. Let |combinedResults| be an empty {{BlockingResponse}}.
+  1. Let |interceptors| and |blocking| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |pendingHandlerCount| be |configs|'s [=list/size=].
+  1. Let |result| be a [=WebRequestEvent result=].
+
+  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestResponseEventDetails object=] given |request| and
-          |response|.
+      1. Let |event| be a [=new=] {{WebRequestHeadersReceivedEvent}} named
+          [=WebRequestInterceptor/authrequired=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `false`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          "{{RequestedHeaders/none}}".
 
-      1. Set |details|["{{WebRequestAuthRequiredDetails/challenger}}"],
-          |details|["{{WebRequestAuthRequiredDetails/isProxy}}"],
-          |details|["{{WebRequestAuthRequiredDetails/scheme}}"], and
-          |details|["{{WebRequestAuthRequiredDetails/realm}}"] fields equal
-          to |challenger|, |isProxy|, |scheme|, and |realm| respectively.
+      1. Set |event|["{{WebRequestHeadersReceivedEvent/response}}"] to the
+          result of [=creating a WebRequestResponse object=] given |request|,
+          |response|, and |interceptor|'s
+          [=WebRequestInterceptor/includeHeaders=].
+
+      1. Set |event|["{{WebRequestHeadersReceivedEvent/response}}"]["{{
+          WebRequestResponse/auth}}"] to a {{WebRequestAuthDetails}}
+          whose "{{WebRequestAuthDetails/challenger}}",
+          "{{WebRequestAuthDetails/isProxy}}",
+          "{{WebRequestAuthDetails/scheme}}", and
+          "{{WebRequestAuthDetails/realm}}" fields have the values
+          |challenger|, |isProxy|, |scheme|, and |realm| respectively.
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
 
-          1. Let |result| be null.
+          1. [=Dispatch=] |event| to |interceptor|.
 
-          1. If |config|'s [=WebRequest handler config/asyncBlocking=] flag is
-              `true`, then:
+          1. Let |credentials| be |event|'s
+              [=WebRequestAuthRequiredEvent/authCredentials=].
 
-              1. Let |callback| be a [=function=] that takes a
-                  {{BlockingResponse}} |blockingResponse| argument and when
-                  executed will set |result| to |blockingResponse|.
+          1. If |event|'s [=WebRequestAuthRequiredEvent/cancel=] is `true`,
+              then set |result|'s [=WebRequestEvent result/cancel=] to `true`.
 
-              1. Call |config|'s [=WebRequest handler config/handler=] given
-                  |details| and |callback|.
+          1. Otherwise, if |credentials| is a {{WebRequestAuthCredentials}},
+              then set |result|'s [=WebRequestEvent result/authCredentials=] to
+              |event|'s [=WebRequestAuthRequiredEvent/authCredentials=].
 
-              1. Wait [=in parallel=] for |callback| to be invoked, and then
-                  continue executing these steps.
+          1. Otherwise, if |credentials| is a {{Promise}}, then:
 
-          1. Otherwise:
+              1. Let |signal| be |event|'s [=WebRequestAuthRequiredEvent/
+                  options=]["{{WebRequestAuthOptions/signal}}"].
 
-              1. Set |result| to the result of calling |config|'s
-                  [=WebRequest handler config/handler=] given |details|.
+              1. Let |done| be `false`.
 
-                  Note: Any exceptions thrown by the handler are intentionally
-                  ignored and will not affect the request.
+              1. If |signal| is an {{AbortSignal}}, then [=AbortSignal/add=] the
+                  following abort algorithm to |signal|:
 
-          1. If all [=map/keys=] in |result| are [=list/contained=] in the set
-              « "cancel", "authCredentials" » and |result|["{{
-              BlockingResponse/authCredentials}}"] is either undefined or a
-              dictionary [=list/containing=] two [=map/keys=] equal to
-              "username" and "password", then:
+                  1. Set |result|'s [=WebRequestEvent result/cancel=] to `true`.
 
-              1. If |result|["{{BlockingResponse/cancel}}"] is `true`, then set
-                  |combinedResults|["{{BlockingResponse/cancel}}"] to `true`.
+                  1. Set |done| to `true`.
 
-              1. If |result|["{{BlockingResponse/authCredentials}}"] is defined
-                  and |combinedResults|["{{BlockingResponse/authCredentials}}"]
-                  is undefined, then set |combinedResults|["{{
-                  BlockingResponse/authCredentials}}"] to
-                  |result|["{{BlockingResponse/authCredentials}}"].
+              1. [=Upon fulfillment=] of |credentials|, run the following steps
+                  that take a |resolvedValue|:
+
+                  1. Set |result|'s [=WebRequestEvent result/authCredentials=]
+                      to |resolvedValue|.
+
+                  1. Set |done| to `true`.
+
+              1. Wait [=in parallel=] for |done| to equal `true`, then [=queue a
+                  global task=] on the [=DOM manipulation task source=] of
+                  |embedderGlobal| that will run continue the remaining steps
+                  of this algorithm.
 
           1. Decrement |pendingHandlerCount|.
 
@@ -3977,7 +4003,7 @@ Each {{WebRequestEvent}} has:
       of |request|'s [=request/client=]'s [=environment settings object/
       global object=] that will continue the remaining steps of this algorithm.
 
-  1. Return |combinedResults|.
+  1. Return |result|.
 
 </div>
 
@@ -3985,36 +4011,36 @@ Each {{WebRequestEvent}} has:
   To <dfn>process beforeRedirect events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "beforeRedirect", and |request|.
+  1. Let |interceptors| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestResponseWithIpEventDetails object=] given |request| and
-          |response|.
+      1. Let |event| be a [=new=] {{WebRequestBeforeRedirectEvent}} named
+          [=WebRequestInterceptor/beforeredirect=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `false`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          "{{RequestedHeaders/none}}".
+
+      1. Set |event|["{{WebRequestBeforeRedirectEvent/response}}"] to the
+          result of [=creating a WebRequestResponse object=] given |request|,
+          |response|, and |interceptor|'s
+          [=WebRequestInterceptor/includeHeaders=].
 
       1. Let |internalResponse| be |response|, if |response| is not a
-          [=filtered response=]; otherwise |response|’s [=internal response=].
+          [=filtered response=]; otherwise |response|'s [=internal response=].
 
-      1. Set |details|["{{WebRequestBeforeRedirectDetails/redirectUrl}}"] to
-          |internalResponse|'s [=location URL=] given |request|'s
-          [=request/current URL=]'s [=url/fragment=].
+      1. Set |event|["{{WebRequestBeforeRedirectEvent/response}}"]["{{
+          WebRequestResponse/redirectURL}}"] to |internalResponse|'s
+          [=location URL=] given |request|'s [=request/current URL=]'s
+          [=url/fragment=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will call |config|'s [=WebRequest handler
-          config/handler=] given |details|.
+          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -4022,29 +4048,28 @@ Each {{WebRequestEvent}} has:
   To <dfn>process responseStarted events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "responseStarted", and |request|.
+  1. Let |interceptors| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestResponseWithIpEventDetails object=] given |request| and
-          |response|.
+      1. Let |event| be a [=new=] {{WebRequestResponseStartedEvent}} named
+          [=WebRequestInterceptor/responsestarted=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `false`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          "{{RequestedHeaders/none}}".
+
+      1. Set |event|["{{WebRequestResponseStartedEvent/response}}"] to the
+          result of [=creating a WebRequestResponse object=] given |request|,
+          |response|, and |interceptor|'s
+          [=WebRequestInterceptor/includeHeaders=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will call |config|'s [=WebRequest handler
-          config/handler=] given |details|.
+          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -4052,29 +4077,28 @@ Each {{WebRequestEvent}} has:
   To <dfn>process completed events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "completed", and |request|.
+  1. Let |interceptors| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestResponseWithIpEventDetails object=] given |request| and
-          |response|.
+      1. Let |event| be a [=new=] {{WebRequestCompletedEvent}} named
+          [=WebRequestInterceptor/completed=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `false`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          "{{RequestedHeaders/none}}".
+
+      1. Set |event|["{{WebRequestCompletedEvent/response}}"] to the
+          result of [=creating a WebRequestResponse object=] given |request|,
+          |response|, and |interceptor|'s
+          [=WebRequestInterceptor/includeHeaders=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will call |config|'s [=WebRequest handler
-          config/handler=] given |details|.
+          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -4082,114 +4106,113 @@ Each {{WebRequestEvent}} has:
   To <dfn>process errorOccurred events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |configs| be the result of calling [=lookup registered WebRequest
-      handler configs=] given "errorOccurred", and |request|.
+  1. Let |interceptors| be the result of getting the
+      [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |embedderGlobal| be the [=relevant global object=] of the result of
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
-  1. For each |config| in |configs|:
+  1. For each |interceptor| in |interceptors|:
 
-      1. Let |details| be the result of calling [=create a
-          WebRequestResponseWithIpEventDetails object=] given |request| and
-          |response|.
+      1. Let |event| be a [=new=] {{WebRequestErrorOccurredEvent}} named
+          [=WebRequestInterceptor/erroroccurred=].
 
-      1. If |config|'s [=WebRequest handler config/requestsHeaders=] is `true`,
-          then set |details|["{{WebRequestResponseEventDetails/responseHeaders}}"]
-          to the result of calling [=convert a header list to an HttpHeader
-          sequence=] given |response|'s [=response/header list=], |config|'s
-          [=WebRequest handler config/requestsAllHeaders=], and isRequest
-          equal to `false`.
+      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+          "{{RequestedHeaders/none}}".
 
-      1. Set |config|'s {{WebRequestErrorOccurredDetails/error}} field to an
+      1. Set |event|["{{WebRequestErrorOccurredEvent/error}}"] to an
           [=implementation-defined=] error message describing the error in
           |response|.
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will call |config|'s [=WebRequest handler
-          config/handler=] given |details|.
+          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
 
 </div>
 
 <div algorithm>
-  To <dfn>create a {{WebRequestEventDetails}} object</dfn> given a [=/request=]
-  |request|, run the following steps:
+  To <dfn>populate a {{WebRequestEvent}}</dfn> given a {{WebRequestEvent}}
+  |event|, a [=/request=] |request|, and a {{RequestedHeaders}}
+  |requestedHeaders|, run the following steps:
 
   1. Let |environmentSettingsObject| be |request|'s [=request/client=].
 
-  1. Let |details| be a {{WebRequestEventDetails}} with the following
-      fields:
-      : {{WebRequestEventDetails/timeStamp}}
-      :: The [=current high resolution time=] given [=this=]'s
-          [=relevant global object=].
+  1. Set the following fields on |event|:
 
-          Note: This timestamp isn't coarsened because Controlled Frames are
-          only available within [=isolated contexts=], which always have the
-          [=cross-origin isolated capability=].
+      : {{WebRequestEvent/documentId}}
+      :: "".
 
-      : {{WebRequestEventDetails/url}}
-      :: The last element of |request|'s [=request/URL list=].
-
-      : {{WebRequestEventDetails/method}}
-      :: |request|'s [=request/method=].
-
-      : {{WebRequestEventDetails/initiator}}
-      :: The [=serialization of an origin=] given |request|'s [=request/origin=].
-
-         Note: An opaque origin will result in {{WebRequestEventDetails/initiator}}
-         being set to the {{DOMString}} "null".
-
-      : {{WebRequestEventDetails/type}}
-      :: The result of calling [=get a request's ResourceType=] given |request|.
-
-      : {{WebRequestEventDetails/requestId}}
-      :: |request|'s [=request/requestId=].
-
-      : {{WebRequestEventDetails/frameId}}
+      : {{WebRequestEvent/frameId}}
       :: -1
 
-      : {{WebRequestEventDetails/parentFrameId}}
+      : {{WebRequestEvent/parentDocumentId}}
+      :: "".
+
+      : {{WebRequestEvent/parentFrameId}}
       :: -1
 
-  1. If |environmentSettingsObject|'s [=environment settings object/global object=]
-      is a {{Window}} object, then:
+  1. Let |window| be the [=owning Window of an environment settings object=]
+      given |environmentSettingsObject|.
 
-      1. Let |window| be |environmentSettingsObject|'s
-          [=environment settings object/global object=].
+  1. If |window| is not null, then:
 
       1. Let |parentNavigable| be |window|'s [=Window/navigable=]'s
           [=navigable/parent=].
 
-      1. Update the following fields of |details|:
+      1. Update the following fields of |event|:
 
-          : {{WebRequestEventDetails/documentId}}
+          : {{WebRequestEvent/documentId}}
           :: |environmentSettingsObject|'s [=environment/id=].
 
-          : {{WebRequestEventDetails/documentLifecycle}}
+          : {{WebRequestEvent/documentLifecycle}}
           :: The result of [=getting the DocumentLifecycle of a Document=] given
               |window|'s [=associated document=].
 
-          : {{WebRequestEventDetails/frameId}}
+          : {{WebRequestEvent/frameId}}
           :: The [=navigable/frameId=] of |window|'s [=Window/navigable=].
 
-          : {{WebRequestEventDetails/frameType}}
-          :: {{FrameType/"fenced_frame"}} if |window|'s
+          : {{WebRequestEvent/frameType}}
+          :: {{FrameType/"fenced-frame"}} if |window|'s
               [=window/browsing context=]'s [=fenced frame config instance=] is
-              non-null, {{FrameType/"outermost_frame"}} if |parentNavigable| is
-              null, {{FrameType/"sub_frame"}} otherwise.
+              non-null, {{FrameType/"outermost-frame"}} if |parentNavigable| is
+              null, {{FrameType/"sub-frame"}} otherwise.
 
           1. If |parentNavigable| is not null, then update the following
-              values of |details|:
+              values of |event|:
 
-              : {{WebRequestEventDetails/parentDocumentId}}
+              : {{WebRequestEvent/parentDocumentId}}
               :: The [=environment/id=] of |parentNavigable|'s
                   [=active document=]'s [=relevant global object=].
 
-              : {{WebRequestEventDetails/parentFrameId}}
+              : {{WebRequestEvent/parentFrameId}}
               :: The [=navigable/frameId=] of |parentNavigable|.
 
-  1. Return |details|.
+    1. Set |event|["{{WebRequestEvent/request}}"] to a {{WebRequestRequest}}
+        with the following fields:
+
+      : {{WebRequestRequest/url}}
+      :: The last element of |request|'s [=request/URL list=].
+
+      : {{WebRequestRequest/method}}
+      :: |request|'s [=request/method=].
+
+      : {{WebRequestRequest/initiator}}
+      :: The [=serialization of an origin=] given |request|'s [=request/origin=].
+
+         Note: An opaque origin will result in {{WebRequestRequest/initiator}}
+         being set to the {{DOMString}} "null".
+
+      : {{WebRequestRequest/type}}
+      :: The result of calling [=get a request's ResourceType=] given |request|.
+
+      : {{WebRequestRequest/id}}
+      :: |request|'s [=request/requestId=].
+
+  1. If |requestedHeaders| is not "{{RequestedHeaders/none}}", then set
+      |event|["{{WebRequestEvent/request}}"]["{{WebRequestRequest/headers}}"]
+      to the result of calling [=convert a header list to a Headers object=]
+      given |request|'s [=request/header list=], |requestedHeaders|, and
+      isRequest equal to `true`.
 
 </div>
 
@@ -4198,7 +4221,7 @@ Each {{WebRequestEvent}} has:
   run the following steps:
 
   1. If |document|'s [=unload counter=] &gt; 0, then return
-      "{{DocumentLifecycle/pending_deletion}}".
+      "{{DocumentLifecycle/pending-deletion}}".
 
   1. If |document|'s [=node navigable=] is non-null and is a [=prerendering
       navigable=], then return "{{DocumentLifecycle/prerender}}".
@@ -4211,118 +4234,65 @@ Each {{WebRequestEvent}} has:
 </div>
 
 <div algorithm>
-  To <dfn>create a {{WebRequestResponseEventDetails}} object</dfn> given a
-  [=/request=] |request|, a [=/response=] |response|, a [=boolean=]
-  |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
-  run the following steps:
+  To <dfn>create a {{WebRequestResponse}} object</dfn> given a [=/request=]
+  |request|, a [=/response=] |response|, and a {{RequestedHeaders}}
+  |requestedHeaders|, run the following steps:
 
-  1. Let |details| be the result of [=creating a WebRequestEventDetails object=]
-      given |request|.
+  1. Let |response| be a {{WebRequestResponse}} with the following fields:
 
-  1. Update the following fields in |details|:
-
-      : {{WebRequestResponseEventDetails/statusCode}}
+      : {{WebRequestResponse/statusCode}}
       :: |response|'s [=response/status=].
 
-      : {{WebRequestResponseEventDetails/statusLine}}
+      : {{WebRequestResponse/statusLine}}
       :: |response|'s [=response/status message=].
 
-  1. If |requestsHeaders| is `true`, then set |details|["
-      {{WebRequestResponseEventDetails/responseHeaders}}"] to the result of
-      calling [=convert a header list to an HttpHeader sequence=] given
-      |response|'s [=response/header list=], |requestsAllHeaders|, and isRequest
+      : {{WebRequestResponse/fromCache}}
+      :: `true` if |response|'s [=response/cache state=] is "local",
+          `false` otherwise.
+
+      : {{WebRequestResponse/ip}}
+      :: The [=ip address=] from which |response| was received if the request
+          involved a network request.
+
+          <span class=XXX>The [[FETCH]] spec currently doesn't specify storing
+          the remote IP address used when sending |request|.</span>
+
+  1. If |requestedHeaders| is not "{{RequestedHeaders/none}}", then set
+      |response|["{{WebRequestResponse/headers}}"] to the result of
+      calling [=convert a header list to a Headers object=] given
+      |response|'s [=response/header list=], |requestedHeaders|, and isRequest
       equal to `false`.
 
-  1. Return |details|.
+  1. Return |response|.
 
 </div>
 
 <div algorithm>
-  To <dfn>create a {{WebRequestResponseWithIpEventDetails}} object</dfn> given a
-  [=/request=] |request|, a [=/response=] |response|,
-  a [=boolean=] |requestsHeaders|, and a [=boolean=] |requestsAllHeaders|,
-  run the following steps:
+  To <dfn>convert a [=header list=] to a {{Headers}} object</dfn> given
+  a [=header list=] |fetchHeaders|, a {{RequestedHeaders}} |requestedHeaders|,
+  and a [=boolean=] |isRequest|, run the following steps:
 
-  1. Let |details| be the result of [=creating a
-      WebRequestResponseEventDetails object=] given |request|, |response|,
-      |requestsHeaders|, and |requestsAllHeaders|.
+  1. [=Assert=] that |requestedHeaders| is not "{{RequestedHeaders/none}}".
 
-  1. If |response|'s [=response/cache state=] is "local", then set |details|["
-      {{WebRequestResponseWithIpEventDetails/fromCache}}"] to `true`.
-
-  1. Set |details|["{{WebRequestResponseWithIpEventDetails/ip}}"] to the
-      [=ip address=] from which |response| was received if the request
-      involved a network request.
-
-      <span class=XXX>The [[FETCH]] spec currently doesn't specify storing
-      the remote IP address used when sending |request|.</span>
-
-  1. Return |details|.
-
-</div>
-
-<div algorithm>
-  To <dfn>convert a [=header list=] to an {{HttpHeader}} sequence</dfn> given
-  a [=header list=] |fetchHeaders|, a [=boolean=] |requestsAllHeaders|, and
-  a [=boolean=] |isRequest|, run the following steps:
-
-  1. Let |headers| be a an empty [=list=] of {{HttpHeader}} objects.
+  1. Let |headers| be a [=new=] {{Headers}} object.
 
   1. For each |fetchHeader| in |fetchHeaders|:
 
       1. If all of the following conditions are met, then [=continue=]:
 
           * |isRequest| is `true`
-          * |requestsAllHeaders| is `false`
+          * |requestedHeaders| is "{{RequestedHeaders/cors}}".
           * |fetchHeader| is not a [=CORS-safelisted request-header=]
 
       1. If all of the following conditions are met, then [=continue=]:
 
           * |isRequest| is `false`
-          * |requestsAllHeaders| is `false`
+          * |requestedHeaders| is "{{RequestedHeaders/cors}}".
           * |fetchHeader|[0] is not a [=CORS-safelisted response-header name=]
 
-      1. Let |header| be a new {{HttpHeader}}.
-
-      1. Set |header|["{{HttpHeader/name}}"] to the [=isomorphic decoding=] of
-          |fetchHeader|[0].
-
-      1. Let |value| be the [=isomorphic decoding=] of |fetchHeader|[1] .
-
-      1. If |value| is a [=scalar value string=], then set |header|["{{
-          HttpHeader/value}}"] to |value|.
-
-      1. Otherwise, set |header|["{{HttpHeader/binaryValue}}"] to
-          |fetchHeader|[1].
-
-      1. [=list/Append=] |header| to |headers|.
+      1. [=Headers/Append=] |fetchHeader| to |headers|.
 
   1. Return |headers|.
-
-</div>
-
-<div algorithm>
-  To <dfn>convert an {{HttpHeader}} sequence to a [=header list=]</dfn> given
-  a {{HttpHeader}} |headers|, run the following steps:
-
-  1. Let |headerList| be a an empty [=header list=].
-
-  1. For each |header| in |headers|:
-
-      1. If any of the following conditions are `true`, [=throw=] a {{TypeError}}:
-
-          * |header|["name"] is not a {{DOMString}}.
-
-          * |header|["value"] is not a {{DOMString}} or |header|["binaryValue"]
-              is not an [=list=] of {{Number}}s.
-
-      1. Let |value| be |header|["value"] if it exists, or the [=isomorphic
-          decoding=] of |header|["binaryValue"] otherwise.
-
-      1. [=list/Append=] a new [=tuple=] with values « |header|["name"],
-          |value| » to |headerList|.
-
-  1. Return |headerList|.
 
 </div>
 
@@ -4337,10 +4307,10 @@ Each {{WebRequestEvent}} has:
       `"xmlhttprequest"`, then return "{{ResourceType/xmlhttprequest}}".
 
   1. If |request|'s [=request/destination=] equals `"document"`,
-      then return "{{ResourceType/main_frame}}".
+      then return "{{ResourceType/main-frame}}".
 
   1. If |request|'s [=request/destination=] equals `"frame"` or `"iframe"`,
-      then return "{{ResourceType/sub_frame}}".
+      then return "{{ResourceType/sub-frame}}".
 
   1. If |request|'s [=request/destination=] equals `"style"` or `"xslt"`,
       then return "{{ResourceType/stylesheet}}".
@@ -4362,7 +4332,7 @@ Each {{WebRequestEvent}} has:
       `"video"`, then return "{{ResourceType/media}}".
 
   1. If |request|'s [=request/destination=] equals `"report"`,
-      then return "{{ResourceType/csp_report}}".
+      then return "{{ResourceType/csp-report}}".
 
   1. If |request|'s [=request/destination=] equals `""` and |request|'s
       [=request/keepalive=] is `true`, then return "{{ResourceType/ping}}".
@@ -4383,94 +4353,6 @@ Each {{WebRequestEvent}} has:
 
 </div>
 
-## WebRequest handler config ## {#webrequest-handler-config-struct}
-
-  A <dfn export>WebRequest handler config</dfn> is a [=struct=] with the
-  following [=struct/items=]:
-
-  <dl export dfn-for="WebRequest handler config">
-    : <dfn>handler</dfn>
-    :: a {{WebRequestEventListener}}
-
-    : <dfn>filter</dfn>
-    :: a {{RequestFilter}}
-
-    : <dfn>requestsBody</dfn>
-    :: a [=boolean=]
-
-    : <dfn>requestsHeaders</dfn>
-    :: a [=boolean=]
-
-    : <dfn>requestsAllHeaders</dfn>
-    :: a [=boolean=]
-
-    : <dfn>blocking</dfn>
-    :: a [=boolean=]
-
-    : <dfn>asyncBlocking</dfn>
-    :: a [=boolean=]
-  </dl>
-
-  <div algorithm>
-    To <dfn>lookup registered WebRequest handler configs</dfn> given a
-    {{DOMString}} |eventName|, and a [=/request=] |request|, run the
-    following steps:
-
-    1. Let |client| be |request|'s [=request/client=].
-
-    1. If |client| is null, return an empty [=list=] and `false`.
-
-    1. If |client|'s corresponding [=global object=] is not a {{Window}},
-        return an empty [=list=] and `false`.
-
-    1. Let |navigable| be the [=/navigable=] that |client|'s [=global object=]
-        is within.
-
-    1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=]
-        and `false`.
-
-    1. Let |controlledFrame| be the {{HTMLControlledFrameElement}}
-        corresponding to |navigable|'s [=embedderParent=].
-
-    1. Let |validHandlers| be an empty [=list=].
-
-    1. Let |blocking| be `false`.
-
-    1. Let |handlerMap| be |controlledFrame|'s
-        {{HTMLControlledFrameElement/request}}'s [=WebRequest/handler map=].
-
-    1. For each |handlerConfig| in |handlerMap|[|eventName|]:
-
-        1. Let |filter| be |handlerConfig|'s
-            [=WebRequest handler config/filter=].
-
-        1. Let |types| be |filter|["{{RequestFilter/types}}"].
-
-        1. If |types| is not [=list/empty=] and |types| does not
-            [=list/contain=] the result of calling [=get a request's
-            ResourceType=] given |request|, then [=iteration/continue=].
-
-        1. Let |urls| be |filter|["{{RequestFilter/urls}}"].
-
-        1. Let |isValidUrl| be `true` if |urls| is [=list/empty=],
-            `false` otherwise.
-
-        1. For each |urlPattern| in |urls|:
-
-            1. If |request|'s [=request/URL=] [=matches a match pattern=] given
-                |urlPattern|, set |isValidUrl| to `true`.
-
-        1. If |isValidUrl| is `false`, then [=iteration/continue=].
-
-        1. If |handlerConfig|'s [=WebRequest handler config/blocking=] or
-            [=WebRequest handler config/asyncBlocking=] is `true`, then set
-            |blocking| to `true`.
-
-        1. [=list/Append=] |handlerConfig| to |validHandlers|.
-
-    1. Return |validHandlers| and |blocking|.
-
-  </div>
 
 ## Monkey Patches ## {#api-web-request-monkey}
 
@@ -4490,13 +4372,13 @@ The [=main fetch=] algorithm is monkey patched as follows:
 
   4. <ins>If |webRequestResult| is not null, then:</ins>
 
-      1. <ins>If |webRequestResult|["{{BlockingResponse/cancel}}"] is `true`,
-          then set |response| to a [=network error=].</ins>
+      1. <ins>If |webRequestResult|'s [=WebRequestEvent result/cancel=] is
+          `true`, then set |response| to a [=network error=].</ins>
 
-      1. <ins>Otherwise, if |webRequestResult|
-          ["{{BlockingResponse/redirectUrl}}"] is not an empty {{DOMString}},
-          then set |response| to the result of [=creating a redirect response=]
-          given |webRequestResult|["{{BlockingResponse/redirectUrl}}"].</ins>
+      1. <ins>Otherwise, if |webRequestResult|'s [=WebRequestEvent result/
+          redirectURL=] is not an empty {{DOMString}}, then set |response| to
+          the result of [=creating a redirect response=] given
+          |webRequestResult|'s [=WebRequestEvent result/redirectURL=].</ins>
 
 
 The [=fetch response handover=] algorithm is monkey patched as follows:
@@ -4530,14 +4412,13 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkey patched as follows:
 
   9. <ins>If |webRequestResult| is not null, then:</ins>
 
-      1. <ins>If |webRequestResult|["{{BlockingResponse/cancel}}"] is `true`,
-          then set |response| to a [=network error=].</ins>
+      1. <ins>If |webRequestResult|'s [=WebRequestEvent result/cancel=] is
+          `true`, then set |response| to a [=network error=].</ins>
 
-      1. <ins>Otherwise, if |webRequestResult|
-          ["{{BlockingResponse/requestHeaders}}"] is a non-empty [=list=], then
-          set |request|'s [=request/header list=] to the result of [=converting
-          an HttpHeader sequence to a header list=] given |webRequestResult|
-          ["{{BlockingResponse/requestHeaders}}"].</ins>
+      1. <ins>Otherwise, if |webRequestResult|'s [=WebRequestEvent result/
+          requestHeaders=] is a non-empty [=list=], then set |request|'s
+          [=request/header list=] to |webRequestResult|'s [=WebRequestEvent
+          result/requestHeaders=]'s [=Headers/header list=].</ins>
 
   10. <ins>If |response| is not null, </ins> run these steps, but abort when
       |fetchParams| is canceled:
@@ -4562,20 +4443,20 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkey patched as follows:
 
       5. <ins>If |webRequestResult| is not null, then:</ins>
 
-          1. <ins>If |webRequestResult|["{{BlockingResponse/cancel}}"] is `true`,
-              then set |response| to a [=network error=].</ins>
+          1. <ins>If |webRequestResult|'s [=WebRequestEvent result/cancel=] is
+              `true`, then set |response| to a [=network error=].</ins>
 
-          1. <ins>Otherwise, if |webRequestResult|
-              ["{{BlockingResponse/redirectUrl}}"] is not an empty
+          1. <ins>Otherwise, if |webRequestResult|'s
+              [=WebRequestEvent result/redirectURL=] is not an empty
               {{DOMString}}, then set |forwardResponse| to the result of
               [=creating a redirect response=] given
-              |webRequestResult|["{{BlockingResponse/redirectUrl}}"].</ins>
+              |webRequestResult|'s [=WebRequestEvent result/redirectURL=].</ins>
 
-          1. <ins>Otherwise, if |webRequestResult|
-              ["{{BlockingResponse/responseHeaders}}"] is a non-empty [=list=], then
-              set |forwardResponse|'s [=response/header list=] to the result of
-              [=converting an HttpHeader sequence to a header list=] given
-              |webRequestResult| ["{{BlockingResponse/responseHeaders}}"].</ins>
+          1. <ins>Otherwise, if |webRequestResult|'s
+              [=WebRequestEvent result/responseHeaders=] is a non-empty
+              [=list=], then set |forwardResponse|'s [=response/header list=] to
+              |webRequestResult|'s [=WebRequestEvent result/responseHeaders=]'s
+              [=Headers/header list=].</ins>
 
 &vellip;
 
@@ -4598,19 +4479,19 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkey patched as follows:
 
           1. <ins>If |webRequestResult| is not null, then:</ins>
 
-              1. <ins>If |webRequestResult|["{{BlockingResponse/cancel}}"] is
-                  `true`, then set |response| to a [=network error=].</ins>
+              1. <ins>If |webRequestResult|'s [=WebRequestEvent result/cancel=]
+                  is `true`, then set |response| to a [=network error=].</ins>
 
-              1. <ins>Otherwise, if |webRequestResult|["{{BlockingResponse/
-                  authCredentials}}"] is an {{/object}}, then:
+              1. <ins>Otherwise, if |webRequestResult|'s [=WebRequestEvent
+                  result/authCredentials=] is an {{/object}}, then:</ins>
 
-                  1. Set |username| to |webRequestResult|["{{BlockingResponse/
-                      authCredentials}}"]["{{WebRequestAuthCredentials/
-                      username}}"].
+                  1. <ins>Set |username| to |webRequestResult|'s
+                      [=WebRequestEvent result/authCredentials=]["{{
+                      WebRequestAuthCredentials/username}}"].</ins>
 
-                  1. Set |password| to |webRequestResult|["{{BlockingResponse/
-                      authCredentials}}"]["{{WebRequestAuthCredentials/
-                      password}}"].
+                  1. <ins>Set |password| to |webRequestResult|'s
+                      [=WebRequestEvent result/authCredentials=]["{{
+                      WebRequestAuthCredentials/password}}"].</ins>
 
           1. <ins>If |username| and |password| are null, then set them to</ins>
               the result of prompting the end user for a username and password,
@@ -4623,14 +4504,14 @@ The [=HTTP-network-or-cache fetch=] algorithm is monkey patched as follows:
 
       5. <ins>If |webRequestResult| is not null, then:</ins>
 
-          1. <ins>If |webRequestResult|["{{BlockingResponse/cancel}}"] is
+          1. <ins>If |webRequestResult|'s [=WebRequestEvent result/cancel=] is
               `true`, then set |response| to a [=network error=].</ins>
 
-          1. <ins>Otherwise, if |webRequestResult|["{{BlockingResponse/
-              authCredentials}}"] is an {{/object}}, then:
+          1. <ins>Otherwise, if |webRequestResult|'s [=WebRequestEvent result/
+              authCredentials=] is an {{/object}}, then:</ins>
 
-              1. Store |webRequestResult|["{{BlockingResponse/
-                  authCredentials}}"] as a [=proxy-authentication entry=].
+              1. <ins>Store |webRequestResult|'s [=WebRequestEvent result/
+                  authCredentials=] as a [=proxy-authentication entry=].</ins>
 
       6. <ins>Otherwise,</ins> prompt the end user as appropriate ...
 
