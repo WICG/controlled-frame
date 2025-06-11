@@ -3214,7 +3214,7 @@ interface WebRequestAuthRequiredEvent : WebRequestEvent {
   readonly attribute WebRequestResponse response;
 
   undefined setCredentials(
-    (WebRequestAuthCredentials or Promise<WebRequestAuthCredentials>) credentials,
+    Promise<WebRequestAuthCredentials> credentials,
     optional WebRequestAuthOptions options = {});
 };
 
@@ -3543,8 +3543,8 @@ corresponding [=event handler event types=]) as [=event handler IDL attributes=]
 Each {{WebRequestAuthRequiredEvent}} has an associated:
   <div dfn-for=WebRequestAuthRequiredEvent>
     * <dfn>cancel</dfn>, a [=boolean=], initially `false`.
-    * <dfn>authCredentials</dfn>, a {{WebRequestAuthCredentials}},
-        {{Promise}}<{{WebRequestAuthCredentials}}>, or null, initially null.
+    * <dfn>authCredentials</dfn>, a {{Promise}}<{{WebRequestAuthCredentials}}>
+        or null, initially null.
     * <dfn>options</dfn>, a {{WebRequestAuthOptions}}, initially «».
   </div>
 
@@ -3964,10 +3964,6 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
           1. If |event|'s [=WebRequestAuthRequiredEvent/cancel=] is `true`,
               then set |result|'s [=WebRequestEvent result/cancel=] to `true`.
-
-          1. Otherwise, if |credentials| is a {{WebRequestAuthCredentials}},
-              then set |result|'s [=WebRequestEvent result/authCredentials=] to
-              |event|'s [=WebRequestAuthRequiredEvent/authCredentials=].
 
           1. Otherwise, if |credentials| is a {{Promise}}, then:
 
