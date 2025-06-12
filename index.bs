@@ -3146,47 +3146,53 @@ enum FrameType {
   "sub-frame",
 };
 
-dictionary UploadData {
-  ArrayBuffer bytes;
-  DOMString file;
+[Exposed=Window, IsolatedContext]
+interface UploadData {
+  readonly attribute ArrayBuffer bytes;
+  readonly attribute DOMString file;
 };
 
-dictionary RequestBody {
-  DOMString error;
-  any formData;
-  sequence<UploadData> raw;
+[Exposed=Window, IsolatedContext]
+interface RequestBody {
+  readonly attribute DOMString error;
+  readonly attribute any formData;
+  readonly attribute sequence<UploadData> raw;
 };
 
-dictionary WebRequestRequest {
-  USVString initiator;
-  required DOMString method;
-  required DOMString id;
-  required ResourceType type;
-  required USVString url;
-  Headers headers;
-  RequestBody body;
+[Exposed=Window, IsolatedContext]
+interface WebRequestRequest {
+  readonly attribute USVString initiator;
+  readonly attribute DOMString method;
+  readonly attribute DOMString id;
+  readonly attribute ResourceType type;
+  readonly attribute USVString url;
+  readonly attribute Headers headers;
+  readonly attribute RequestBody body;
 };
 
-dictionary AuthChallenger {
-  DOMString host;
-  long port;
+[Exposed=Window, IsolatedContext]
+interface AuthChallenger {
+  readonly attribute DOMString host;
+  readonly attribute long port;
 };
 
-dictionary WebRequestAuthDetails {
-  required AuthChallenger challenger;
-  required boolean isProxy;
-  required DOMString scheme;
-  DOMString realm;
+[Exposed=Window, IsolatedContext]
+interface WebRequestAuthDetails {
+  readonly attribute AuthChallenger challenger;
+  readonly attribute boolean isProxy;
+  readonly attribute DOMString scheme;
+  readonly attribute DOMString realm;
 };
 
-dictionary WebRequestResponse {
-  required long statusCode;
-  required DOMString statusLine;
-  boolean fromCache;
-  Headers headers;
-  DOMString ip;
-  USVString redirectURL;
-  WebRequestAuthDetails auth;
+[Exposed=Window, IsolatedContext]
+interface WebRequestResponse {
+  readonly attribute long statusCode;
+  readonly attribute DOMString statusLine;
+  readonly attribute boolean fromCache;
+  readonly attribute Headers headers;
+  readonly attribute DOMString ip;
+  readonly attribute USVString redirectURL;
+  readonly attribute WebRequestAuthDetails auth;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3271,6 +3277,235 @@ Each {{WebRequestInterceptor}} has an associated:
     * <dfn>blocking</dfn>, which is a [=boolean=].
     * <dfn>includeRequestBody</dfn>, which is a [=boolean=].
     * <dfn>includeHeaders</dfn>, which is a {{RequestedHeaders}}.
+  </div>
+
+Each {{UploadData}} has an associated:
+  <div dfn-for=UploadData>
+    * <dfn>bytes</dfn>, which is an {{ArrayBuffer}}.
+
+        The <dfn attribute>bytes</dfn> getter steps are
+        to return [=this=]'s [=UploadData/bytes=].
+
+    * <dfn>file</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>file</dfn> getter steps are
+        to return [=this=]'s [=UploadData/file=].
+  </div>
+
+Each {{RequestBody}} has an associated:
+  <div dfn-for=RequestBody>
+    * <dfn>error</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>error</dfn> getter steps are
+        to return [=this=]'s [=RequestBody/error=].
+
+    * <dfn>formData</dfn>, which is an {{Object}}.
+
+        The <dfn attribute>formData</dfn> getter steps are
+        to return [=this=]'s [=RequestBody/formData=].
+
+    * <dfn>raw</dfn>, which is a [=list=] of {{UploadData}}s.
+
+        The <dfn attribute>raw</dfn> getter steps are
+        to return [=this=]'s [=RequestBody/raw=].
+  </div>
+
+Each {{WebRequestRequest}} has an associated:
+  <div dfn-for=WebRequestRequest>
+    * <dfn>initiator</dfn>, which is a {{USVString}}.
+
+        The <dfn attribute>initiator</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/initiator=].
+
+    * <dfn>method</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>method</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/method=].
+
+    * <dfn>id</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>id</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/id=].
+
+    * <dfn>type</dfn>, which is a {{ResourceType}}.
+
+        The <dfn attribute>type</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/type=].
+
+    * <dfn>url</dfn>, which is a {{USVString}}.
+
+        The <dfn attribute>url</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/url=].
+
+    * <dfn>headers</dfn>, which is a {{Headers}}.
+
+        The <dfn attribute>headers</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/headers=].
+
+    * <dfn>body</dfn>, which is a {{RequestBody}}.
+
+        The <dfn attribute>body</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/body=].
+  </div>
+
+Each {{AuthChallenger}} has an associated:
+  <div dfn-for=AuthChallenger>
+    * <dfn>host</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>host</dfn> getter steps are
+        to return [=this=]'s [=AuthChallenger/host=].
+
+    * <dfn>port</dfn>, which is a {{long}}.
+
+        The <dfn attribute>port</dfn> getter steps are
+        to return [=this=]'s [=AuthChallenger/port=].
+  </div>
+
+Each {{WebRequestAuthDetails}} has an associated:
+  <div dfn-for=WebRequestAuthDetails>
+    * <dfn>challenger</dfn>, which is an {{AuthChallenger}}.
+
+        The <dfn attribute>challenger</dfn> getter steps are
+        to return [=this=]'s [=WebRequestAuthDetails/challenger=].
+
+    * <dfn>isProxy</dfn>, which is a [=boolean=].
+
+        The <dfn attribute>isProxy</dfn> getter steps are
+        to return [=this=]'s [=WebRequestAuthDetails/isProxy=].
+
+    * <dfn>scheme</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>scheme</dfn> getter steps are
+        to return [=this=]'s [=WebRequestAuthDetails/scheme=].
+
+    * <dfn>realm</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>realm</dfn> getter steps are
+        to return [=this=]'s [=WebRequestAuthDetails/realm=].
+  </div>
+
+Each {{WebRequestResponse}} has an associated:
+  <div dfn-for=WebRequestResponse>
+    * <dfn>statusCode</dfn>, which is a {{long}}.
+
+        The <dfn attribute>statusCode</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponse/statusCode=].
+
+    * <dfn>statusLine</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>statusLine</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponse/statusLine=].
+
+    * <dfn>fromCache</dfn>, which is a [=boolean=].
+
+        The <dfn attribute>fromCache</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponse/fromCache=].
+
+    * <dfn>headers</dfn>, which is a {{Headers}}.
+
+        The <dfn attribute>headers</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponse/headers=].
+
+    * <dfn>ip</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>ip</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponse/ip=].
+
+    * <dfn>redirectURL</dfn>, which is a {{USVString}}.
+
+        The <dfn attribute>redirectURL</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponse/redirectURL=].
+
+    * <dfn>auth</dfn>, which is a {{WebRequestAuthDetails}}.
+
+        The <dfn attribute>auth</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponse/auth=].
+  </div>
+
+Each {{WebRequestEvent}} has an associated:
+  <div dfn-for=WebRequestEvent>
+    * <dfn>documentId</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>documentId</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/documentId=].
+
+    * <dfn>documentLifecycle</dfn>, which is a {{DocumentLifecycle}}.
+
+        The <dfn attribute>documentLifecycle</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/documentLifecycle=].
+
+    * <dfn>frameId</dfn>, which is a {{long}}.
+
+        The <dfn attribute>frameId</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/frameId=].
+
+    * <dfn>frameType</dfn>, which is a {{FrameType}}.
+
+        The <dfn attribute>frameType</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/frameType=].
+
+    * <dfn>parentDocumentId</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>parentDocumentId</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/parentDocumentId=].
+
+    * <dfn>parentFrameId</dfn>, which is a {{long}}.
+
+        The <dfn attribute>parentFrameId</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/parentFrameId=].
+
+    * <dfn>request</dfn>, which is a {{WebRequestRequest}}.
+
+        The <dfn attribute>request</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/request=].
+  </div>
+
+Each {{WebRequestAuthRequiredEvent}} has an associated:
+  <div dfn-for=WebRequestAuthRequiredEvent>
+    * <dfn>response</dfn>, which is a {{WebRequestResponse}}.
+
+        The <dfn attribute>response</dfn> getter steps are
+        to return [=this=]'s [=WebRequestAuthRequiredEvent/response=].
+  </div>
+
+Each {{WebRequestBeforeRedirectEvent}} has an associated:
+  <div dfn-for=WebRequestBeforeRedirectEvent>
+    * <dfn>response</dfn>, which is a {{WebRequestResponse}}.
+
+        The <dfn attribute>response</dfn> getter steps are
+        to return [=this=]'s [=WebRequestBeforeRedirectEvent/response=].
+  </div>
+
+Each {{WebRequestCompletedEvent}} has an associated:
+  <div dfn-for=WebRequestCompletedEvent>
+    * <dfn>response</dfn>, which is a {{WebRequestResponse}}.
+
+        The <dfn attribute>response</dfn> getter steps are
+        to return [=this=]'s [=WebRequestCompletedEvent/response=].
+  </div>
+
+Each {{WebRequestErrorOccurredEvent}} has an associated:
+  <div dfn-for=WebRequestErrorOccurredEvent>
+    * <dfn>error</dfn>, which is a {{DOMString}}.
+
+        The <dfn attribute>error</dfn> getter steps are
+        to return [=this=]'s [=WebRequestErrorOccurredEvent/error=].
+  </div>
+
+Each {{WebRequestHeadersReceivedEvent}} has an associated:
+  <div dfn-for=WebRequestHeadersReceivedEvent>
+    * <dfn>response</dfn>, which is a {{WebRequestResponse}}.
+
+        The <dfn attribute>response</dfn> getter steps are
+        to return [=this=]'s [=WebRequestHeadersReceivedEvent/response=].
+  </div>
+
+Each {{WebRequestResponseStartedEvent}} has an associated:
+  <div dfn-for=WebRequestResponseStartedEvent>
+    * <dfn>response</dfn>, which is a {{WebRequestResponse}}.
+
+        The <dfn attribute>response</dfn> getter steps are
+        to return [=this=]'s [=WebRequestResponseStartedEvent/response=].
   </div>
 
 <div algorithm>
@@ -3680,7 +3915,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       1. If |interceptor|'s [=WebRequestInterceptor/includeRequestBody=] is
           `true` and |request|'s [=request/body=] is not null, then:
 
-          1. Let |requestBody| be an empty {{RequestBody}}.
+          1. Let |requestBody| be a [=new=] {{RequestBody}}.
 
           1. Let |body| be |request|'s [=request/body=].
 
@@ -3689,14 +3924,14 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
           1. Switch on |body|'s [=body/source=]:
 
               : [=byte sequence=]
-              :: [=list/Append=] an {{UploadData}} with {{UploadData/bytes}}
-                  equal to the serialized |body|'s [=body/source=] to
-                  |requestBody|["{{RequestBody/raw}}"].
+              :: [=list/Append=] a [=new=] {{UploadData}} with [=UploadData/
+                  bytes=] equal to the serialized |body|'s [=body/source=] to
+                  |requestBody|'s [=RequestBody/raw=].
 
               : {{Blob}}
-              :: [=list/Append=] an {{UploadData}} with {{UploadData/bytes}}
-                  equal to the serialized |body|'s [=body/source=] to
-                  |requestBody|["{{RequestBody/raw}}"].
+              :: [=list/Append=] a [=new=] {{UploadData}} with [=UploadData/
+                  bytes=] equal to the serialized |body|'s [=body/source=] to
+                  |requestBody|'s [=RequestBody/raw=].
 
               : {{FormData}}
               ::  1. Let |formData| be «[]».
@@ -3707,9 +3942,9 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
                       1. Switch on |entry|[1]:
 
                       : {{File}}
-                      :: [=list/Append=] an {{UploadData}} with
-                          {{UploadData/file}} equal to |entry|[1]'s
-                          {{File/name}} to |requestBody|["{{RequestBody/raw}}"].
+                      :: [=list/Append=] a [=new=] {{UploadData}} with
+                          [=UploadData/file=] equal to |entry|[1]'s
+                          {{File/name}} to |requestBody|'s [=RequestBody/raw=].
 
                       : {{USVString}}
                       ::  1. If |formData|[|entry|[0]] does not exist, then
@@ -3719,10 +3954,10 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
                           1. [=list/Append=] |entry|[1] to
                               |formData|[|entry|[0]].
 
-                  1. Set |requestBody|["{{RequestBody/formData}}"] to |formData|.
+                  1. Set |requestBody|'s [=RequestBody/formData=] to |formData|.
 
-          1. Set |event|["{{WebRequestEvent/request}}"]["{{
-              WebRequestRequest/body}}"] to |requestBody|.
+          1. Set |event|'s [=WebRequestEvent/request=]'s [=WebRequestRequest/
+              body=] to |requestBody|.
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
@@ -3849,7 +4084,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       1. [=Populate a WebRequestEvent=] given |event|, |request|, and
           "{{RequestedHeaders/none}}".
 
-      1. Set |event|["{{WebRequestHeadersReceivedEvent/response}}"] to the
+      1. Set |event|'s [=WebRequestHeadersReceivedEvent/response=] to the
           result of [=creating a WebRequestResponse object=] given |request|,
           |response|, and |interceptor|'s
           [=WebRequestInterceptor/includeHeaders=].
@@ -3894,9 +4129,9 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   To <dfn>process authRequired events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |challenger| be an {{AuthChallenger}} with {{AuthChallenger/host}} and
-      {{AuthChallenger/port}} equal to the [=url/host=] and [=url/port=] of
-      |response|'s [=response/URL=].
+  1. Let |challenger| be a [=new=] {{AuthChallenger}} with [=AuthChallenger/
+      host=] and [=AuthChallenger/port=] equal to the [=url/host=] and
+      [=url/port=] of |response|'s [=response/URL=].
 
   1. If |response|'s [=response/status=] is 401, then:
 
@@ -3935,23 +4170,23 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
   1. For each |interceptor| in |interceptors|:
 
-      1. Let |event| be a [=new=] {{WebRequestHeadersReceivedEvent}} named
+      1. Let |event| be a [=new=] {{WebRequestAuthRequiredEvent}} named
           [=WebRequestInterceptor/authrequired=].
 
       1. [=Populate a WebRequestEvent=] given |event|, |request|, and
           "{{RequestedHeaders/none}}".
 
-      1. Set |event|["{{WebRequestHeadersReceivedEvent/response}}"] to the
+      1. Set |event|'s [=WebRequestAuthRequiredEvent/response=] to the
           result of [=creating a WebRequestResponse object=] given |request|,
           |response|, and |interceptor|'s
           [=WebRequestInterceptor/includeHeaders=].
 
-      1. Set |event|["{{WebRequestHeadersReceivedEvent/response}}"]["{{
-          WebRequestResponse/auth}}"] to a {{WebRequestAuthDetails}}
-          whose "{{WebRequestAuthDetails/challenger}}",
-          "{{WebRequestAuthDetails/isProxy}}",
-          "{{WebRequestAuthDetails/scheme}}", and
-          "{{WebRequestAuthDetails/realm}}" fields have the values
+      1. Set |event|'s [=WebRequestAuthRequiredEvent/response=]'s [=
+          WebRequestResponse/auth=] to a [=new=] {{WebRequestAuthDetails}}
+          whose [=WebRequestAuthDetails/challenger=],
+          [=WebRequestAuthDetails/isProxy=],
+          [=WebRequestAuthDetails/scheme=], and
+          [=WebRequestAuthDetails/realm=] fields have the values
           |challenger|, |isProxy|, |scheme|, and |realm| respectively.
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
@@ -4022,7 +4257,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       1. [=Populate a WebRequestEvent=] given |event|, |request|, and
           "{{RequestedHeaders/none}}".
 
-      1. Set |event|["{{WebRequestBeforeRedirectEvent/response}}"] to the
+      1. Set |event|'s [=WebRequestBeforeRedirectEvent/response=] to the
           result of [=creating a WebRequestResponse object=] given |request|,
           |response|, and |interceptor|'s
           [=WebRequestInterceptor/includeHeaders=].
@@ -4030,8 +4265,8 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       1. Let |internalResponse| be |response|, if |response| is not a
           [=filtered response=]; otherwise |response|'s [=internal response=].
 
-      1. Set |event|["{{WebRequestBeforeRedirectEvent/response}}"]["{{
-          WebRequestResponse/redirectURL}}"] to |internalResponse|'s
+      1. Set |event|'s [=WebRequestBeforeRedirectEvent/response=]'s [=
+          WebRequestResponse/redirectURL=] to |internalResponse|'s
           [=location URL=] given |request|'s [=request/current URL=]'s
           [=url/fragment=].
 
@@ -4059,7 +4294,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       1. [=Populate a WebRequestEvent=] given |event|, |request|, and
           "{{RequestedHeaders/none}}".
 
-      1. Set |event|["{{WebRequestResponseStartedEvent/response}}"] to the
+      1. Set |event|'s [=WebRequestResponseStartedEvent/response=] to the
           result of [=creating a WebRequestResponse object=] given |request|,
           |response|, and |interceptor|'s
           [=WebRequestInterceptor/includeHeaders=].
@@ -4088,7 +4323,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       1. [=Populate a WebRequestEvent=] given |event|, |request|, and
           "{{RequestedHeaders/none}}".
 
-      1. Set |event|["{{WebRequestCompletedEvent/response}}"] to the
+      1. Set |event|'s [=WebRequestCompletedEvent/response=] to the
           result of [=creating a WebRequestResponse object=] given |request|,
           |response|, and |interceptor|'s
           [=WebRequestInterceptor/includeHeaders=].
@@ -4117,7 +4352,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       1. [=Populate a WebRequestEvent=] given |event|, |request|, and
           "{{RequestedHeaders/none}}".
 
-      1. Set |event|["{{WebRequestErrorOccurredEvent/error}}"] to an
+      1. Set |event|'s [=WebRequestErrorOccurredEvent/error=] to an
           [=implementation-defined=] error message describing the error in
           |response|.
 
@@ -4135,16 +4370,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
   1. Set the following fields on |event|:
 
-      : {{WebRequestEvent/documentId}}
+      : [=WebRequestEvent/documentId=]
       :: "".
 
-      : {{WebRequestEvent/frameId}}
+      : [=WebRequestEvent/frameId=]
       :: -1
 
-      : {{WebRequestEvent/parentDocumentId}}
+      : [=WebRequestEvent/parentDocumentId=]
       :: "".
 
-      : {{WebRequestEvent/parentFrameId}}
+      : [=WebRequestEvent/parentFrameId=]
       :: -1
 
   1. Let |window| be the [=owning Window of an environment settings object=]
@@ -4157,55 +4392,55 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
       1. Update the following fields of |event|:
 
-          : {{WebRequestEvent/documentId}}
+          : [=WebRequestEvent/documentId=]
           :: |environmentSettingsObject|'s [=environment/id=].
 
-          : {{WebRequestEvent/documentLifecycle}}
+          : [=WebRequestEvent/documentLifecycle=]
           :: The result of [=getting the DocumentLifecycle of a Document=] given
               |window|'s [=associated document=].
 
-          : {{WebRequestEvent/frameId}}
+          : [=WebRequestEvent/frameId=]
           :: The [=navigable/frameId=] of |window|'s [=Window/navigable=].
 
-          : {{WebRequestEvent/frameType}}
+          : [=WebRequestEvent/frameType=]
           :: {{FrameType/"fenced-frame"}} if |window|'s
               [=window/browsing context=]'s [=fenced frame config instance=] is
               non-null, {{FrameType/"outermost-frame"}} if |parentNavigable| is
               null, {{FrameType/"sub-frame"}} otherwise.
 
-          1. If |parentNavigable| is not null, then update the following
-              values of |event|:
+      1. If |parentNavigable| is not null, then update the following
+          values of |event|:
 
-              : {{WebRequestEvent/parentDocumentId}}
-              :: The [=environment/id=] of |parentNavigable|'s
-                  [=active document=]'s [=relevant global object=].
+          : [=WebRequestEvent/parentDocumentId=]
+          :: The [=environment/id=] of |parentNavigable|'s
+              [=active document=]'s [=relevant global object=].
 
-              : {{WebRequestEvent/parentFrameId}}
-              :: The [=navigable/frameId=] of |parentNavigable|.
+          : [=WebRequestEvent/parentFrameId=]
+          :: The [=navigable/frameId=] of |parentNavigable|.
 
-    1. Set |event|["{{WebRequestEvent/request}}"] to a {{WebRequestRequest}}
-        with the following fields:
+      1. Set |event|'s [=WebRequestEvent/request=] to a [=new=]
+          {{WebRequestRequest}} with the following fields:
 
-      : {{WebRequestRequest/url}}
-      :: The last element of |request|'s [=request/URL list=].
+          : [=WebRequestRequest/url=]
+          :: The last element of |request|'s [=request/URL list=].
 
-      : {{WebRequestRequest/method}}
-      :: |request|'s [=request/method=].
+          : [=WebRequestRequest/method=]
+          :: |request|'s [=request/method=].
 
-      : {{WebRequestRequest/initiator}}
-      :: The [=serialization of an origin=] given |request|'s [=request/origin=].
+          : [=WebRequestRequest/initiator=]
+          :: The [=serialization of an origin=] given |request|'s [=request/origin=].
 
-         Note: An opaque origin will result in {{WebRequestRequest/initiator}}
-         being set to the {{DOMString}} "null".
+              Note: An opaque origin will result in [=WebRequestRequest/
+              initiator=] being set to the {{DOMString}} "null".
 
-      : {{WebRequestRequest/type}}
-      :: The result of calling [=get a request's ResourceType=] given |request|.
+          : [=WebRequestRequest/type=]
+          :: The result of calling [=get a request's ResourceType=] given |request|.
 
-      : {{WebRequestRequest/id}}
-      :: |request|'s [=request/requestId=].
+          : [=WebRequestRequest/id=]
+          :: |request|'s [=request/requestId=].
 
   1. If |requestedHeaders| is not "{{RequestedHeaders/none}}", then set
-      |event|["{{WebRequestEvent/request}}"]["{{WebRequestRequest/headers}}"]
+      |event|'s [=WebRequestEvent/request=]'s [=WebRequestRequest/headers=]
       to the result of calling [=convert a header list to a Headers object=]
       given |request|'s [=request/header list=], |requestedHeaders|, and
       isRequest equal to `true`.
@@ -4234,19 +4469,19 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   |request|, a [=/response=] |response|, and a {{RequestedHeaders}}
   |requestedHeaders|, run the following steps:
 
-  1. Let |response| be a {{WebRequestResponse}} with the following fields:
+  1. Let |response| be a [=new=] {{WebRequestResponse}} with the following fields:
 
-      : {{WebRequestResponse/statusCode}}
+      : [=WebRequestResponse/statusCode=]
       :: |response|'s [=response/status=].
 
-      : {{WebRequestResponse/statusLine}}
+      : [=WebRequestResponse/statusLine=]
       :: |response|'s [=response/status message=].
 
-      : {{WebRequestResponse/fromCache}}
+      : [=WebRequestResponse/fromCache=]
       :: `true` if |response|'s [=response/cache state=] is "local",
           `false` otherwise.
 
-      : {{WebRequestResponse/ip}}
+      : [=WebRequestResponse/ip=]
       :: The [=ip address=] from which |response| was received if the request
           involved a network request.
 
@@ -4254,7 +4489,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
           the remote IP address used when sending |request|.</span>
 
   1. If |requestedHeaders| is not "{{RequestedHeaders/none}}", then set
-      |response|["{{WebRequestResponse/headers}}"] to the result of
+      |response|'s [=WebRequestResponse/headers=] to the result of
       calling [=convert a header list to a Headers object=] given
       |response|'s [=response/header list=], |requestedHeaders|, and isRequest
       equal to `false`.
