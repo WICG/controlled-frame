@@ -4691,19 +4691,20 @@ interface ContextMenus : EventTarget {
     attribute EventHandler onshow;
 };
 
-dictionary MenuItemDetails {
-    required DOMString id;
-    boolean checked;
-    boolean editable;
-    long frameId;
-    USVString frameURL;
-    USVString linkURL;
-    DOMString mediaType;
-    USVString pageURL;
-    DOMString parentMenuId;
-    DOMString selectionText;
-    USVString srcURL;
-    boolean wasChecked;
+[Exposed=Window, IsolatedContext]
+interface MenuItemDetails {
+    readonly attribute DOMString id;
+    readonly attribute boolean checked;
+    readonly attribute boolean editable;
+    readonly attribute long frameId;
+    readonly attribute USVString frameURL;
+    readonly attribute USVString linkURL;
+    readonly attribute DOMString mediaType;
+    readonly attribute USVString pageURL;
+    readonly attribute DOMString parentMenuId;
+    readonly attribute DOMString selectionText;
+    readonly attribute USVString srcURL;
+    readonly attribute boolean wasChecked;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -5040,7 +5041,7 @@ as the [=context menu item=] that was clicked, run the following steps:
 1. Let |properties| be the result of [=map/getting=] the [=map/value=] of the
     [=map/entry=] in [=ContextMenus/context menu map=] given the [=map/key=] |id|.
 
-1. Let |menuItem| be a {{MenuItemDetails}}.
+1. Let |menuItem| be a [=new=] {{MenuItemDetails}}.
 
     1. Update the following fields of |menuItem|:
 
