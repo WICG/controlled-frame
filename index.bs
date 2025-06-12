@@ -3156,7 +3156,7 @@ interface UploadData {
 interface RequestBody {
   readonly attribute DOMString error;
   readonly attribute any formData;
-  readonly attribute sequence<UploadData> raw;
+  readonly attribute FrozenArray<UploadData> raw;
 };
 
 [Exposed=Window, IsolatedContext]
