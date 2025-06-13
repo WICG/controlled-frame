@@ -842,16 +842,26 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   The <dfn method for=HTMLControlledFrameElement>canGoBack()</dfn>
   method steps are:
 
-  ISSUE: We can't actually synchronously access the embedded navigable's
-  history state. In the future we should update this method to return a
-  Promise.
+  1. Let |result| be [=a new promise=].
 
-  1. If [=this=]'s [=embedded navigable=] is null, then return `false`.
+  1. Let |controlledframe| be [=this=].
 
-  1. If [=this=]'s [=embedded navigable=]'s [=current session history step=]
-      is &gt; 0, return `true`.
+  1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
-  1. Return `false`.
+  1. If |embeddedNavigable| is null, then [=resolve=] |result| with `false`
+      and return |result|.
+
+  1. [=Queue a global task=] on the [=navigation and traversal task source=] of
+      |embeddedNavigable|'s [=node document=]'s [=relevant global object=] that
+      will run the following steps:
+
+      1. Let |canGoBack| be `true` if |embeddedNavigable|'s
+          [=current session history step=] is &gt; 0, `false` otherwise.
+
+      1. [=Resolve an embedder promise=] given |controlledframe|, |result|,
+          and |canGoBack|.
+
+  1. Return |result|.
 
 </div>
 
@@ -859,17 +869,31 @@ Frame's [=embedded navigable=]'s [=current session history entry=]'s
   The <dfn method for=HTMLControlledFrameElement>canGoForward()</dfn>
   method steps are:
 
-  1. If [=this=]'s [=embedded navigable=] is null, then return `false`.
+  1. Let |result| be [=a new promise=].
 
-  1. Let |step| be [=this=]'s [=embedded navigable=]'s [=current session
-      history step=].
+  1. Let |controlledframe| be [=this=].
 
-  1. Let |steps| be the result of [=getting all used history steps=]
-      given [=this=]'s [=embedded navigable=].
+  1. Let |embeddedNavigable| be |controlledframe|'s [=embedded navigable=].
 
-  1. If |step| + 1 &lt; the [=list/size=] of |steps|, then return `true`.
+  1. If |embeddedNavigable| is null, then [=resolve=] |result| with `false`
+      and return |result|.
 
-  1. Return `false`.
+  1. [=Queue a global task=] on the [=navigation and traversal task source=] of
+      |embeddedNavigable|'s [=node document=]'s [=relevant global object=] that
+      will run the following steps:
+
+      1. Let |step| be |embeddedNavigable|'s [=current session history step=].
+
+      1. Let |steps| be the result of [=getting all used history steps=]
+          given |embeddedNavigable|.
+
+      1. Let |canGoForward| be `true` if |step| + 1 &lt; the [=list/size=] of
+          |steps|, `false` otherwise.
+
+      1. [=Resolve an embedder promise=] given |controlledframe|, |result|,
+          and |canGoForward|.
+
+  1. Return |result|.
 
 </div>
 
