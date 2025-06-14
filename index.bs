@@ -3106,10 +3106,10 @@ enum RequestedHeaders {
 
 dictionary WebRequestInterceptorOptions {
   required sequence<HeadersInit> urlPatterns;
-  sequence<ResourceType> resourceTypes;
-  boolean blocking;
-  boolean includeRequestBody;
-  RequestedHeaders includeHeaders;
+  sequence<ResourceType> resourceTypes = [];
+  boolean blocking = false;
+  boolean includeRequestBody = false;
+  RequestedHeaders includeHeaders = "none";
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3117,7 +3117,7 @@ interface WebRequest {
   WebRequestInterceptor createWebRequestInterceptor(
       WebRequestInterceptorOptions options);
 
-  Promise<undefined> handlerBehaviorChanged();
+  Promise<undefined> interceptorBehaviorChanged();
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3148,26 +3148,26 @@ enum FrameType {
 
 [Exposed=Window, IsolatedContext]
 interface UploadData {
-  readonly attribute ArrayBuffer bytes;
-  readonly attribute DOMString file;
+  readonly attribute ArrayBuffer? bytes;
+  readonly attribute DOMString? file;
 };
 
 [Exposed=Window, IsolatedContext]
 interface RequestBody {
-  readonly attribute DOMString error;
+  readonly attribute DOMString? error;
   readonly attribute any formData;
-  readonly attribute FrozenArray<UploadData> raw;
+  readonly attribute FrozenArray<UploadData>? raw;
 };
 
 [Exposed=Window, IsolatedContext]
 interface WebRequestRequest {
-  readonly attribute USVString initiator;
   readonly attribute DOMString method;
   readonly attribute DOMString id;
   readonly attribute ResourceType type;
   readonly attribute USVString url;
-  readonly attribute Headers headers;
-  readonly attribute RequestBody body;
+  readonly attribute USVString? initiator;
+  readonly attribute Headers? headers;
+  readonly attribute RequestBody? body;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3181,7 +3181,7 @@ interface WebRequestAuthDetails {
   readonly attribute AuthChallenger challenger;
   readonly attribute boolean isProxy;
   readonly attribute DOMString scheme;
-  readonly attribute DOMString realm;
+  readonly attribute DOMString? realm;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3189,21 +3189,21 @@ interface WebRequestResponse {
   readonly attribute long statusCode;
   readonly attribute DOMString statusLine;
   readonly attribute boolean fromCache;
-  readonly attribute Headers headers;
-  readonly attribute DOMString ip;
-  readonly attribute USVString redirectURL;
-  readonly attribute WebRequestAuthDetails auth;
+  readonly attribute Headers? headers;
+  readonly attribute DOMString? ip;
+  readonly attribute USVString? redirectURL;
+  readonly attribute WebRequestAuthDetails? auth;
 };
 
 [Exposed=Window, IsolatedContext]
 interface WebRequestEvent : Event {
-  readonly attribute DOMString documentId;
-  readonly attribute DocumentLifecycle documentLifecycle;
-  readonly attribute long frameId;
-  readonly attribute FrameType frameType;
-  readonly attribute DOMString parentDocumentId;
-  readonly attribute long parentFrameId;
   readonly attribute WebRequestRequest request;
+  readonly attribute long frameId;
+  readonly attribute FrameType? frameType;
+  readonly attribute DOMString? documentId;
+  readonly attribute DocumentLifecycle? documentLifecycle;
+  readonly attribute DOMString? parentDocumentId;
+  readonly attribute long? parentFrameId;
 };
 
 dictionary WebRequestAuthCredentials {
@@ -3281,12 +3281,12 @@ Each {{WebRequestInterceptor}} has an associated:
 
 Each {{UploadData}} has an associated:
   <div dfn-for=UploadData>
-    * <dfn>bytes</dfn>, which is an {{ArrayBuffer}}.
+    * <dfn>bytes</dfn>, which is an {{ArrayBuffer}} or null.
 
         The <dfn attribute>bytes</dfn> getter steps are
         to return [=this=]'s [=UploadData/bytes=].
 
-    * <dfn>file</dfn>, which is a {{DOMString}}.
+    * <dfn>file</dfn>, which is a {{DOMString}} or null.
 
         The <dfn attribute>file</dfn> getter steps are
         to return [=this=]'s [=UploadData/file=].
@@ -3294,7 +3294,7 @@ Each {{UploadData}} has an associated:
 
 Each {{RequestBody}} has an associated:
   <div dfn-for=RequestBody>
-    * <dfn>error</dfn>, which is a {{DOMString}}.
+    * <dfn>error</dfn>, which is a {{DOMString}} or null.
 
         The <dfn attribute>error</dfn> getter steps are
         to return [=this=]'s [=RequestBody/error=].
@@ -3304,7 +3304,7 @@ Each {{RequestBody}} has an associated:
         The <dfn attribute>formData</dfn> getter steps are
         to return [=this=]'s [=RequestBody/formData=].
 
-    * <dfn>raw</dfn>, which is a [=list=] of {{UploadData}}s.
+    * <dfn>raw</dfn>, which is a [=list=] of {{UploadData}}s or null.
 
         The <dfn attribute>raw</dfn> getter steps are
         to return [=this=]'s [=RequestBody/raw=].
@@ -3312,11 +3312,6 @@ Each {{RequestBody}} has an associated:
 
 Each {{WebRequestRequest}} has an associated:
   <div dfn-for=WebRequestRequest>
-    * <dfn>initiator</dfn>, which is a {{USVString}}.
-
-        The <dfn attribute>initiator</dfn> getter steps are
-        to return [=this=]'s [=WebRequestRequest/initiator=].
-
     * <dfn>method</dfn>, which is a {{DOMString}}.
 
         The <dfn attribute>method</dfn> getter steps are
@@ -3337,12 +3332,17 @@ Each {{WebRequestRequest}} has an associated:
         The <dfn attribute>url</dfn> getter steps are
         to return [=this=]'s [=WebRequestRequest/url=].
 
-    * <dfn>headers</dfn>, which is a {{Headers}}.
+    * <dfn>initiator</dfn>, which is a {{USVString}} or null.
+
+        The <dfn attribute>initiator</dfn> getter steps are
+        to return [=this=]'s [=WebRequestRequest/initiator=].
+
+    * <dfn>headers</dfn>, which is a {{Headers}} or null.
 
         The <dfn attribute>headers</dfn> getter steps are
         to return [=this=]'s [=WebRequestRequest/headers=].
 
-    * <dfn>body</dfn>, which is a {{RequestBody}}.
+    * <dfn>body</dfn>, which is a {{RequestBody}} or null.
 
         The <dfn attribute>body</dfn> getter steps are
         to return [=this=]'s [=WebRequestRequest/body=].
@@ -3378,7 +3378,7 @@ Each {{WebRequestAuthDetails}} has an associated:
         The <dfn attribute>scheme</dfn> getter steps are
         to return [=this=]'s [=WebRequestAuthDetails/scheme=].
 
-    * <dfn>realm</dfn>, which is a {{DOMString}}.
+    * <dfn>realm</dfn>, which is a {{DOMString}} or null.
 
         The <dfn attribute>realm</dfn> getter steps are
         to return [=this=]'s [=WebRequestAuthDetails/realm=].
@@ -3401,22 +3401,22 @@ Each {{WebRequestResponse}} has an associated:
         The <dfn attribute>fromCache</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/fromCache=].
 
-    * <dfn>headers</dfn>, which is a {{Headers}}.
+    * <dfn>headers</dfn>, which is a {{Headers}} or null.
 
         The <dfn attribute>headers</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/headers=].
 
-    * <dfn>ip</dfn>, which is a {{DOMString}}.
+    * <dfn>ip</dfn>, which is a {{DOMString}} or null.
 
         The <dfn attribute>ip</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/ip=].
 
-    * <dfn>redirectURL</dfn>, which is a {{USVString}}.
+    * <dfn>redirectURL</dfn>, which is a {{USVString}} or null.
 
         The <dfn attribute>redirectURL</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/redirectURL=].
 
-    * <dfn>auth</dfn>, which is a {{WebRequestAuthDetails}}.
+    * <dfn>auth</dfn>, which is a {{WebRequestAuthDetails}} or null.
 
         The <dfn attribute>auth</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/auth=].
@@ -3424,40 +3424,40 @@ Each {{WebRequestResponse}} has an associated:
 
 Each {{WebRequestEvent}} has an associated:
   <div dfn-for=WebRequestEvent>
-    * <dfn>documentId</dfn>, which is a {{DOMString}}.
+    * <dfn>request</dfn>, which is a {{WebRequestRequest}}.
 
-        The <dfn attribute>documentId</dfn> getter steps are
-        to return [=this=]'s [=WebRequestEvent/documentId=].
-
-    * <dfn>documentLifecycle</dfn>, which is a {{DocumentLifecycle}}.
-
-        The <dfn attribute>documentLifecycle</dfn> getter steps are
-        to return [=this=]'s [=WebRequestEvent/documentLifecycle=].
+        The <dfn attribute>request</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/request=].
 
     * <dfn>frameId</dfn>, which is a {{long}}.
 
         The <dfn attribute>frameId</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/frameId=].
 
-    * <dfn>frameType</dfn>, which is a {{FrameType}}.
+    * <dfn>frameType</dfn>, which is a {{FrameType}} or null.
 
         The <dfn attribute>frameType</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/frameType=].
 
-    * <dfn>parentDocumentId</dfn>, which is a {{DOMString}}.
+    * <dfn>documentId</dfn>, which is a {{DOMString}} or null.
+
+        The <dfn attribute>documentId</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/documentId=].
+
+    * <dfn>documentLifecycle</dfn>, which is a {{DocumentLifecycle}} or null.
+
+        The <dfn attribute>documentLifecycle</dfn> getter steps are
+        to return [=this=]'s [=WebRequestEvent/documentLifecycle=].
+
+    * <dfn>parentDocumentId</dfn>, which is a {{DOMString}} or null.
 
         The <dfn attribute>parentDocumentId</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/parentDocumentId=].
 
-    * <dfn>parentFrameId</dfn>, which is a {{long}}.
+    * <dfn>parentFrameId</dfn>, which is a {{long}} or null.
 
         The <dfn attribute>parentFrameId</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/parentFrameId=].
-
-    * <dfn>request</dfn>, which is a {{WebRequestRequest}}.
-
-        The <dfn attribute>request</dfn> getter steps are
-        to return [=this=]'s [=WebRequestEvent/request=].
   </div>
 
 Each {{WebRequestAuthRequiredEvent}} has an associated:
@@ -3538,7 +3538,7 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 </div>
 
 <div algorithm>
-  The <dfn method for=WebRequest>handlerBehaviorChanged(|callback|)</dfn>
+  The <dfn method for=WebRequest>interceptorBehaviorChanged(|callback|)</dfn>
   method steps are:
 
   1. Let |controlledframe| be [=this=].
@@ -3593,7 +3593,7 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
       1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`, then
           set |blocking| to `true`.
 
-    1. Return |applicableInterceptors| and |blocking|.
+  1. Return |applicableInterceptors| and |blocking|.
 
 </div>
 
@@ -4217,10 +4217,20 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
               1. [=Upon fulfillment=] of |credentials|, run the following steps
                   that take a |resolvedValue|:
 
-                  1. Set |result|'s [=WebRequestEvent result/authCredentials=]
-                      to |resolvedValue|.
+                  1. If |resolvedValue| is a [=dictionary=] [=map/containing=]
+                      two [=map/keys=] equal to "username" and "password", and
+                      |result|'s [=WebRequestEvent result/authCredentials=]
+                      is undefined, then set |result|'s [=WebRequestEvent
+                      result/authCredentials=] to |resolvedValue|.
 
                   1. Set |done| to `true`.
+
+              1. [=Upon rejection=] of |credentials|, run the following steps:
+
+                  1. Set |done| to `true`.
+
+                  Note: A rejected promise will not cancel the request, but no
+                  credentials will be provided to the server.
 
               1. Wait [=in parallel=] for |done| to equal `true`, then [=queue a
                   global task=] on the [=DOM manipulation task source=] of
