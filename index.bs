@@ -4694,22 +4694,26 @@ interface ContextMenus : EventTarget {
 [Exposed=Window, IsolatedContext]
 interface MenuItemDetails {
     readonly attribute DOMString id;
-    readonly attribute boolean checked;
-    readonly attribute boolean editable;
-    readonly attribute long frameId;
-    readonly attribute USVString frameURL;
-    readonly attribute USVString linkURL;
-    readonly attribute DOMString mediaType;
-    readonly attribute USVString pageURL;
-    readonly attribute DOMString parentMenuId;
-    readonly attribute DOMString selectionText;
-    readonly attribute USVString srcURL;
-    readonly attribute boolean wasChecked;
+    readonly attribute DOMString? parentMenuId;
+    readonly attribute boolean? checked;
+    readonly attribute boolean? wasChecked;
 };
 
 [Exposed=Window, IsolatedContext]
 interface ContextMenusClickEvent : Event {
   readonly attribute MenuItemDetails menuItem;
+
+  // Details about the frame the context menu is opened within.
+  readonly attribute long frameId;
+  readonly attribute USVString frameURL;
+  readonly attribute USVString pageURL;
+
+  // Details about the element the context menu is opened within the context of.
+  readonly attribute boolean editable;
+  readonly attribute USVString? linkURL;
+  readonly attribute DOMString? mediaType;
+  readonly attribute DOMString? selectionText;
+  readonly attribute USVString? srcURL;
 };
 </xmp>
 
@@ -4918,17 +4922,17 @@ of the items.
 
   1. Let |targetUrl| be an empty string.
 
-      1. If |element| is an instance of {{HTMLImageElement}}, then set
-          |targetUrl| to the {{HTMLImageElement/src}} attribute of |element|.
+  1. If |element| is an instance of {{HTMLImageElement}}, then set
+      |targetUrl| to the {{HTMLImageElement/src}} attribute of |element|.
 
-      1. If |element| is an instance of {{HTMLVideoElement}}, then set
-          |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
+  1. If |element| is an instance of {{HTMLVideoElement}}, then set
+      |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
 
-      1. If |element| is an instance of {{HTMLAudioElement}}, then set
-          |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
+  1. If |element| is an instance of {{HTMLAudioElement}}, then set
+      |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
 
-      1. If |element| is an instance of {{HTMLAnchorElement}}, then set
-          |targetUrl| to the [=href=] attribute of |element|.
+  1. If |element| is an instance of {{HTMLAnchorElement}}, then set
+      |targetUrl| to the [=href=] attribute of |element|.
 
   1. If |properties|["{{ContextMenusProperties/contexts}}"] is not
       [=list/empty=]:
@@ -4940,6 +4944,9 @@ of the items.
 
           1. If |element| matches |context|, set |matchesContext| to `true`
               and break;
+
+              Issue: {{ContextType}} matching behavior isn't specified, though
+              the note above has some information on the desired behavior.
 
       1. If |matchesContext| is `false`, return `false`.
 
@@ -4969,7 +4976,7 @@ of the items.
 
       1. If |matchesTargetUrl| is `false`, return `false`.
 
-  1. Note: Different user agents may implement additional conditions.
+  Note: Different user agents may implement additional conditions.
 
   1. Return `true`.
 
@@ -5041,57 +5048,50 @@ as the [=context menu item=] that was clicked, run the following steps:
 1. Let |properties| be the result of [=map/getting=] the [=map/value=] of the
     [=map/entry=] in [=ContextMenus/context menu map=] given the [=map/key=] |id|.
 
-1. Let |menuItem| be a [=new=] {{MenuItemDetails}}.
-
-    1. Update the following fields of |menuItem|:
-
-        : {{MenuItemDetails/editable}}
-        :: Whether the |element| selected is editable, such as a text input.
-
-        : {{MenuItemDetails/frameId}}
-        :: The [=navigable/frameId=] of the [=navigable container=] from which
-            the [=/contextmenu=] [=event=] is dispatched.
-
-        : {{MenuItemDetails/frameURL}}
-        :: The [=Document/URL=] of the [=navigable container=] from which the
-            [=/contextmenu=] [=event=] is dispatched.
-
-        : {{MenuItemDetails/id}}
-        :: |id|.
-
-        : {{MenuItemDetails/pageURL}}
-        :: The [=Document/URL=] of the [=embedded navigable=].
-
-    1. Update the following optional fields of |menuItem|:
-
-        Note: Different user agents may set these fields differently.
-
-        : {{MenuItemDetails/checked}}
-        :: Whether the [=context menu item=] is checked.
-
-        : {{MenuItemDetails/linkURL}}
-        :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s
-            [=href=] [=attribute=].
-
-        : {{MenuItemDetails/mediaType}}
-        :: One of "image", "video", or "audio", if any, based on |element|.
-
-        : {{MenuItemDetails/parentMenuId}}
-        :: |properties|["{{ContextMenusProperties/parentId}}"].
-
-        : {{MenuItemDetails/selectionText}}
-        :: The text for the context selection, if any.
-
-        : {{MenuItemDetails/srcURL}}
-        :: The "src" attribute of |element|, if it exists.
-
-        : {{MenuItemDetails/wasChecked}}
-        :: The state of a checkbox or radio item before it was clicked.
-
 1. Let |event| be a [=new=] {{ContextMenusClickEvent}} named
     [=ContextMenus/click=].
 
-1. Set |event|["{{ContextMenusClickEvent/menuItem}}"] to |menuItem|.
+1. Set |event|["{{ContextMenusClickEvent/menuItem}}"] to a [=new=]
+    {{MenuItemDetails}} with the following fields:
+
+    : {{MenuItemDetails/id}}
+    :: |id|.
+
+    : {{MenuItemDetails/parentMenuId}}
+    :: |properties|["{{ContextMenusProperties/parentId}}"].
+
+    : {{MenuItemDetails/checked}}
+    :: Whether the [=context menu item=] is checked.
+
+    : {{MenuItemDetails/wasChecked}}
+    :: The state of a checkbox or radio item before it was clicked.
+
+  1. Set the following fields of |event|:
+
+      : {{ContextMenusClickEvent/frameId}}
+      :: The [=navigable/frameId=] of |element|'s [=node navigable=].
+
+      : {{ContextMenusClickEvent/frameURL}}
+      :: The [=Document/URL=] of the |element|'s [=node navigable=].
+
+      : {{ContextMenusClickEvent/pageURL}}
+      :: The [=Document/URL=] of the |element|'s [=traversable navigable=].
+
+      : {{ContextMenusClickEvent/editable}}
+      :: Whether the |element| selected is editable, such as a text input.
+
+      : {{ContextMenusClickEvent/linkURL}}
+      :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s
+          [=href=] [=attribute=].
+
+      : {{ContextMenusClickEvent/mediaType}}
+      :: One of "image", "video", or "audio", if any, based on |element|.
+
+      : {{ContextMenusClickEvent/selectionText}}
+      :: The text for the context selection, if any.
+
+      : {{ContextMenusClickEvent/srcURL}}
+      :: The "src" attribute of |element|, if it exists.
 
 1. [=Dispatch=] |event| at |contextMenus|.
 
