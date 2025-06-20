@@ -3121,7 +3121,7 @@ enum RequestedHeaders {
 };
 
 dictionary WebRequestInterceptorOptions {
-  required sequence<HeadersInit> urlPatterns;
+  required sequence<(URLPattern or URLPatternInput)> urlPatterns;
   sequence<ResourceType> resourceTypes = [];
   boolean blocking = false;
   boolean includeRequestBody = false;
@@ -3252,7 +3252,7 @@ interface WebRequestBeforeRequestEvent : WebRequestEvent {
 
 [Exposed=Window, IsolatedContext]
 interface WebRequestBeforeSendHeadersEvent : WebRequestEvent {
-  undefined setRequestHeaders(Headers requestHeaders);
+  undefined setRequestHeaders((Headers or HeadersInit) requestHeaders);
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3270,7 +3270,7 @@ interface WebRequestHeadersReceivedEvent : WebRequestEvent {
   readonly attribute WebRequestResponse response;
 
   undefined redirect(USVString redirectURL);
-  undefined setResponseHeaders(Headers responseHeaders);
+  undefined setResponseHeaders((Headers or HeadersInit) responseHeaders);
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3536,9 +3536,6 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 
   1. Set the following fields on |interceptor|:
 
-    :  [=WebRequestInterceptor/urlPatterns=]
-    :: |options|["{{WebRequestInterceptorOptions/urlPatterns}}"]
-
     :  [=WebRequestInterceptor/resourceTypes=]
     :: |options|["{{WebRequestInterceptorOptions/resourceTypes}}"]
 
@@ -3550,6 +3547,15 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 
     :  [=WebRequestInterceptor/includeHeaders=]
     :: |options|["{{WebRequestInterceptorOptions/includeHeaders}}"]
+
+  1. [=list/For each=] |urlPattern| in |options|["{{
+      WebRequestInterceptorOptions/urlPatterns}}"]:
+
+      1. If |urlPattern| is a {{URLPattern}}, then [=list/append=] |urlPattern|
+          to |interceptor|'s [=WebRequestInterceptor/urlPatterns=].
+
+      1. Otherwise, [=list/append=] a [=new=] {{URLPattern}} given |urlPattern|
+          to |interceptor|'s [=WebRequestInterceptor/urlPatterns=].
 
   1. [=list/Append=] |interceptor| to [=this=]'s [=WebRequest/interceptors=].
 
