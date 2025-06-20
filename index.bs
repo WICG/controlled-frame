@@ -570,14 +570,6 @@ locations.
 
 </div>
 
-<div algorithm>
-  A {{USVString}} <var ignore>url</var> <dfn>matches a {{URLPattern}}</dfn>
-  <var ignore>pattern</var> if the following steps return `true`:
-
-  TODO: spec this
-
-</div>
-
 <!-- ====================================================================== -->
 ## Attributes ## {#attributes}
 <!-- ====================================================================== -->
@@ -3292,7 +3284,7 @@ interface WebRequestSendHeadersEvent : WebRequestEvent {};
 
 Each {{WebRequest}} has an associated:
  * <dfn for=WebRequest>interceptors</dfn>, which is a [=list=] of
-    {{WebRequestInterceptor}}s.
+    {{WebRequestInterceptor}}s, intially «».
 
 Each {{WebRequestInterceptor}} has an associated:
   <div dfn-for=WebRequestInterceptor>
@@ -3305,12 +3297,12 @@ Each {{WebRequestInterceptor}} has an associated:
 
 Each {{UploadData}} has an associated:
   <div dfn-for=UploadData>
-    * <dfn>bytes</dfn>, which is an {{ArrayBuffer}} or null.
+    * <dfn>bytes</dfn>, which is an {{ArrayBuffer}} or null, initially null.
 
         The <dfn attribute>bytes</dfn> getter steps are
         to return [=this=]'s [=UploadData/bytes=].
 
-    * <dfn>file</dfn>, which is a {{DOMString}} or null.
+    * <dfn>file</dfn>, which is a {{DOMString}} or null, initially null.
 
         The <dfn attribute>file</dfn> getter steps are
         to return [=this=]'s [=UploadData/file=].
@@ -3318,17 +3310,18 @@ Each {{UploadData}} has an associated:
 
 Each {{RequestBody}} has an associated:
   <div dfn-for=RequestBody>
-    * <dfn>error</dfn>, which is a {{DOMString}} or null.
+    * <dfn>error</dfn>, which is a {{DOMString}} or null, initially null.
 
         The <dfn attribute>error</dfn> getter steps are
         to return [=this=]'s [=RequestBody/error=].
 
-    * <dfn>formData</dfn>, which is an {{Object}}.
+    * <dfn>formData</dfn>, which is an {{Object}} or null, initially null.
 
         The <dfn attribute>formData</dfn> getter steps are
         to return [=this=]'s [=RequestBody/formData=].
 
-    * <dfn>raw</dfn>, which is a [=list=] of {{UploadData}}s or null.
+    * <dfn>raw</dfn>, which is a [=list=] of {{UploadData}}s or null, initially
+        null.
 
         The <dfn attribute>raw</dfn> getter steps are
         to return [=this=]'s [=RequestBody/raw=].
@@ -3361,12 +3354,12 @@ Each {{WebRequestRequest}} has an associated:
         The <dfn attribute>initiator</dfn> getter steps are
         to return [=this=]'s [=WebRequestRequest/initiator=].
 
-    * <dfn>headers</dfn>, which is a {{Headers}} or null.
+    * <dfn>headers</dfn>, which is a {{Headers}} or null, initially null.
 
         The <dfn attribute>headers</dfn> getter steps are
         to return [=this=]'s [=WebRequestRequest/headers=].
 
-    * <dfn>body</dfn>, which is a {{RequestBody}} or null.
+    * <dfn>body</dfn>, which is a {{RequestBody}} or null, initially null.
 
         The <dfn attribute>body</dfn> getter steps are
         to return [=this=]'s [=WebRequestRequest/body=].
@@ -3425,7 +3418,7 @@ Each {{WebRequestResponse}} has an associated:
         The <dfn attribute>fromCache</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/fromCache=].
 
-    * <dfn>headers</dfn>, which is a {{Headers}} or null.
+    * <dfn>headers</dfn>, which is a {{Headers}} or null, initially null.
 
         The <dfn attribute>headers</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/headers=].
@@ -3435,12 +3428,13 @@ Each {{WebRequestResponse}} has an associated:
         The <dfn attribute>ip</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/ip=].
 
-    * <dfn>redirectURL</dfn>, which is a {{USVString}} or null.
+    * <dfn>redirectURL</dfn>, which is a {{USVString}} or null, initially null.
 
         The <dfn attribute>redirectURL</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/redirectURL=].
 
-    * <dfn>auth</dfn>, which is a {{WebRequestAuthDetails}} or null.
+    * <dfn>auth</dfn>, which is a {{WebRequestAuthDetails}} or null, initially
+        null.
 
         The <dfn attribute>auth</dfn> getter steps are
         to return [=this=]'s [=WebRequestResponse/auth=].
@@ -3458,27 +3452,29 @@ Each {{WebRequestEvent}} has an associated:
         The <dfn attribute>frameId</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/frameId=].
 
-    * <dfn>frameType</dfn>, which is a {{FrameType}} or null.
+    * <dfn>frameType</dfn>, which is a {{FrameType}} or null, initially null.
 
         The <dfn attribute>frameType</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/frameType=].
 
-    * <dfn>documentId</dfn>, which is a {{DOMString}} or null.
+    * <dfn>documentId</dfn>, which is a {{DOMString}} or null, initially null.
 
         The <dfn attribute>documentId</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/documentId=].
 
-    * <dfn>documentLifecycle</dfn>, which is a {{DocumentLifecycle}} or null.
+    * <dfn>documentLifecycle</dfn>, which is a {{DocumentLifecycle}} or null,
+        initially null.
 
         The <dfn attribute>documentLifecycle</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/documentLifecycle=].
 
-    * <dfn>parentDocumentId</dfn>, which is a {{DOMString}} or null.
+    * <dfn>parentDocumentId</dfn>, which is a {{DOMString}} or null, initially
+        null.
 
         The <dfn attribute>parentDocumentId</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/parentDocumentId=].
 
-    * <dfn>parentFrameId</dfn>, which is a {{long}} or null.
+    * <dfn>parentFrameId</dfn>, which is a {{long}} or null, initially null.
 
         The <dfn attribute>parentFrameId</dfn> getter steps are
         to return [=this=]'s [=WebRequestEvent/parentFrameId=].
@@ -4404,16 +4400,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
   1. Set the following fields on |event|:
 
-      : [=WebRequestEvent/documentId=]
-      :: "".
-
       : [=WebRequestEvent/frameId=]
-      :: -1
-
-      : [=WebRequestEvent/parentDocumentId=]
-      :: "".
-
-      : [=WebRequestEvent/parentFrameId=]
       :: -1
 
   1. Let |window| be the [=owning Window of an environment settings object=]
@@ -4452,26 +4439,26 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
           : [=WebRequestEvent/parentFrameId=]
           :: The [=navigable/frameId=] of |parentNavigable|.
 
-      1. Set |event|'s [=WebRequestEvent/request=] to a [=new=]
-          {{WebRequestRequest}} with the following fields:
+  1. Set |event|'s [=WebRequestEvent/request=] to a [=new=]
+      {{WebRequestRequest}} with the following fields:
 
-          : [=WebRequestRequest/url=]
-          :: The last element of |request|'s [=request/URL list=].
+      : [=WebRequestRequest/url=]
+      :: The last element of |request|'s [=request/URL list=].
 
-          : [=WebRequestRequest/method=]
-          :: |request|'s [=request/method=].
+      : [=WebRequestRequest/method=]
+      :: |request|'s [=request/method=].
 
-          : [=WebRequestRequest/initiator=]
-          :: The [=serialization of an origin=] given |request|'s [=request/origin=].
+      : [=WebRequestRequest/initiator=]
+      :: The [=serialization of an origin=] given |request|'s [=request/origin=].
 
-              Note: An opaque origin will result in [=WebRequestRequest/
-              initiator=] being set to the {{DOMString}} "null".
+          Note: An opaque origin will result in [=WebRequestRequest/
+          initiator=] being set to the {{DOMString}} "null".
 
-          : [=WebRequestRequest/type=]
-          :: The result of calling [=get a request's ResourceType=] given |request|.
+      : [=WebRequestRequest/type=]
+      :: The result of calling [=get a request's ResourceType=] given |request|.
 
-          : [=WebRequestRequest/id=]
-          :: |request|'s [=request/requestId=].
+      : [=WebRequestRequest/id=]
+      :: |request|'s [=request/requestId=].
 
   1. If |requestedHeaders| is not "{{RequestedHeaders/none}}", then set
       |event|'s [=WebRequestEvent/request=]'s [=WebRequestRequest/headers=]
