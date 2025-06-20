@@ -233,8 +233,6 @@ spec: nav-speculation; urlPrefix: https://wicg.github.io/nav-speculation/
     type: dfn
         urlPrefix: prerendering.html
             text: prerendering navigable; url: prerendering-navigable
-
-text: match pattern; type: dfn; url: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns;
 </pre>
 
 <pre class=link-defaults>
@@ -548,25 +546,15 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
 </div>
 
 <div algorithm>
-  A {{USVString}} <var ignore>url</var> <dfn>matches a {{URLPattern}}</dfn>
-  <var ignore>pattern</var> if the following steps return `true`:
+  A [=/URL=] |url| <dfn>matches a {{URLPattern}}</dfn> |pattern| if the
+  following steps return `true`:
 
-  TODO: spec this
+  1. Let |result| be the result of [=URL pattern/match=] given |pattern|,
+      and |url|.
 
-</div>
+  1. If |result| is null, then return `false`.
 
-A <dfn>match pattern</dfn> is a {{USVString}} that represents a group of URLs.
-It follows the structure of a [=/URL=] with wildcards (`"*"`) in supported
-locations.
-
-<div algorithm>
-  A {{USVString}} <var ignore>url</var> <dfn>matches a [=match pattern=]</dfn>
-  <var ignore>pattern</var> if the following steps return `true`:
-
-  Issue: Match patterns should have a formal specification.
-  <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">
-  Documentation</a> exists on MDN, and all browsers that support Web Extensions
-  will already have a Match Pattern implementation that can be reused here.
+  1. Return `true`.
 
 </div>
 
@@ -884,8 +872,8 @@ dictionary ContentScriptDetails {
   required DOMString name;
   InjectionItems js;
   InjectionItems css;
-  required sequence<DOMString> matches;
-  sequence<DOMString> excludeMatches;
+  required sequence<(URLPattern or URLPatternInput)> urlPatterns;
+  sequence<(URLPattern or URLPatternInput)> excludeURLPatterns;
   boolean allFrames;
   boolean matchAboutBlank;
   RunAt runAt;
@@ -907,18 +895,18 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   :: a [=list=] of {{DOMString}}s containing CSS that will be injected into a
       document.
 
-  : <dfn>matches</dfn>
-  :: a [=list=] of {{USVString}}s containing [=match patterns=].
+  : <dfn>urlPatterns</dfn>
+  :: a [=list=] of {{URLPattern}}s.
 
       Note: Content may be injected into a document if its [=Document/URL=]
-      <a href="#matches-a-match-pattern">matches</a> any of these patterns.
+      <a href="#matches-a-urlpattern">matches</a> any of these patterns.
 
-  : <dfn>excludeMatches</dfn>
-  :: a [=list=] of {{USVString}}s containing [=match patterns=].
+  : <dfn>excludeURLPatterns</dfn>
+  :: a [=list=] of {{URLPattern}}s.
 
       Note: Content will not be injected into a document if its [=Document/URL=]
-      <a href="#matches-a-match-pattern">matches</a> any of these patterns. This
-      overrides [=content script config/matches=]; if both lists have entries
+      <a href="#matches-a-urlpattern">matches</a> any of these patterns. This
+      overrides [=content script config/urlPattern=]; if both lists have entries
       that a document's [=Document/URL=] matches, the content will not be
       injected into the document.
 
@@ -988,8 +976,8 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       |details|["{{ContentScriptDetails/css}}"] are both defined, or both
       undefined, then [=reject=] |result| with a {{TypeError}} and return it.
 
-  1. If |details|["{{ContentScriptDetails/matches}}"] is [=list/empty=], then
-      [=reject=] |result| with a {{TypeError}} and return it.
+  1. If |details|["{{ContentScriptDetails/urlPatterns}}"] is [=list/empty=],
+      then [=reject=] |result| with a {{TypeError}} and return it.
 
   1. Let |isCss| be a [=boolean=] equal to `true` if
       |details|["{{ContentScriptDetails/css}}"] is defined, `false` otherwise.
@@ -1011,11 +999,10 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
 
       : [=content script config/pendingFetchCount=]
       :: 0
-      : [=content script config/matches=]
-      :: |details|["{{ContentScriptDetails/matches}}"]
-      : [=content script config/excludeMatches=]
-      :: |details|["{{ContentScriptDetails/excludeMatches}}"] if defined,
-          otherwise an empty [=list=]
+      : [=content script config/urlPatterns=]
+      :: «»
+      : [=content script config/excludeURLPatterns=]
+      :: «»
       : [=content script config/allFrames=]
       :: |details|["{{ContentScriptDetails/allFrames}}"] if defined, otherwise
           `false`
@@ -1025,6 +1012,29 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
       : [=content script config/runAt=]
       :: |details|["{{ContentScriptDetails/runAt}}"] if defined, otherwise
           {{RunAt/document-idle}}
+
+  1. [=list/For each=] |urlPattern| in |details|["{{
+      ContentScriptDetails/urlPatterns}}"]:
+
+      1. If |urlPattern| is a {{URLPattern}}, then [=list/append=] |urlPattern|
+          to |config|'s [=content script config/urlPatterns=].
+
+      1. Otherwise, [=list/append=] a [=new=] {{URLPattern}} given |urlPattern|
+          to |config|'s [=content script config/urlPatterns=].
+
+  1. If |details|["{{ContentScriptDetails/excludeURLPatterns}}"] is defined,
+      then:
+
+      1. [=list/For each=] |urlPattern| in |details|["{{
+          ContentScriptDetails/excludeURLPatterns}}"]:
+
+          1. If |urlPattern| is a {{URLPattern}}, then [=list/append=]
+              |urlPattern| to |config|'s
+              [=content script config/excludeURLPatterns=].
+
+          1. Otherwise, [=list/append=] a [=new=] {{URLPattern}} given
+              |urlPattern| to |config|'s
+              [=content script config/excludeURLPatterns=].
 
   1. Let |completionSteps| be the following algorithm, which takes a {{long}}
       |index|, a [=boolean=] |success|, and a {{DOMString}} |source|:
@@ -1091,15 +1101,15 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. Let |match| be `false`.
 
   1. [=list/For each=] |pattern| of |config|'s
-      [=content script config/matches=]:
+      [=content script config/urlPatterns=]:
 
-      1. If |urlString| [=matches a match pattern=] |pattern|, then set
+      1. If |urlString| [=matches a URLPattern=] |pattern|, then set
           |match| to `true`.
 
   1. [=list/For each=] |pattern| of |config|'s
-      [=content script config/excludeMatches=]:
+      [=content script config/excludeURLPatterns=]:
 
-      1. If |urlString| [=matches a match pattern=] |pattern|, then set
+      1. If |urlString| [=matches a URLPattern=] |pattern|, then set
           |match| to `false`.
 
   1. Return |match|.
@@ -4808,10 +4818,10 @@ enum ItemType {
 dictionary ContextMenusProperties {
     boolean checked;
     sequence<ContextType> contexts;
-    sequence<USVString> documentURLPatterns;
+    sequence<(URLPattern or URLPatternInput)> documentURLPatterns;
     boolean enabled;
     DOMString parentId;
-    sequence<USVString> targetURLPatterns;
+    sequence<(URLPattern or URLPatternInput)> targetURLPatterns;
     DOMString title;
     ItemType type;
 };
@@ -4893,14 +4903,14 @@ of the items.
         is ignored.
 
     : {{ContextMenusProperties/documentURLPatterns}}
-    :: A [=list=] of strings that are {{URLPattern}}s. If it is not
+    :: A [=list=] of {{URLPattern}}s or {{URLPatternInput}}s. If it is not
         [=list/empty=], then the [=context menu item=] will not be shown unless
         the [=/URL=] of the embedded document [=matches a URLPattern=] with
         one of the [=list=] [=list/items=]. If it is [=list/empty=], then this
         check is ignored.
 
     : {{ContextMenusProperties/targetURLPatterns}}
-    :: A [=list=] of strings that are {{URLPattern}}s. If it is not
+    :: A [=list=] of {{URLPattern}}s or {{URLPatternInput}}s. If it is not
         [=list/empty=], then the [=context menu item=] will not be shown unless
         the [=/URL=] of the target of the [=ContextMenus/context menu=]
         [=matches a URLPattern=] with one of the [=list=] [=list/items=]. If
@@ -5098,8 +5108,11 @@ of the items.
       1. For each |urlPattern| in |properties|["{{
             ContextMenusProperties/documentURLPatterns}}"]:
 
-          1. If |documentUrl| [=matches a URLPattern=], given |urlPattern|, set
-              |matchesDocumentUrl| to `true` and break;
+          1. If |urlPattern| is a {{URLPatternInput}}, then set |urlPattern| to
+              a [=new=] {{URLPattern}} given |urlPattern|.
+
+          1. If |documentUrl| [=matches a URLPattern=], given |urlPattern|,
+              then set |matchesDocumentUrl| to `true` and break;
 
       1. If |matchesDocumentUrl| is `false`, return `false`.
 
@@ -5111,14 +5124,17 @@ of the items.
       1. For each |urlPattern| in |properties|["{{
           ContextMenusProperties/targetURLPatterns}}"]:
 
-          1. If |targetUrl| [=matches a URLPattern=], given |urlPattern|,
+          1. If |urlPattern| is a {{URLPatternInput}}, then set |urlPattern| to
+              a [=new=] {{URLPattern}} given |urlPattern|.
+
+          1. If |targetUrl| [=matches a URLPattern=], given |urlPattern|, then
               set |matchesTargetUrl| to `true` and break;
 
       1. If |matchesTargetUrl| is `false`, return `false`.
 
-  Note: Different user agents may implement additional conditions.
-
   1. Return `true`.
+
+  Note: Different user agents may implement additional conditions.
 
 </div>
 
