@@ -3296,6 +3296,10 @@ Each {{WebRequest}} has an associated:
  * <dfn for=WebRequest>interceptors</dfn>, which is a [=list=] of
     {{WebRequestInterceptor}}s, intially «».
 
+Note: [=WebRequest/interceptors=] will be written to from tasks
+    on the <{controlledframe}> element's event loop, but read [=in parallel=]
+    during [=fetch=].
+
 Each {{WebRequestInterceptor}} has an associated:
   <div dfn-for=WebRequestInterceptor>
     * <dfn>urlPatterns</dfn>, which is a [=list=] of {{URLPattern}}s.
@@ -3574,13 +3578,17 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 </div>
 
 <div algorithm>
-  The <dfn method for=WebRequest>interceptorBehaviorChanged(|callback|)</dfn>
+  The <dfn method for=WebRequest>interceptorBehaviorChanged()</dfn>
   method steps are:
+
+  1. Let |promise| be [=a new promise=].
 
   1. Let |controlledframe| be [=this=].
 
-  1. [=In parallel=], clear the HTTP cache associated with the partition
-      used by [=environments=] embedded within the |controlledframe|
+  1. Return |promise| and run the following steps [=in parallel=].
+
+  1. Clear the HTTP cache associated with the partition used by
+      [=environment's=] embedded within the |controlledframe|
       {{HTMLControlledFrameElement}}.
 
       Note: The behavior of event handlers registered through the WebRequest
@@ -3589,7 +3597,8 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
       to invalidate any cache entries that were affected by WebRequest event
       handlers.
 
-  1. Invoke |callback| when the HTTP cache has been cleared.
+  1. [=Resolve an embedder promise=] given |controlledframe| and |promise| when
+      the HTTP cache has been cleared.
 
 </div>
 
@@ -3606,13 +3615,12 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 
   1. If |window| is null then return an empty [=list=] and `false`.
 
-  1. Let |navigable| be |window|'s [=node navigable=].
+  1. Let |navigable| be |window|'s [=Window/navigable=].
 
-  1. If |navigable|'s [=embedderParent=] is null, return an empty [=list=]
+  1. If |navigable| or its [=embedderParent=] is null, return an empty [=list=]
       and `false`.
 
-  1. Let |controlledFrame| be the {{HTMLControlledFrameElement}}
-      corresponding to |navigable|'s [=embedderParent=].
+  1. Let |controlledFrame| be |navigable|'s [=embedderParent=].
 
   1. Let |applicableInterceptors| be an empty [=list=].
 
@@ -3940,63 +3948,65 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
-
-      1. Let |event| be a [=new=] {{WebRequestBeforeRequestEvent}} named
-          [=WebRequestInterceptor/beforerequest=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          "{{RequestedHeaders/none}}".
-
-      1. If |interceptor|'s [=WebRequestInterceptor/includeRequestBody=] is
-          `true` and |request|'s [=request/body=] is not null, then:
-
-          1. Let |requestBody| be a [=new=] {{RequestBody}}.
-
-          1. Let |body| be |request|'s [=request/body=].
-
-              <span class=XXX>TODO: serialize [=body/stream=] if present.</span>
-
-          1. Switch on |body|'s [=body/source=]:
-
-              : [=byte sequence=]
-              :: [=list/Append=] a [=new=] {{UploadData}} with [=UploadData/
-                  bytes=] equal to the serialized |body|'s [=body/source=] to
-                  |requestBody|'s [=RequestBody/raw=].
-
-              : {{Blob}}
-              :: [=list/Append=] a [=new=] {{UploadData}} with [=UploadData/
-                  bytes=] equal to the serialized |body|'s [=body/source=] to
-                  |requestBody|'s [=RequestBody/raw=].
-
-              : {{FormData}}
-              ::  1. Let |formData| be «[]».
-
-                  1. [=list/For each=] |entry| in |body|'s [=body/source=]'s
-                      [=FormData/entry list=]:
-
-                      1. Switch on |entry|[1]:
-
-                      : {{File}}
-                      :: [=list/Append=] a [=new=] {{UploadData}} with
-                          [=UploadData/file=] equal to |entry|[1]'s
-                          {{File/name}} to |requestBody|'s [=RequestBody/raw=].
-
-                      : {{USVString}}
-                      ::  1. If |formData|[|entry|[0]] does not exist, then
-                              set |formData|[|entry|[0]] equal to an empty
-                              [=list=].
-
-                          1. [=list/Append=] |entry|[1] to
-                              |formData|[|entry|[0]].
-
-                  1. Set |requestBody|'s [=RequestBody/formData=] to |formData|.
-
-          1. Set |event|'s [=WebRequestEvent/request=]'s [=WebRequestRequest/
-              body=] to |requestBody|.
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestBeforeRequestEvent}} named
+              [=WebRequestInterceptor/beforerequest=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              "{{RequestedHeaders/none}}".
+
+          1. If |interceptor|'s [=WebRequestInterceptor/includeRequestBody=] is
+              `true` and |request|'s [=request/body=] is not null, then:
+
+              1. Let |requestBody| be a [=new=] {{RequestBody}}.
+
+              1. Let |body| be |request|'s [=request/body=].
+
+                  <span class=XXX>TODO: serialize [=body/stream=] if present.</span>
+
+              1. Switch on |body|'s [=body/source=]:
+
+                  : [=byte sequence=]
+                  :: [=list/Append=] a [=new=] {{UploadData}} with [=UploadData/
+                      bytes=] equal to the serialized |body|'s [=body/source=] to
+                      |requestBody|'s [=RequestBody/raw=].
+
+                  : {{Blob}}
+                  :: [=list/Append=] a [=new=] {{UploadData}} with [=UploadData/
+                      bytes=] equal to the serialized |body|'s [=body/source=] to
+                      |requestBody|'s [=RequestBody/raw=].
+
+                  : {{FormData}}
+                  ::  1. Let |formData| be «[]».
+
+                      1. [=list/For each=] |entry| in |body|'s [=body/source=]'s
+                          [=FormData/entry list=]:
+
+                          1. Switch on |entry|[1]:
+
+                          : {{File}}
+                          :: [=list/Append=] a [=new=] {{UploadData}} with
+                              [=UploadData/file=] equal to |entry|[1]'s
+                              {{File/name}} to |requestBody|'s [=RequestBody/raw=].
+
+                          : {{USVString}}
+                          ::  1. If |formData|[|entry|[0]] does not exist, then
+                                  set |formData|[|entry|[0]] equal to an empty
+                                  [=list=].
+
+                              1. [=list/Append=] |entry|[1] to
+                                  |formData|[|entry|[0]].
+
+                      1. Set |requestBody|'s [=RequestBody/formData=] to |formData|.
+
+              1. Set |event|'s [=WebRequestEvent/request=]'s [=WebRequestRequest/
+                  body=] to |requestBody|.
 
           1. [=Dispatch=] |event| to |interceptor|.
 
@@ -4034,16 +4044,18 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
-
-      1. Let |event| be a [=new=] {{WebRequestBeforeSendHeadersEvent}} named
-          [=WebRequestInterceptor/beforesendheaders=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          |interceptor|'s [=WebRequestInterceptor/includeHeaders=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestBeforeSendHeadersEvent}} named
+              [=WebRequestInterceptor/beforesendheaders=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              |interceptor|'s [=WebRequestInterceptor/includeHeaders=].
 
           1. [=Dispatch=] |event| to |interceptor|.
 
@@ -4084,16 +4096,20 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
 
-      1. Let |event| be a [=new=] {{WebRequestSendHeadersEvent}} named
-          [=WebRequestInterceptor/sendheaders=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          |interceptor|'s [=WebRequestInterceptor/includeHeaders=].
-
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
+          |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestSendHeadersEvent}} named
+              [=WebRequestInterceptor/sendheaders=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              |interceptor|'s [=WebRequestInterceptor/includeHeaders=].
+
+          1. [=Dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -4112,21 +4128,23 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
-
-      1. Let |event| be a [=new=] {{WebRequestHeadersReceivedEvent}} named
-          [=WebRequestInterceptor/headersreceived=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          "{{RequestedHeaders/none}}".
-
-      1. Set |event|'s [=WebRequestHeadersReceivedEvent/response=] to the
-          result of [=creating a WebRequestResponse object=] given |request|,
-          |response|, and |interceptor|'s
-          [=WebRequestInterceptor/includeHeaders=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestHeadersReceivedEvent}} named
+              [=WebRequestInterceptor/headersreceived=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              "{{RequestedHeaders/none}}".
+
+          1. Set |event|'s [=WebRequestHeadersReceivedEvent/response=] to the
+              result of [=creating a WebRequestResponse object=] given |request|,
+              |response|, and |interceptor|'s
+              [=WebRequestInterceptor/includeHeaders=].
 
           1. [=Dispatch=] |event| to |interceptor|.
 
@@ -4204,29 +4222,31 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
-
-      1. Let |event| be a [=new=] {{WebRequestAuthRequiredEvent}} named
-          [=WebRequestInterceptor/authrequired=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          "{{RequestedHeaders/none}}".
-
-      1. Set |event|'s [=WebRequestAuthRequiredEvent/response=] to the
-          result of [=creating a WebRequestResponse object=] given |request|,
-          |response|, and |interceptor|'s
-          [=WebRequestInterceptor/includeHeaders=].
-
-      1. Set |event|'s [=WebRequestAuthRequiredEvent/response=]'s [=
-          WebRequestResponse/auth=] to a [=new=] {{WebRequestAuthDetails}}
-          whose [=WebRequestAuthDetails/challenger=],
-          [=WebRequestAuthDetails/isProxy=],
-          [=WebRequestAuthDetails/scheme=], and
-          [=WebRequestAuthDetails/realm=] fields have the values
-          |challenger|, |isProxy|, |scheme|, and |realm| respectively.
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestAuthRequiredEvent}} named
+              [=WebRequestInterceptor/authrequired=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              "{{RequestedHeaders/none}}".
+
+          1. Set |event|'s [=WebRequestAuthRequiredEvent/response=] to the
+              result of [=creating a WebRequestResponse object=] given |request|,
+              |response|, and |interceptor|'s
+              [=WebRequestInterceptor/includeHeaders=].
+
+          1. Set |event|'s [=WebRequestAuthRequiredEvent/response=]'s [=
+              WebRequestResponse/auth=] to a [=new=] {{WebRequestAuthDetails}}
+              whose [=WebRequestAuthDetails/challenger=],
+              [=WebRequestAuthDetails/isProxy=],
+              [=WebRequestAuthDetails/scheme=], and
+              [=WebRequestAuthDetails/realm=] fields have the values
+              |challenger|, |isProxy|, |scheme|, and |realm| respectively.
 
           1. [=Dispatch=] |event| to |interceptor|.
 
@@ -4295,29 +4315,33 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
 
-      1. Let |event| be a [=new=] {{WebRequestBeforeRedirectEvent}} named
-          [=WebRequestInterceptor/beforeredirect=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          "{{RequestedHeaders/none}}".
-
-      1. Set |event|'s [=WebRequestBeforeRedirectEvent/response=] to the
-          result of [=creating a WebRequestResponse object=] given |request|,
-          |response|, and |interceptor|'s
-          [=WebRequestInterceptor/includeHeaders=].
-
-      1. Let |internalResponse| be |response|, if |response| is not a
-          [=filtered response=]; otherwise |response|'s [=internal response=].
-
-      1. Set |event|'s [=WebRequestBeforeRedirectEvent/response=]'s [=
-          WebRequestResponse/redirectURL=] to |internalResponse|'s
-          [=location URL=] given |request|'s [=request/current URL=]'s
-          [=url/fragment=].
-
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
+          |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestBeforeRedirectEvent}} named
+              [=WebRequestInterceptor/beforeredirect=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              "{{RequestedHeaders/none}}".
+
+          1. Set |event|'s [=WebRequestBeforeRedirectEvent/response=] to the
+              result of [=creating a WebRequestResponse object=] given |request|,
+              |response|, and |interceptor|'s
+              [=WebRequestInterceptor/includeHeaders=].
+
+          1. Let |internalResponse| be |response|, if |response| is not a
+              [=filtered response=]; otherwise |response|'s [=internal response=].
+
+          1. Set |event|'s [=WebRequestBeforeRedirectEvent/response=]'s [=
+              WebRequestResponse/redirectURL=] to |internalResponse|'s
+              [=location URL=] given |request|'s [=request/current URL=]'s
+              [=url/fragment=].
+
+          1. [=Dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -4332,21 +4356,25 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
 
-      1. Let |event| be a [=new=] {{WebRequestResponseStartedEvent}} named
-          [=WebRequestInterceptor/responsestarted=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          "{{RequestedHeaders/none}}".
-
-      1. Set |event|'s [=WebRequestResponseStartedEvent/response=] to the
-          result of [=creating a WebRequestResponse object=] given |request|,
-          |response|, and |interceptor|'s
-          [=WebRequestInterceptor/includeHeaders=].
-
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
+          |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestResponseStartedEvent}} named
+              [=WebRequestInterceptor/responsestarted=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              "{{RequestedHeaders/none}}".
+
+          1. Set |event|'s [=WebRequestResponseStartedEvent/response=] to the
+              result of [=creating a WebRequestResponse object=] given |request|,
+              |response|, and |interceptor|'s
+              [=WebRequestInterceptor/includeHeaders=].
+
+          1. [=Dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -4361,21 +4389,25 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
 
-      1. Let |event| be a [=new=] {{WebRequestCompletedEvent}} named
-          [=WebRequestInterceptor/completed=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          "{{RequestedHeaders/none}}".
-
-      1. Set |event|'s [=WebRequestCompletedEvent/response=] to the
-          result of [=creating a WebRequestResponse object=] given |request|,
-          |response|, and |interceptor|'s
-          [=WebRequestInterceptor/includeHeaders=].
-
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
+          |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestCompletedEvent}} named
+              [=WebRequestInterceptor/completed=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              "{{RequestedHeaders/none}}".
+
+          1. Set |event|'s [=WebRequestCompletedEvent/response=] to the
+              result of [=creating a WebRequestResponse object=] given |request|,
+              |response|, and |interceptor|'s
+              [=WebRequestInterceptor/includeHeaders=].
+
+          1. [=Dispatch=] |event| to |interceptor|.
 
 </div>
 
@@ -4390,20 +4422,24 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=getting an environment's embedderParent=] given |request|'s
       [=request/client=].
 
+  1. If |embedderGlobal| is null, then return.
+
   1. For each |interceptor| in |interceptors|:
 
-      1. Let |event| be a [=new=] {{WebRequestErrorOccurredEvent}} named
-          [=WebRequestInterceptor/erroroccurred=].
-
-      1. [=Populate a WebRequestEvent=] given |event|, |request|, and
-          "{{RequestedHeaders/none}}".
-
-      1. Set |event|'s [=WebRequestErrorOccurredEvent/error=] to an
-          [=implementation-defined=] error message describing the error in
-          |response|.
-
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will [=dispatch=] |event| to |interceptor|.
+          |embedderGlobal| that will run the following steps:
+
+          1. Let |event| be a [=new=] {{WebRequestErrorOccurredEvent}} named
+              [=WebRequestInterceptor/erroroccurred=].
+
+          1. [=Populate a WebRequestEvent=] given |event|, |request|, and
+              "{{RequestedHeaders/none}}".
+
+          1. Set |event|'s [=WebRequestErrorOccurredEvent/error=] to an
+              [=implementation-defined=] error message describing the error in
+              |response|.
+
+          1. [=Dispatch=] |event| to |interceptor|.
 
 </div>
 
