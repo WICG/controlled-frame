@@ -3624,8 +3624,6 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 
   1. Let |applicableInterceptors| be an empty [=list=].
 
-  1. Let |blocking| be `false`.
-
   1. For each |interceptor| in |controlledFrame|'s [=controlledframe/request=]'s
       [=WebRequest/interceptors=]:
 
@@ -3634,10 +3632,7 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 
       1. [=list/Append=] |interceptor| to |applicableInterceptors|.
 
-      1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`, then
-          set |blocking| to `true`.
-
-  1. Return |applicableInterceptors| and |blocking|.
+  1. Return |applicableInterceptors|.
 
 </div>
 
@@ -3937,23 +3932,26 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   To <dfn>process beforeRequest events</dfn> given a [=/request=] |request|,
   run the following steps:
 
-  1. Let |interceptors| and |blocking| be the result of getting the
+  1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |result| be a [=WebRequestEvent result=].
 
-  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
+  1. Let |pendingHandlerCount| be 0.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
+      1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+          then increment |pendingHandlerCount|.
+
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestBeforeRequestEvent}} named
               [=WebRequestInterceptor/beforerequest=].
@@ -3968,7 +3966,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
               1. Let |body| be |request|'s [=request/body=].
 
-                  <span class=XXX>TODO: serialize [=body/stream=] if present.</span>
+                  <span class=XXX>TODO: serialize |body|'s [=body/stream=] if present.</span>
 
               1. Switch on |body|'s [=body/source=]:
 
@@ -4018,12 +4016,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
               then set |result|'s [=WebRequestEvent result/redirectURL=] to
               [=event=]'s [=WebRequestBeforeRequestEvent/redirectURL=].
 
-          1. Decrement |pendingHandlerCount|.
+          1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+              then decrement |pendingHandlerCount|.
 
-  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
-      to equal 0, then [=queue a global task=] on the [=networking task source=]
-      of |request|'s [=request/client=]'s [=environment settings object/
-      global object=] that will continue the remaining steps of this algorithm.
+  1. If |pendingHandlerCount| &gt; 0, then wait [=in parallel=] for
+      |pendingHandlerCount| to equal 0, then [=queue a global task=] that will
+      continue the remaining steps of this algorithm on either the [=networking
+      task source=] of |request|'s [=request/client=]'s [=environment settings
+      object/global object=] or the [=in parallel=] context that these steps
+      were first invoked on, depending on how these steps were run before going
+      in parallel.
 
   1. Return |result|.
 
@@ -4033,23 +4035,26 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   To <dfn>process beforeSendHeaders events</dfn> given a [=/request=] |request|,
   run the following steps:
 
-  1. Let |interceptors| and |blocking| be the result of getting the
+  1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |result| be a [=WebRequestEvent result=].
 
-  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
+  1. Let |pendingHandlerCount| be 0.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
+      1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+          then increment |pendingHandlerCount|.
+
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestBeforeSendHeadersEvent}} named
               [=WebRequestInterceptor/beforesendheaders=].
@@ -4074,12 +4079,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
                   1. [=Headers/Append=] |header| to |result|'s [=WebRequestEvent
                       result/requestHeaders=].
 
-          1. Decrement |pendingHandlerCount|.
+          1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+              then decrement |pendingHandlerCount|.
 
-  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
-      to equal 0, then [=queue a global task=] on the [=networking task source=]
-      of |request|'s [=request/client=]'s [=environment settings object/
-      global object=] that will continue the remaining steps of this algorithm.
+  1. If |pendingHandlerCount| &gt; 0, then wait [=in parallel=] for
+      |pendingHandlerCount| to equal 0, then [=queue a global task=] that will
+      continue the remaining steps of this algorithm on either the [=networking
+      task source=] of |request|'s [=request/client=]'s [=environment settings
+      object/global object=] or the [=in parallel=] context that these steps
+      were first invoked on, depending on how these steps were run before going
+      in parallel.
 
   1. Return |result|.
 
@@ -4092,16 +4101,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestSendHeadersEvent}} named
               [=WebRequestInterceptor/sendheaders=].
@@ -4117,23 +4126,26 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   To <dfn>process headersReceived events</dfn> given a [=/request=] |request|
   and a [=/response=] |response|, run the following steps:
 
-  1. Let |interceptors| and |blocking| be the result of getting the
+  1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |result| be a [=WebRequestEvent result=].
 
   1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
+      1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+          then increment |pendingHandlerCount|.
+
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestHeadersReceivedEvent}} named
               [=WebRequestInterceptor/headersreceived=].
@@ -4168,12 +4180,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
                   1. [=Headers/Append=] |header| to |result|'s [=WebRequestEvent
                       result/responseHeaders=].
 
-          1. Decrement |pendingHandlerCount|.
+          1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+              then decrement |pendingHandlerCount|.
 
-  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
-      to equal 0, then [=queue a global task=] on the [=networking task source=]
-      of |request|'s [=request/client=]'s [=environment settings object/
-      global object=] that will continue the remaining steps of this algorithm.
+  1. If |pendingHandlerCount| &gt; 0, then wait [=in parallel=] for
+      |pendingHandlerCount| to equal 0, then [=queue a global task=] that will
+      continue the remaining steps of this algorithm on either the [=networking
+      task source=] of |request|'s [=request/client=]'s [=environment settings
+      object/global object=] or the [=in parallel=] context that these steps
+      were first invoked on, depending on how these steps were run before going
+      in parallel.
 
   1. Return |result|.
 
@@ -4211,23 +4227,26 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
   1. If |scheme| is null, then return null.
 
-  1. Let |interceptors| and |blocking| be the result of getting the
+  1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |result| be a [=WebRequestEvent result=].
 
-  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
+  1. Let |pendingHandlerCount| be 0.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
+      1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+          then increment |pendingHandlerCount|.
+
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestAuthRequiredEvent}} named
               [=WebRequestInterceptor/authrequired=].
@@ -4290,15 +4309,19 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
               1. Wait [=in parallel=] for |done| to equal `true`, then [=queue a
                   global task=] on the [=DOM manipulation task source=] of
-                  |embedderGlobal| that will run continue the remaining steps
+                  |controlledFrameEmbedderGlobal| that will run continue the remaining steps
                   of this algorithm.
 
-          1. Decrement |pendingHandlerCount|.
+          1. If |interceptor|'s [=WebRequestInterceptor/blocking=] is `true`,
+              then decrement |pendingHandlerCount|.
 
-  1. If |blocking| is `true`, then wait [=in parallel=] for |pendingHandlerCount|
-      to equal 0, then [=queue a global task=] on the [=networking task source=]
-      of |request|'s [=request/client=]'s [=environment settings object/
-      global object=] that will continue the remaining steps of this algorithm.
+  1. If |pendingHandlerCount| &gt; 0, then wait [=in parallel=] for
+      |pendingHandlerCount| to equal 0, then [=queue a global task=] that will
+      continue the remaining steps of this algorithm on either the [=networking
+      task source=] of |request|'s [=request/client=]'s [=environment settings
+      object/global object=] or the [=in parallel=] context that these steps
+      were first invoked on, depending on how these steps were run before going
+      in parallel.
 
   1. Return |result|.
 
@@ -4311,16 +4334,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestBeforeRedirectEvent}} named
               [=WebRequestInterceptor/beforeredirect=].
@@ -4352,16 +4375,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestResponseStartedEvent}} named
               [=WebRequestInterceptor/responsestarted=].
@@ -4385,16 +4408,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestCompletedEvent}} named
               [=WebRequestInterceptor/completed=].
@@ -4418,16 +4441,16 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |interceptors| be the result of getting the
       [=applicable WebRequestInterceptors=] of |request|.
 
-  1. Let |embedderGlobal| be the [=relevant global object=] of the result of
-      [=getting an environment's embedderParent=] given |request|'s
-      [=request/client=].
+  1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
+      the result of [=getting an environment's embedderParent=] given
+      |request|'s [=request/client=].
 
-  1. If |embedderGlobal| is null, then return.
+  1. If |controlledFrameEmbedderGlobal| is null, then return.
 
   1. For each |interceptor| in |interceptors|:
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
-          |embedderGlobal| that will run the following steps:
+          |controlledFrameEmbedderGlobal| that will run the following steps:
 
           1. Let |event| be a [=new=] {{WebRequestErrorOccurredEvent}} named
               [=WebRequestInterceptor/erroroccurred=].
