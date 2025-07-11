@@ -3296,9 +3296,14 @@ Each {{WebRequest}} has an associated:
  * <dfn for=WebRequest>interceptors</dfn>, which is a [=list=] of
     {{WebRequestInterceptor}}s, intially «».
 
-Note: [=WebRequest/interceptors=] will be written to from tasks
+Note: [=WebRequest/Interceptors=] will be written to from tasks
     on the <{controlledframe}> element's event loop, but read [=in parallel=]
     during [=fetch=].
+    <br><br>
+    A snapshot of [=applicable WebRequestInterceptors=] will be created prior
+    to dispatching <a href="#api-web-request-events">WebRequest events</a>.
+    Event listeners registered on a {{WebRequestInterceptor}} while processing
+    an event will not be fired for that event.
 
 Each {{WebRequestInterceptor}} has an associated:
   <div dfn-for=WebRequestInterceptor>
@@ -3581,21 +3586,33 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
   The <dfn method for=WebRequest>interceptorBehaviorChanged()</dfn>
   method steps are:
 
+  Note: The behavior of event handlers registered through the WebRequest
+  API will be reflected in the HTTP cache, which will no longer be valid if
+  the behavior of the event handlers changed. The purpose of this method is
+  to invalidate any cache entries that were affected by WebRequest event
+  handlers.
+
   1. Let |promise| be [=a new promise=].
 
   1. Let |controlledframe| be [=this=].
 
   1. Return |promise| and run the following steps [=in parallel=].
 
-  1. Clear the HTTP cache associated with the partition used by
-      [=environment's=] embedded within the |controlledframe|
-      {{HTMLControlledFrameElement}}.
+  1. Remove all entries in the
+      <a href="https://datatracker.ietf.org/doc/html/rfc7234#section-2">network
+      cache</a> that originated from content in |controlledframe|'s
+      <{HTMLControlledFrameElement/partition}>.
 
-      Note: The behavior of event handlers registered through the WebRequest
-      API will be reflected in the HTTP cache, which will no longer be valid if
-      the behavior of the event handlers changed. The purpose of this method is
-      to invalidate any cache entries that were affected by WebRequest event
-      handlers.
+      Issue: The <a href="https://datatracker.ietf.org/doc/html/rfc7234#section-2">
+          network cache</a> specification isn't aware of [=storage keys=]. The
+          intended behavior is to remove cache entries whose [=storage key/
+          embedding origin=] is |controlledframe|'s [=relevant settings object=]'s
+          [=environment/top-level origin=], and [=storage key/partition=]
+          is |controlledframe|'s <{HTMLControlledFrameElement/partition}>.
+
+  1. If a user agent implements caches beyond a pure network cache, it MUST
+      remove all entries from those caches that originate from content in
+      |controlledframe|'s <{HTMLControlledFrameElement/partition}>.
 
   1. [=Resolve an embedder promise=] given |controlledframe| and |promise| when
       the HTTP cache has been cleared.
