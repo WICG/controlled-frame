@@ -4934,15 +4934,35 @@ member, which is a {{ContextMenus}}. Each {{ContextMenus}} manages a
 
 Each [=map/entry=] of the [=context menu map=] represents a
 [=context menu item=]. A <dfn for=ContextMenus>context menu item</dfn>
-represents an entry in a <dfn for=ContextMenus>context menu</dfn>. A
-[=ContextMenus/context menu item=] should be shown to the user as the result of
-an [=implementation-defined=] action if [=determining whether the context menu
-item will be shown=] returns `true` given the relevant <{controlledframe}> and
-{{HTMLElement}} that the [=ContextMenus/context menu=] was opened within,
-and the [=ContextMenus/context menu item=]'s {{ContextMenusProperties}}.
+represents an entry in a [=context menu=]. Each [=context menu item=] has an
+associated:
 
-Note: The appearance of a [=ContextMenus/context menu=] is
-      [=implementation-defined=].
+  <div dfn-for="context menu item">
+    * <dfn>id</dfn>, the [=map/key=] of the [=context menu map=] [=map/entry=]
+        that the [=context menu item=] corresponds to.
+    * <dfn>properties</dfn>, the [=map/value=] of the [=context menu map=]
+        [=map/entry=] that the [=context menu item=] corresponds to.
+    * <dfn>menu</dfn>, the [=context menu=] that the [=context menu item=]
+        belongs to.
+  </div>
+
+A <dfn for=ContextMenus>context menu</dfn> represents an
+[=implementation-defined=] interface that can display [=context menu items=]
+to the user. Each [=context menu=] has an associated <dfn for="context menu">
+context element</dfn>, which is the {{HTMLElement}} that the [=context menu=]
+was opened within the context of.
+
+A [=ContextMenus/context menu item=] |item| should be shown to the user as the
+result of an [=implementation-defined=] action if [=determining whether the
+context menu item will be shown=] given |item| returns `true`.
+
+Note: The intention of this API is to expose context-dependent additional
+      actions to users. On desktop platforms this might take the form of entries
+      in a context menu that is accessed by right clicking on content within the
+      Controlled Frame; on mobile devices it might be accessed by long pressing
+      on an item within the Controlled Frame. In these examples the [=context
+      menu=]'s [=context menu/context element=] would be the element that the
+      user right clicked or long pressed on.
 
 The [=map/values=] of the [=context menu map=], which are
 {{ContextMenusProperties}} objects, control the conditions under which the
@@ -5014,8 +5034,8 @@ of the items.
 
   1. Let |id| be the |properties|["{{ContextMenusCreateProperties/id}}"].
 
-  1. If |contextMenusMap|[|id|] [=map/exists=], [=reject=] |p| with a
-      {{TypeError}} and abort these steps.
+  1. If |contextMenusMap|[|id|] [=map/exists=], [=reject an embedder promise=]
+      given |controlledframe|, |p|, and {{TypeError}}, and abort these steps.
 
   1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
 
@@ -5074,8 +5094,9 @@ of the items.
   1. Let |contextMenusMap| be |controlledframe|'s [=ContextMenus/context menu
       map=].
 
-  1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject=] |p| with a
-      {{TypeError}} and abort these steps.
+  1. If |contextMenusMap|[|id|] does not [=map/exist=], [=reject an embedder
+      promise=] given |controlledframe|, |p|, and {{TypeError}},
+      and abort these steps.
 
   1. [=map/Set=] |contextMenusMap|[|id|] to |properties|.
 
@@ -5123,21 +5144,27 @@ of the items.
 <div algorithm>
 
   To <dfn>determine whether the [=ContextMenus/context menu item=] will be shown
-  </dfn> given a <{controlledframe}> element |controlledframe|, an
-  {{HTMLElement}} |element|, and a {{ContextMenusProperties}} |properties|:
+  </dfn> given a [=context menu item=] |item|:
 
-  1. Let |documentUrl| be the [=Document/URL=] of |controlledframe|'s embedded
-      document.
+  1. Let |properties| be |item|'s [=context menu item/properties=].
+
+  1. Let |element| be |item|'s [=context menu item/menu=]'s
+      [=context menu/context element=].
+
+  1. Let |controlledframe| be |element|'s [=node navigable=]'s
+      [=embedderParent=].
+
+  1. If |controlledframe| is null, then return `false`.
+
+  1. Let |documentUrl| be the [=Document/URL=] of |controlledframe|'s [=embedded
+      navigable=]'s [=active document=].
 
   1. Let |targetUrl| be an empty string.
 
   1. If |element| is an instance of {{HTMLImageElement}}, then set
       |targetUrl| to the {{HTMLImageElement/src}} attribute of |element|.
 
-  1. If |element| is an instance of {{HTMLVideoElement}}, then set
-      |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
-
-  1. If |element| is an instance of {{HTMLAudioElement}}, then set
+  1. If |element| is an instance of {{HTMLMediaElement}}, then set
       |targetUrl| to the {{HTMLMediaElement/src}} attribute of |element|.
 
   1. If |element| is an instance of {{HTMLAnchorElement}}, then set
@@ -5193,8 +5220,6 @@ of the items.
 
   1. Return `true`.
 
-  Note: Different user agents may implement additional conditions.
-
 </div>
 
 ## Events ## {#api-context-menus-events}
@@ -5242,9 +5267,7 @@ context menu items=] are shown to the user, [=ContextMenus/dispatch a
 show event=] to |contextMenus|.
 
 When a [=ContextMenus/context menu item=] |item| is selected by a user,
-[=ContextMenus/dispatch a click event=] given the {{ContextMenus}} |item|
-belongs to, the {{HTMLElement}} inside the embedding document where the
-[=ContextMenus/context menu=] is opened at, and |item|.
+[=ContextMenus/dispatch a click event=] given |item|.
 
 <div algorithm>
 To <dfn for=ContextMenus>[=dispatch=] a [=ContextMenus/show=] [=event=]</dfn>
@@ -5254,14 +5277,13 @@ named [=ContextMenus/show=] to |contextMenus|.
 
 <div algorithm>
 To <dfn for=ContextMenus>[=dispatch=] a [=ContextMenus/click=] [=event=]</dfn>
-given {{ContextMenus}} |contextMenus|, {{HTMLElement}} |element|, and |menuItem|
-as the [=context menu item=] that was clicked, run the following steps:
+given a [=context menu item=] |item|, run the following steps:
 
-1. Let |id| be the [=map/key=] of the [=ContextMenus/context menu map=]'s
-    [=map/entry=] that is associated with |menuItem|.
+1. Let |properties| be |item|'s [=context menu item/properties=].
 
-1. Let |properties| be the result of [=map/getting=] the [=map/value=] of the
-    [=map/entry=] in [=ContextMenus/context menu map=] given the [=map/key=] |id|.
+1. Let |menu| be |item|'s [=context menu item/menu=].
+
+1. Let |element| be |menu|'s [=context menu/context element=].
 
 1. Let |event| be a [=new=] {{ContextMenusClickEvent}} named
     [=ContextMenus/click=].
@@ -5270,7 +5292,7 @@ as the [=context menu item=] that was clicked, run the following steps:
     {{MenuItemDetails}} with the following fields:
 
     : {{MenuItemDetails/id}}
-    :: |id|.
+    :: |item|'s [=context menu item/id=].
 
     : {{MenuItemDetails/parentMenuId}}
     :: |properties|["{{ContextMenusProperties/parentId}}"].
@@ -5297,7 +5319,7 @@ as the [=context menu item=] that was clicked, run the following steps:
 
       : {{ContextMenusClickEvent/linkURL}}
       :: If |element| is an instance of {{HTMLAnchorElement}}, |element|'s
-          [=href=] [=attribute=].
+          {{HTMLHyperlinkElementUtils/href}} [=attribute=].
 
       : {{ContextMenusClickEvent/mediaType}}
       :: One of "image", "video", or "audio", if any, based on |element|.
@@ -5308,7 +5330,7 @@ as the [=context menu item=] that was clicked, run the following steps:
       : {{ContextMenusClickEvent/srcURL}}
       :: The "src" attribute of |element|, if it exists.
 
-1. [=Dispatch=] |event| at |contextMenus|.
+1. [=Dispatch=] |event| at |menu|.
 
 </div>
 
