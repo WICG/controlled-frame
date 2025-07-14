@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 618007319, updated Thu Jun 26 17:23:55 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="5d810bd40c8aa3d63b9219176d0cb790ee807c8e" name="revision">
+  <meta content="5570518b161a5f9f780b3fe1f941a6d7a1a313c2" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -1061,7 +1061,7 @@ the respective content attributes of the same name.</p>
    <ul>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="controlledframe" data-dfn-type="dfn" data-noexport id="controlledframe-embedded-navigable">embedded navigable</dfn>, a
-<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable" id="ref-for-traversable-navigable">traversable navigable</a> with a non-null <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent">embedderParent</a>, or null.
+<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable" id="ref-for-traversable-navigable">traversable navigable</a> with a non-null <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent">controlledFrameEmbedderParent</a>, or null.
 It is initially null.</p>
      <p class="note" role="note"><span class="marker">Note:</span> The <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable①">embedded navigable</a> appears as a top-level traversable with a
 null <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent">parent</a>. Content within the <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable②">embedded navigable</a> cannot
@@ -1134,7 +1134,7 @@ steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#initialize-the-navigable" id="ref-for-initialize-the-navigable">Initialize the navigable</a> <var>traversable</var> given <var>documentState</var>.</p>
      <li data-md>
-      <p>Set <var>traversable</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①">embedderParent</a> to <var>element</var>.</p>
+      <p>Set <var>traversable</var>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①">controlledFrameEmbedderParent</a> to <var>element</var>.</p>
      <li data-md>
       <p>Set <var>element</var>’s <a data-link-type="dfn" href="#controlledframe-embedded-navigable" id="ref-for-controlledframe-embedded-navigable⑥">embedded navigable</a> to <var>traversable</var>.</p>
      <li data-md>
@@ -1860,10 +1860,10 @@ index was out of range.</p>
       <p>Let <var>embeddedNavigable</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable">node navigable</a>’s
   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable" id="ref-for-traversable-navigable②">traversable navigable</a>.</p>
      <li data-md>
-      <p>If <var>embeddedNavigable</var> is null or its <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②">embedderParent</a> is null, then
+      <p>If <var>embeddedNavigable</var> is null or its <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent②">controlledFrameEmbedderParent</a> is null, then
   return.</p>
      <li data-md>
-      <p>Let <var>controlledframe</var> be <var>embeddedNavigable</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent③">embedderParent</a>.</p>
+      <p>Let <var>controlledframe</var> be <var>embeddedNavigable</var>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent③">controlledFrameEmbedderParent</a>.</p>
      <li data-md>
       <p>Let <var>url</var> be <var>document</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url③">URL</a>.</p>
      <li data-md>
@@ -1952,7 +1952,7 @@ implementation of this isolation that can be implemented by all browsers.</stron
   given <var>script</var>.</p>
        <li data-md>
         <p>Let <var>controlledframe</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable②">node navigable</a>’s
-  <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable" id="ref-for-traversable-navigable③">traversable navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent④">embedderParent</a>.</p>
+  <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable" id="ref-for-traversable-navigable③">traversable navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent④">controlledFrameEmbedderParent</a>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task⑧">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source④">DOM manipulation task source</a> of
   <var>controlledframe</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global⑧">relevant global object</a> that will run
@@ -2529,7 +2529,7 @@ given <var>controlledframe</var> and <var>p</var>.</p>
   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-document" id="ref-for-nav-document⑧">active document</a>.</p>
            <li data-md>
             <p>Let <var>embedder</var> be <var>embeddedDocument</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable③">node navigable</a>’s
-  <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent⑤">embedderParent</a>.</p>
+  <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent⑤">controlledFrameEmbedderParent</a>.</p>
            <li data-md>
             <p>If <var>embedder</var> is null, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue⑥">continue</a>.</p>
            <li data-md>
@@ -3473,14 +3473,14 @@ given <code><a data-link-type="element" href="#elementdef-controlledframe" id="r
     <li data-md>
      <p>Set <var>message</var> to the result of optionally truncating message.</p>
     <li data-md>
-     <ins>Let <var>embedderParent</var> be <var>window</var>’s
-<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable">navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent⑥">embedderParent</a>.</ins>
+     <ins>Let <var>controlledFrameEmbedderParent</var> be <var>window</var>’s
+<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable">navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent⑥">controlledFrameEmbedderParent</a>.</ins>
      .
 
 
     <li data-md>
-     <ins>If <var>embedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①③">HTMLControlledFrameElement</a></code>, then
-<a data-link-type="dfn" href="#fire-a-dialog-event" id="ref-for-fire-a-dialog-event">fire a "dialog" event</a> with <var>embedderParent</var>, "alert" and <var>message</var>,
+     <ins>If <var>controlledFrameEmbedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①③">HTMLControlledFrameElement</a></code>, then
+<a data-link-type="dfn" href="#fire-a-dialog-event" id="ref-for-fire-a-dialog-event">fire a "dialog" event</a> with <var>controlledFrameEmbedderParent</var>, "alert" and <var>message</var>,
 and return.</ins>
    </ol>
    <p>For <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-confirm" id="ref-for-dom-confirm">confirm</a>:</p>
@@ -3488,14 +3488,14 @@ and return.</ins>
     <li data-md>
      <p>Set <var>message</var> to the result of optionally truncating message.</p>
     <li data-md>
-     <ins>Let <var>embedderParent</var> be <var>window</var>’s
-<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable①">navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent⑦">embedderParent</a>.</ins>
+     <ins>Let <var>controlledFrameEmbedderParent</var> be <var>window</var>’s
+<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable①">navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent⑦">controlledFrameEmbedderParent</a>.</ins>
      .
 
 
     <li data-md>
-     <ins>If <var>embedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①④">HTMLControlledFrameElement</a></code>, then return
-the result of <a data-link-type="dfn" href="#fire-a-dialog-event" id="ref-for-fire-a-dialog-event①">firing a "dialog" event</a> with <var>embedderParent</var>, "confirm",
+     <ins>If <var>controlledFrameEmbedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①④">HTMLControlledFrameElement</a></code>, then return
+the result of <a data-link-type="dfn" href="#fire-a-dialog-event" id="ref-for-fire-a-dialog-event①">firing a "dialog" event</a> with <var>controlledFrameEmbedderParent</var>, "confirm",
 and <var>message</var>.</ins>
    </ol>
    <p>For <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-prompt" id="ref-for-dom-prompt">prompt</a>:</p>
@@ -3503,15 +3503,15 @@ and <var>message</var>.</ins>
     <li data-md>
      <p>Set <var>default</var> to the result of optionally truncating default.</p>
     <li data-md>
-     <ins>Let <var>embedderParent</var> be <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable②">navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent⑧">embedderParent</a>.</ins>
+     <ins>Let <var>controlledFrameEmbedderParent</var> be <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable②">navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent⑧">controlledFrameEmbedderParent</a>.</ins>
      .
 
 
     <li data-md>
-     <ins>If <var>embedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑤">HTMLControlledFrameElement</a></code>, then:</ins>
+     <ins>If <var>controlledFrameEmbedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑤">HTMLControlledFrameElement</a></code>, then:</ins>
      <ol>
       <li data-md>
-       <ins>Let <var>accept</var> and <var>response</var> be the results of <a data-link-type="dfn" href="#fire-a-dialog-event" id="ref-for-fire-a-dialog-event②">firing a "dialog" event</a> with <var>embedderParent</var>, "prompt" and <var>message</var>.</ins>
+       <ins>Let <var>accept</var> and <var>response</var> be the results of <a data-link-type="dfn" href="#fire-a-dialog-event" id="ref-for-fire-a-dialog-event②">firing a "dialog" event</a> with <var>controlledFrameEmbedderParent</var>, "prompt" and <var>message</var>.</ins>
       <li data-md>
        <ins>If <var>accept</var> equals <code>false</code>, return null.</ins>
       <li data-md>
@@ -3523,7 +3523,7 @@ and <var>message</var>.</ins>
     <li data-md>
      <ins>Let <var>windowOpenDisposition</var> be "<code class="idl"><a data-link-type="idl" href="#dom-windowopendisposition-ignore" id="ref-for-dom-windowopendisposition-ignore">ignore</a></code>".</ins>
     <li data-md>
-     <ins>Let <var>embedderParent</var> be <var>sourceDocument</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable④">node navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent⑨">embedderParent</a>.</ins>
+     <ins>Let <var>controlledFrameEmbedderParent</var> be <var>sourceDocument</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable④">node navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent⑨">controlledFrameEmbedderParent</a>.</ins>
    </ol>
    <p>...</p>
    <del>14. If <var>targetNavigable</var> is null, then return null.</del>
@@ -3532,10 +3532,10 @@ and <var>message</var>.</ins>
      <ins>If <var>targetNavigable</var> is null:</ins>
      <ol>
       <li data-md>
-       <ins>If <var>embedderParent</var> is not null:</ins>
+       <ins>If <var>controlledFrameEmbedderParent</var> is not null:</ins>
        <ol>
         <li data-md>
-         <ins><a data-link-type="dfn" href="#fire-a-newwindow-event" id="ref-for-fire-a-newwindow-event">Fire a "newwindow" event</a> with <var>embedderParent</var>, <var>url</var>,
+         <ins><a data-link-type="dfn" href="#fire-a-newwindow-event" id="ref-for-fire-a-newwindow-event">Fire a "newwindow" event</a> with <var>controlledFrameEmbedderParent</var>, <var>url</var>,
 <var>target</var>, <var>targetNavigable</var>, and <var>windowOpenDisposition</var>.</ins>
        </ol>
       <li data-md>
@@ -3584,10 +3584,10 @@ then:</p>
     "<code class="idl"><a data-link-type="idl" href="#dom-windowopendisposition-save_to_disk" id="ref-for-dom-windowopendisposition-save_to_disk">save_to_disk</a></code>".</p>
    <ol>
     <li data-md>
-     <ins>If <var>embedderParent</var> is not null:</ins>
+     <ins>If <var>controlledFrameEmbedderParent</var> is not null:</ins>
      <ol>
       <li data-md>
-       <ins><a data-link-type="dfn" href="#fire-a-newwindow-event" id="ref-for-fire-a-newwindow-event①">Fire a "newwindow" event</a> with <var>embedderParent</var>, <var>url</var>,
+       <ins><a data-link-type="dfn" href="#fire-a-newwindow-event" id="ref-for-fire-a-newwindow-event①">Fire a "newwindow" event</a> with <var>controlledFrameEmbedderParent</var>, <var>url</var>,
    <var>target</var>, <var>targetNavigable</var>, and <var>windowOpenDisposition</var>.</ins>
      </ol>
    </ol>
@@ -3596,11 +3596,11 @@ then:</p>
     <li data-md>
      <p>Otherwise, if container is non-null, then queue an element task on the DOM manipulation task source given container to fire an event named load at container.</p>
     <li data-md>
-     <ins>Let <var>embedderParent</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑤">node navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⓪">embedderParent</a>.
+     <ins>Let <var>controlledFrameEmbedderParent</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑤">node navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①⓪">controlledFrameEmbedderParent</a>.
 
 </ins>
     <li data-md>
-     <ins> If <var>embedderParent</var> is <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑥">HTMLControlledFrameElement</a></code>, then <a data-link-type="dfn" href="#fire-a-contentload-event" id="ref-for-fire-a-contentload-event">Fire a "contentload" event</a> with <var>embedderParent</var>.</ins>
+     <ins> If <var>controlledFrameEmbedderParent</var> is <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑥">HTMLControlledFrameElement</a></code>, then <a data-link-type="dfn" href="#fire-a-contentload-event" id="ref-for-fire-a-contentload-event">Fire a "contentload" event</a> with <var>controlledFrameEmbedderParent</var>.</ins>
    </ol>
    <div style="border: 2px solid red;">
     <p>Monkey-patch for loadstart, loadabort, and loadcommit which looks like the following:</p>
@@ -3612,7 +3612,7 @@ then:</p>
      <li data-md>
       <p>loadabort -> at each early exist points of the algorithm between loadstart and loadcommit.</p>
     </ol>
-    <p>For each of these, check whether the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable">top-level traversable</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable④">navigable</a> has an <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①①">embedderParent</a> of <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑦">HTMLControlledFrameElement</a></code>, if so, then fire the corresponding event with input arguments.</p>
+    <p>For each of these, check whether the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable">top-level traversable</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable④">navigable</a> has an <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①①">controlledFrameEmbedderParent</a> of <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑦">HTMLControlledFrameElement</a></code>, if so, then fire the corresponding event with input arguments.</p>
    </div>
    <h5 class="heading settled" data-level="3.7.13.2" id="events-monkey-patches-redirect"><span class="secno">3.7.13.2. </span><span class="content"><a data-link-type="biblio" href="#biblio-fetch" title="Fetch Standard">[FETCH]</a></span><a class="self-link" href="#events-monkey-patches-redirect"></a></h5>
    <p>For <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-http-fetch" id="ref-for-concept-http-fetch">HTTP fetch</a>(loadredirect):</p>
@@ -3628,9 +3628,9 @@ then:</p>
 
 </ins>
         <li data-md>
-         <ins>Let <var>embedderParent</var> be <var>currentNavigable</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable①">top-level traversable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①②">embedderParent</a>.</ins>
+         <ins>Let <var>controlledFrameEmbedderParent</var> be <var>currentNavigable</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable①">top-level traversable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①②">controlledFrameEmbedderParent</a>.</ins>
         <li data-md>
-         <ins>If <var>embedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑧">HTMLControlledFrameElement</a></code>:</ins>
+         <ins>If <var>controlledFrameEmbedderParent</var> is a <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑧">HTMLControlledFrameElement</a></code>:</ins>
          <p>
           1.
           <ins>Let <var>oldUrl</var> be <var>request</var>’s associated <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url①">URL</a>.</ins>
@@ -3645,7 +3645,7 @@ then:</p>
          </p>
          <p>
           1.
-          <ins><a data-link-type="dfn" href="#fire-a-loadredirect-event" id="ref-for-fire-a-loadredirect-event">Fire a "loadredirect" event</a> with <var>embedderParent</var>, <var>oldUrl</var>, <var>newUrl</var>, and <var>isTopLevel</var>.</ins>
+          <ins><a data-link-type="dfn" href="#fire-a-loadredirect-event" id="ref-for-fire-a-loadredirect-event">Fire a "loadredirect" event</a> with <var>controlledFrameEmbedderParent</var>, <var>oldUrl</var>, <var>newUrl</var>, and <var>isTopLevel</var>.</ins>
          </p>
        </ol>
      </ol>
@@ -3660,12 +3660,12 @@ permission</dfn> given DOMString <var>permission</var>, an optional dictionary
 run the following steps:</p>
     <ol>
      <li data-md>
-      <p>Let <var>embedderParent</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑥">node navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①③">embedderParent</a>.</p>
+      <p>Let <var>controlledFrameEmbedderParent</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑥">node navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①③">controlledFrameEmbedderParent</a>.</p>
      <li data-md>
-      <p>If <var>embedderParent</var> is not <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑨">HTMLControlledFrameElement</a></code>, return <code>true</code>.</p>
+      <p>If <var>controlledFrameEmbedderParent</var> is not <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement①⑨">HTMLControlledFrameElement</a></code>, return <code>true</code>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="#fire-a-permissionrequest-event" id="ref-for-fire-a-permissionrequest-event">Fire a "permissionrequest" event</a> with <var>document</var>,
-<var>embedderParent</var>, <var>permission</var>, <var>document</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url⑤">URL</a>, <var>options</var>, and
+<var>controlledFrameEmbedderParent</var>, <var>permission</var>, <var>document</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url⑤">URL</a>, <var>options</var>, and
 <var>completionSteps</var>.</p>
     </ol>
    </div>
@@ -3698,12 +3698,12 @@ feature given an algorithm that assigns its <a data-link-type="dfn" href="https:
        <ins>Terminate this algorithm.</ins>
      </ol>
     <li data-md>
-     <ins>Let <var>embedderParent</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑦">node navigable</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①④">embedderParent</a>.</ins>
+     <ins>Let <var>controlledFrameEmbedderParent</var> be <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑦">node navigable</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①④">controlledFrameEmbedderParent</a>.</ins>
     <li data-md>
-     <ins>If <var>embedderParent</var> is <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⓪">HTMLControlledFrameElement</a></code>:</ins>
+     <ins>If <var>controlledFrameEmbedderParent</var> is <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②⓪">HTMLControlledFrameElement</a></code>:</ins>
      <ol>
       <li data-md>
-       <p>Let <var>nodeDocument</var> be <var>embedderParent</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document⑧">node document</a>.</p>
+       <p>Let <var>nodeDocument</var> be <var>controlledFrameEmbedderParent</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document⑧">node document</a>.</p>
       <li data-md>
        <ins>If <var>nodeDocument</var> is null:</ins>
        <ol>
@@ -3749,8 +3749,8 @@ the needs of Controlled Frame.</p>
     <li data-md>
      <p>A <dfn class="dfn-paneled" data-dfn-for="navigable" data-dfn-type="dfn" data-noexport id="navigable-next-frameid">next frameId</dfn> integer, initially 1.</p>
     <li data-md>
-     <p>An <dfn class="dfn-paneled" data-dfn-for="navigable" data-dfn-type="dfn" data-noexport id="navigable-embedderparent">embedderParent</dfn>, an <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②②">HTMLControlledFrameElement</a></code>
-or null.</p>
+     <p>An <dfn class="dfn-paneled" data-dfn-for="navigable" data-dfn-type="dfn" data-noexport id="navigable-controlledframeembedderparent">controlledFrameEmbedderParent</dfn>, an
+<code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②②">HTMLControlledFrameElement</a></code> or null.</p>
    </ul>
    <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#initialize-the-navigable" id="ref-for-initialize-the-navigable①">initialize the navigable</a> algorithm given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑥">navigable</a> <var>navigable</var>
 and an optional <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑦">navigable</a>-or-null <var>parent</var> (default null) is
@@ -3819,11 +3819,11 @@ To determine the network partition key, given an <a data-link-type="dfn" href="h
        .
       </p>
      <li data-md>
-      <ins>Let <var>embedderParent</var> be the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent">getting an environment’s embedderParent</a> given <var>environment</var>.</ins>
+      <ins>Let <var>controlledFrameEmbedderParent</var> be the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent">getting an environment’s controlledFrameEmbedderParent</a> given <var>environment</var>.</ins>
      <li data-md>
-      <ins>If <var>embedderParent</var> is not null, then set <var>secondKey</var> to a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#tuple" id="ref-for-tuple①">tuple</a>
-  consisting of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin①">top-level origin</a> of <var>embedderParent</var>’s
-  <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object⑤">relevant settings object</a>, and <var>embedderParent</var>’s
+      <ins>If <var>controlledFrameEmbedderParent</var> is not null, then set <var>secondKey</var> to a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#tuple" id="ref-for-tuple①">tuple</a>
+  consisting of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin①">top-level origin</a> of <var>controlledFrameEmbedderParent</var>’s
+  <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object⑤">relevant settings object</a>, and <var>controlledFrameEmbedderParent</var>’s
   <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition⑨">partition</a></code>.</ins>
      <li data-md>
       <p>Return (<var>topLevelSite</var>, <var>secondKey</var>).</p>
@@ -3859,15 +3859,15 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="obtain a Controlled Fra
      <li data-md>
       <ins>Let <var>topLevelOrigin</var> and <var>partition</var> be null.</ins>
      <li data-md>
-      <ins>Let <var>embedderParent</var> be the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent①">getting an environment’s embedderParent</a> given <var>environment</var>.</ins>
+      <ins>Let <var>controlledFrameEmbedderParent</var> be the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent①">getting an environment’s controlledFrameEmbedderParent</a> given <var>environment</var>.</ins>
      <li data-md>
-      <ins>If <var>embedderParent</var> is not null, then:</ins>
+      <ins>If <var>controlledFrameEmbedderParent</var> is not null, then:</ins>
       <ol>
        <li data-md>
         <ins>Set <var>topLevelOrigin</var> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin②">top-level origin</a> of
-  <var>embedderParent</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object⑥">relevant settings object</a>.</ins>
+  <var>controlledFrameEmbedderParent</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object⑥">relevant settings object</a>.</ins>
        <li data-md>
-        <ins>Set <var>partition</var> to <var>embedderParent</var>’s
+        <ins>Set <var>partition</var> to <var>controlledFrameEmbedderParent</var>’s
   <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-partition" id="ref-for-dom-htmlcontrolledframeelement-partition①⓪">partition</a></code>.</ins>
       </ol>
      <li data-md>
@@ -3875,19 +3875,19 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="obtain a Controlled Fra
    and <var>origin</var>.</ins>
     </ol>
    </div>
-   <div class="algorithm" data-algorithm="get an environment’s embedderParent">
+   <div class="algorithm" data-algorithm="get an environment’s controlledFrameEmbedderParent">
     
-To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-an-environments-embedderparent">get an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑥">environment</a>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⑤">embedderParent</a></dfn> given an
-<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑦">environment</a> <var>environment</var>, run the following steps:
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-an-environments-controlledframeembedderparent">get an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑥">environment</a>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①⑤">controlledFrameEmbedderParent</a></dfn> given
+an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑦">environment</a> <var>environment</var>, run the following steps:
 
 
     <ol>
      <li data-md>
       <p>If <var>environment</var> is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object③">environment settings object</a> whose
   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#global-object" id="ref-for-global-object④">global object</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window④">Window</a></code> object, then:</p>
-      <p class="issue" id="issue-ec21111a"><a class="self-link" href="#issue-ec21111a"></a> This algorithm doesn’t work for Shared or Service Workers because
-  <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⑥">embedderParent</a> is only defined on a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑧">navigable</a>, and it’s not
-  always possible to go from a non-<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window⑤">Window</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑧">environment</a> to a
+      <p class="issue" id="issue-f387d93f"><a class="self-link" href="#issue-f387d93f"></a> This algorithm doesn’t work for Shared or Service Workers because
+  <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①⑥">controlledFrameEmbedderParent</a> is only defined on a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑧">navigable</a>, and
+  it’s not always possible to go from a non-<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window⑤">Window</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑧">environment</a> to a
   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable" id="ref-for-navigable⑨">navigable</a>.</p>
       <ol>
        <li data-md>
@@ -3896,8 +3896,8 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-an-environ
        <li data-md>
         <p>Let <var>top</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#top-level-traversable" id="ref-for-top-level-traversable④">top-level traversable</a> of <var>navigable</var>.</p>
        <li data-md>
-        <p>If <var>top</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⑦">embedderParent</a> is not null, then return <var>top</var>’s
-  <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⑧">embedderParent</a>.</p>
+        <p>If <var>top</var>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①⑦">controlledFrameEmbedderParent</a> is not null, then return <var>top</var>’s
+  <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①⑧">controlledFrameEmbedderParent</a>.</p>
       </ol>
      <li data-md>
       <p>Return null.</p>
@@ -4434,10 +4434,10 @@ to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id
      <li data-md>
       <p>Let <var>navigable</var> be <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable⑤">navigable</a>.</p>
      <li data-md>
-      <p>If <var>navigable</var> or its <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⑨">embedderParent</a> is null, return an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①①">list</a>
+      <p>If <var>navigable</var> or its <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent①⑨">controlledFrameEmbedderParent</a> is null, return an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①①">list</a>
   and <code>false</code>.</p>
      <li data-md>
-      <p>Let <var>controlledFrame</var> be <var>navigable</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②⓪">embedderParent</a>.</p>
+      <p>Let <var>controlledFrame</var> be <var>navigable</var>’s <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent②⓪">controlledFrameEmbedderParent</a>.</p>
      <li data-md>
       <p>Let <var>applicableInterceptors</var> be an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①②">list</a>.</p>
      <li data-md>
@@ -4758,7 +4758,7 @@ or null, initially null.</p>
       <p>Let <var>pendingHandlerCount</var> be 0.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②③">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent②">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent②">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client②">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -4876,7 +4876,7 @@ or null, initially null.</p>
       <p>Let <var>pendingHandlerCount</var> be 0.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②④">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent③">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent③">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client④">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -4943,7 +4943,7 @@ or null, initially null.</p>
   <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors③">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑤">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent④">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent④">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -4982,7 +4982,7 @@ or null, initially null.</p>
       <p>Let <var>pendingHandlerCount</var> be <var>interceptor</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a>.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑥">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑤">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent⑤">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑦">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -5094,7 +5094,7 @@ or null, initially null.</p>
       <p>Let <var>pendingHandlerCount</var> be 0.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑦">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑥">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent⑥">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑨">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -5202,7 +5202,7 @@ or null, initially null.</p>
   <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑥">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑧">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑦">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent⑦">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①①">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -5249,7 +5249,7 @@ or null, initially null.</p>
   <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑦">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑨">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑧">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent⑧">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①②">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -5289,7 +5289,7 @@ or null, initially null.</p>
   <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑧">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③⓪">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑨">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent⑨">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①③">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -5329,7 +5329,7 @@ or null, initially null.</p>
   <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑨">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③①">relevant global object</a> of
-  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent①⓪">getting an environment’s embedderParent</a> given
+  the result of <a data-link-type="dfn" href="#get-an-environments-controlledframeembedderparent" id="ref-for-get-an-environments-controlledframeembedderparent①⓪">getting an environment’s controlledFrameEmbedderParent</a> given
   <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①④">client</a>.</p>
      <li data-md>
       <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
@@ -6075,7 +6075,7 @@ nested iframe or a link).</p>
   <a data-link-type="dfn" href="#context-menu-context-element" id="ref-for-context-menu-context-element①">context element</a>.</p>
      <li data-md>
       <p>Let <var>controlledframe</var> be <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑨">node navigable</a>’s
-  <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②①">embedderParent</a>.</p>
+  <a data-link-type="dfn" href="#navigable-controlledframeembedderparent" id="ref-for-navigable-controlledframeembedderparent②①">controlledFrameEmbedderParent</a>.</p>
      <li data-md>
       <p>If <var>controlledframe</var> is null, then return <code>false</code>.</p>
      <li data-md>
@@ -6808,6 +6808,7 @@ redirection")</p>
    <li><a href="#dom-contextmenusproperties-contexts">contexts</a><span>, in § 5</span>
    <li><a href="#enumdef-contexttype">ContextType</a><span>, in § 5</span>
    <li><a href="#elementdef-controlledframe">controlledframe</a><span>, in § 3</span>
+   <li><a href="#navigable-controlledframeembedderparent">controlledFrameEmbedderParent</a><span>, in § 3.8.1.1</span>
    <li><a href="#controlled-frame-zoom-map">Controlled Frame zoom map</a><span>, in § 3.5.1</span>
    <li><a href="#convert-a-header-list-to-a-headers-object">convert a header list to a Headers object</a><span>, in § 4.1</span>
    <li><a href="#dom-cleardatatypeset-cookies">cookies</a><span>, in § 3.5</span>
@@ -6868,7 +6869,6 @@ redirection")</p>
    <li><a href="#dom-contexttype-editable">"editable"</a><span>, in § 5</span>
    <li><a href="#dom-contextmenusclickevent-editable">editable</a><span>, in § 5</span>
    <li><a href="#controlledframe-embedded-navigable">embedded navigable</a><span>, in § 3</span>
-   <li><a href="#navigable-embedderparent">embedderParent</a><span>, in § 3.8.1.1</span>
    <li><a href="#storage-key-embedding-origin">embedding origin</a><span>, in § 3.8.1.3</span>
    <li><a href="#empty-a-storage-bottle">empty a storage bottle</a><span>, in § 3.5</span>
    <li><a href="#dom-contextmenusproperties-enabled">enabled</a><span>, in § 5</span>
@@ -6946,7 +6946,7 @@ redirection")</p>
    <li><a href="#fullscreenpermissionrequestcontroller">FullscreenPermissionRequestController</a><span>, in § 3.7.4</span>
    <li><a href="#dom-permissiontype-geolocation">"geolocation"</a><span>, in § 3.7.4</span>
    <li><a href="#geolocationpermissionrequestcontroller">GeolocationPermissionRequestController</a><span>, in § 3.7.4</span>
-   <li><a href="#get-an-environments-embedderparent">get an environment’s embedderParent</a><span>, in § 3.8.1.3</span>
+   <li><a href="#get-an-environments-controlledframeembedderparent">get an environment’s controlledFrameEmbedderParent</a><span>, in § 3.8.1.3</span>
    <li><a href="#get-a-requests-resourcetype">get a request’s ResourceType</a><span>, in § 4.1</span>
    <li><a href="#dom-htmlcontrolledframeelement-getaudiostate">getAudioState()</a><span>, in § 3.5</span>
    <li><a href="#get-the-documentlifecycle-of-a-document">get the DocumentLifecycle of a Document</a><span>, in § 4.1</span>
@@ -8570,9 +8570,9 @@ redirection")</p>
       <a href="https://github.com/whatwg/html/issues/9030">issue</a>
       in the HTML Standard. <a class="issue-return" href="#issue-2ee7c424" title="Jump to section">↵</a></div>
    <div class="issue"> This algorithm doesn’t work for Shared or Service Workers because
-  <a data-link-type="dfn" href="#navigable-embedderparent">embedderParent</a> is only defined on a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">navigable</a>, and it’s not
-  always possible to go from a non-<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window">Window</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment">environment</a> to a
-  <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">navigable</a>. <a class="issue-return" href="#issue-ec21111a" title="Jump to section">↵</a></div>
+  <a data-link-type="dfn" href="#navigable-controlledframeembedderparent">controlledFrameEmbedderParent</a> is only defined on a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">navigable</a>, and
+  it’s not always possible to go from a non-<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window">Window</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment">environment</a> to a
+  <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">navigable</a>. <a class="issue-return" href="#issue-f387d93f" title="Jump to section">↵</a></div>
    <div class="issue"> The <a href="https://datatracker.ietf.org/doc/html/rfc7234#section-2">
       network cache</a> specification isn’t aware of <a data-link-type="dfn" href="#storage-key">storage keys</a>. The
       intended behavior is to remove cache entries whose <a data-link-type="dfn" href="#storage-key-embedding-origin">embedding origin</a> is <var>controlledframe</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object">relevant settings object</a>’s
@@ -9499,7 +9499,7 @@ let dfnPanelData = {
 "fullscreenpermissionrequestcontroller": {"dfnID":"fullscreenpermissionrequestcontroller","dfnText":"FullscreenPermissionRequestController","external":false,"refSections":[{"refs":[{"id":"ref-for-fullscreenpermissionrequestcontroller"}],"title":"3.7.4. permissionrequest"}],"url":"#fullscreenpermissionrequestcontroller"},
 "geolocationpermissionrequestcontroller": {"dfnID":"geolocationpermissionrequestcontroller","dfnText":"GeolocationPermissionRequestController","external":false,"refSections":[{"refs":[{"id":"ref-for-geolocationpermissionrequestcontroller"}],"title":"3.7.4. permissionrequest"}],"url":"#geolocationpermissionrequestcontroller"},
 "get-a-requests-resourcetype": {"dfnID":"get-a-requests-resourcetype","dfnText":"get a request\u2019s ResourceType","external":false,"refSections":[{"refs":[{"id":"ref-for-get-a-requests-resourcetype"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-get-a-requests-resourcetype\u2460"}],"title":"4.1. Events"}],"url":"#get-a-requests-resourcetype"},
-"get-an-environments-embedderparent": {"dfnID":"get-an-environments-embedderparent","dfnText":"get an environment\u2019s embedderParent","external":false,"refSections":[{"refs":[{"id":"ref-for-get-an-environments-embedderparent"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-get-an-environments-embedderparent\u2460"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-get-an-environments-embedderparent\u2461"},{"id":"ref-for-get-an-environments-embedderparent\u2462"},{"id":"ref-for-get-an-environments-embedderparent\u2463"},{"id":"ref-for-get-an-environments-embedderparent\u2464"},{"id":"ref-for-get-an-environments-embedderparent\u2465"},{"id":"ref-for-get-an-environments-embedderparent\u2466"},{"id":"ref-for-get-an-environments-embedderparent\u2467"},{"id":"ref-for-get-an-environments-embedderparent\u2468"},{"id":"ref-for-get-an-environments-embedderparent\u2460\u24ea"}],"title":"4.1. Events"}],"url":"#get-an-environments-embedderparent"},
+"get-an-environments-controlledframeembedderparent": {"dfnID":"get-an-environments-controlledframeembedderparent","dfnText":"get an environment\u2019s controlledFrameEmbedderParent","external":false,"refSections":[{"refs":[{"id":"ref-for-get-an-environments-controlledframeembedderparent"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2460"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2461"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2462"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2463"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2464"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2465"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2466"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2467"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2468"},{"id":"ref-for-get-an-environments-controlledframeembedderparent\u2460\u24ea"}],"title":"4.1. Events"}],"url":"#get-an-environments-controlledframeembedderparent"},
 "get-the-documentlifecycle-of-a-document": {"dfnID":"get-the-documentlifecycle-of-a-document","dfnText":"get the DocumentLifecycle of a Document","external":false,"refSections":[{"refs":[{"id":"ref-for-get-the-documentlifecycle-of-a-document"}],"title":"4.1. Events"}],"url":"#get-the-documentlifecycle-of-a-document"},
 "get-the-per-origin-zoom-level": {"dfnID":"get-the-per-origin-zoom-level","dfnText":"get the per-origin zoom level","external":false,"refSections":[{"refs":[{"id":"ref-for-get-the-per-origin-zoom-level"}],"title":"3.5.1. Zoom"}],"url":"#get-the-per-origin-zoom-level"},
 "hidpermissionrequestcontroller": {"dfnID":"hidpermissionrequestcontroller","dfnText":"HidPermissionRequestController","external":false,"refSections":[{"refs":[{"id":"ref-for-hidpermissionrequestcontroller"}],"title":"3.7.4. permissionrequest"}],"url":"#hidpermissionrequestcontroller"},
@@ -9521,7 +9521,7 @@ let dfnPanelData = {
 "matches-a-urlpattern": {"dfnID":"matches-a-urlpattern","dfnText":"matches a URLPattern","external":false,"refSections":[{"refs":[{"id":"ref-for-matches-a-urlpattern"},{"id":"ref-for-matches-a-urlpattern"},{"id":"ref-for-matches-a-urlpattern"},{"id":"ref-for-matches-a-urlpattern\u2460"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-matches-a-urlpattern\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-matches-a-urlpattern\u2462"},{"id":"ref-for-matches-a-urlpattern\u2463"},{"id":"ref-for-matches-a-urlpattern\u2464"},{"id":"ref-for-matches-a-urlpattern\u2465"}],"title":"5. Context Menus API"}],"url":"#matches-a-urlpattern"},
 "mediapermissionrequestcontroller": {"dfnID":"mediapermissionrequestcontroller","dfnText":"MediaPermissionRequestController","external":false,"refSections":[{"refs":[{"id":"ref-for-mediapermissionrequestcontroller"}],"title":"3.7.4. permissionrequest"}],"url":"#mediapermissionrequestcontroller"},
 "menuitemdetails": {"dfnID":"menuitemdetails","dfnText":"MenuItemDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-menuitemdetails"}],"title":"5. Context Menus API"},{"refs":[{"id":"ref-for-menuitemdetails\u2460"}],"title":"5.1. Events"}],"url":"#menuitemdetails"},
-"navigable-embedderparent": {"dfnID":"navigable-embedderparent","dfnText":"embedderParent","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-embedderparent"},{"id":"ref-for-navigable-embedderparent\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2461"},{"id":"ref-for-navigable-embedderparent\u2462"},{"id":"ref-for-navigable-embedderparent\u2463"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2464"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2465"},{"id":"ref-for-navigable-embedderparent\u2466"},{"id":"ref-for-navigable-embedderparent\u2467"},{"id":"ref-for-navigable-embedderparent\u2468"},{"id":"ref-for-navigable-embedderparent\u2460\u24ea"},{"id":"ref-for-navigable-embedderparent\u2460\u2460"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2460\u2461"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2460\u2462"},{"id":"ref-for-navigable-embedderparent\u2460\u2463"}],"title":"3.7.13.3. [Permissions]"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2460\u2464"},{"id":"ref-for-navigable-embedderparent\u2460\u2465"},{"id":"ref-for-navigable-embedderparent\u2460\u2466"},{"id":"ref-for-navigable-embedderparent\u2460\u2467"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2460\u2468"},{"id":"ref-for-navigable-embedderparent\u2461\u24ea"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-navigable-embedderparent\u2461\u2460"}],"title":"5. Context Menus API"}],"url":"#navigable-embedderparent"},
+"navigable-controlledframeembedderparent": {"dfnID":"navigable-controlledframeembedderparent","dfnText":"controlledFrameEmbedderParent","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent"},{"id":"ref-for-navigable-controlledframeembedderparent\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2461"},{"id":"ref-for-navigable-controlledframeembedderparent\u2462"},{"id":"ref-for-navigable-controlledframeembedderparent\u2463"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2464"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2465"},{"id":"ref-for-navigable-controlledframeembedderparent\u2466"},{"id":"ref-for-navigable-controlledframeembedderparent\u2467"},{"id":"ref-for-navigable-controlledframeembedderparent\u2468"},{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u24ea"},{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2460"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2461"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2462"},{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2463"}],"title":"3.7.13.3. [Permissions]"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2464"},{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2465"},{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2466"},{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2467"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2460\u2468"},{"id":"ref-for-navigable-controlledframeembedderparent\u2461\u24ea"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-navigable-controlledframeembedderparent\u2461\u2460"}],"title":"5. Context Menus API"}],"url":"#navigable-controlledframeembedderparent"},
 "navigable-frameid": {"dfnID":"navigable-frameid","dfnText":"frameId","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-frameid"}],"title":"3.8.1.1. [HTML]"},{"refs":[{"id":"ref-for-navigable-frameid\u2460"},{"id":"ref-for-navigable-frameid\u2461"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-navigable-frameid\u2462"}],"title":"5.1. Events"}],"url":"#navigable-frameid"},
 "navigable-next-frameid": {"dfnID":"navigable-next-frameid","dfnText":"next frameId","external":false,"refSections":[{"refs":[{"id":"ref-for-navigable-next-frameid"},{"id":"ref-for-navigable-next-frameid\u2460"}],"title":"3.8.1.1. [HTML]"}],"url":"#navigable-next-frameid"},
 "navigate-a-controlledframe": {"dfnID":"navigate-a-controlledframe","dfnText":"navigate a controlledframe","external":false,"refSections":[{"refs":[{"id":"ref-for-navigate-a-controlledframe"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-navigate-a-controlledframe\u2460"}],"title":"3.2. Attributes"}],"url":"#navigate-a-controlledframe"},
@@ -10378,7 +10378,7 @@ let refsData = {
 "#fullscreenpermissionrequestcontroller": {"displayText":"FullscreenPermissionRequestController","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"FullscreenPermissionRequestController","type":"interface","url":"#fullscreenpermissionrequestcontroller"},
 "#geolocationpermissionrequestcontroller": {"displayText":"GeolocationPermissionRequestController","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"GeolocationPermissionRequestController","type":"interface","url":"#geolocationpermissionrequestcontroller"},
 "#get-a-requests-resourcetype": {"displayText":"get a request's resourcetype","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"get a request's resourcetype","type":"dfn","url":"#get-a-requests-resourcetype"},
-"#get-an-environments-embedderparent": {"displayText":"get an environment's embedderparent","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"get an environment's embedderparent","type":"dfn","url":"#get-an-environments-embedderparent"},
+"#get-an-environments-controlledframeembedderparent": {"displayText":"get an environment's controlledframeembedderparent","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"get an environment's controlledframeembedderparent","type":"dfn","url":"#get-an-environments-controlledframeembedderparent"},
 "#get-the-documentlifecycle-of-a-document": {"displayText":"get the documentlifecycle of a document","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"get the documentlifecycle of a document","type":"dfn","url":"#get-the-documentlifecycle-of-a-document"},
 "#get-the-per-origin-zoom-level": {"displayText":"get the per-origin zoom level","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"get the per-origin zoom level","type":"dfn","url":"#get-the-per-origin-zoom-level"},
 "#hidpermissionrequestcontroller": {"displayText":"HidPermissionRequestController","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"HidPermissionRequestController","type":"interface","url":"#hidpermissionrequestcontroller"},
@@ -10400,7 +10400,7 @@ let refsData = {
 "#matches-a-urlpattern": {"displayText":"matches a urlpattern","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"matches a urlpattern","type":"dfn","url":"#matches-a-urlpattern"},
 "#mediapermissionrequestcontroller": {"displayText":"MediaPermissionRequestController","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"MediaPermissionRequestController","type":"interface","url":"#mediapermissionrequestcontroller"},
 "#menuitemdetails": {"displayText":"MenuItemDetails","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"MenuItemDetails","type":"interface","url":"#menuitemdetails"},
-"#navigable-embedderparent": {"displayText":"embedderparent","export":true,"for_":["navigable"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"embedderparent","type":"dfn","url":"#navigable-embedderparent"},
+"#navigable-controlledframeembedderparent": {"displayText":"controlledframeembedderparent","export":true,"for_":["navigable"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"controlledframeembedderparent","type":"dfn","url":"#navigable-controlledframeembedderparent"},
 "#navigable-frameid": {"displayText":"frameid","export":true,"for_":["navigable"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"frameid","type":"dfn","url":"#navigable-frameid"},
 "#navigable-next-frameid": {"displayText":"next frameid","export":true,"for_":["navigable"],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"next frameid","type":"dfn","url":"#navigable-next-frameid"},
 "#navigate-a-controlledframe": {"displayText":"navigate a controlledframe","export":true,"for_":[],"level":"1","normative":true,"shortname":"controlled-frame","spec":"controlled-frame-1","status":"local","text":"navigate a controlledframe","type":"dfn","url":"#navigate-a-controlledframe"},
