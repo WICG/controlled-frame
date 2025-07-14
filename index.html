@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 618007319, updated Thu Jun 26 17:23:55 2025 -0700" name="generator">
   <link href="https://wicg.github.io/controlled-frame/" rel="canonical">
-  <meta content="6b80fb0ddcac4b21375e4911354eb0db66586ea6" name="revision">
+  <meta content="5d810bd40c8aa3d63b9219176d0cb790ee807c8e" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -790,7 +790,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <h1 class="p-name no-ref" id="title">Controlled Frame API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
-    <time class="dt-updated" datetime="2025-07-10">10 July 2025</time></p>
+    <time class="dt-updated" datetime="2025-07-14">14 July 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -4093,7 +4093,15 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-an-environ
      <p><dfn class="dfn-paneled" data-dfn-for="WebRequest" data-dfn-type="dfn" data-noexport id="webrequest-interceptors">interceptors</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list⑤">list</a> of
 <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor①">WebRequestInterceptor</a></code>s, intially «».</p>
    </ul>
-   <p>Each <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor②">WebRequestInterceptor</a></code> has an associated:</p>
+   <p class="note" role="note"><span class="marker">Note:</span> <a data-link-type="dfn" href="#webrequest-interceptors" id="ref-for-webrequest-interceptors">Interceptors</a> will be written to from tasks
+    on the <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe②⑥">controlledframe</a></code> element’s event loop, but read <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①③">in parallel</a>
+    during <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-fetch" id="ref-for-concept-fetch①">fetch</a>.
+    <br><br>
+    A snapshot of <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors">applicable WebRequestInterceptors</a> will be created prior
+    to dispatching <a href="#api-web-request-events">WebRequest events</a>.
+    Event listeners registered on a <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor②">WebRequestInterceptor</a></code> while processing
+    an event will not be fired for that event.</p>
+   <p>Each <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor③">WebRequestInterceptor</a></code> has an associated:</p>
    <div>
     <ul>
      <li data-md>
@@ -4337,7 +4345,7 @@ to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id
 
     <ol>
      <li data-md>
-      <p>Let <var>interceptor</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②②">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor③">WebRequestInterceptor</a></code> object.</p>
+      <p>Let <var>interceptor</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②②">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor④">WebRequestInterceptor</a></code> object.</p>
      <li data-md>
       <p>Set the following fields on <var>interceptor</var>:</p>
       <dl>
@@ -4365,36 +4373,51 @@ to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id
   to <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-urlpatterns" id="ref-for-webrequestinterceptor-urlpatterns①">urlPatterns</a>.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑧">Append</a> <var>interceptor</var> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦③">this</a>’s <a data-link-type="dfn" href="#webrequest-interceptors" id="ref-for-webrequest-interceptors">interceptors</a>.</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑧">Append</a> <var>interceptor</var> to <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦③">this</a>’s <a data-link-type="dfn" href="#webrequest-interceptors" id="ref-for-webrequest-interceptors①">interceptors</a>.</p>
      <li data-md>
       <p>Return <var>interceptor</var>.</p>
     </ol>
    </div>
-   <div class="algorithm" data-algorithm="interceptorBehaviorChanged(callback)" data-algorithm-for="WebRequest">
+   <div class="algorithm" data-algorithm="interceptorBehaviorChanged()" data-algorithm-for="WebRequest">
     
-  The <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="method" data-export data-lt="interceptorBehaviorChanged()|interceptorBehaviorChanged(callback)" id="dom-webrequest-interceptorbehaviorchanged"><code>interceptorBehaviorChanged(<var>callback</var>)</code></dfn>
+  The <dfn class="dfn-paneled idl-code" data-dfn-for="WebRequest" data-dfn-type="method" data-export id="dom-webrequest-interceptorbehaviorchanged"><code>interceptorBehaviorChanged()</code></dfn>
   method steps are:
 
 
-    <ol>
-     <li data-md>
-      <p>Let <var>controlledframe</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦④">this</a>.</p>
-     <li data-md>
-      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①③">In parallel</a>, clear the HTTP cache associated with the partition
-  used by <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment" id="ref-for-environment⑨">environments</a> embedded within the <var>controlledframe</var>
-  <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②③">HTMLControlledFrameElement</a></code>.</p>
-      <p class="note" role="note"><span class="marker">Note:</span> The behavior of event handlers registered through the WebRequest
+    <p class="note" role="note"><span class="marker">Note:</span> The behavior of event handlers registered through the WebRequest
   API will be reflected in the HTTP cache, which will no longer be valid if
   the behavior of the event handlers changed. The purpose of this method is
   to invalidate any cache entries that were affected by WebRequest event
   handlers.</p>
+    <ol>
      <li data-md>
-      <p>Invoke <var>callback</var> when the HTTP cache has been cleared.</p>
+      <p>Let <var>promise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑥">a new promise</a>.</p>
+     <li data-md>
+      <p>Let <var>controlledframe</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦④">this</a>.</p>
+     <li data-md>
+      <p>Return <var>promise</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①④">in parallel</a>.</p>
+     <li data-md>
+      <p>Remove all entries in the
+  <a href="https://datatracker.ietf.org/doc/html/rfc7234#section-2">network
+  cache</a> that originated from content in <var>controlledframe</var>’s
+  <code><a data-link-type="element-sub" href="#element-attrdef-htmlcontrolledframeelement-partition" id="ref-for-element-attrdef-htmlcontrolledframeelement-partition②">partition</a></code>.</p>
+      <p class="issue" id="issue-cd83e030"><a class="self-link" href="#issue-cd83e030"></a> The <a href="https://datatracker.ietf.org/doc/html/rfc7234#section-2">
+      network cache</a> specification isn’t aware of <a data-link-type="dfn" href="#storage-key" id="ref-for-storage-key①">storage keys</a>. The
+      intended behavior is to remove cache entries whose <a data-link-type="dfn" href="#storage-key-embedding-origin" id="ref-for-storage-key-embedding-origin②">embedding origin</a> is <var>controlledframe</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object⑦">relevant settings object</a>’s
+      <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin③">top-level origin</a>, and <a data-link-type="dfn" href="#storage-key-partition" id="ref-for-storage-key-partition②">partition</a>
+      is <var>controlledframe</var>’s <code><a data-link-type="element-sub" href="#element-attrdef-htmlcontrolledframeelement-partition" id="ref-for-element-attrdef-htmlcontrolledframeelement-partition③">partition</a></code>.</p>
+     <li data-md>
+      <p>If a user agent implements caches beyond a pure network cache, it MUST
+  remove all entries from those caches that originate from content in
+  <var>controlledframe</var>’s <code><a data-link-type="element-sub" href="#element-attrdef-htmlcontrolledframeelement-partition" id="ref-for-element-attrdef-htmlcontrolledframeelement-partition④">partition</a></code>.</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②⓪">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>promise</var> when
+  the HTTP cache has been cleared.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="applicable WebRequestInterceptors">
     
-  To get the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="applicable-webrequestinterceptors">applicable <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor④">WebRequestInterceptor</a></code>s</dfn> for a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request①">request</a>
+  To get the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="applicable-webrequestinterceptors">applicable <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor⑤">WebRequestInterceptor</a></code>s</dfn> for a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request①">request</a>
   <var>request</var>, run the following steps:
 
 
@@ -4409,39 +4432,33 @@ to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id
      <li data-md>
       <p>If <var>window</var> is null then return an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①⓪">list</a> and <code>false</code>.</p>
      <li data-md>
-      <p>Let <var>navigable</var> be <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑧">node navigable</a>.</p>
+      <p>Let <var>navigable</var> be <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable⑤">navigable</a>.</p>
      <li data-md>
-      <p>If <var>navigable</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⑨">embedderParent</a> is null, return an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①①">list</a>
+      <p>If <var>navigable</var> or its <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent①⑨">embedderParent</a> is null, return an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①①">list</a>
   and <code>false</code>.</p>
      <li data-md>
-      <p>Let <var>controlledFrame</var> be the <code class="idl"><a data-link-type="idl" href="#htmlcontrolledframeelement" id="ref-for-htmlcontrolledframeelement②④">HTMLControlledFrameElement</a></code>
-  corresponding to <var>navigable</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②⓪">embedderParent</a>.</p>
+      <p>Let <var>controlledFrame</var> be <var>navigable</var>’s <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②⓪">embedderParent</a>.</p>
      <li data-md>
       <p>Let <var>applicableInterceptors</var> be an empty <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①②">list</a>.</p>
      <li data-md>
-      <p>Let <var>blocking</var> be <code>false</code>.</p>
-     <li data-md>
       <p>For each <var>interceptor</var> in <var>controlledFrame</var>’s <a data-link-type="dfn" href="#controlledframe-request" id="ref-for-controlledframe-request②">request</a>’s
-  <a data-link-type="dfn" href="#webrequest-interceptors" id="ref-for-webrequest-interceptors①">interceptors</a>:</p>
+  <a data-link-type="dfn" href="#webrequest-interceptors" id="ref-for-webrequest-interceptors②">interceptors</a>:</p>
       <ol>
        <li data-md>
         <p>If <var>request</var> should not be <a data-link-type="dfn" href="#webrequestinterceptor-intercepted" id="ref-for-webrequestinterceptor-intercepted">intercepted</a>
   by <var>interceptor</var>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue⑦">continue</a>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑨">Append</a> <var>interceptor</var> to <var>applicableInterceptors</var>.</p>
-       <li data-md>
-        <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking①">blocking</a> is <code>true</code>, then
-  set <var>blocking</var> to <code>true</code>.</p>
       </ol>
      <li data-md>
-      <p>Return <var>applicableInterceptors</var> and <var>blocking</var>.</p>
+      <p>Return <var>applicableInterceptors</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="intercepted" data-algorithm-for="WebRequestInterceptor">
     
   To determine if a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request②">request</a> <var>request</var> should be
   <dfn class="dfn-paneled" data-dfn-for="WebRequestInterceptor" data-dfn-type="dfn" data-noexport id="webrequestinterceptor-intercepted">intercepted</dfn> by a
-  <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor⑤">WebRequestInterceptor</a></code>, run the following steps:
+  <code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor⑥">WebRequestInterceptor</a></code>, run the following steps:
 
 
     <ol>
@@ -4496,7 +4513,7 @@ to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id
     </ol>
    </div>
    <h3 class="heading settled" data-level="4.1" id="api-web-request-events"><span class="secno">4.1. </span><span class="content">Events</span><a class="self-link" href="#api-web-request-events"></a></h3>
-   <p><code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor⑥">WebRequestInterceptor</a></code> fires the following events:</p>
+   <p><code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor⑦">WebRequestInterceptor</a></code> fires the following events:</p>
    <table>
     <tbody>
      <tr>
@@ -4567,7 +4584,7 @@ to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id
       receiving its <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response" id="ref-for-concept-response③">response</a>.
     
    </table>
-   <p><code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor⑦">WebRequestInterceptor</a></code> supports the following <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers" id="ref-for-event-handlers②">event handlers</a> (and their
+   <p><code class="idl"><a data-link-type="idl" href="#webrequestinterceptor" id="ref-for-webrequestinterceptor⑧">WebRequestInterceptor</a></code> supports the following <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers" id="ref-for-event-handlers②">event handlers</a> (and their
 corresponding <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-event-type" id="ref-for-event-handler-event-type②">event handler event types</a>) as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes" id="ref-for-event-handler-idl-attributes">event handler IDL attributes</a>:</p>
    <table>
     <tbody>
@@ -4733,86 +4750,91 @@ or null, initially null.</p>
 
     <ol>
      <li data-md>
-      <p>Let <var>interceptors</var> and <var>blocking</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+      <p>Let <var>interceptors</var> be the result of getting the
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors①">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>result</var> be a <a data-link-type="dfn" href="#webrequestevent-result" id="ref-for-webrequestevent-result">WebRequestEvent result</a>.</p>
      <li data-md>
-      <p>Let <var>pendingHandlerCount</var> be <var>interceptor</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a>.</p>
+      <p>Let <var>pendingHandlerCount</var> be 0.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②③">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent②">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client②">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②③">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent②">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client②">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②④">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestbeforerequestevent" id="ref-for-webrequestbeforerequestevent④">WebRequestBeforeRequestEvent</a></code> named
-  <a data-link-type="dfn" href="#webrequestinterceptor-beforerequest" id="ref-for-webrequestinterceptor-beforerequest①">beforerequest</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
-  "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none">none</a></code>".</p>
-       <li data-md>
-        <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-includerequestbody" id="ref-for-webrequestinterceptor-includerequestbody①">includeRequestBody</a> is
-  <code>true</code> and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body" id="ref-for-concept-request-body">body</a> is not null, then:</p>
-        <ol>
-         <li data-md>
-          <p>Let <var>requestBody</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑤">new</a> <code class="idl"><a data-link-type="idl" href="#requestbody" id="ref-for-requestbody③">RequestBody</a></code>.</p>
-         <li data-md>
-          <p>Let <var>body</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body" id="ref-for-concept-request-body①">body</a>.</p>
-          <p><span class="XXX">TODO: serialize <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream" id="ref-for-concept-body-stream">stream</a> if present.</span></p>
-         <li data-md>
-          <p>Switch on <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source">source</a>:</p>
-          <dl>
-           <dt data-md><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#byte-sequence" id="ref-for-byte-sequence①">byte sequence</a>
-           <dd data-md>
-            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①⓪">Append</a> a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑥">new</a> <code class="idl"><a data-link-type="idl" href="#uploaddata" id="ref-for-uploaddata③">UploadData</a></code> with <a data-link-type="dfn" href="#uploaddata-bytes" id="ref-for-uploaddata-bytes①">bytes</a> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source①">source</a> to
-  <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-raw" id="ref-for-requestbody-raw①">raw</a>.</p>
-           <dt data-md><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-Blob" id="ref-for-dfn-Blob">Blob</a></code>
-           <dd data-md>
-            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①①">Append</a> a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑦">new</a> <code class="idl"><a data-link-type="idl" href="#uploaddata" id="ref-for-uploaddata④">UploadData</a></code> with <a data-link-type="dfn" href="#uploaddata-bytes" id="ref-for-uploaddata-bytes②">bytes</a> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source②">source</a> to
-  <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-raw" id="ref-for-requestbody-raw②">raw</a>.</p>
-           <dt data-md><code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#formdata" id="ref-for-formdata">FormData</a></code>
-           <dd data-md>
-            <ol>
-             <li data-md>
-              <p>Let <var>formData</var> be «[]».</p>
-             <li data-md>
-              <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑤">For each</a> <var>entry</var> in <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source③">source</a>’s
-  <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-list" id="ref-for-concept-formdata-entry-list">entry list</a>:</p>
-              <ol>
-               <li data-md>
-                <p>Switch on <var>entry</var>[1]:</p>
-              </ol>
-              <dl>
-               <dt data-md><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-file" id="ref-for-dfn-file">File</a></code>
-               <dd data-md>
-                <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①②">Append</a> a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑧">new</a> <code class="idl"><a data-link-type="idl" href="#uploaddata" id="ref-for-uploaddata⑤">UploadData</a></code> with
-  <a data-link-type="dfn" href="#uploaddata-file" id="ref-for-uploaddata-file①">file</a> equal to <var>entry</var>[1]'s
-  <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-name" id="ref-for-dfn-name">name</a></code> to <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-raw" id="ref-for-requestbody-raw③">raw</a>.</p>
-               <dt data-md><code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString②⑧">USVString</a></code>
-               <dd data-md>
-                <ol>
-                 <li data-md>
-                  <p>If <var>formData</var>[<var>entry</var>[0]] does not exist, then
-  set <var>formData</var>[<var>entry</var>[0]] equal to an empty
-  <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①③">list</a>.</p>
-                 <li data-md>
-                  <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①③">Append</a> <var>entry</var>[1] to
-  <var>formData</var>[<var>entry</var>[0]].</p>
-                </ol>
-              </dl>
-             <li data-md>
-              <p>Set <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-formdata" id="ref-for-requestbody-formdata①">formData</a> to <var>formData</var>.</p>
-            </ol>
-          </dl>
-         <li data-md>
-          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestevent-request" id="ref-for-webrequestevent-request①">request</a>’s <a data-link-type="dfn" href="#webrequestrequest-body" id="ref-for-webrequestrequest-body①">body</a> to <var>requestBody</var>.</p>
-        </ol>
+        <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking①">blocking</a> is <code>true</code>,
+  then increment <var>pendingHandlerCount</var>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②②">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source①⑧">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will run the following steps:</p>
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
         <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②④">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestbeforerequestevent" id="ref-for-webrequestbeforerequestevent④">WebRequestBeforeRequestEvent</a></code> named
+  <a data-link-type="dfn" href="#webrequestinterceptor-beforerequest" id="ref-for-webrequestinterceptor-beforerequest①">beforerequest</a>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+  "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none">none</a></code>".</p>
+         <li data-md>
+          <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-includerequestbody" id="ref-for-webrequestinterceptor-includerequestbody①">includeRequestBody</a> is
+  <code>true</code> and <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body" id="ref-for-concept-request-body">body</a> is not null, then:</p>
+          <ol>
+           <li data-md>
+            <p>Let <var>requestBody</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑤">new</a> <code class="idl"><a data-link-type="idl" href="#requestbody" id="ref-for-requestbody③">RequestBody</a></code>.</p>
+           <li data-md>
+            <p>Let <var>body</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body" id="ref-for-concept-request-body①">body</a>.</p>
+            <p><span class="XXX">TODO: serialize <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream" id="ref-for-concept-body-stream">stream</a> if present.</span></p>
+           <li data-md>
+            <p>Switch on <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source">source</a>:</p>
+            <dl>
+             <dt data-md><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#byte-sequence" id="ref-for-byte-sequence①">byte sequence</a>
+             <dd data-md>
+              <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①⓪">Append</a> a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑥">new</a> <code class="idl"><a data-link-type="idl" href="#uploaddata" id="ref-for-uploaddata③">UploadData</a></code> with <a data-link-type="dfn" href="#uploaddata-bytes" id="ref-for-uploaddata-bytes①">bytes</a> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source①">source</a> to
+  <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-raw" id="ref-for-requestbody-raw①">raw</a>.</p>
+             <dt data-md><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-Blob" id="ref-for-dfn-Blob">Blob</a></code>
+             <dd data-md>
+              <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①①">Append</a> a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑦">new</a> <code class="idl"><a data-link-type="idl" href="#uploaddata" id="ref-for-uploaddata④">UploadData</a></code> with <a data-link-type="dfn" href="#uploaddata-bytes" id="ref-for-uploaddata-bytes②">bytes</a> equal to the serialized <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source②">source</a> to
+  <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-raw" id="ref-for-requestbody-raw②">raw</a>.</p>
+             <dt data-md><code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#formdata" id="ref-for-formdata">FormData</a></code>
+             <dd data-md>
+              <ol>
+               <li data-md>
+                <p>Let <var>formData</var> be «[]».</p>
+               <li data-md>
+                <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑤">For each</a> <var>entry</var> in <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-source" id="ref-for-concept-body-source③">source</a>’s
+  <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-list" id="ref-for-concept-formdata-entry-list">entry list</a>:</p>
+                <ol>
+                 <li data-md>
+                  <p>Switch on <var>entry</var>[1]:</p>
+                </ol>
+                <dl>
+                 <dt data-md><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-file" id="ref-for-dfn-file">File</a></code>
+                 <dd data-md>
+                  <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①②">Append</a> a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑧">new</a> <code class="idl"><a data-link-type="idl" href="#uploaddata" id="ref-for-uploaddata⑤">UploadData</a></code> with
+  <a data-link-type="dfn" href="#uploaddata-file" id="ref-for-uploaddata-file①">file</a> equal to <var>entry</var>[1]'s
+  <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/FileAPI/#dfn-name" id="ref-for-dfn-name">name</a></code> to <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-raw" id="ref-for-requestbody-raw③">raw</a>.</p>
+                 <dt data-md><code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString②⑧">USVString</a></code>
+                 <dd data-md>
+                  <ol>
+                   <li data-md>
+                    <p>If <var>formData</var>[<var>entry</var>[0]] does not exist, then
+  set <var>formData</var>[<var>entry</var>[0]] equal to an empty
+  <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①③">list</a>.</p>
+                   <li data-md>
+                    <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①③">Append</a> <var>entry</var>[1] to
+  <var>formData</var>[<var>entry</var>[0]].</p>
+                  </ol>
+                </dl>
+               <li data-md>
+                <p>Set <var>requestBody</var>’s <a data-link-type="dfn" href="#requestbody-formdata" id="ref-for-requestbody-formdata①">formData</a> to <var>formData</var>.</p>
+              </ol>
+            </dl>
+           <li data-md>
+            <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestevent-request" id="ref-for-webrequestevent-request①">request</a>’s <a data-link-type="dfn" href="#webrequestrequest-body" id="ref-for-webrequestrequest-body①">body</a> to <var>requestBody</var>.</p>
+          </ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①②">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
          <li data-md>
@@ -4824,13 +4846,16 @@ or null, initially null.</p>
   then set <var>result</var>’s <a data-link-type="dfn" href="#webrequestevent-result-redirecturl" id="ref-for-webrequestevent-result-redirecturl①">redirectURL</a> to
   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#events" id="ref-for-events">event</a>’s <a data-link-type="dfn" href="#webrequestbeforerequestevent-redirecturl" id="ref-for-webrequestbeforerequestevent-redirecturl②">redirectURL</a>.</p>
          <li data-md>
-          <p>Decrement <var>pendingHandlerCount</var>.</p>
+          <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking②">blocking</a> is <code>true</code>,
+  then decrement <var>pendingHandlerCount</var>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p>If <var>blocking</var> is <code>true</code>, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①④">in parallel</a> for <var>pendingHandlerCount</var>
-  to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②③">queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source">networking task source</a>
-  of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global①">global object</a> that will continue the remaining steps of this algorithm.</p>
+      <p>If <var>pendingHandlerCount</var> > 0, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑤">in parallel</a> for
+  <var>pendingHandlerCount</var> to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②③">queue a global task</a> that will
+  continue the remaining steps of this algorithm on either the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source">networking task source</a> of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client③">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global①">global object</a> or the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑥">in parallel</a> context that these steps
+  were first invoked on, depending on how these steps were run before going
+  in parallel.</p>
      <li data-md>
       <p>Return <var>result</var>.</p>
     </ol>
@@ -4843,29 +4868,34 @@ or null, initially null.</p>
 
     <ol>
      <li data-md>
-      <p>Let <var>interceptors</var> and <var>blocking</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors①">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+      <p>Let <var>interceptors</var> be the result of getting the
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors②">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>result</var> be a <a data-link-type="dfn" href="#webrequestevent-result" id="ref-for-webrequestevent-result①">WebRequestEvent result</a>.</p>
      <li data-md>
-      <p>Let <var>pendingHandlerCount</var> be <var>interceptor</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size②">size</a>.</p>
+      <p>Let <var>pendingHandlerCount</var> be 0.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②④">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent③">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client④">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②④">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent③">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client④">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑨">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestbeforesendheadersevent" id="ref-for-webrequestbeforesendheadersevent④">WebRequestBeforeSendHeadersEvent</a></code> named
-  <a data-link-type="dfn" href="#webrequestinterceptor-beforesendheaders" id="ref-for-webrequestinterceptor-beforesendheaders①">beforesendheaders</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent①">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
-  <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders①">includeHeaders</a>.</p>
+        <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking③">blocking</a> is <code>true</code>,
+  then increment <var>pendingHandlerCount</var>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②④">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source①⑨">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will run the following steps:</p>
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
         <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new②⑨">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestbeforesendheadersevent" id="ref-for-webrequestbeforesendheadersevent④">WebRequestBeforeSendHeadersEvent</a></code> named
+  <a data-link-type="dfn" href="#webrequestinterceptor-beforesendheaders" id="ref-for-webrequestinterceptor-beforesendheaders①">beforesendheaders</a>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent①">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+  <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders①">includeHeaders</a>.</p>
          <li data-md>
           <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①③">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
          <li data-md>
@@ -4887,13 +4917,16 @@ or null, initially null.</p>
             </ol>
           </ol>
          <li data-md>
-          <p>Decrement <var>pendingHandlerCount</var>.</p>
+          <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking④">blocking</a> is <code>true</code>,
+  then decrement <var>pendingHandlerCount</var>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p>If <var>blocking</var> is <code>true</code>, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑤">in parallel</a> for <var>pendingHandlerCount</var>
-  to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑤">queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source①">networking task source</a>
-  of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global②">global object</a> that will continue the remaining steps of this algorithm.</p>
+      <p>If <var>pendingHandlerCount</var> > 0, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑦">in parallel</a> for
+  <var>pendingHandlerCount</var> to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑤">queue a global task</a> that will
+  continue the remaining steps of this algorithm on either the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source①">networking task source</a> of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑤">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global②">global object</a> or the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑧">in parallel</a> context that these steps
+  were first invoked on, depending on how these steps were run before going
+  in parallel.</p>
      <li data-md>
       <p>Return <var>result</var>.</p>
     </ol>
@@ -4907,23 +4940,29 @@ or null, initially null.</p>
     <ol>
      <li data-md>
       <p>Let <var>interceptors</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors②">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors③">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑤">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent④">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑤">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent④">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑥">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③①">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestsendheadersevent" id="ref-for-webrequestsendheadersevent①">WebRequestSendHeadersEvent</a></code> named
-  <a data-link-type="dfn" href="#webrequestinterceptor-sendheaders" id="ref-for-webrequestinterceptor-sendheaders①">sendheaders</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent②">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
-  <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders②">includeHeaders</a>.</p>
-       <li data-md>
         <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑥">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⓪">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①④">dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③①">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestsendheadersevent" id="ref-for-webrequestsendheadersevent①">WebRequestSendHeadersEvent</a></code> named
+  <a data-link-type="dfn" href="#webrequestinterceptor-sendheaders" id="ref-for-webrequestinterceptor-sendheaders①">sendheaders</a>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent②">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+  <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders②">includeHeaders</a>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①④">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+        </ol>
       </ol>
     </ol>
    </div>
@@ -4935,34 +4974,39 @@ or null, initially null.</p>
 
     <ol>
      <li data-md>
-      <p>Let <var>interceptors</var> and <var>blocking</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors③">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+      <p>Let <var>interceptors</var> be the result of getting the
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors④">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>result</var> be a <a data-link-type="dfn" href="#webrequestevent-result" id="ref-for-webrequestevent-result②">WebRequestEvent result</a>.</p>
      <li data-md>
-      <p>Let <var>pendingHandlerCount</var> be <var>interceptor</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size③">size</a>.</p>
+      <p>Let <var>pendingHandlerCount</var> be <var>interceptor</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a>.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑥">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑤">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑦">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑥">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑤">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑦">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③②">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestheadersreceivedevent" id="ref-for-webrequestheadersreceivedevent⑥">WebRequestHeadersReceivedEvent</a></code> named
+        <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking⑤">blocking</a> is <code>true</code>,
+  then increment <var>pendingHandlerCount</var>.</p>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑦">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②①">DOM manipulation task source</a> of
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③②">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestheadersreceivedevent" id="ref-for-webrequestheadersreceivedevent⑥">WebRequestHeadersReceivedEvent</a></code> named
   <a data-link-type="dfn" href="#webrequestinterceptor-headersreceived" id="ref-for-webrequestinterceptor-headersreceived①">headersreceived</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent③">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent③">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
   "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none①">none</a></code>".</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestheadersreceivedevent-response" id="ref-for-webrequestheadersreceivedevent-response①">response</a> to the
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestheadersreceivedevent-response" id="ref-for-webrequestheadersreceivedevent-response①">response</a> to the
   result of <a data-link-type="dfn" href="#create-a-webrequestresponse-object" id="ref-for-create-a-webrequestresponse-object">creating a WebRequestResponse object</a> given <var>request</var>,
   <var>response</var>, and <var>interceptor</var>’s
   <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders③">includeHeaders</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑦">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②①">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will run the following steps:</p>
-        <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑤">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
          <li data-md>
@@ -4989,13 +5033,16 @@ or null, initially null.</p>
             </ol>
           </ol>
          <li data-md>
-          <p>Decrement <var>pendingHandlerCount</var>.</p>
+          <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking⑥">blocking</a> is <code>true</code>,
+  then decrement <var>pendingHandlerCount</var>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p>If <var>blocking</var> is <code>true</code>, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑥">in parallel</a> for <var>pendingHandlerCount</var>
-  to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑧">queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source②">networking task source</a>
-  of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑧">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global③">global object</a> that will continue the remaining steps of this algorithm.</p>
+      <p>If <var>pendingHandlerCount</var> > 0, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑨">in parallel</a> for
+  <var>pendingHandlerCount</var> to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑧">queue a global task</a> that will
+  continue the remaining steps of this algorithm on either the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source②">networking task source</a> of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑧">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global③">global object</a> or the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⓪">in parallel</a> context that these steps
+  were first invoked on, depending on how these steps were run before going
+  in parallel.</p>
      <li data-md>
       <p>Return <var>result</var>.</p>
     </ol>
@@ -5039,41 +5086,46 @@ or null, initially null.</p>
      <li data-md>
       <p>If <var>scheme</var> is null, then return null.</p>
      <li data-md>
-      <p>Let <var>interceptors</var> and <var>blocking</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors④">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+      <p>Let <var>interceptors</var> be the result of getting the
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑤">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
       <p>Let <var>result</var> be a <a data-link-type="dfn" href="#webrequestevent-result" id="ref-for-webrequestevent-result③">WebRequestEvent result</a>.</p>
      <li data-md>
-      <p>Let <var>pendingHandlerCount</var> be <var>interceptor</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size④">size</a>.</p>
+      <p>Let <var>pendingHandlerCount</var> be 0.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑦">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑥">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑨">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑦">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑥">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client⑨">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑤">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestauthrequiredevent" id="ref-for-webrequestauthrequiredevent⑤">WebRequestAuthRequiredEvent</a></code> named
+        <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking⑦">blocking</a> is <code>true</code>,
+  then increment <var>pendingHandlerCount</var>.</p>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑨">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②②">DOM manipulation task source</a> of
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑤">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestauthrequiredevent" id="ref-for-webrequestauthrequiredevent⑤">WebRequestAuthRequiredEvent</a></code> named
   <a data-link-type="dfn" href="#webrequestinterceptor-authrequired" id="ref-for-webrequestinterceptor-authrequired①">authrequired</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent④">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent④">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
   "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none②">none</a></code>".</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestauthrequiredevent-response" id="ref-for-webrequestauthrequiredevent-response①">response</a> to the
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestauthrequiredevent-response" id="ref-for-webrequestauthrequiredevent-response①">response</a> to the
   result of <a data-link-type="dfn" href="#create-a-webrequestresponse-object" id="ref-for-create-a-webrequestresponse-object①">creating a WebRequestResponse object</a> given <var>request</var>,
   <var>response</var>, and <var>interceptor</var>’s
   <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders④">includeHeaders</a>.</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestauthrequiredevent-response" id="ref-for-webrequestauthrequiredevent-response②">response</a>’s <a data-link-type="dfn" href="#webrequestresponse-auth" id="ref-for-webrequestresponse-auth①">auth</a> to a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑥">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestauthdetails" id="ref-for-webrequestauthdetails③">WebRequestAuthDetails</a></code>
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestauthrequiredevent-response" id="ref-for-webrequestauthrequiredevent-response②">response</a>’s <a data-link-type="dfn" href="#webrequestresponse-auth" id="ref-for-webrequestresponse-auth①">auth</a> to a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑥">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestauthdetails" id="ref-for-webrequestauthdetails③">WebRequestAuthDetails</a></code>
   whose <a data-link-type="dfn" href="#webrequestauthdetails-challenger" id="ref-for-webrequestauthdetails-challenger①">challenger</a>,
   <a data-link-type="dfn" href="#webrequestauthdetails-isproxy" id="ref-for-webrequestauthdetails-isproxy①">isProxy</a>,
   <a data-link-type="dfn" href="#webrequestauthdetails-scheme" id="ref-for-webrequestauthdetails-scheme①">scheme</a>, and
   <a data-link-type="dfn" href="#webrequestauthdetails-realm" id="ref-for-webrequestauthdetails-realm①">realm</a> fields have the values
   <var>challenger</var>, <var>isProxy</var>, <var>scheme</var>, and <var>realm</var> respectively.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task②⑨">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②②">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will run the following steps:</p>
-        <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑥">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
          <li data-md>
@@ -5119,18 +5171,21 @@ or null, initially null.</p>
             <p class="note" role="note"><span class="marker">Note:</span> A rejected promise will not cancel the request, but no
   credentials will be provided to the server.</p>
            <li data-md>
-            <p>Wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑦">in parallel</a> for <var>done</var> to equal <code>true</code>, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③⓪">queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②③">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will run continue the remaining steps
+            <p>Wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②①">in parallel</a> for <var>done</var> to equal <code>true</code>, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③⓪">queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②③">DOM manipulation task source</a> of
+  <var>controlledFrameEmbedderGlobal</var> that will run continue the remaining steps
   of this algorithm.</p>
           </ol>
          <li data-md>
-          <p>Decrement <var>pendingHandlerCount</var>.</p>
+          <p>If <var>interceptor</var>’s <a data-link-type="dfn" href="#webrequestinterceptor-blocking" id="ref-for-webrequestinterceptor-blocking⑧">blocking</a> is <code>true</code>,
+  then decrement <var>pendingHandlerCount</var>.</p>
         </ol>
       </ol>
      <li data-md>
-      <p>If <var>blocking</var> is <code>true</code>, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑧">in parallel</a> for <var>pendingHandlerCount</var>
-  to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③①">queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source③">networking task source</a>
-  of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①⓪">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global④">global object</a> that will continue the remaining steps of this algorithm.</p>
+      <p>If <var>pendingHandlerCount</var> > 0, then wait <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②②">in parallel</a> for
+  <var>pendingHandlerCount</var> to equal 0, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③①">queue a global task</a> that will
+  continue the remaining steps of this algorithm on either the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#networking-task-source" id="ref-for-networking-task-source③">networking task source</a> of <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①⓪">client</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global④">global object</a> or the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②③">in parallel</a> context that these steps
+  were first invoked on, depending on how these steps were run before going
+  in parallel.</p>
      <li data-md>
       <p>Return <var>result</var>.</p>
     </ol>
@@ -5144,35 +5199,41 @@ or null, initially null.</p>
     <ol>
      <li data-md>
       <p>Let <var>interceptors</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑤">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑥">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑧">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑦">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①①">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑧">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑦">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①①">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑦">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestbeforeredirectevent" id="ref-for-webrequestbeforeredirectevent②">WebRequestBeforeRedirectEvent</a></code> named
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③②">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②④">DOM manipulation task source</a> of
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑦">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestbeforeredirectevent" id="ref-for-webrequestbeforeredirectevent②">WebRequestBeforeRedirectEvent</a></code> named
   <a data-link-type="dfn" href="#webrequestinterceptor-beforeredirect" id="ref-for-webrequestinterceptor-beforeredirect①">beforeredirect</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑤">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑤">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
   "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none③">none</a></code>".</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestbeforeredirectevent-response" id="ref-for-webrequestbeforeredirectevent-response①">response</a> to the
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestbeforeredirectevent-response" id="ref-for-webrequestbeforeredirectevent-response①">response</a> to the
   result of <a data-link-type="dfn" href="#create-a-webrequestresponse-object" id="ref-for-create-a-webrequestresponse-object②">creating a WebRequestResponse object</a> given <var>request</var>,
   <var>response</var>, and <var>interceptor</var>’s
   <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders⑤">includeHeaders</a>.</p>
-       <li data-md>
-        <p>Let <var>internalResponse</var> be <var>response</var>, if <var>response</var> is not a
+         <li data-md>
+          <p>Let <var>internalResponse</var> be <var>response</var>, if <var>response</var> is not a
   <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-filtered-response" id="ref-for-concept-filtered-response">filtered response</a>; otherwise <var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-internal-response" id="ref-for-concept-internal-response">internal response</a>.</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestbeforeredirectevent-response" id="ref-for-webrequestbeforeredirectevent-response②">response</a>’s <a data-link-type="dfn" href="#webrequestresponse-redirecturl" id="ref-for-webrequestresponse-redirecturl①">redirectURL</a> to <var>internalResponse</var>’s
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestbeforeredirectevent-response" id="ref-for-webrequestbeforeredirectevent-response②">response</a>’s <a data-link-type="dfn" href="#webrequestresponse-redirecturl" id="ref-for-webrequestresponse-redirecturl①">redirectURL</a> to <var>internalResponse</var>’s
   <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-location-url" id="ref-for-concept-response-location-url①">location URL</a> given <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current URL</a>’s
   <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-fragment" id="ref-for-concept-url-fragment">fragment</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③②">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②④">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑦">dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑦">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+        </ol>
       </ol>
     </ol>
    </div>
@@ -5185,28 +5246,34 @@ or null, initially null.</p>
     <ol>
      <li data-md>
       <p>Let <var>interceptors</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑥">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑦">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑨">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑧">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①②">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②⑨">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑧">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①②">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑧">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestresponsestartedevent" id="ref-for-webrequestresponsestartedevent②">WebRequestResponseStartedEvent</a></code> named
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③③">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⑤">DOM manipulation task source</a> of
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑧">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestresponsestartedevent" id="ref-for-webrequestresponsestartedevent②">WebRequestResponseStartedEvent</a></code> named
   <a data-link-type="dfn" href="#webrequestinterceptor-responsestarted" id="ref-for-webrequestinterceptor-responsestarted①">responsestarted</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑥">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑥">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
   "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none④">none</a></code>".</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestresponsestartedevent-response" id="ref-for-webrequestresponsestartedevent-response①">response</a> to the
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestresponsestartedevent-response" id="ref-for-webrequestresponsestartedevent-response①">response</a> to the
   result of <a data-link-type="dfn" href="#create-a-webrequestresponse-object" id="ref-for-create-a-webrequestresponse-object③">creating a WebRequestResponse object</a> given <var>request</var>,
   <var>response</var>, and <var>interceptor</var>’s
   <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders⑥">includeHeaders</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③③">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⑤">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑧">dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑧">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+        </ol>
       </ol>
     </ol>
    </div>
@@ -5219,28 +5286,34 @@ or null, initially null.</p>
     <ol>
      <li data-md>
       <p>Let <var>interceptors</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑦">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑧">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③⓪">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑨">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①③">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③⓪">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent⑨">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①③">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑨">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestcompletedevent" id="ref-for-webrequestcompletedevent②">WebRequestCompletedEvent</a></code> named
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③④">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⑥">DOM manipulation task source</a> of
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new③⑨">new</a> <code class="idl"><a data-link-type="idl" href="#webrequestcompletedevent" id="ref-for-webrequestcompletedevent②">WebRequestCompletedEvent</a></code> named
   <a data-link-type="dfn" href="#webrequestinterceptor-completed" id="ref-for-webrequestinterceptor-completed①">completed</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑦">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑦">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
   "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none⑤">none</a></code>".</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestcompletedevent-response" id="ref-for-webrequestcompletedevent-response①">response</a> to the
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequestcompletedevent-response" id="ref-for-webrequestcompletedevent-response①">response</a> to the
   result of <a data-link-type="dfn" href="#create-a-webrequestresponse-object" id="ref-for-create-a-webrequestresponse-object④">creating a WebRequestResponse object</a> given <var>request</var>,
   <var>response</var>, and <var>interceptor</var>’s
   <a data-link-type="dfn" href="#webrequestinterceptor-includeheaders" id="ref-for-webrequestinterceptor-includeheaders⑦">includeHeaders</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③④">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⑥">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑨">dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①⑨">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+        </ol>
       </ol>
     </ol>
    </div>
@@ -5253,27 +5326,33 @@ or null, initially null.</p>
     <ol>
      <li data-md>
       <p>Let <var>interceptors</var> be the result of getting the
-  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑧">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
+  <a data-link-type="dfn" href="#applicable-webrequestinterceptors" id="ref-for-applicable-webrequestinterceptors⑨">applicable WebRequestInterceptors</a> of <var>request</var>.</p>
      <li data-md>
-      <p>Let <var>embedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③①">relevant global object</a> of the result of
-  <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent①⓪">getting an environment’s embedderParent</a> given <var>request</var>’s
-  <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①④">client</a>.</p>
+      <p>Let <var>controlledFrameEmbedderGlobal</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③①">relevant global object</a> of
+  the result of <a data-link-type="dfn" href="#get-an-environments-embedderparent" id="ref-for-get-an-environments-embedderparent①⓪">getting an environment’s embedderParent</a> given
+  <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client" id="ref-for-concept-request-client①④">client</a>.</p>
+     <li data-md>
+      <p>If <var>controlledFrameEmbedderGlobal</var> is null, then return.</p>
      <li data-md>
       <p>For each <var>interceptor</var> in <var>interceptors</var>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new④⓪">new</a> <code class="idl"><a data-link-type="idl" href="#webrequesterroroccurredevent" id="ref-for-webrequesterroroccurredevent②">WebRequestErrorOccurredEvent</a></code> named
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③⑤">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⑦">DOM manipulation task source</a> of
+  <var>controlledFrameEmbedderGlobal</var> that will run the following steps:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>event</var> be a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#new" id="ref-for-new④⓪">new</a> <code class="idl"><a data-link-type="idl" href="#webrequesterroroccurredevent" id="ref-for-webrequesterroroccurredevent②">WebRequestErrorOccurredEvent</a></code> named
   <a data-link-type="dfn" href="#webrequestinterceptor-erroroccurred" id="ref-for-webrequestinterceptor-erroroccurred①">erroroccurred</a>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑧">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
+         <li data-md>
+          <p><a data-link-type="dfn" href="#populate-a-webrequestevent" id="ref-for-populate-a-webrequestevent⑧">Populate a WebRequestEvent</a> given <var>event</var>, <var>request</var>, and
   "<code class="idl"><a data-link-type="idl" href="#dom-requestedheaders-none" id="ref-for-dom-requestedheaders-none⑥">none</a></code>".</p>
-       <li data-md>
-        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequesterroroccurredevent-error" id="ref-for-webrequesterroroccurredevent-error①">error</a> to an
+         <li data-md>
+          <p>Set <var>event</var>’s <a data-link-type="dfn" href="#webrequesterroroccurredevent-error" id="ref-for-webrequesterroroccurredevent-error①">error</a> to an
   <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#implementation-defined" id="ref-for-implementation-defined①">implementation-defined</a> error message describing the error in
   <var>response</var>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task" id="ref-for-queue-a-global-task③⑤">Queue a global task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②⑦">DOM manipulation task source</a> of
-  <var>embedderGlobal</var> that will <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch②⓪">dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch②⓪">Dispatch</a> <var>event</var> to <var>interceptor</var>.</p>
+        </ol>
       </ol>
     </ol>
    </div>
@@ -5301,7 +5380,7 @@ or null, initially null.</p>
       <p>If <var>window</var> is not null, then:</p>
       <ol>
        <li data-md>
-        <p>Let <var>parentNavigable</var> be <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable⑤">navigable</a>’s
+        <p>Let <var>parentNavigable</var> be <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable⑥">navigable</a>’s
   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent" id="ref-for-nav-parent④">parent</a>.</p>
        <li data-md>
         <p>Update the following fields of <var>event</var>:</p>
@@ -5315,7 +5394,7 @@ or null, initially null.</p>
   <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window" id="ref-for-concept-document-window">associated document</a>.</p>
          <dt data-md><a data-link-type="dfn" href="#webrequestevent-frameid" id="ref-for-webrequestevent-frameid②">frameId</a>
          <dd data-md>
-          <p>The <a data-link-type="dfn" href="#navigable-frameid" id="ref-for-navigable-frameid①">frameId</a> of <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable⑥">navigable</a>.</p>
+          <p>The <a data-link-type="dfn" href="#navigable-frameid" id="ref-for-navigable-frameid①">frameId</a> of <var>window</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable" id="ref-for-window-navigable⑦">navigable</a>.</p>
          <dt data-md><a data-link-type="dfn" href="#webrequestevent-frametype" id="ref-for-webrequestevent-frametype①">frameType</a>
          <dd data-md>
           <p><code class="idl"><a data-link-type="idl" href="#dom-frametype-fenced-frame" id="ref-for-dom-frametype-fenced-frame">"fenced-frame"</a></code> if <var>window</var>’s
@@ -5376,7 +5455,7 @@ or null, initially null.</p>
       <p>If <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-lifecycle.html#unload-counter" id="ref-for-unload-counter">unload counter</a> > 0, then return
   "<code class="idl"><a data-link-type="idl" href="#dom-documentlifecycle-pending-deletion" id="ref-for-dom-documentlifecycle-pending-deletion">pending-deletion</a></code>".</p>
      <li data-md>
-      <p>If <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑨">node navigable</a> is non-null and is a <a data-link-type="dfn" href="https://wicg.github.io/nav-speculation/prerendering.html#prerendering-navigable" id="ref-for-prerendering-navigable">prerendering navigable</a>, then return "<code class="idl"><a data-link-type="idl" href="#dom-documentlifecycle-prerender" id="ref-for-dom-documentlifecycle-prerender">prerender</a></code>".</p>
+      <p>If <var>document</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑧">node navigable</a> is non-null and is a <a data-link-type="dfn" href="https://wicg.github.io/nav-speculation/prerendering.html#prerendering-navigable" id="ref-for-prerendering-navigable">prerendering navigable</a>, then return "<code class="idl"><a data-link-type="idl" href="#dom-documentlifecycle-prerender" id="ref-for-dom-documentlifecycle-prerender">prerender</a></code>".</p>
      <li data-md>
       <p>If <var>document</var> is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-lifecycle.html#concept-document-salvageable" id="ref-for-concept-document-salvageable">salvageable</a> and does not have its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-lifecycle.html#page-showing" id="ref-for-page-showing">page showing</a>,
   return "<code class="idl"><a data-link-type="idl" href="#dom-documentlifecycle-cached" id="ref-for-dom-documentlifecycle-cached">cached</a></code>".</p>
@@ -5778,7 +5857,7 @@ opaque string, randomly assigned at the request’s creation.</p>
   <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString③②"><c- b>USVString</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenusClickEvent" data-dfn-type="attribute" data-export data-readonly data-type="USVString?" id="dom-contextmenusclickevent-srcurl"><code><c- g>srcURL</c-></code></dfn>;
 };
 </pre>
-   <p>Each <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe②⑥">controlledframe</a></code> has a <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-contextmenus" id="ref-for-dom-htmlcontrolledframeelement-contextmenus①">contextMenus</a></code>
+   <p>Each <code><a data-link-type="element" href="#elementdef-controlledframe" id="ref-for-elementdef-controlledframe②⑦">controlledframe</a></code> has a <code class="idl"><a data-link-type="idl" href="#dom-htmlcontrolledframeelement-contextmenus" id="ref-for-dom-htmlcontrolledframeelement-contextmenus①">contextMenus</a></code>
 member, which is a <code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus③">ContextMenus</a></code>. Each <code class="idl"><a data-link-type="idl" href="#contextmenus" id="ref-for-contextmenus④">ContextMenus</a></code> manages a
 <dfn class="dfn-paneled" data-dfn-for="ContextMenus" data-dfn-type="dfn" data-noexport id="contextmenus-context-menu-map">context menu <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map②">map</a></dfn> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys" id="ref-for-map-getting-the-keys③">keys</a> are
 <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑦⑧">DOMString</a></code>s representing menu item ids, and whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values②">values</a> are
@@ -5874,11 +5953,11 @@ if the <code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperti
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export id="dom-contextmenus-create"><code>create(<var>properties</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑥">a new promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑦">a new promise</a>.</p>
      <li data-md>
       <p>Let <var>controlledframe</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑤">this</a>.</p>
      <li data-md>
-      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①⑨">in parallel</a>.</p>
+      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②④">in parallel</a>.</p>
      <li data-md>
       <p>Let <var>contextMenusMap</var> be <var>controlledframe</var>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map④">context menu map</a>.</p>
      <li data-md>
@@ -5889,52 +5968,52 @@ if the <code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperti
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set①">Set</a> <var>contextMenusMap</var>[<var>id</var>] to <var>properties</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②⓪">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②①">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="remove(id)" data-algorithm-for="ContextMenus">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export id="dom-contextmenus-remove"><code>remove(<var>id</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑦">a new promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑧">a new promise</a>.</p>
      <li data-md>
       <p>Let <var>controlledframe</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑥">this</a>.</p>
      <li data-md>
-      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⓪">in parallel</a>.</p>
+      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⑤">in parallel</a>.</p>
      <li data-md>
       <p>Let <var>contextMenusMap</var> be <var>controlledframe</var>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map⑤">context menu map</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-remove" id="ref-for-map-remove①">Remove</a> <var>contextMenusMap</var>[<var>id</var>].</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②①">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②②">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="removeAll()" data-algorithm-for="ContextMenus">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export id="dom-contextmenus-removeall"><code>removeAll()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑧">a new promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑨">a new promise</a>.</p>
      <li data-md>
       <p>Let <var>controlledframe</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑦">this</a>.</p>
      <li data-md>
-      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②①">in parallel</a>.</p>
+      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⑥">in parallel</a>.</p>
      <li data-md>
       <p>Let <var>contextMenusMap</var> be <var>controlledframe</var>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map⑥">context menu map</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-clear" id="ref-for-map-clear②">Clear</a> <var>contextMenusMap</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②②">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②③">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="update(id, properties)" data-algorithm-for="ContextMenus">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="ContextMenus" data-dfn-type="method" data-export data-lt="update(id, properties)|update(id)" id="dom-contextmenus-update"><code>update(<var>id</var>, <var>properties</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①⑨">a new promise</a>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise②⓪">a new promise</a>.</p>
      <li data-md>
       <p>Let <var>controlledframe</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧⑧">this</a>.</p>
      <li data-md>
-      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②②">in parallel</a>.</p>
+      <p>Return <var>p</var> and run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②⑦">in parallel</a>.</p>
      <li data-md>
       <p>Let <var>contextMenusMap</var> be <var>controlledframe</var>’s <a data-link-type="dfn" href="#contextmenus-context-menu-map" id="ref-for-contextmenus-context-menu-map⑦">context menu map</a>.</p>
      <li data-md>
@@ -5943,7 +6022,7 @@ if the <code class="idl"><a data-link-type="idl" href="#dom-contextmenusproperti
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set②">Set</a> <var>contextMenusMap</var>[<var>id</var>] to <var>properties</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②③">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
+      <p><a data-link-type="dfn" href="#resolve-an-embedder-promise" id="ref-for-resolve-an-embedder-promise②④">Resolve an embedder promise</a> given <var>controlledframe</var> and <var>p</var>.</p>
     </ol>
    </div>
    <div class="note" role="note">
@@ -5995,7 +6074,7 @@ nested iframe or a link).</p>
       <p>Let <var>element</var> be <var>item</var>’s <a data-link-type="dfn" href="#context-menu-item-menu" id="ref-for-context-menu-item-menu">menu</a>’s
   <a data-link-type="dfn" href="#context-menu-context-element" id="ref-for-context-menu-context-element①">context element</a>.</p>
      <li data-md>
-      <p>Let <var>controlledframe</var> be <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable①⓪">node navigable</a>’s
+      <p>Let <var>controlledframe</var> be <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable⑨">node navigable</a>’s
   <a data-link-type="dfn" href="#navigable-embedderparent" id="ref-for-navigable-embedderparent②①">embedderParent</a>.</p>
      <li data-md>
       <p>If <var>controlledframe</var> is null, then return <code>false</code>.</p>
@@ -6150,10 +6229,10 @@ given a <a data-link-type="dfn" href="#contextmenus-context-menu-item" id="ref-f
       <dl>
        <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-contextmenusclickevent-frameid" id="ref-for-dom-contextmenusclickevent-frameid">frameId</a></code>
        <dd data-md>
-        <p>The <a data-link-type="dfn" href="#navigable-frameid" id="ref-for-navigable-frameid③">frameId</a> of <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable①①">node navigable</a>.</p>
+        <p>The <a data-link-type="dfn" href="#navigable-frameid" id="ref-for-navigable-frameid③">frameId</a> of <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable①⓪">node navigable</a>.</p>
        <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-contextmenusclickevent-frameurl" id="ref-for-dom-contextmenusclickevent-frameurl">frameURL</a></code>
        <dd data-md>
-        <p>The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url⑦">URL</a> of the <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable①②">node navigable</a>.</p>
+        <p>The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url⑦">URL</a> of the <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable" id="ref-for-node-navigable①①">node navigable</a>.</p>
        <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-contextmenusclickevent-pageurl" id="ref-for-dom-contextmenusclickevent-pageurl">pageURL</a></code>
        <dd data-md>
         <p>The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-url" id="ref-for-concept-document-url⑧">URL</a> of the <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#traversable-navigable" id="ref-for-traversable-navigable④">traversable navigable</a>.</p>
@@ -6940,7 +7019,6 @@ redirection")</p>
    <li><a href="#dom-htmlcontrolledframeelement-insertcss">insertCSS(details)</a><span>, in § 3.4</span>
    <li><a href="#webrequestinterceptor-intercepted">intercepted</a><span>, in § 4</span>
    <li><a href="#dom-webrequest-interceptorbehaviorchanged">interceptorBehaviorChanged()</a><span>, in § 4</span>
-   <li><a href="#dom-webrequest-interceptorbehaviorchanged">interceptorBehaviorChanged(callback)</a><span>, in § 4</span>
    <li><a href="#webrequest-interceptors">interceptors</a><span>, in § 4</span>
    <li>
     ip
@@ -8495,6 +8573,11 @@ redirection")</p>
   <a data-link-type="dfn" href="#navigable-embedderparent">embedderParent</a> is only defined on a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">navigable</a>, and it’s not
   always possible to go from a non-<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window">Window</a></code> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment">environment</a> to a
   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#navigable">navigable</a>. <a class="issue-return" href="#issue-ec21111a" title="Jump to section">↵</a></div>
+   <div class="issue"> The <a href="https://datatracker.ietf.org/doc/html/rfc7234#section-2">
+      network cache</a> specification isn’t aware of <a data-link-type="dfn" href="#storage-key">storage keys</a>. The
+      intended behavior is to remove cache entries whose <a data-link-type="dfn" href="#storage-key-embedding-origin">embedding origin</a> is <var>controlledframe</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object">relevant settings object</a>’s
+      <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin">top-level origin</a>, and <a data-link-type="dfn" href="#storage-key-partition">partition</a>
+      is <var>controlledframe</var>’s <code><a data-link-type="element-sub" href="#element-attrdef-htmlcontrolledframeelement-partition">partition</a></code>. <a class="issue-return" href="#issue-cd83e030" title="Jump to section">↵</a></div>
    <div class="issue"> <code class="idl"><a data-link-type="idl" href="#enumdef-contexttype">ContextType</a></code> matching behavior isn’t specified, though
   the note above has some information on the desired behavior. <a class="issue-return" href="#issue-17a53530" title="Jump to section">↵</a></div>
   </div>
@@ -8700,7 +8783,7 @@ function parseHTML(markup) {
 let dfnPanelData = {
 "00a799db": {"dfnID":"00a799db","dfnText":"destroy a top-level traversable","external":true,"refSections":[{"refs":[{"id":"ref-for-destroy-a-top-level-traversable"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#destroy-a-top-level-traversable"},
 "0174ad00": {"dfnID":"0174ad00","dfnText":"storage shed","external":true,"refSections":[{"refs":[{"id":"ref-for-storage-shed"}],"title":"3.5. Configuration methods"}],"url":"https://storage.spec.whatwg.org#storage-shed"},
-"0204d188": {"dfnID":"0204d188","dfnText":"size","external":true,"refSections":[{"refs":[{"id":"ref-for-list-size"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-list-size\u2460"},{"id":"ref-for-list-size\u2461"},{"id":"ref-for-list-size\u2462"},{"id":"ref-for-list-size\u2463"}],"title":"4.1. Events"}],"url":"https://infra.spec.whatwg.org/#list-size"},
+"0204d188": {"dfnID":"0204d188","dfnText":"size","external":true,"refSections":[{"refs":[{"id":"ref-for-list-size"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-list-size\u2460"}],"title":"4.1. Events"}],"url":"https://infra.spec.whatwg.org/#list-size"},
 "0298c08c": {"dfnID":"0298c08c","dfnText":"header list (for Headers)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-headers-header-list"},{"id":"ref-for-concept-headers-header-list\u2460"}],"title":"4.2.1. Fetch"}],"url":"https://fetch.spec.whatwg.org/#concept-headers-header-list"},
 "03675365": {"dfnID":"03675365","dfnText":"event handler IDL attribute","external":true,"refSections":[{"refs":[{"id":"ref-for-event-handler-idl-attributes"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-event-handler-idl-attributes\u2460"}],"title":"5.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes"},
 "03afaf9c": {"dfnID":"03afaf9c","dfnText":"empty","external":true,"refSections":[{"refs":[{"id":"ref-for-list-empty"},{"id":"ref-for-list-empty\u2460"},{"id":"ref-for-list-empty\u2461"},{"id":"ref-for-list-empty\u2462"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-list-empty\u2463"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-list-empty\u2464"},{"id":"ref-for-list-empty\u2465"},{"id":"ref-for-list-empty\u2466"},{"id":"ref-for-list-empty\u2467"},{"id":"ref-for-list-empty\u2468"},{"id":"ref-for-list-empty\u2460\u24ea"},{"id":"ref-for-list-empty\u2460\u2460"},{"id":"ref-for-list-empty\u2460\u2461"},{"id":"ref-for-list-empty\u2460\u2462"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#list-empty"},
@@ -8727,7 +8810,7 @@ let dfnPanelData = {
 "12b8dfc0": {"dfnID":"12b8dfc0","dfnText":"current settings object","external":true,"refSections":[{"refs":[{"id":"ref-for-current-settings-object"},{"id":"ref-for-current-settings-object\u2460"},{"id":"ref-for-current-settings-object\u2461"}],"title":"3.5.1. Zoom"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object"},
 "12d6b9a8": {"dfnID":"12d6b9a8","dfnText":"values","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-values"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-map-getting-the-values\u2460"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-map-getting-the-values\u2461"},{"id":"ref-for-map-getting-the-values\u2462"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
 "1372f92a": {"dfnID":"1372f92a","dfnText":"dispatch","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-event-dispatch"}],"title":"3.7.1. consolemessage"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2460"}],"title":"3.7.2. dialog"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2461"}],"title":"3.7.3. newwindow"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2462"}],"title":"3.7.4. permissionrequest"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2463"}],"title":"3.7.5. sizechanged"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2464"}],"title":"3.7.6. zoomchange"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2465"}],"title":"3.7.7. contentload"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2466"}],"title":"3.7.8. loadabort"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2467"}],"title":"3.7.9. loadcommit"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2468"}],"title":"3.7.10. loadstart"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2460\u24ea"}],"title":"3.7.11. loadstop"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2460\u2460"}],"title":"3.7.12. loadredirect"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2460\u2461"},{"id":"ref-for-concept-event-dispatch\u2460\u2462"},{"id":"ref-for-concept-event-dispatch\u2460\u2463"},{"id":"ref-for-concept-event-dispatch\u2460\u2464"},{"id":"ref-for-concept-event-dispatch\u2460\u2465"},{"id":"ref-for-concept-event-dispatch\u2460\u2466"},{"id":"ref-for-concept-event-dispatch\u2460\u2467"},{"id":"ref-for-concept-event-dispatch\u2460\u2468"},{"id":"ref-for-concept-event-dispatch\u2461\u24ea"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-concept-event-dispatch\u2461\u2460"},{"id":"ref-for-concept-event-dispatch\u2461\u2461"},{"id":"ref-for-concept-event-dispatch\u2461\u2462"},{"id":"ref-for-concept-event-dispatch\u2461\u2463"}],"title":"5.1. Events"}],"url":"https://dom.spec.whatwg.org/#concept-event-dispatch"},
-"13dd6cae": {"dfnID":"13dd6cae","dfnText":"node navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-node-navigable"},{"id":"ref-for-node-navigable\u2460"},{"id":"ref-for-node-navigable\u2461"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-node-navigable\u2462"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-node-navigable\u2463"},{"id":"ref-for-node-navigable\u2464"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-node-navigable\u2465"},{"id":"ref-for-node-navigable\u2466"}],"title":"3.7.13.3. [Permissions]"},{"refs":[{"id":"ref-for-node-navigable\u2467"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-node-navigable\u2468"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-node-navigable\u2460\u24ea"}],"title":"5. Context Menus API"},{"refs":[{"id":"ref-for-node-navigable\u2460\u2460"},{"id":"ref-for-node-navigable\u2460\u2461"}],"title":"5.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable"},
+"13dd6cae": {"dfnID":"13dd6cae","dfnText":"node navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-node-navigable"},{"id":"ref-for-node-navigable\u2460"},{"id":"ref-for-node-navigable\u2461"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-node-navigable\u2462"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-node-navigable\u2463"},{"id":"ref-for-node-navigable\u2464"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-node-navigable\u2465"},{"id":"ref-for-node-navigable\u2466"}],"title":"3.7.13.3. [Permissions]"},{"refs":[{"id":"ref-for-node-navigable\u2467"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-node-navigable\u2468"}],"title":"5. Context Menus API"},{"refs":[{"id":"ref-for-node-navigable\u2460\u24ea"},{"id":"ref-for-node-navigable\u2460\u2460"}],"title":"5.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable"},
 "1441e3bf": {"dfnID":"1441e3bf","dfnText":"name","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-name"}],"title":"4.1. Events"}],"url":"https://w3c.github.io/FileAPI/#dfn-name"},
 "15012e89": {"dfnID":"15012e89","dfnText":"prerendering navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-prerendering-navigable"}],"title":"4.1. Events"}],"url":"https://wicg.github.io/nav-speculation/prerendering.html#prerendering-navigable"},
 "15e48c39": {"dfnID":"15e48c39","dfnText":"set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"}],"title":"3.5. Configuration methods"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
@@ -8738,13 +8821,13 @@ let dfnPanelData = {
 "1bba3db7": {"dfnID":"1bba3db7","dfnText":"parent","external":true,"refSections":[{"refs":[{"id":"ref-for-nav-parent"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-nav-parent\u2460"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-nav-parent\u2461"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-nav-parent\u2462"}],"title":"3.8.1.1. [HTML]"},{"refs":[{"id":"ref-for-nav-parent\u2463"}],"title":"4.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#nav-parent"},
 "1c1b8187": {"dfnID":"1c1b8187","dfnText":"completely finish loading","external":true,"refSections":[{"refs":[{"id":"ref-for-completely-finish-loading"}],"title":"3.7.13.1. [HTML]"}],"url":"https://html.spec.whatwg.org/multipage/document-lifecycle.html#completely-finish-loading"},
 "1f8cac9a": {"dfnID":"1f8cac9a","dfnText":"URL","external":true,"refSections":[{"refs":[{"id":"ref-for-she-url"}],"title":"3.2. Attributes"}],"url":"https://html.spec.whatwg.org/multipage/browsing-the-web.html#she-url"},
-"228be966": {"dfnID":"228be966","dfnText":"navigable (for Window)","external":true,"refSections":[{"refs":[{"id":"ref-for-window-navigable"},{"id":"ref-for-window-navigable\u2460"},{"id":"ref-for-window-navigable\u2461"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-window-navigable\u2462"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-window-navigable\u2463"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-window-navigable\u2464"},{"id":"ref-for-window-navigable\u2465"}],"title":"4.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable"},
+"228be966": {"dfnID":"228be966","dfnText":"navigable (for Window)","external":true,"refSections":[{"refs":[{"id":"ref-for-window-navigable"},{"id":"ref-for-window-navigable\u2460"},{"id":"ref-for-window-navigable\u2461"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-window-navigable\u2462"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-window-navigable\u2463"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-window-navigable\u2464"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-window-navigable\u2465"},{"id":"ref-for-window-navigable\u2466"}],"title":"4.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#window-navigable"},
 "22ece843": {"dfnID":"22ece843","dfnText":"absolute-URL string","external":true,"refSections":[{"refs":[{"id":"ref-for-absolute-url-string"}],"title":"3. The controlledframe element"}],"url":"https://url.spec.whatwg.org/#absolute-url-string"},
 "235ddea5": {"dfnID":"235ddea5","dfnText":"alert","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-alert"}],"title":"3.7.13.1. [HTML]"}],"url":"https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-alert"},
 "2484ae30": {"dfnID":"2484ae30","dfnText":"NavigationHistoryBehavior","external":true,"refSections":[{"refs":[{"id":"ref-for-navigationhistorybehavior"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#navigationhistorybehavior"},
 "24afcdf2": {"dfnID":"24afcdf2","dfnText":"status message","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response-status-message"}],"title":"4.1. Events"}],"url":"https://fetch.spec.whatwg.org/#concept-response-status-message"},
 "24bd7d25": {"dfnID":"24bd7d25","dfnText":"upon fulfillment","external":true,"refSections":[{"refs":[{"id":"ref-for-upon-fulfillment"}],"title":"4.1. Events"}],"url":"https://webidl.spec.whatwg.org/#upon-fulfillment"},
-"24cf98a1": {"dfnID":"24cf98a1","dfnText":"environment","external":true,"refSections":[{"refs":[{"id":"ref-for-environment"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-environment\u2460"},{"id":"ref-for-environment\u2461"},{"id":"ref-for-environment\u2462"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-environment\u2463"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-environment\u2464"},{"id":"ref-for-environment\u2465"},{"id":"ref-for-environment\u2466"},{"id":"ref-for-environment\u2467"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-environment\u2468"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#environment"},
+"24cf98a1": {"dfnID":"24cf98a1","dfnText":"environment","external":true,"refSections":[{"refs":[{"id":"ref-for-environment"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-environment\u2460"},{"id":"ref-for-environment\u2461"},{"id":"ref-for-environment\u2462"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-environment\u2463"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-environment\u2464"},{"id":"ref-for-environment\u2465"},{"id":"ref-for-environment\u2466"},{"id":"ref-for-environment\u2467"}],"title":"3.8.1.3. [STORAGE]"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#environment"},
 "253f4946": {"dfnID":"253f4946","dfnText":"URLPatternInput","external":true,"refSections":[{"refs":[{"id":"ref-for-typedefdef-urlpatterninput"},{"id":"ref-for-typedefdef-urlpatterninput\u2460"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-typedefdef-urlpatterninput\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-typedefdef-urlpatterninput\u2462"},{"id":"ref-for-typedefdef-urlpatterninput\u2463"},{"id":"ref-for-typedefdef-urlpatterninput\u2464"},{"id":"ref-for-typedefdef-urlpatterninput\u2465"},{"id":"ref-for-typedefdef-urlpatterninput\u2466"},{"id":"ref-for-typedefdef-urlpatterninput\u2467"}],"title":"5. Context Menus API"}],"url":"https://urlpattern.spec.whatwg.org/#typedefdef-urlpatterninput"},
 "2594e562": {"dfnID":"2594e562","dfnText":"navigate","external":true,"refSections":[{"refs":[{"id":"ref-for-navigate"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-navigate\u2460"}],"title":"3.7.13.1. [HTML]"}],"url":"https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate"},
 "27d98ff5": {"dfnID":"27d98ff5","dfnText":"navigation and traversal task source","external":true,"refSections":[{"refs":[{"id":"ref-for-navigation-and-traversal-task-source"},{"id":"ref-for-navigation-and-traversal-task-source\u2460"},{"id":"ref-for-navigation-and-traversal-task-source\u2461"},{"id":"ref-for-navigation-and-traversal-task-source\u2462"}],"title":"3.3. Navigation methods"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#navigation-and-traversal-task-source"},
@@ -8873,7 +8956,7 @@ let dfnPanelData = {
 "99f492fd": {"dfnID":"99f492fd","dfnText":"CORS-safelisted request-header","external":true,"refSections":[{"refs":[{"id":"ref-for-cors-safelisted-request-header"}],"title":"4.1. Events"}],"url":"https://fetch.spec.whatwg.org/#cors-safelisted-request-header"},
 "9a95489b": {"dfnID":"9a95489b","dfnText":"internal response","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-internal-response"}],"title":"4.1. Events"}],"url":"https://fetch.spec.whatwg.org/#concept-internal-response"},
 "9c19b7fc": {"dfnID":"9c19b7fc","dfnText":"navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-navigable"},{"id":"ref-for-navigable\u2460"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-navigable\u2461"},{"id":"ref-for-navigable\u2462"}],"title":"3.7.3. newwindow"},{"refs":[{"id":"ref-for-navigable\u2463"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-navigable\u2464"},{"id":"ref-for-navigable\u2465"},{"id":"ref-for-navigable\u2466"}],"title":"3.8.1.1. [HTML]"},{"refs":[{"id":"ref-for-navigable\u2467"},{"id":"ref-for-navigable\u2468"}],"title":"3.8.1.3. [STORAGE]"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#navigable"},
-"9c4c1e66": {"dfnID":"9c4c1e66","dfnText":"relevant settings object","external":true,"refSections":[{"refs":[{"id":"ref-for-relevant-settings-object"},{"id":"ref-for-relevant-settings-object\u2460"},{"id":"ref-for-relevant-settings-object\u2461"},{"id":"ref-for-relevant-settings-object\u2462"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-relevant-settings-object\u2463"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-relevant-settings-object\u2464"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-relevant-settings-object\u2465"}],"title":"3.8.1.3. [STORAGE]"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object"},
+"9c4c1e66": {"dfnID":"9c4c1e66","dfnText":"relevant settings object","external":true,"refSections":[{"refs":[{"id":"ref-for-relevant-settings-object"},{"id":"ref-for-relevant-settings-object\u2460"},{"id":"ref-for-relevant-settings-object\u2461"},{"id":"ref-for-relevant-settings-object\u2462"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-relevant-settings-object\u2463"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-relevant-settings-object\u2464"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-relevant-settings-object\u2465"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-relevant-settings-object\u2466"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object"},
 "9ca506a8": {"dfnID":"9ca506a8","dfnText":"CSS style sheet","external":true,"refSections":[{"refs":[{"id":"ref-for-css-style-sheet"}],"title":"3.4. Scripting methods"}],"url":"https://drafts.csswg.org/cssom-1/#css-style-sheet"},
 "9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-idl-sequence\u2461"},{"id":"ref-for-idl-sequence\u2462"},{"id":"ref-for-idl-sequence\u2463"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-idl-sequence\u2464"},{"id":"ref-for-idl-sequence\u2465"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-idl-sequence\u2466"},{"id":"ref-for-idl-sequence\u2467"},{"id":"ref-for-idl-sequence\u2468"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
 "9d386f55": {"dfnID":"9d386f55","dfnText":"event handler event type","external":true,"refSections":[{"refs":[{"id":"ref-for-event-handler-event-type"},{"id":"ref-for-event-handler-event-type\u2460"}],"title":"3.7. Events"},{"refs":[{"id":"ref-for-event-handler-event-type\u2461"},{"id":"ref-for-event-handler-event-type\u2462"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-event-handler-event-type\u2463"},{"id":"ref-for-event-handler-event-type\u2464"}],"title":"5.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-event-type"},
@@ -8882,12 +8965,12 @@ let dfnPanelData = {
 "a1d47575": {"dfnID":"a1d47575","dfnText":"status","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response-status"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-response-status\u2460"},{"id":"ref-for-concept-response-status\u2461"},{"id":"ref-for-concept-response-status\u2462"},{"id":"ref-for-concept-response-status\u2463"}],"title":"4.1. Events"}],"url":"https://fetch.spec.whatwg.org/#concept-response-status"},
 "a2411b6a": {"dfnID":"a2411b6a","dfnText":"History","external":true,"refSections":[{"refs":[{"id":"ref-for-history-3"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#history-3"},
 "a326add7": {"dfnID":"a326add7","dfnText":"contain (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"},{"id":"ref-for-map-exists\u2460"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-map-exists\u2461"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
-"a33db89a": {"dfnID":"a33db89a","dfnText":"fetch","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-fetch"}],"title":"3.4. Scripting methods"}],"url":"https://fetch.spec.whatwg.org/#concept-fetch"},
+"a33db89a": {"dfnID":"a33db89a","dfnText":"fetch","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-fetch"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-fetch\u2460"}],"title":"4. Web Request API"}],"url":"https://fetch.spec.whatwg.org/#concept-fetch"},
 "a45b756f": {"dfnID":"a45b756f","dfnText":"browsing context group set","external":true,"refSections":[{"refs":[{"id":"ref-for-browsing-context-group-set"}],"title":"3.5.1. Zoom"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context-group-set"},
 "a50a11ab": {"dfnID":"a50a11ab","dfnText":"in a document tree","external":true,"refSections":[{"refs":[{"id":"ref-for-in-a-document-tree"}],"title":"3.2. Attributes"}],"url":"https://dom.spec.whatwg.org/#in-a-document-tree"},
 "a686a312": {"dfnID":"a686a312","dfnText":"isolated context","external":true,"refSections":[{"refs":[{"id":"ref-for-isolated-context"}],"title":"3. The controlledframe element"}],"url":"https://wicg.github.io/isolated-web-apps/isolated-contexts.html#isolated-context"},
 "a6e67972": {"dfnID":"a6e67972","dfnText":"Object","external":true,"refSections":[{"refs":[{"id":"ref-for-sec-object-objects"}],"title":"4. Web Request API"}],"url":"https://tc39.es/ecma262/multipage/fundamental-objects.html#sec-object-objects"},
-"a72449dd": {"dfnID":"a72449dd","dfnText":"in parallel","external":true,"refSections":[{"refs":[{"id":"ref-for-in-parallel"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-in-parallel\u2460"},{"id":"ref-for-in-parallel\u2461"},{"id":"ref-for-in-parallel\u2462"},{"id":"ref-for-in-parallel\u2463"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-in-parallel\u2464"},{"id":"ref-for-in-parallel\u2465"},{"id":"ref-for-in-parallel\u2466"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-in-parallel\u2467"},{"id":"ref-for-in-parallel\u2468"},{"id":"ref-for-in-parallel\u2460\u24ea"},{"id":"ref-for-in-parallel\u2460\u2460"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-in-parallel\u2460\u2461"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-in-parallel\u2460\u2462"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-in-parallel\u2460\u2463"},{"id":"ref-for-in-parallel\u2460\u2464"},{"id":"ref-for-in-parallel\u2460\u2465"},{"id":"ref-for-in-parallel\u2460\u2466"},{"id":"ref-for-in-parallel\u2460\u2467"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-in-parallel\u2460\u2468"},{"id":"ref-for-in-parallel\u2461\u24ea"},{"id":"ref-for-in-parallel\u2461\u2460"},{"id":"ref-for-in-parallel\u2461\u2461"}],"title":"5. Context Menus API"}],"url":"https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel"},
+"a72449dd": {"dfnID":"a72449dd","dfnText":"in parallel","external":true,"refSections":[{"refs":[{"id":"ref-for-in-parallel"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-in-parallel\u2460"},{"id":"ref-for-in-parallel\u2461"},{"id":"ref-for-in-parallel\u2462"},{"id":"ref-for-in-parallel\u2463"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-in-parallel\u2464"},{"id":"ref-for-in-parallel\u2465"},{"id":"ref-for-in-parallel\u2466"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-in-parallel\u2467"},{"id":"ref-for-in-parallel\u2468"},{"id":"ref-for-in-parallel\u2460\u24ea"},{"id":"ref-for-in-parallel\u2460\u2460"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-in-parallel\u2460\u2461"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-in-parallel\u2460\u2462"},{"id":"ref-for-in-parallel\u2460\u2463"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-in-parallel\u2460\u2464"},{"id":"ref-for-in-parallel\u2460\u2465"},{"id":"ref-for-in-parallel\u2460\u2466"},{"id":"ref-for-in-parallel\u2460\u2467"},{"id":"ref-for-in-parallel\u2460\u2468"},{"id":"ref-for-in-parallel\u2461\u24ea"},{"id":"ref-for-in-parallel\u2461\u2460"},{"id":"ref-for-in-parallel\u2461\u2461"},{"id":"ref-for-in-parallel\u2461\u2462"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-in-parallel\u2461\u2463"},{"id":"ref-for-in-parallel\u2461\u2464"},{"id":"ref-for-in-parallel\u2461\u2465"},{"id":"ref-for-in-parallel\u2461\u2466"}],"title":"5. Context Menus API"}],"url":"https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel"},
 "a973e0fe": {"dfnID":"a973e0fe","dfnText":"document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-concept-document\u2460"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-concept-document\u2461"}],"title":"3.7.4. permissionrequest"},{"refs":[{"id":"ref-for-concept-document\u2462"}],"title":"3.7.13.3. [Permissions]"}],"url":"https://dom.spec.whatwg.org/#concept-document"},
 "a9ae485f": {"dfnID":"a9ae485f","dfnText":"float","external":true,"refSections":[{"refs":[{"id":"ref-for-float"},{"id":"ref-for-float\u2460"},{"id":"ref-for-float\u2461"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-float\u2462"}],"title":"3.7.6. zoomchange"}],"url":"https://drafts.csswg.org/css-page-floats-3/#float"},
 "aa7bbf63": {"dfnID":"aa7bbf63","dfnText":"video","external":true,"refSections":[{"refs":[{"id":"ref-for-video"}],"title":"5. Context Menus API"}],"url":"https://html.spec.whatwg.org/multipage/media.html#video"},
@@ -8900,7 +8983,7 @@ let dfnPanelData = {
 "af07f0c4": {"dfnID":"af07f0c4","dfnText":"length","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-history-length"}],"title":"3. The controlledframe element"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-history-length"},
 "af99cbc1": {"dfnID":"af99cbc1","dfnText":"readystatechange","external":true,"refSections":[{"refs":[{"id":"ref-for-event-readystatechange"}],"title":"3.8.1.1. [HTML]"}],"url":"https://html.spec.whatwg.org/multipage/indices.html#event-readystatechange"},
 "allowed-by-embedder-to-use": {"dfnID":"allowed-by-embedder-to-use","dfnText":"allowed by embedder to use a\npermission","external":false,"refSections":[{"refs":[{"id":"ref-for-allowed-by-embedder-to-use"}],"title":"3.7.13.3. [Permissions]"}],"url":"#allowed-by-embedder-to-use"},
-"applicable-webrequestinterceptors": {"dfnID":"applicable-webrequestinterceptors","dfnText":"applicable WebRequestInterceptors","external":false,"refSections":[{"refs":[{"id":"ref-for-applicable-webrequestinterceptors"},{"id":"ref-for-applicable-webrequestinterceptors\u2460"},{"id":"ref-for-applicable-webrequestinterceptors\u2461"},{"id":"ref-for-applicable-webrequestinterceptors\u2462"},{"id":"ref-for-applicable-webrequestinterceptors\u2463"},{"id":"ref-for-applicable-webrequestinterceptors\u2464"},{"id":"ref-for-applicable-webrequestinterceptors\u2465"},{"id":"ref-for-applicable-webrequestinterceptors\u2466"},{"id":"ref-for-applicable-webrequestinterceptors\u2467"}],"title":"4.1. Events"}],"url":"#applicable-webrequestinterceptors"},
+"applicable-webrequestinterceptors": {"dfnID":"applicable-webrequestinterceptors","dfnText":"applicable WebRequestInterceptors","external":false,"refSections":[{"refs":[{"id":"ref-for-applicable-webrequestinterceptors"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-applicable-webrequestinterceptors\u2460"},{"id":"ref-for-applicable-webrequestinterceptors\u2461"},{"id":"ref-for-applicable-webrequestinterceptors\u2462"},{"id":"ref-for-applicable-webrequestinterceptors\u2463"},{"id":"ref-for-applicable-webrequestinterceptors\u2464"},{"id":"ref-for-applicable-webrequestinterceptors\u2465"},{"id":"ref-for-applicable-webrequestinterceptors\u2466"},{"id":"ref-for-applicable-webrequestinterceptors\u2467"},{"id":"ref-for-applicable-webrequestinterceptors\u2468"}],"title":"4.1. Events"}],"url":"#applicable-webrequestinterceptors"},
 "apply-zoom-level": {"dfnID":"apply-zoom-level","dfnText":"zoom level is applied","external":false,"refSections":[{"refs":[{"id":"ref-for-apply-zoom-level"},{"id":"ref-for-apply-zoom-level\u2460"},{"id":"ref-for-apply-zoom-level\u2461"},{"id":"ref-for-apply-zoom-level\u2462"}],"title":"3.5.1. Zoom"}],"url":"#apply-zoom-level"},
 "authchallenger": {"dfnID":"authchallenger","dfnText":"AuthChallenger","external":false,"refSections":[{"refs":[{"id":"ref-for-authchallenger"},{"id":"ref-for-authchallenger\u2460"},{"id":"ref-for-authchallenger\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-authchallenger\u2462"}],"title":"4.1. Events"}],"url":"#authchallenger"},
 "authchallenger-host": {"dfnID":"authchallenger-host","dfnText":"host","external":false,"refSections":[{"refs":[{"id":"ref-for-authchallenger-host"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-authchallenger-host\u2460"}],"title":"4.1. Events"}],"url":"#authchallenger-host"},
@@ -8929,7 +9012,7 @@ let dfnPanelData = {
 "c2b8c763": {"dfnID":"c2b8c763","dfnText":"proxy map reference set","external":true,"refSections":[{"refs":[{"id":"ref-for-storage-bottle-proxy-map-reference-set"}],"title":"3.5. Configuration methods"}],"url":"https://storage.spec.whatwg.org#storage-bottle-proxy-map-reference-set"},
 "c5891539": {"dfnID":"c5891539","dfnText":"HTMLImageElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmlimageelement"}],"title":"5. Context Menus API"}],"url":"https://html.spec.whatwg.org/multipage/embedded-content.html#htmlimageelement"},
 "c62cd7cf": {"dfnID":"c62cd7cf","dfnText":"origin (for Document)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-origin"}],"title":"3.5.1. Zoom"}],"url":"https://dom.spec.whatwg.org/#concept-document-origin"},
-"c63519ed": {"dfnID":"c63519ed","dfnText":"top-level origin","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-environment-top-level-origin"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-concept-environment-top-level-origin\u2460"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-environment-top-level-origin\u2461"}],"title":"3.8.1.3. [STORAGE]"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin"},
+"c63519ed": {"dfnID":"c63519ed","dfnText":"top-level origin","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-environment-top-level-origin"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-concept-environment-top-level-origin\u2460"}],"title":"3.8.1.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-environment-top-level-origin\u2461"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-concept-environment-top-level-origin\u2462"}],"title":"4. Web Request API"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin"},
 "c68875cd": {"dfnID":"c68875cd","dfnText":"page showing","external":true,"refSections":[{"refs":[{"id":"ref-for-page-showing"}],"title":"4.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/document-lifecycle.html#page-showing"},
 "c6bfe500": {"dfnID":"c6bfe500","dfnText":"set the value","external":true,"refSections":[{"refs":[{"id":"ref-for-map-set"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-map-set\u2460"},{"id":"ref-for-map-set\u2461"}],"title":"5. Context Menus API"}],"url":"https://infra.spec.whatwg.org/#map-set"},
 "c88f3887": {"dfnID":"c88f3887","dfnText":"item (for struct)","external":true,"refSections":[{"refs":[{"id":"ref-for-struct-item"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-struct-item\u2460"}],"title":"4.1. Events"}],"url":"https://infra.spec.whatwg.org/#struct-item"},
@@ -8988,7 +9071,7 @@ let dfnPanelData = {
 "d7edb843": {"dfnID":"d7edb843","dfnText":"urlencoded serializer","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-urlencoded-serializer"}],"title":"3.4. Scripting methods"}],"url":"https://url.spec.whatwg.org/#concept-urlencoded-serializer"},
 "d85a6c84": {"dfnID":"d85a6c84","dfnText":"header list","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-header-list"},{"id":"ref-for-concept-header-list\u2460"},{"id":"ref-for-concept-header-list\u2461"},{"id":"ref-for-concept-header-list\u2462"}],"title":"4.1. Events"}],"url":"https://fetch.spec.whatwg.org/#concept-header-list"},
 "d95397a7": {"dfnID":"d95397a7","dfnText":"all","external":true,"refSections":[{"refs":[{"id":"ref-for-propdef-all"}],"title":"5. Context Menus API"}],"url":"https://drafts.csswg.org/css-cascade-5/#propdef-all"},
-"dacde8b5": {"dfnID":"dacde8b5","dfnText":"a new promise","external":true,"refSections":[{"refs":[{"id":"ref-for-a-new-promise"},{"id":"ref-for-a-new-promise\u2460"},{"id":"ref-for-a-new-promise\u2461"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-a-new-promise\u2462"},{"id":"ref-for-a-new-promise\u2463"},{"id":"ref-for-a-new-promise\u2464"},{"id":"ref-for-a-new-promise\u2465"},{"id":"ref-for-a-new-promise\u2466"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-a-new-promise\u2467"},{"id":"ref-for-a-new-promise\u2468"},{"id":"ref-for-a-new-promise\u2460\u24ea"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2460"},{"id":"ref-for-a-new-promise\u2460\u2461"},{"id":"ref-for-a-new-promise\u2460\u2462"},{"id":"ref-for-a-new-promise\u2460\u2463"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2464"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2465"},{"id":"ref-for-a-new-promise\u2460\u2466"},{"id":"ref-for-a-new-promise\u2460\u2467"},{"id":"ref-for-a-new-promise\u2460\u2468"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#a-new-promise"},
+"dacde8b5": {"dfnID":"dacde8b5","dfnText":"a new promise","external":true,"refSections":[{"refs":[{"id":"ref-for-a-new-promise"},{"id":"ref-for-a-new-promise\u2460"},{"id":"ref-for-a-new-promise\u2461"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-a-new-promise\u2462"},{"id":"ref-for-a-new-promise\u2463"},{"id":"ref-for-a-new-promise\u2464"},{"id":"ref-for-a-new-promise\u2465"},{"id":"ref-for-a-new-promise\u2466"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-a-new-promise\u2467"},{"id":"ref-for-a-new-promise\u2468"},{"id":"ref-for-a-new-promise\u2460\u24ea"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2460"},{"id":"ref-for-a-new-promise\u2460\u2461"},{"id":"ref-for-a-new-promise\u2460\u2462"},{"id":"ref-for-a-new-promise\u2460\u2463"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2464"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2465"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-a-new-promise\u2460\u2466"},{"id":"ref-for-a-new-promise\u2460\u2467"},{"id":"ref-for-a-new-promise\u2460\u2468"},{"id":"ref-for-a-new-promise\u2461\u24ea"}],"title":"5. Context Menus API"}],"url":"https://webidl.spec.whatwg.org/#a-new-promise"},
 "dae0bfde": {"dfnID":"dae0bfde","dfnText":"serialization of an origin","external":true,"refSections":[{"refs":[{"id":"ref-for-ascii-serialisation-of-an-origin"}],"title":"4.1. Events"}],"url":"https://html.spec.whatwg.org/multipage/browsers.html#ascii-serialisation-of-an-origin"},
 "db8aa4d8": {"dfnID":"db8aa4d8","dfnText":"stream","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-body-stream"}],"title":"4.1. Events"}],"url":"https://fetch.spec.whatwg.org/#concept-body-stream"},
 "dc1cd39b": {"dfnID":"dc1cd39b","dfnText":"URL (for request)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-url"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-request-url\u2460"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-concept-request-url\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-concept-request-url\u2462"}],"title":"4.1. Events"},{"refs":[{"id":"ref-for-concept-request-url\u2463"}],"title":"8.1. Security"}],"url":"https://fetch.spec.whatwg.org/#concept-request-url"},
@@ -9278,7 +9361,7 @@ let dfnPanelData = {
 "dom-uploaddata-file": {"dfnID":"dom-uploaddata-file","dfnText":"file","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-uploaddata-file"}],"title":"4. Web Request API"}],"url":"#dom-uploaddata-file"},
 "dom-webrequest-createwebrequestinterceptor": {"dfnID":"dom-webrequest-createwebrequestinterceptor","dfnText":"createWebRequestInterceptor(options)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequest-createwebrequestinterceptor"}],"title":"4. Web Request API"}],"url":"#dom-webrequest-createwebrequestinterceptor"},
 "dom-webrequest-createwebrequestinterceptor-options-options": {"dfnID":"dom-webrequest-createwebrequestinterceptor-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-webrequest-createwebrequestinterceptor-options-options"},
-"dom-webrequest-interceptorbehaviorchanged": {"dfnID":"dom-webrequest-interceptorbehaviorchanged","dfnText":"interceptorBehaviorChanged(callback)","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequest-interceptorbehaviorchanged"}],"title":"4. Web Request API"}],"url":"#dom-webrequest-interceptorbehaviorchanged"},
+"dom-webrequest-interceptorbehaviorchanged": {"dfnID":"dom-webrequest-interceptorbehaviorchanged","dfnText":"interceptorBehaviorChanged()","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequest-interceptorbehaviorchanged"}],"title":"4. Web Request API"}],"url":"#dom-webrequest-interceptorbehaviorchanged"},
 "dom-webrequestauthcredentials-password": {"dfnID":"dom-webrequestauthcredentials-password","dfnText":"password","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequestauthcredentials-password"}],"title":"4.2.1. Fetch"}],"url":"#dom-webrequestauthcredentials-password"},
 "dom-webrequestauthcredentials-username": {"dfnID":"dom-webrequestauthcredentials-username","dfnText":"username","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequestauthcredentials-username"}],"title":"4.2.1. Fetch"}],"url":"#dom-webrequestauthcredentials-username"},
 "dom-webrequestauthdetails-challenger": {"dfnID":"dom-webrequestauthdetails-challenger","dfnText":"challenger","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-webrequestauthdetails-challenger"}],"title":"4. Web Request API"}],"url":"#dom-webrequestauthdetails-challenger"},
@@ -9373,9 +9456,9 @@ let dfnPanelData = {
 "ee7bba09": {"dfnID":"ee7bba09","dfnText":"response","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-response"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-concept-response\u2460"},{"id":"ref-for-concept-response\u2461"},{"id":"ref-for-concept-response\u2462"},{"id":"ref-for-concept-response\u2463"},{"id":"ref-for-concept-response\u2464"},{"id":"ref-for-concept-response\u2465"},{"id":"ref-for-concept-response\u2466"},{"id":"ref-for-concept-response\u2467"},{"id":"ref-for-concept-response\u2468"},{"id":"ref-for-concept-response\u2460\u24ea"},{"id":"ref-for-concept-response\u2460\u2460"}],"title":"4.1. Events"}],"url":"https://fetch.spec.whatwg.org/#concept-response"},
 "eec1be2d": {"dfnID":"eec1be2d","dfnText":"float","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-float"},{"id":"ref-for-idl-float\u2460"}],"title":"3.7.6. zoomchange"}],"url":"https://webidl.spec.whatwg.org/#idl-float"},
 "efd1ec5d": {"dfnID":"efd1ec5d","dfnText":"object","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-object"},{"id":"ref-for-idl-object\u2460"}],"title":"4.2.1. Fetch"}],"url":"https://webidl.spec.whatwg.org/#idl-object"},
-"element-attrdef-htmlcontrolledframeelement-partition": {"dfnID":"element-attrdef-htmlcontrolledframeelement-partition","dfnText":"partition","external":false,"refSections":[{"refs":[{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-partition"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-partition\u2460"}],"title":"3.2. Attributes"}],"url":"#element-attrdef-htmlcontrolledframeelement-partition"},
+"element-attrdef-htmlcontrolledframeelement-partition": {"dfnID":"element-attrdef-htmlcontrolledframeelement-partition","dfnText":"partition","external":false,"refSections":[{"refs":[{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-partition"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-partition\u2460"}],"title":"3.2. Attributes"},{"refs":[{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-partition\u2461"},{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-partition\u2462"},{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-partition\u2463"}],"title":"4. Web Request API"}],"url":"#element-attrdef-htmlcontrolledframeelement-partition"},
 "element-attrdef-htmlcontrolledframeelement-src": {"dfnID":"element-attrdef-htmlcontrolledframeelement-src","dfnText":"src","external":false,"refSections":[{"refs":[{"id":"ref-for-element-attrdef-htmlcontrolledframeelement-src"}],"title":"3. The controlledframe element"}],"url":"#element-attrdef-htmlcontrolledframeelement-src"},
-"elementdef-controlledframe": {"dfnID":"elementdef-controlledframe","dfnText":"controlledframe","external":false,"refSections":[{"refs":[{"id":"ref-for-elementdef-controlledframe"},{"id":"ref-for-elementdef-controlledframe\u2460"},{"id":"ref-for-elementdef-controlledframe\u2461"},{"id":"ref-for-elementdef-controlledframe\u2462"},{"id":"ref-for-elementdef-controlledframe\u2463"},{"id":"ref-for-elementdef-controlledframe\u2464"},{"id":"ref-for-elementdef-controlledframe\u2465"},{"id":"ref-for-elementdef-controlledframe\u2466"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2467"},{"id":"ref-for-elementdef-controlledframe\u2468"}],"title":"3.1. Common infrastructure"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u24ea"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2460"},{"id":"ref-for-elementdef-controlledframe\u2460\u2461"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2462"}],"title":"3.7.1. consolemessage"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2463"}],"title":"3.7.2. dialog"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2464"}],"title":"3.7.3. newwindow"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2465"}],"title":"3.7.4. permissionrequest"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2466"}],"title":"3.7.5. sizechanged"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2467"}],"title":"3.7.6. zoomchange"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2468"}],"title":"3.7.7. contentload"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u24ea"}],"title":"3.7.8. loadabort"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2460"}],"title":"3.7.9. loadcommit"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2461"}],"title":"3.7.10. loadstart"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2462"}],"title":"3.7.11. loadstop"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2463"}],"title":"3.7.12. loadredirect"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2464"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2465"}],"title":"5. Context Menus API"}],"url":"#elementdef-controlledframe"},
+"elementdef-controlledframe": {"dfnID":"elementdef-controlledframe","dfnText":"controlledframe","external":false,"refSections":[{"refs":[{"id":"ref-for-elementdef-controlledframe"},{"id":"ref-for-elementdef-controlledframe\u2460"},{"id":"ref-for-elementdef-controlledframe\u2461"},{"id":"ref-for-elementdef-controlledframe\u2462"},{"id":"ref-for-elementdef-controlledframe\u2463"},{"id":"ref-for-elementdef-controlledframe\u2464"},{"id":"ref-for-elementdef-controlledframe\u2465"},{"id":"ref-for-elementdef-controlledframe\u2466"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2467"},{"id":"ref-for-elementdef-controlledframe\u2468"}],"title":"3.1. Common infrastructure"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u24ea"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2460"},{"id":"ref-for-elementdef-controlledframe\u2460\u2461"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2462"}],"title":"3.7.1. consolemessage"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2463"}],"title":"3.7.2. dialog"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2464"}],"title":"3.7.3. newwindow"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2465"}],"title":"3.7.4. permissionrequest"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2466"}],"title":"3.7.5. sizechanged"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2467"}],"title":"3.7.6. zoomchange"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2460\u2468"}],"title":"3.7.7. contentload"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u24ea"}],"title":"3.7.8. loadabort"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2460"}],"title":"3.7.9. loadcommit"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2461"}],"title":"3.7.10. loadstart"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2462"}],"title":"3.7.11. loadstop"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2463"}],"title":"3.7.12. loadredirect"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2464"}],"title":"3.8.1.3. [STORAGE]"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2465"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-elementdef-controlledframe\u2461\u2466"}],"title":"5. Context Menus API"}],"url":"#elementdef-controlledframe"},
 "embedded-navigable-muted": {"dfnID":"embedded-navigable-muted","dfnText":"muted","external":false,"refSections":[{"refs":[{"id":"ref-for-embedded-navigable-muted"},{"id":"ref-for-embedded-navigable-muted\u2460"},{"id":"ref-for-embedded-navigable-muted\u2461"},{"id":"ref-for-embedded-navigable-muted\u2462"},{"id":"ref-for-embedded-navigable-muted\u2463"}],"title":"3.5. Configuration methods"}],"url":"#embedded-navigable-muted"},
 "empty-a-storage-bottle": {"dfnID":"empty-a-storage-bottle","dfnText":"empty a storage bottle","external":false,"refSections":[{"refs":[{"id":"ref-for-empty-a-storage-bottle"},{"id":"ref-for-empty-a-storage-bottle\u2460"},{"id":"ref-for-empty-a-storage-bottle\u2461"}],"title":"3.5. Configuration methods"}],"url":"#empty-a-storage-bottle"},
 "enumdef-contexttype": {"dfnID":"enumdef-contexttype","dfnText":"ContextType","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-contexttype"},{"id":"ref-for-enumdef-contexttype\u2460"},{"id":"ref-for-enumdef-contexttype\u2461"},{"id":"ref-for-enumdef-contexttype\u2462"}],"title":"5. Context Menus API"}],"url":"#enumdef-contexttype"},
@@ -9420,7 +9503,7 @@ let dfnPanelData = {
 "get-the-documentlifecycle-of-a-document": {"dfnID":"get-the-documentlifecycle-of-a-document","dfnText":"get the DocumentLifecycle of a Document","external":false,"refSections":[{"refs":[{"id":"ref-for-get-the-documentlifecycle-of-a-document"}],"title":"4.1. Events"}],"url":"#get-the-documentlifecycle-of-a-document"},
 "get-the-per-origin-zoom-level": {"dfnID":"get-the-per-origin-zoom-level","dfnText":"get the per-origin zoom level","external":false,"refSections":[{"refs":[{"id":"ref-for-get-the-per-origin-zoom-level"}],"title":"3.5.1. Zoom"}],"url":"#get-the-per-origin-zoom-level"},
 "hidpermissionrequestcontroller": {"dfnID":"hidpermissionrequestcontroller","dfnText":"HidPermissionRequestController","external":false,"refSections":[{"refs":[{"id":"ref-for-hidpermissionrequestcontroller"}],"title":"3.7.4. permissionrequest"}],"url":"#hidpermissionrequestcontroller"},
-"htmlcontrolledframeelement": {"dfnID":"htmlcontrolledframeelement","dfnText":"HTMLControlledFrameElement","external":false,"refSections":[{"refs":[{"id":"ref-for-htmlcontrolledframeelement"},{"id":"ref-for-htmlcontrolledframeelement\u2460"},{"id":"ref-for-htmlcontrolledframeelement\u2461"},{"id":"ref-for-htmlcontrolledframeelement\u2462"},{"id":"ref-for-htmlcontrolledframeelement\u2463"},{"id":"ref-for-htmlcontrolledframeelement\u2464"},{"id":"ref-for-htmlcontrolledframeelement\u2465"},{"id":"ref-for-htmlcontrolledframeelement\u2466"},{"id":"ref-for-htmlcontrolledframeelement\u2467"},{"id":"ref-for-htmlcontrolledframeelement\u2468"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u24ea"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2460"}],"title":"3.7. Events"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2461"}],"title":"3.7.3. newwindow"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2462"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2463"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2464"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2465"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2466"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2467"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2468"},{"id":"ref-for-htmlcontrolledframeelement\u2461\u24ea"}],"title":"3.7.13.3. [Permissions]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2461\u2460"}],"title":"3.7.13.4. [Console]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2461\u2461"}],"title":"3.8.1.1. [HTML]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2461\u2462"},{"id":"ref-for-htmlcontrolledframeelement\u2461\u2463"}],"title":"4. Web Request API"}],"url":"#htmlcontrolledframeelement"},
+"htmlcontrolledframeelement": {"dfnID":"htmlcontrolledframeelement","dfnText":"HTMLControlledFrameElement","external":false,"refSections":[{"refs":[{"id":"ref-for-htmlcontrolledframeelement"},{"id":"ref-for-htmlcontrolledframeelement\u2460"},{"id":"ref-for-htmlcontrolledframeelement\u2461"},{"id":"ref-for-htmlcontrolledframeelement\u2462"},{"id":"ref-for-htmlcontrolledframeelement\u2463"},{"id":"ref-for-htmlcontrolledframeelement\u2464"},{"id":"ref-for-htmlcontrolledframeelement\u2465"},{"id":"ref-for-htmlcontrolledframeelement\u2466"},{"id":"ref-for-htmlcontrolledframeelement\u2467"},{"id":"ref-for-htmlcontrolledframeelement\u2468"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u24ea"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2460"}],"title":"3.7. Events"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2461"}],"title":"3.7.3. newwindow"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2462"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2463"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2464"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2465"},{"id":"ref-for-htmlcontrolledframeelement\u2460\u2466"}],"title":"3.7.13.1. [HTML]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2467"}],"title":"3.7.13.2. [FETCH]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2460\u2468"},{"id":"ref-for-htmlcontrolledframeelement\u2461\u24ea"}],"title":"3.7.13.3. [Permissions]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2461\u2460"}],"title":"3.7.13.4. [Console]"},{"refs":[{"id":"ref-for-htmlcontrolledframeelement\u2461\u2461"}],"title":"3.8.1.1. [HTML]"}],"url":"#htmlcontrolledframeelement"},
 "htmlcontrolledframeelement-zoommode": {"dfnID":"htmlcontrolledframeelement-zoommode","dfnText":"zoomMode","external":false,"refSections":[{"refs":[{"id":"ref-for-htmlcontrolledframeelement-zoommode"},{"id":"ref-for-htmlcontrolledframeelement-zoommode\u2460"},{"id":"ref-for-htmlcontrolledframeelement-zoommode\u2461"},{"id":"ref-for-htmlcontrolledframeelement-zoommode\u2462"},{"id":"ref-for-htmlcontrolledframeelement-zoommode\u2463"},{"id":"ref-for-htmlcontrolledframeelement-zoommode\u2464"}],"title":"3.5.1. Zoom"}],"url":"#htmlcontrolledframeelement-zoommode"},
 "initialize-a-controlledframe": {"dfnID":"initialize-a-controlledframe","dfnText":"initialize a controlledframe","external":false,"refSections":[{"refs":[{"id":"ref-for-initialize-a-controlledframe"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-initialize-a-controlledframe\u2460"}],"title":"3.2. Attributes"}],"url":"#initialize-a-controlledframe"},
 "inject-a-script-into-a-document": {"dfnID":"inject-a-script-into-a-document","dfnText":"inject a script into a document","external":false,"refSections":[{"refs":[{"id":"ref-for-inject-a-script-into-a-document"},{"id":"ref-for-inject-a-script-into-a-document\u2460"}],"title":"3.4. Scripting methods"}],"url":"#inject-a-script-into-a-document"},
@@ -9469,20 +9552,20 @@ let dfnPanelData = {
 "requestbody-error": {"dfnID":"requestbody-error","dfnText":"error","external":false,"refSections":[{"refs":[{"id":"ref-for-requestbody-error"}],"title":"4. Web Request API"}],"url":"#requestbody-error"},
 "requestbody-formdata": {"dfnID":"requestbody-formdata","dfnText":"formData","external":false,"refSections":[{"refs":[{"id":"ref-for-requestbody-formdata"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-requestbody-formdata\u2460"}],"title":"4.1. Events"}],"url":"#requestbody-formdata"},
 "requestbody-raw": {"dfnID":"requestbody-raw","dfnText":"raw","external":false,"refSections":[{"refs":[{"id":"ref-for-requestbody-raw"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-requestbody-raw\u2460"},{"id":"ref-for-requestbody-raw\u2461"},{"id":"ref-for-requestbody-raw\u2462"}],"title":"4.1. Events"}],"url":"#requestbody-raw"},
-"resolve-an-embedder-promise": {"dfnID":"resolve-an-embedder-promise","dfnText":"resolve an embedder promise","external":false,"refSections":[{"refs":[{"id":"ref-for-resolve-an-embedder-promise"},{"id":"ref-for-resolve-an-embedder-promise\u2460"},{"id":"ref-for-resolve-an-embedder-promise\u2461"},{"id":"ref-for-resolve-an-embedder-promise\u2462"},{"id":"ref-for-resolve-an-embedder-promise\u2463"},{"id":"ref-for-resolve-an-embedder-promise\u2464"},{"id":"ref-for-resolve-an-embedder-promise\u2465"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2466"},{"id":"ref-for-resolve-an-embedder-promise\u2467"},{"id":"ref-for-resolve-an-embedder-promise\u2468"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u24ea"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2460\u2460"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2461"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2462"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2460\u2463"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2464"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2465"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2466"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2467"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2460\u2468"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2461\u24ea"},{"id":"ref-for-resolve-an-embedder-promise\u2461\u2460"},{"id":"ref-for-resolve-an-embedder-promise\u2461\u2461"},{"id":"ref-for-resolve-an-embedder-promise\u2461\u2462"}],"title":"5. Context Menus API"}],"url":"#resolve-an-embedder-promise"},
+"resolve-an-embedder-promise": {"dfnID":"resolve-an-embedder-promise","dfnText":"resolve an embedder promise","external":false,"refSections":[{"refs":[{"id":"ref-for-resolve-an-embedder-promise"},{"id":"ref-for-resolve-an-embedder-promise\u2460"},{"id":"ref-for-resolve-an-embedder-promise\u2461"},{"id":"ref-for-resolve-an-embedder-promise\u2462"},{"id":"ref-for-resolve-an-embedder-promise\u2463"},{"id":"ref-for-resolve-an-embedder-promise\u2464"},{"id":"ref-for-resolve-an-embedder-promise\u2465"}],"title":"3.3. Navigation methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2466"},{"id":"ref-for-resolve-an-embedder-promise\u2467"},{"id":"ref-for-resolve-an-embedder-promise\u2468"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u24ea"}],"title":"3.4. Scripting methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2460\u2460"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2461"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2462"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2460\u2463"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2464"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2465"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2466"},{"id":"ref-for-resolve-an-embedder-promise\u2460\u2467"}],"title":"3.5.1. Zoom"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2460\u2468"}],"title":"3.6. Capture methods"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2461\u24ea"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-resolve-an-embedder-promise\u2461\u2460"},{"id":"ref-for-resolve-an-embedder-promise\u2461\u2461"},{"id":"ref-for-resolve-an-embedder-promise\u2461\u2462"},{"id":"ref-for-resolve-an-embedder-promise\u2461\u2463"}],"title":"5. Context Menus API"}],"url":"#resolve-an-embedder-promise"},
 "set-the-per-origin-zoom-level": {"dfnID":"set-the-per-origin-zoom-level","dfnText":"set the per-origin zoom level","external":false,"refSections":[{"refs":[{"id":"ref-for-set-the-per-origin-zoom-level"}],"title":"3.5.1. Zoom"}],"url":"#set-the-per-origin-zoom-level"},
 "sizechange": {"dfnID":"sizechange","dfnText":"SizeChange","external":false,"refSections":[{"refs":[{"id":"ref-for-sizechange"},{"id":"ref-for-sizechange\u2460"},{"id":"ref-for-sizechange\u2461"}],"title":"3.7.5. sizechanged"}],"url":"#sizechange"},
 "sizechangedevent": {"dfnID":"sizechangedevent","dfnText":"SizeChangedEvent","external":false,"refSections":[{"refs":[{"id":"ref-for-sizechangedevent"}],"title":"3.7.5. sizechanged"}],"url":"#sizechangedevent"},
-"storage-key": {"dfnID":"storage-key","dfnText":"storage key","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key"}],"title":"3.5. Configuration methods"}],"url":"#storage-key"},
-"storage-key-embedding-origin": {"dfnID":"storage-key-embedding-origin","dfnText":"embedding origin","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key-embedding-origin"},{"id":"ref-for-storage-key-embedding-origin\u2460"}],"title":"3.5. Configuration methods"}],"url":"#storage-key-embedding-origin"},
+"storage-key": {"dfnID":"storage-key","dfnText":"storage key","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-storage-key\u2460"}],"title":"4. Web Request API"}],"url":"#storage-key"},
+"storage-key-embedding-origin": {"dfnID":"storage-key-embedding-origin","dfnText":"embedding origin","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key-embedding-origin"},{"id":"ref-for-storage-key-embedding-origin\u2460"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-storage-key-embedding-origin\u2461"}],"title":"4. Web Request API"}],"url":"#storage-key-embedding-origin"},
 "storage-key-origin": {"dfnID":"storage-key-origin","dfnText":"origin","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key-origin"}],"title":"3.8.1.3. [STORAGE]"}],"url":"#storage-key-origin"},
-"storage-key-partition": {"dfnID":"storage-key-partition","dfnText":"partition","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key-partition"},{"id":"ref-for-storage-key-partition\u2460"}],"title":"3.5. Configuration methods"}],"url":"#storage-key-partition"},
+"storage-key-partition": {"dfnID":"storage-key-partition","dfnText":"partition","external":false,"refSections":[{"refs":[{"id":"ref-for-storage-key-partition"},{"id":"ref-for-storage-key-partition\u2460"}],"title":"3.5. Configuration methods"},{"refs":[{"id":"ref-for-storage-key-partition\u2461"}],"title":"4. Web Request API"}],"url":"#storage-key-partition"},
 "uploaddata": {"dfnID":"uploaddata","dfnText":"UploadData","external":false,"refSections":[{"refs":[{"id":"ref-for-uploaddata"},{"id":"ref-for-uploaddata\u2460"},{"id":"ref-for-uploaddata\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-uploaddata\u2462"},{"id":"ref-for-uploaddata\u2463"},{"id":"ref-for-uploaddata\u2464"}],"title":"4.1. Events"}],"url":"#uploaddata"},
 "uploaddata-bytes": {"dfnID":"uploaddata-bytes","dfnText":"bytes","external":false,"refSections":[{"refs":[{"id":"ref-for-uploaddata-bytes"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-uploaddata-bytes\u2460"},{"id":"ref-for-uploaddata-bytes\u2461"}],"title":"4.1. Events"}],"url":"#uploaddata-bytes"},
 "uploaddata-file": {"dfnID":"uploaddata-file","dfnText":"file","external":false,"refSections":[{"refs":[{"id":"ref-for-uploaddata-file"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-uploaddata-file\u2460"}],"title":"4.1. Events"}],"url":"#uploaddata-file"},
 "validate-and-resolve-contentscriptdetails": {"dfnID":"validate-and-resolve-contentscriptdetails","dfnText":"validate and resolve ContentScriptDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-validate-and-resolve-contentscriptdetails"}],"title":"3.4. Scripting methods"}],"url":"#validate-and-resolve-contentscriptdetails"},
 "webrequest": {"dfnID":"webrequest","dfnText":"WebRequest","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest"},{"id":"ref-for-webrequest\u2460"},{"id":"ref-for-webrequest\u2461"}],"title":"3. The controlledframe element"},{"refs":[{"id":"ref-for-webrequest\u2462"}],"title":"4. Web Request API"}],"url":"#webrequest"},
-"webrequest-interceptors": {"dfnID":"webrequest-interceptors","dfnText":"interceptors","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-interceptors"},{"id":"ref-for-webrequest-interceptors\u2460"}],"title":"4. Web Request API"}],"url":"#webrequest-interceptors"},
+"webrequest-interceptors": {"dfnID":"webrequest-interceptors","dfnText":"interceptors","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequest-interceptors"},{"id":"ref-for-webrequest-interceptors\u2460"},{"id":"ref-for-webrequest-interceptors\u2461"}],"title":"4. Web Request API"}],"url":"#webrequest-interceptors"},
 "webrequestauthdetails": {"dfnID":"webrequestauthdetails","dfnText":"WebRequestAuthDetails","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestauthdetails"},{"id":"ref-for-webrequestauthdetails\u2460"},{"id":"ref-for-webrequestauthdetails\u2461"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequestauthdetails\u2462"}],"title":"4.1. Events"}],"url":"#webrequestauthdetails"},
 "webrequestauthdetails-challenger": {"dfnID":"webrequestauthdetails-challenger","dfnText":"challenger","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestauthdetails-challenger"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequestauthdetails-challenger\u2460"}],"title":"4.1. Events"}],"url":"#webrequestauthdetails-challenger"},
 "webrequestauthdetails-isproxy": {"dfnID":"webrequestauthdetails-isproxy","dfnText":"isProxy","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestauthdetails-isproxy"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequestauthdetails-isproxy\u2460"}],"title":"4.1. Events"}],"url":"#webrequestauthdetails-isproxy"},
@@ -9524,12 +9607,12 @@ let dfnPanelData = {
 "webrequestheadersreceivedevent-redirecturl": {"dfnID":"webrequestheadersreceivedevent-redirecturl","dfnText":"redirectURL","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestheadersreceivedevent-redirecturl"},{"id":"ref-for-webrequestheadersreceivedevent-redirecturl\u2460"},{"id":"ref-for-webrequestheadersreceivedevent-redirecturl\u2461"}],"title":"4.1. Events"}],"url":"#webrequestheadersreceivedevent-redirecturl"},
 "webrequestheadersreceivedevent-response": {"dfnID":"webrequestheadersreceivedevent-response","dfnText":"response","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestheadersreceivedevent-response"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequestheadersreceivedevent-response\u2460"}],"title":"4.1. Events"}],"url":"#webrequestheadersreceivedevent-response"},
 "webrequestheadersreceivedevent-responseheaders": {"dfnID":"webrequestheadersreceivedevent-responseheaders","dfnText":"responseHeaders","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestheadersreceivedevent-responseheaders"},{"id":"ref-for-webrequestheadersreceivedevent-responseheaders\u2460"},{"id":"ref-for-webrequestheadersreceivedevent-responseheaders\u2461"}],"title":"4.1. Events"}],"url":"#webrequestheadersreceivedevent-responseheaders"},
-"webrequestinterceptor": {"dfnID":"webrequestinterceptor","dfnText":"WebRequestInterceptor","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor"},{"id":"ref-for-webrequestinterceptor\u2460"},{"id":"ref-for-webrequestinterceptor\u2461"},{"id":"ref-for-webrequestinterceptor\u2462"},{"id":"ref-for-webrequestinterceptor\u2463"},{"id":"ref-for-webrequestinterceptor\u2464"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequestinterceptor\u2465"},{"id":"ref-for-webrequestinterceptor\u2466"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor"},
+"webrequestinterceptor": {"dfnID":"webrequestinterceptor","dfnText":"WebRequestInterceptor","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor"},{"id":"ref-for-webrequestinterceptor\u2460"},{"id":"ref-for-webrequestinterceptor\u2461"},{"id":"ref-for-webrequestinterceptor\u2462"},{"id":"ref-for-webrequestinterceptor\u2463"},{"id":"ref-for-webrequestinterceptor\u2464"},{"id":"ref-for-webrequestinterceptor\u2465"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequestinterceptor\u2466"},{"id":"ref-for-webrequestinterceptor\u2467"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor"},
 "webrequestinterceptor-authrequired": {"dfnID":"webrequestinterceptor-authrequired","dfnText":"authrequired","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-authrequired"},{"id":"ref-for-webrequestinterceptor-authrequired\u2460"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-authrequired"},
 "webrequestinterceptor-beforeredirect": {"dfnID":"webrequestinterceptor-beforeredirect","dfnText":"beforeredirect","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-beforeredirect"},{"id":"ref-for-webrequestinterceptor-beforeredirect\u2460"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-beforeredirect"},
 "webrequestinterceptor-beforerequest": {"dfnID":"webrequestinterceptor-beforerequest","dfnText":"beforerequest","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-beforerequest"},{"id":"ref-for-webrequestinterceptor-beforerequest\u2460"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-beforerequest"},
 "webrequestinterceptor-beforesendheaders": {"dfnID":"webrequestinterceptor-beforesendheaders","dfnText":"beforesendheaders","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-beforesendheaders"},{"id":"ref-for-webrequestinterceptor-beforesendheaders\u2460"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-beforesendheaders"},
-"webrequestinterceptor-blocking": {"dfnID":"webrequestinterceptor-blocking","dfnText":"blocking","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-blocking"},{"id":"ref-for-webrequestinterceptor-blocking\u2460"}],"title":"4. Web Request API"}],"url":"#webrequestinterceptor-blocking"},
+"webrequestinterceptor-blocking": {"dfnID":"webrequestinterceptor-blocking","dfnText":"blocking","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-blocking"}],"title":"4. Web Request API"},{"refs":[{"id":"ref-for-webrequestinterceptor-blocking\u2460"},{"id":"ref-for-webrequestinterceptor-blocking\u2461"},{"id":"ref-for-webrequestinterceptor-blocking\u2462"},{"id":"ref-for-webrequestinterceptor-blocking\u2463"},{"id":"ref-for-webrequestinterceptor-blocking\u2464"},{"id":"ref-for-webrequestinterceptor-blocking\u2465"},{"id":"ref-for-webrequestinterceptor-blocking\u2466"},{"id":"ref-for-webrequestinterceptor-blocking\u2467"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-blocking"},
 "webrequestinterceptor-completed": {"dfnID":"webrequestinterceptor-completed","dfnText":"completed","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-completed"},{"id":"ref-for-webrequestinterceptor-completed\u2460"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-completed"},
 "webrequestinterceptor-erroroccurred": {"dfnID":"webrequestinterceptor-erroroccurred","dfnText":"erroroccurred","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-erroroccurred"},{"id":"ref-for-webrequestinterceptor-erroroccurred\u2460"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-erroroccurred"},
 "webrequestinterceptor-headersreceived": {"dfnID":"webrequestinterceptor-headersreceived","dfnText":"headersreceived","external":false,"refSections":[{"refs":[{"id":"ref-for-webrequestinterceptor-headersreceived"},{"id":"ref-for-webrequestinterceptor-headersreceived\u2460"}],"title":"4.1. Events"}],"url":"#webrequestinterceptor-headersreceived"},
