@@ -392,7 +392,7 @@ the respective content attributes of the same name.
 
 Each <{controlledframe}> has an associated:
  * <dfn for=controlledframe>embedded navigable</dfn>, a
-    [=traversable navigable=] with a non-null [=embedderParent=], or null.
+    [=traversable navigable=] with a non-null [=controlledFrameEmbedderParent=], or null.
     It is initially null.
 
     Note: The [=embedded navigable=] appears as a top-level traversable with a
@@ -458,7 +458,7 @@ steps are to return [=this=]'s [=controlledframe/contextMenus=].
 
   1. [=Initialize the navigable=] |traversable| given |documentState|.
 
-  1. Set |traversable|'s [=embedderParent=] to |element|.
+  1. Set |traversable|'s [=controlledFrameEmbedderParent=] to |element|.
 
   1. Set |element|'s [=embedded navigable=] to |traversable|.
 
@@ -1123,10 +1123,10 @@ A <dfn>content script config</dfn> is a [=struct=] with the following
   1. Let |embeddedNavigable| be |document|'s [=node navigable=]'s
       [=traversable navigable=].
 
-  1. If |embeddedNavigable| is null or its [=embedderParent=] is null, then
+  1. If |embeddedNavigable| is null or its [=controlledFrameEmbedderParent=] is null, then
       return.
 
-  1. Let |controlledframe| be |embeddedNavigable|'s [=embedderParent=].
+  1. Let |controlledframe| be |embeddedNavigable|'s [=controlledFrameEmbedderParent=].
 
   1. Let |url| be |document|'s [=Document/URL=].
 
@@ -1207,7 +1207,7 @@ implementation of this isolation that can be implemented by all browsers.
           given |script|.
 
       1. Let |controlledframe| be |document|'s [=node navigable=]'s
-          [=traversable navigable=]'s [=embedderParent=].
+          [=traversable navigable=]'s [=controlledFrameEmbedderParent=].
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |controlledframe|'s [=relevant global object=] that will run
@@ -1738,7 +1738,7 @@ The <dfn method for=HTMLControlledFrameElement>setZoom(|zoomFactor|)</dfn> metho
                   [=active document=].
 
               1. Let |embedder| be |embeddedDocument|'s [=node navigable=]'s
-                  [=embedderParent=].
+                  [=controlledFrameEmbedderParent=].
 
               1. If |embedder| is null, then [=continue=].
 
@@ -2731,34 +2731,34 @@ For [=alert=]:
 
 4. Set |message| to the result of optionally truncating message.
 
-5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s
-    [=Window/navigable=]'s [=embedderParent=].</ins>.
+5. <ins>Let |controlledFrameEmbedderParent| be <var ignore=''>window</var>'s
+    [=Window/navigable=]'s [=controlledFrameEmbedderParent=].</ins>.
 
-6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, then
-    [=fire a "dialog" event=] with |embedderParent|, "alert" and |message|,
+6. <ins>If |controlledFrameEmbedderParent| is a {{HTMLControlledFrameElement}}, then
+    [=fire a "dialog" event=] with |controlledFrameEmbedderParent|, "alert" and |message|,
     and return.</ins>
 
 For [=confirm=]:
 
 3. Set |message| to the result of optionally truncating message.
 
-4. <ins>Let |embedderParent| be <var ignore=''>window</var>'s
-    [=Window/navigable=]'s [=embedderParent=].</ins>.
+4. <ins>Let |controlledFrameEmbedderParent| be <var ignore=''>window</var>'s
+    [=Window/navigable=]'s [=controlledFrameEmbedderParent=].</ins>.
 
-5. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, then return
-    the result of [=firing a "dialog" event=] with |embedderParent|, "confirm",
+5. <ins>If |controlledFrameEmbedderParent| is a {{HTMLControlledFrameElement}}, then return
+    the result of [=firing a "dialog" event=] with |controlledFrameEmbedderParent|, "confirm",
     and |message|.</ins>
 
 For [=prompt=]:
 
 4. Set <var ignore=''>default</var> to the result of optionally truncating default.
 
-5. <ins>Let |embedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=embedderParent=].</ins>.
+5. <ins>Let |controlledFrameEmbedderParent| be <var ignore=''>window</var>'s [=Window/navigable=]'s [=controlledFrameEmbedderParent=].</ins>.
 
-6. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}, then:</ins>
+6. <ins>If |controlledFrameEmbedderParent| is a {{HTMLControlledFrameElement}}, then:</ins>
 
       1. <ins>Let |accept| and |response| be the results of [=firing a "dialog"
-          event=] with |embedderParent|, "prompt" and |message|.</ins>
+          event=] with |controlledFrameEmbedderParent|, "prompt" and |message|.</ins>
 
       1. <ins>If |accept| equals `false`, return null.</ins>
 
@@ -2768,8 +2768,8 @@ For [=window open steps=]:
 
 1. <ins>Let |windowOpenDisposition| be "{{WindowOpenDisposition/ignore}}".</ins>
 
-2. <ins>Let |embedderParent| be <var ignore=''>sourceDocument</var>'s [=node
-    navigable=]'s [=embedderParent=].</ins>
+2. <ins>Let |controlledFrameEmbedderParent| be <var ignore=''>sourceDocument</var>'s [=node
+    navigable=]'s [=controlledFrameEmbedderParent=].</ins>
 
 ...
 
@@ -2777,9 +2777,9 @@ For [=window open steps=]:
 
 14. <ins>If |targetNavigable| is null:</ins>
 
-      1. <ins>If |embedderParent| is not null:</ins>
+      1. <ins>If |controlledFrameEmbedderParent| is not null:</ins>
 
-            1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, |url|,
+            1. <ins>[=Fire a "newwindow" event=] with |controlledFrameEmbedderParent|, |url|,
                 |target|, |targetNavigable|, and |windowOpenDisposition|.</ins>
 
       1. <ins>Return null.<ins>
@@ -2819,21 +2819,19 @@ Note: Step 15 and 16 also [=/navigate=] |targetNavigable|; during navigation,
     download, then |windowOpenDisposition| may be set to
     "{{WindowOpenDisposition/save_to_disk}}".
 
-1. <ins>If |embedderParent| is not null:</ins>
+1. <ins>If |controlledFrameEmbedderParent| is not null:</ins>
 
-       1. <ins>[=Fire a "newwindow" event=] with |embedderParent|, |url|,
+       1. <ins>[=Fire a "newwindow" event=] with |controlledFrameEmbedderParent|, |url|,
            |target|, |targetNavigable|, and |windowOpenDisposition|.</ins>
-
-
 
 
 For [=completely finish loading=]:
 
 5. Otherwise, if container is non-null, then queue an element task on the DOM manipulation task source given container to fire an event named load at container.
 
-6. <ins>Let |embedderParent| be <var ignore=''>document</var>'s [=node navigable=]'s [=embedderParent=].
+6. <ins>Let |controlledFrameEmbedderParent| be <var ignore=''>document</var>'s [=node navigable=]'s [=controlledFrameEmbedderParent=].
 
-7. <ins> If |embedderParent| is {{HTMLControlledFrameElement}}, then [=Fire a "contentload" event=] with |embedderParent|.</ins>
+7. <ins> If |controlledFrameEmbedderParent| is {{HTMLControlledFrameElement}}, then [=Fire a "contentload" event=] with |controlledFrameEmbedderParent|.</ins>
 
 <div style="border: 2px solid red;">
 
@@ -2845,7 +2843,7 @@ Monkey-patch for loadstart, loadabort, and loadcommit which looks like the follo
 
 1. loadabort -> at each early exist points of the algorithm between loadstart and loadcommit.
 
-For each of these, check whether the [=top-level traversable=] of the [=/navigable=] has an [=embedderParent=] of {{HTMLControlledFrameElement}}, if so, then fire the corresponding event with input arguments.
+For each of these, check whether the [=top-level traversable=] of the [=/navigable=] has an [=controlledFrameEmbedderParent=] of {{HTMLControlledFrameElement}}, if so, then fire the corresponding event with input arguments.
 
 </div>
 
@@ -2859,9 +2857,9 @@ For [=HTTP fetch=](loadredirect):
 
             1. <ins>Let |currentNavigable| be |window|'s associated [=Window/navigable=].
 
-            1. <ins>Let |embedderParent| be |currentNavigable|'s [=top-level traversable=]'s [=embedderParent=].</ins>
+            1. <ins>Let |controlledFrameEmbedderParent| be |currentNavigable|'s [=top-level traversable=]'s [=controlledFrameEmbedderParent=].</ins>
 
-            1. <ins>If |embedderParent| is a {{HTMLControlledFrameElement}}:</ins>
+            1. <ins>If |controlledFrameEmbedderParent| is a {{HTMLControlledFrameElement}}:</ins>
 
                   1.<ins>Let |oldUrl| be |request|'s associated [=request/URL=].</ins>
 
@@ -2869,7 +2867,7 @@ For [=HTTP fetch=](loadredirect):
 
                   1.<ins>Let |isTopLevel| be `false`, if |currentNavigable| has a null [=navigable/parent=] set |isTopLevel| to `true`.
 
-                  1.<ins>[=Fire a "loadredirect" event=] with |embedderParent|, |oldUrl|, |newUrl|, and |isTopLevel|.</ins>
+                  1.<ins>[=Fire a "loadredirect" event=] with |controlledFrameEmbedderParent|, |oldUrl|, |newUrl|, and |isTopLevel|.</ins>
 
 #### [[Permissions]] #### {#events-monkey-patches-permissions}
 
@@ -2883,12 +2881,12 @@ permission</dfn> given DOMString |permission|, an optional dictionary
 |options|, and an algorithm |completionSteps| that takes a [=boolean=],
 run the following steps:
 
-1. Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].
+1. Let |controlledFrameEmbedderParent| be |document|'s [=node navigable=]'s [=controlledFrameEmbedderParent=].
 
-1. If |embedderParent| is not {{HTMLControlledFrameElement}}, return `true`.
+1. If |controlledFrameEmbedderParent| is not {{HTMLControlledFrameElement}}, return `true`.
 
 1. [=Fire a "permissionrequest" event=] with |document|,
-    |embedderParent|, |permission|, |document|'s [=Document/URL=], |options|, and
+    |controlledFrameEmbedderParent|, |permission|, |document|'s [=Document/URL=], |options|, and
     |completionSteps|.
 
 </div>
@@ -2917,11 +2915,11 @@ For [=request a position=] (geolocation):
 
       1. <ins>Terminate this algorithm.</ins>
 
-7. <ins>Let |embedderParent| be |document|'s [=node navigable=]'s [=embedderParent=].</ins>
+7. <ins>Let |controlledFrameEmbedderParent| be |document|'s [=node navigable=]'s [=controlledFrameEmbedderParent=].</ins>
 
-8. <ins>If |embedderParent| is {{HTMLControlledFrameElement}}:</ins>
+8. <ins>If |controlledFrameEmbedderParent| is {{HTMLControlledFrameElement}}:</ins>
 
-      1. Let |nodeDocument| be |embedderParent|'s [=node document=].
+      1. Let |nodeDocument| be |controlledFrameEmbedderParent|'s [=node document=].
 
       1. <ins>If |nodeDocument| is null:</ins>
 
@@ -2966,8 +2964,8 @@ the needs of Controlled Frame.
 Each [=/navigable=] has:
  * A <dfn for=navigable>frameId</dfn> integer, initially 0.
  * A <dfn for=navigable>next frameId</dfn> integer, initially 1.
- * An <dfn for=navigable>embedderParent</dfn>, an {{HTMLControlledFrameElement}}
-    or null.
+ * An <dfn for=navigable>controlledFrameEmbedderParent</dfn>, an
+    {{HTMLControlledFrameElement}} or null.
 
 The [=initialize the navigable=] algorithm given a [=/navigable=] |navigable|
 and an optional [=/navigable=]-or-null |parent| (default null) is
@@ -3018,12 +3016,12 @@ To determine the network partition key, given an [=environment=] |environment|:
 
   5. Let |secondKey| be null <del>or an [=implementation-defined=] value</del>.
 
-  6. <ins>Let |embedderParent| be the result of [=getting an environment's
-      embedderParent=] given |environment|.</ins>
+  6. <ins>Let |controlledFrameEmbedderParent| be the result of [=getting an environment's
+      controlledFrameEmbedderParent=] given |environment|.</ins>
 
-  7. <ins>If |embedderParent| is not null, then set |secondKey| to a [=tuple=]
-      consisting of the [=environment/top-level origin=] of |embedderParent|'s
-      [=relevant settings object=], and |embedderParent|'s
+  7. <ins>If |controlledFrameEmbedderParent| is not null, then set |secondKey| to a [=tuple=]
+      consisting of the [=environment/top-level origin=] of |controlledFrameEmbedderParent|'s
+      [=relevant settings object=], and |controlledFrameEmbedderParent|'s
       {{HTMLControlledFrameElement/partition}}.</ins>
 
   8. Return (|topLevelSite|, |secondKey|).
@@ -3062,15 +3060,15 @@ To <dfn data-lt='obtain a Controlled Frame storage key'>obtain a storage key for
 
   1. <ins>Let |topLevelOrigin| and |partition| be null.</ins>
 
-  1. <ins>Let |embedderParent| be the result of [=getting an environment's
-      embedderParent=] given |environment|.</ins>
+  1. <ins>Let |controlledFrameEmbedderParent| be the result of [=getting an environment's
+      controlledFrameEmbedderParent=] given |environment|.</ins>
 
-  1. <ins>If |embedderParent| is not null, then:</ins>
+  1. <ins>If |controlledFrameEmbedderParent| is not null, then:</ins>
 
       1. <ins>Set |topLevelOrigin| to the [=environment/top-level origin=] of
-          |embedderParent|'s [=relevant settings object=].</ins>
+          |controlledFrameEmbedderParent|'s [=relevant settings object=].</ins>
 
-      1. <ins>Set |partition| to |embedderParent|'s
+      1. <ins>Set |partition| to |controlledFrameEmbedderParent|'s
           {{HTMLControlledFrameElement/partition}}.</ins>
 
   1. <ins>Return a [=tuple=] consisting of |topLevelOrigin|, |partition|,
@@ -3079,15 +3077,15 @@ To <dfn data-lt='obtain a Controlled Frame storage key'>obtain a storage key for
 </div>
 
 <div algorithm>
-To <dfn>get an [=environment=]'s [=embedderParent=]</dfn> given an
-[=environment=] |environment|, run the following steps:
+To <dfn>get an [=environment=]'s [=controlledFrameEmbedderParent=]</dfn> given
+an [=environment=] |environment|, run the following steps:
 
   1. If |environment| is an [=environment settings object=] whose
       [=global object=] is a {{Window}} object, then:
 
       Issue: This algorithm doesn't work for Shared or Service Workers because
-      [=embedderParent=] is only defined on a [=/navigable=], and it's not
-      always possible to go from a non-{{Window}} [=environment=] to a
+      [=controlledFrameEmbedderParent=] is only defined on a [=/navigable=], and
+      it's not always possible to go from a non-{{Window}} [=environment=] to a
       [=/navigable=].
 
       1. Let |navigable| be |environment|'s [=global object=]'s
@@ -3095,8 +3093,8 @@ To <dfn>get an [=environment=]'s [=embedderParent=]</dfn> given an
 
       1. Let |top| be the [=top-level traversable=] of |navigable|.
 
-      1. If |top|'s [=embedderParent=] is not null, then return |top|'s
-          [=embedderParent=].
+      1. If |top|'s [=controlledFrameEmbedderParent=] is not null, then return |top|'s
+          [=controlledFrameEmbedderParent=].
 
   1. Return null.
 
@@ -3634,10 +3632,10 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 
   1. Let |navigable| be |window|'s [=Window/navigable=].
 
-  1. If |navigable| or its [=embedderParent=] is null, return an empty [=list=]
+  1. If |navigable| or its [=controlledFrameEmbedderParent=] is null, return an empty [=list=]
       and `false`.
 
-  1. Let |controlledFrame| be |navigable|'s [=embedderParent=].
+  1. Let |controlledFrame| be |navigable|'s [=controlledFrameEmbedderParent=].
 
   1. Let |applicableInterceptors| be an empty [=list=].
 
@@ -3957,7 +3955,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |pendingHandlerCount| be 0.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4060,7 +4058,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |pendingHandlerCount| be 0.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4119,7 +4117,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4151,7 +4149,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4252,7 +4250,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Let |pendingHandlerCount| be 0.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4352,7 +4350,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4393,7 +4391,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4426,7 +4424,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -4459,7 +4457,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       [=applicable WebRequestInterceptors=] of |request|.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
-      the result of [=getting an environment's embedderParent=] given
+      the result of [=getting an environment's controlledFrameEmbedderParent=] given
       |request|'s [=request/client=].
 
   1. If |controlledFrameEmbedderGlobal| is null, then return.
@@ -5169,7 +5167,7 @@ of the items.
       [=context menu/context element=].
 
   1. Let |controlledframe| be |element|'s [=node navigable=]'s
-      [=embedderParent=].
+      [=controlledFrameEmbedderParent=].
 
   1. If |controlledframe| is null, then return `false`.
 
