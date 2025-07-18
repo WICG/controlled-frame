@@ -1048,7 +1048,7 @@ class ControlledFrameController {
     }
   }
 
-  #addOnAuthRequired(e) {
+  #addOnAuthRequired() {
     let listener = (e) => {
       Log.evt('authrequired fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1059,7 +1059,7 @@ class ControlledFrameController {
     Log.info('Added authrequired event listener');
   }
 
-  #addOnBeforeRedirect(e) {
+  #addOnBeforeRedirect() {
     let listener = (e) => {
       Log.evt('beforeredirect fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1068,7 +1068,7 @@ class ControlledFrameController {
     Log.info('Added beforeredirect event listener');
   }
 
-  #addOnBeforeRequest(e) {
+  #addOnBeforeRequest() {
     let listener = (e) => {
       Log.evt('beforerequest fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1079,7 +1079,7 @@ class ControlledFrameController {
     Log.info('Added beforerequest event listener');
   }
 
-  #addOnBeforeSendHeaders(e) {
+  #addOnBeforeSendHeaders() {
     let listener = (e) => {
       Log.evt('beforesendheaders fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1090,7 +1090,7 @@ class ControlledFrameController {
     Log.info('Added beforesendheaders event listener');
   }
 
-  #addOnCompleted(e) {
+  #addOnCompleted() {
     let listener = (e) => {
       Log.evt('completed fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1099,7 +1099,7 @@ class ControlledFrameController {
     Log.info('Added completed event listener');
   }
 
-  #addOnErrorOccurred(e) {
+  #addOnErrorOccurred() {
     let listener = (e) => {
       Log.evt('erroroccurred fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1108,7 +1108,7 @@ class ControlledFrameController {
     Log.info('Added erroroccurred event listener');
   }
 
-  #addOnHeadersReceived(e) {
+  #addOnHeadersReceived() {
     let listener = (e) => {
       Log.evt('headersreceived fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1120,7 +1120,7 @@ class ControlledFrameController {
     Log.info('Added headersreceived event listener');
   }
 
-  #addOnResponseStarted(e) {
+  #addOnResponseStarted() {
     let listener = (e) => {
       Log.evt('responsestarted fired');
       Log.info(`event = ${JSON.stringify(e)}`);
@@ -1129,7 +1129,7 @@ class ControlledFrameController {
     Log.info('Added responsestarted event listener');
   }
 
-  #addOnSendHeaders(e) {
+  #addOnSendHeaders() {
     let listener = (e) => {
       Log.evt('sendheaders fired');
       Log.info(`event = ${JSON.stringify(e)}`);
