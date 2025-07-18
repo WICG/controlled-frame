@@ -400,7 +400,7 @@ class ControlledFrameController {
       js: {},
     };
     // Set the string values that are split by commas.
-    for (const keyName of ['excludeGlobs', 'excludeMatches', 'includeGlobs', 'matches']) {
+    for (const keyName of ['excludeURLPatterns', 'urlPatterns']) {
       const keyValue = $(`#content_script_details_${keyName}_in`).value;
       this.#setIfValid(contentScriptDetails, keyName, keyValue, ',');
     }
@@ -863,7 +863,7 @@ class ControlledFrameController {
           return;
         }
       }
-      createProperties.documentUrlPatterns = documentUrlPatterns;
+      createProperties.documentURLPatterns = documentUrlPatterns;
     }
 
     let targetUrlPatternsValue = $(
@@ -877,7 +877,7 @@ class ControlledFrameController {
           return;
         }
       }
-      createProperties.targetUrlPatterns = targetUrlPatterns;
+      createProperties.targetURLPatterns = targetUrlPatterns;
     }
 
     return createProperties;

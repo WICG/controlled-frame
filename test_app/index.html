@@ -111,7 +111,7 @@
               <option value="audio">audio</option>
             </select>
 
-            <label for="context_menus_create_properties_document_url_patterns_in">documentUrlPatterns</label>
+            <label for="context_menus_create_properties_document_url_patterns_in">documentURLPatterns</label>
             <input type="text" id="context_menus_create_properties_document_url_patterns_in" />
 
             <label for="context_menus_create_properties_enabled_chk">enabled</label>
@@ -123,7 +123,7 @@
             <label for="context_menus_create_properties_parentId_in">parentId</label>
             <input type="text" id="context_menus_create_properties_parentId_in" />
 
-            <label for="context_menus_create_properties_target_url_patterns_in">targetUrlPatterns</label>
+            <label for="context_menus_create_properties_target_url_patterns_in">targetURLPatterns</label>
             <input type="text" id="context_menus_create_properties_target_url_patterns_in" />
 
             <label for="context_menus_create_properties_title_in">title</label>
@@ -381,24 +381,18 @@
           <div class="subcontrols">
             <h4>Content Scripts: Content Injection</h4>
 
-            <h5>ContentScriptDetails detail</h5>
+            <h5>ContentScriptDetails</h5>
             <label for="content_script_details_allFrames_chk">allFrames</label>
             <div class="checkbox"><input type="checkbox" id="content_script_details_allFrames_chk" /></div>
 
-            <label for="content_script_details_excludeGlobs_in">excludeGlobs</label>
-            <input type="text" id="content_script_details_excludeGlobs_in" />
+            <label for="content_script_details_urlPatterns_in">urlPatterns</label>
+	          <input type="text" id="content_script_details_urlPatterns_in" value="*://*" />
 
-            <label for="content_script_details_excludeMatches_in">excludeMatches</label>
-            <input type="text" id="content_script_details_excludeMatches_in" />
-
-            <label for="content_script_details_includeGlobs_in">includeGlobs</label>
-            <input type="text" id="content_script_details_includeGlobs_in" />
+            <label for="content_script_details_excludeURLPatterns_in">excludeURLPatterns</label>
+            <input type="text" id="content_script_details_excludeURLPatterns_in" />
 
             <label for="content_script_details_matchAboutBlank_chk">matchAboutBlank</label>
             <div class="checkbox"><input type="checkbox" id="content_script_details_matchAboutBlank_chk" /></div>
-
-            <label for="content_script_details_matches_in">matches</label>
-	    <input type="text" id="content_script_details_matches_in" value="<all_urls>" />
 
             <label for="content_script_details_name_in">name</label>
             <input type="text" id="content_script_details_name_in" value="myRule" />
@@ -410,28 +404,26 @@
               <option value="document-idle">document-idle</option>
             </select>
 
-            <h6>InjectDetails detail.css</h6>
+            <h6>CSS details</h6>
             <label for="content_script_details_css_injection_items_code_in">code</label>
-            <textarea id="content_script_details_css_injection_items_code_in">
-body {
+            <textarea id="content_script_details_css_injection_items_code_in">body {
   background-color: red !important;
-}
-            </textarea>
+}</textarea>
 
             <label for="content_script_details_css_injection_items_files_in">files</label>
             <input type="text" id="content_script_details_css_injection_items_files_in" />
+            <p><code>/red.css</code> can be used to test CSS injection.</p>
 
-            <h6>InjectDetails detail.js</h6>
+            <h6>JS details</h6>
             <label for="content_script_details_js_injection_items_code_in">code</label>
-            <textarea id="content_script_details_js_injection_items_code_in">
-(function () {
+            <textarea id="content_script_details_js_injection_items_code_in">(function () {
   document.body.style.backgroundColor = 'red';
   return true;
-})();
-            </textarea>
+})();</textarea>
 
             <label for="content_script_details_js_injection_items_files_in">files</label>
             <input type="text" id="content_script_details_js_injection_items_files_in" />
+            <p><code>/red.js</code> can be used to test CSS injection.</p>
 
             <label for="add_content_scripts_result">addContentScripts([<br> detail])</label>
             <div id="add_content_scripts_result"></div>
@@ -445,14 +437,11 @@ body {
           <div class="subcontrols">
             <h4>executeScript: Content Injection</h4>
 
-            <h5>InjectDetails details</h5>
             <label for="inject_details_code_in">code</label>
-            <textarea id="inject_details_code_in">
-(function () {
+            <textarea id="inject_details_code_in">(function () {
   document.body.style.backgroundColor = 'red';
   return true;
-})();
-            </textarea>
+})();</textarea>
 
             <label for="inject_details_file_in">file</label>
             <input type="text" id="inject_details_file_in" />
@@ -465,13 +454,10 @@ body {
           <div class="subcontrols">
             <h4>insertCSS: Content Injection</h4>
 
-            <h5>InjectDetails details</h5>
             <label for="insertcss_inject_details_code_in">code</label>
-            <textarea id="insertcss_inject_details_code_in">
-body {
+            <textarea id="insertcss_inject_details_code_in">body {
   background-color: red !important;
-}
-            </textarea>
+}</textarea>
 
             <label for="insertcss_inject_details_file_in">file</label>
             <input type="text" id="insertcss_inject_details_file_in" />
