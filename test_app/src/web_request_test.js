@@ -200,6 +200,12 @@ export class WebRequestTest extends LitElement {
     this.selectedTestSelect = this.renderRoot.getElementById('selectedTest');
   }
 
+  #addResult(result) {
+    this.resultsDiv.innerText += result;
+    this.resultsDiv.appendChild(document.createElement('br'));
+    this.resultsDiv.appendChild(document.createElement('br'));
+  }
+
   #getActiveTest() {
     return this.selectedTestSelect.value;
   }
@@ -231,130 +237,198 @@ export class WebRequestTest extends LitElement {
     try {
       await this.navigateFrame('https://www.chrome.com');
       await this.navigateFrame('https://www.chromium.org', /*shouldAbort=*/true);
-      this.resultsDiv.innerText = 'Success: Navigation to chromium was blocked.';
+      this.#addResult('Success: Navigation to chromium was blocked.');
     } catch (e) {
       if (e.includes('chrome')) {
-        this.resultsDiv.innerText =
+        this.resultsDiv.innerText +=
           'Failure: Navigation to chrome.com should have succeeded.';
       } else {
-        this.resultsDiv.innerText =
+        this.resultsDiv.innerText +=
           'Failure: Navigation to chromium.org should have failed.';
       }
     }
   }
 
   async #onBeforeRequestCancelsNavigation() {
-    this.controlledframe.request.onBeforeRequest.addListener(() => {
-      return { cancel: true };
-    }, { urls: ['https://www.chromium.org/*'] }, ['blocking']);
-    this.#expectNavigationToBeCanceled();
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      resourceTypes: ['main-frame'],
+      blocking: true,
+      urlPatterns: ['https://www.chromium.org/*'],
+    });
+    const listener = (e) => { e.preventDefault() };
+    interceptor.addEventListener('beforerequest', listener);
+    await this.#expectNavigationToBeCanceled();
+    interceptor.removeEventListener('beforerequest', listener);
   }
 
   async #onBeforeSendHeadersCancelsNavigation() {
-    this.controlledframe.request.onBeforeSendHeaders.addListener(() => {
-      return { cancel: true };
-    }, { urls: ['https://www.chromium.org/*'] }, ['blocking']);
-    this.#expectNavigationToBeCanceled();
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      resourceTypes: ['main-frame'],
+      blocking: true,
+      urlPatterns: ['https://www.chromium.org/*'],
+    });
+    const listener = (e) => { e.preventDefault() };
+    interceptor.addEventListener('beforesendheaders', listener);
+    await this.#expectNavigationToBeCanceled();
+    interceptor.removeEventListener('beforesendheaders', listener);
   }
 
   async #onHeadersReceivedCancelsNavigation() {
-    this.controlledframe.request.onBeforeSendHeaders.addListener(() => {
-      return { cancel: true };
-    }, { urls: ['https://www.chromium.org/*'] }, ['blocking']);
-    this.#expectNavigationToBeCanceled();
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      blocking: true,
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['https://www.chromium.org/*'],
+    });
+    const listener = (e) => { e.preventDefault() };
+    interceptor.addEventListener('headersreceived', listener);
+    await this.#expectNavigationToBeCanceled();
+    interceptor.removeEventListener('headersreceived', listener);
   }
 
   async #onAuthRequiredFired() {
-    this.controlledframe.request.onAuthRequired.addListener((details) => {
-      this.resultsDiv.innerText =
-        `onAuthRequired event was fired; challenger is \
-        ${details.challenger.host}:${details.challenger.port}`;
-      return { cancel: true };
-    }, { urls: ['https://www.w3.org/Member/'] }, ['blocking']);
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['https://authenticationtest.com/HTTPAuth/'],
+      blocking: true,
+    });
+    const listener = (e) => {
+      this.resultsDiv.innerText +=
+        `Success: onAuthRequired event was fired; challenger is \
+        ${e.response.auth.challenger.host}:${e.response.auth.challenger.port}`;
+      e.preventDefault();
+    };
+    interceptor.addEventListener('authrequired', listener);
     try {
-      await this.navigateFrame('https://www.w3.org/Member/', /*shouldAbort=*/true);
+      await this.navigateFrame('https://authenticationtest.com/HTTPAuth/', /*shouldAbort=*/true);
     } catch (e) {
       if (this.resultsDiv.innerText.length === 0) {
-        this.resultsDiv.innerText = 'Failure: onAuthRequired not fired';
+        this.#addResult('Failure: onAuthRequired not fired');
       }
     }
+    interceptor.removeEventListener('authrequired', listener);
   }
 
-  #onBeforeRedirectFired() {
-    this.controlledframe.request.onBeforeRedirect.addListener((details) => {
-      this.resultsDiv.innerText += `Success: onBeforeRedirect fired for \
-        redirect from ${details.url} to ${details.redirectUrl}`;
-    }, { urls: ['<all_urls>'] });
-    this.controlledframe.src = "https://www.crrev.com/c/";
+  async #onBeforeRedirectFired() {
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['*://*:*'],
+    });
+    const listener = (e) => {
+      this.#addResult(`Success: onBeforeRedirect fired for \
+        redirect from ${e.request.url} to ${e.response.redirectURL}`);
+    };
+    interceptor.addEventListener('beforeredirect', listener);
+    await this.navigateFrame('https://www.crrev.com/c/');
+    interceptor.removeEventListener('beforeredirect', listener);
   }
 
-  #onCompletedFired() {
-    this.controlledframe.request.onCompleted.addListener((details) => {
-      this.resultsDiv.innerText += `Success: onCompleted fired for \
-        ${details.url} with status ${details.statusLine}`;
-    }, { urls: ['<all_urls>'] });
-    this.controlledframe.src = "https://www.chromium.org";
+  async #onCompletedFired() {
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['*://*:*'],
+    });
+    const listener = (e) => {
+      this.#addResult(`Success: onCompleted fired for \
+        ${e.request.url} with status ${e.response.statusLine}`);
+    };
+    interceptor.addEventListener('completed', listener);
+    await this.navigateFrame('https://www.chromium.org');
+    interceptor.removeEventListener('completed', listener);
   }
 
-  #onErrorOccurredFired() {
-    this.controlledframe.request.onErrorOccurred.addListener((details) => {
-      this.resultsDiv.innerText += `Success: onErrorOccurred fired for \
-        ${details.url} with error ${details.error}`;
-    }, { urls: ['<all_urls>'] });
-    this.controlledframe.src = "https://invalid-url";
+  async #onErrorOccurredFired() {
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['*://*:*'],
+    });
+    const listener = (e) => {
+      this.#addResult(`Success: onErrorOccurred fired for \
+        ${e.request.url} with error ${e.error}`);
+    };
+    interceptor.addEventListener('erroroccurred', listener);
+    await this.navigateFrame('https://invalid-url');
+    interceptor.removeEventListener('erroroccurred', listener);
   }
 
-  #onHeadersReceivedFired() {
-    this.controlledframe.request.onHeadersReceived.addListener((details) => {
+  async #onHeadersReceivedFired() {
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      includeHeaders: 'all',
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['*://*:*'],
+    });
+    const listener = (e) => {
       let headers = 'headers received: ';
-      if (details.responseHeaders) {
-        for (const header of details.responseHeaders) {
-          headers += `${header.name}: ${header.value}; `;
+      if (e.response.headers) {
+        for (const header of e.response.headers) {
+          headers += `${header[0]}: ${header[1]}; `;
         }
       } else {
         headers = 'no headers received';
       }
-      this.resultsDiv.innerText += `Success: onHeadersReceived fired for \
-        ${details.url} with ${headers}`;
-    }, { urls: ['<all_urls>'] }, ['blocking']);
-    this.controlledframe.src = 'https://www.google.com';
+      this.#addResult(`Success: onHeadersReceived fired for \
+        ${e.request.url} with ${headers}`);
+    };
+    interceptor.addEventListener('headersreceived', listener);
+    await this.navigateFrame('https://www.google.com');
+    interceptor.removeEventListener('headersreceived', listener);
   }
 
-  #onResponseStartedFired() {
-    this.controlledframe.request.onResponseStarted.addListener((details) => {
+  async #onResponseStartedFired() {
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      includeHeaders: 'all',
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['*://*:*'],
+    });
+    const listner = (e) => {
       let headers = 'headers received: ';
-      if (details.responseHeaders) {
-        for (const header of details.responseHeaders) {
-          headers += `${header.name}: ${header.value}; `;
+      if (e.response.headers) {
+        for (const header of e.response.headers) {
+          headers += `${header[0]}: ${header[1]}; `;
         }
       } else {
         headers = 'no headers received';
       }
-      this.resultsDiv.innerText += `Success: onResponseStarted fired for \
-        ${details.url} with ${headers}`;
-    }, { urls: ['<all_urls>'] });
-    this.controlledframe.src = "https://www.google.com";
+      this.#addResult(`Success: onResponseStarted fired for \
+        ${e.request.url} with ${headers}`);
+    };
+    interceptor.addEventListener('responsestarted', listner);
+    await this.navigateFrame('https://www.google.com');
+    interceptor.removeEventListener('responsestarted', listner);
   }
 
-  #onSendHeadersFired() {
-    this.controlledframe.request.onBeforeSendHeaders.addListener(() => {
-      return {
-        responseHeaders: [{ name: 'test', value: 'testValue' }]
-      };
-    }, { urls: ['<all_urls>'] }, ['blocking']);
-    this.controlledframe.request.onSendHeaders.addListener((details) => {
-      let headers = 'headers received: ';
-      if (details.responseHeaders) {
-        for (const header of details.responseHeaders) {
-          headers += `${header.name}: ${header.value}; `;
+  async #onSendHeadersFired() {
+    const interceptor = this.controlledframe.request.createWebRequestInterceptor({
+      blocking: true,
+      includeHeaders: 'all',
+      resourceTypes: ['main-frame'],
+      urlPatterns: ['*://*:*'],
+    });
+    const setHeadersListener = (e) => {
+      const modifiedHeaders = e.request.headers;
+      modifiedHeaders.set('test', 'testValue');
+      e.setRequestHeaders(modifiedHeaders);
+    };
+    interceptor.addEventListener('beforesendheaders', setHeadersListener);
+    const getHeadersListener = (e) => {
+      let headers = 'headers sent: ';
+      if (e.request.headers) {
+        for (const header of e.request.headers) {
+          headers += `${header[0]}: ${header[1]}; `;
         }
       } else {
-        headers = 'no headers received';
+        headers = 'no headers sent';
       }
-      this.resultsDiv.innerText += `Success: onSendHeaders fired for \
-        ${details.url} with ${headers}`;
-    }, { urls: ['<all_urls>'] });
-    this.controlledframe.src = "https://www.google.com";
+      if (e.request.headers && e.request.headers.get('test') === 'testValue') {
+        this.#addResult(`Success: onSendHeaders fired for \
+          ${e.request.url} with ${headers}`);
+      } else {
+        this.#addResult('Failure: custom header not sent');
+      }
+    };
+    interceptor.addEventListener('sendheaders', getHeadersListener);
+    await this.navigateFrame('https://www.google.com');
+    interceptor.removeEventListener('sendheaders', getHeadersListener);
+    interceptor.removeEventListener('beforesendheaders', setHeadersListener);
   }
 };
 
