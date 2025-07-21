@@ -233,10 +233,10 @@ class ControlledFrameController {
       return;
     }
 
-    this.controlledFrame.contextMenus.onShow.addListener(
-      this.#contextMenusOnShow.bind(this));
-    this.controlledFrame.contextMenus.onClicked.addListener(
-      this.#contextMenusOnClicked.bind(this));
+    this.controlledFrame.contextMenus.addEventListener(
+      'show', this.#contextMenusOnShow.bind(this));
+    this.controlledFrame.contextMenus.addEventListener(
+      'click', this.#contextMenusOnClicked.bind(this));
   }
 
   // Add event listeners for the web request related Controlled Frame API.
@@ -400,7 +400,7 @@ class ControlledFrameController {
       js: {},
     };
     // Set the string values that are split by commas.
-    for (const keyName of ['excludeGlobs', 'excludeMatches', 'includeGlobs', 'matches']) {
+    for (const keyName of ['excludeURLPatterns', 'urlPatterns']) {
       const keyValue = $(`#content_script_details_${keyName}_in`).value;
       this.#setIfValid(contentScriptDetails, keyName, keyValue, ',');
     }
@@ -863,7 +863,7 @@ class ControlledFrameController {
           return;
         }
       }
-      createProperties.documentUrlPatterns = documentUrlPatterns;
+      createProperties.documentURLPatterns = documentUrlPatterns;
     }
 
     let targetUrlPatternsValue = $(
@@ -877,7 +877,7 @@ class ControlledFrameController {
           return;
         }
       }
-      createProperties.targetUrlPatterns = targetUrlPatterns;
+      createProperties.targetURLPatterns = targetUrlPatterns;
     }
 
     return createProperties;
@@ -964,275 +964,178 @@ class ControlledFrameController {
     );
   }
 
-  #readRequestFilter() {
-    let filter = {};
-    let types = new Array();
-    for (const option of $('#request_filter_types').options) {
+  #getInterceptor() {
+    const options = {};
+    const types = new Array();
+    for (const option of $('#interceptor_types').options) {
       if (option.selected) types.push(option.value);
     }
-    if (types.length !== 0) filter.types = types;
-    let urls = $('#request_filter_urls').value;
-    if (urls.length !== 0) filter.urls = urls.split(',');
-    let windowId = $('#request_filter_window_id').value;
-    if (windowId.length !== 0) filter.windowId = parseInt(windowId);
-    return filter;
+    if (types.length !== 0) {
+      options.resourceTypes = types;
+    }
+    const urls = $('#interceptor_urls').value;
+    if (urls.length !== 0) {
+      options.urlPatterns = urls.split(',');
+    }
+    options.blocking = !!$('#interceptor_blocking').checked;
+    options.includeHeaders = $('#interceptor_headers').value;
+    return this.controlledFrame.request.createWebRequestInterceptor(options);
   }
 
-  #readBlockingResponse() {
-    let blockingResponse = {};
-    let password = $('#blocking_response_auth_credentials_password').value;
-    if (password.length !== 0)
-      blockingResponse.authCredentials.password = password;
-    let username = $('#blocking_response_auth_credentials_username').value;
-    if (username.length !== 0)
-      blockingResponse.authCredentials.username = username;
-    blockingResponse.cancel = $('#blocking_response_cancel').checked;
-    let redirectUrl = $('#blocking_response_redirect_url').value;
-    if (redirectUrl !== 0 && isValidUrl(redirectUrl))
-      blockingResponse.redirectUrl = redirectUrl;
-    let requestHeaders = $('#blocking_response_request_headers').value;
+  #maybeCancelRequest(e) {
+    if (!$('#interceptor_blocking').checked) {
+      return;
+    }
+    if ($('#response_cancel').checked) {
+      Log.info('Canceling request');
+      e.preventDefault();
+    }
+  }
+
+  #maybeRedirectRequest(e) {
+    if (!$('#interceptor_blocking').checked) {
+      return;
+    }
+    let redirectUrl = $('#response_redirect_url').value;
+    if (redirectUrl !== 0 && isValidUrl(redirectUrl)) {
+      Log.info(`Redirecting request to: ${redirectUrl}`);
+      e.redirect(redirectUrl);
+    }
+  }
+
+  #maybeSetAuthCredentials(e) {
+    if (!$('#interceptor_blocking').checked) {
+      return;
+    }
+    let password = $('#response_auth_credentials_password').value;
+    let username = $('#response_auth_credentials_username').value;
+    if (username.length > 0 || password.length > 0) {
+      const credentials = { username, password };
+      Log.info(`Setting credentials to: ${JSON.stringify(credentials)}`);
+      e.setCredentials(Promise.resolve(credentials));
+    }
+  }
+
+  #maybeOverrideRequestHeaders(e) {
+    if (!$('#interceptor_blocking').checked) {
+      return;
+    }
+    let requestHeaders = $('#response_request_headers').value;
     if (requestHeaders.length !== 0) {
       try {
         requestHeaders = JSON.parse(requestHeaders);
-        if (requestHeaders && typeof requestHeaders === 'object')
-          blockingResponse.requestHeaders = requestHeaders;
+        if (requestHeaders && typeof requestHeaders === 'object') {
+          Log.info(`Setting request headers to: ${JSON.stringify(requestHeaders)}`);
+          e.setRequestHeaders(requestHeaders);
+        }
       } catch (e) {}
     }
-    let responseHeaders = $('#blocking_response_response_headers').value;
+  }
+
+  #maybeOverrideResponseHeaders(e) {
+    if (!$('#interceptor_blocking').checked) {
+      return;
+    }
+    let responseHeaders = $('#response_response_headers').value;
     if (responseHeaders.length !== 0) {
       try {
         responseHeaders = JSON.parse(responseHeaders);
-        if (responseHeaders && typeof responseHeaders === 'object')
-          blockingResponse.responseHeaders = responseHeaders;
+        if (responseHeaders && typeof responseHeaders === 'object') {
+          Log.info(`Setting response headers to: ${JSON.stringify(responseHeaders)}`);
+          e.setResponseHeaders(responseHeaders);
+        }
       } catch (e) {}
     }
-    return blockingResponse;
   }
 
-  #addOnAuthRequired(e) {
-    if (typeof this.controlledFrame.request.onAuthRequired !== 'object') {
-      Log.warn('request.onAuthRequired: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_auth_required_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = (details, asyncCallback) => {
-      Log.evt('onAuthRequired fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
-      if (extraInfoSpec.includes('blocking')) {
-        Log.info('Responding with BlockingResponse response');
-        return this.#readBlockingResponse();
-      }
-      if (extraInfoSpec.includes('asyncBlocking')) {
-        Log.info('Asynchronously responding with BlockingResponse response');
-        asyncCallback(this.#readBlockingResponse);
-      }
+  #addOnAuthRequired() {
+    let listener = (e) => {
+      Log.evt('authrequired fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
+      this.#maybeCancelRequest(e);
+      this.#maybeSetAuthCredentials(e);
     };
-    this.controlledFrame.request.onAuthRequired.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onAuthRequired event handler');
+    this.#getInterceptor().addEventListener('authrequired', listener);
+    Log.info('Added authrequired event listener');
   }
 
-  #addOnBeforeRedirect(e) {
-    if (typeof this.controlledFrame.request.onBeforeRedirect !== 'object') {
-      Log.warn('request.onBeforeRedirect: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_before_redirect_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onBeforeRedirect fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
-      Log.info('Responding with BlockingResponse response');
-      return this.#readBlockingResponse();
+  #addOnBeforeRedirect() {
+    let listener = (e) => {
+      Log.evt('beforeredirect fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
     };
-    this.controlledFrame.request.onBeforeRedirect.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onBeforeRedirect event handler');
+    this.#getInterceptor().addEventListener('beforeredirect', listener);
+    Log.info('Added beforeredirect event listener');
   }
 
-  #addOnBeforeRequest(e) {
-    if (typeof this.controlledFrame.request.onBeforeRequest !== 'object') {
-      Log.warn('request.onBeforeRequest: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_before_request_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onBeforeRequest fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
-      Log.info('Responding with BlockingResponse response');
-      if (extraInfoSpec.includes('blocking'))
-        return this.#readBlockingResponse();
+  #addOnBeforeRequest() {
+    let listener = (e) => {
+      Log.evt('beforerequest fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
+      this.#maybeCancelRequest(e);
+      this.#maybeRedirectRequest(e);
     };
-    this.controlledFrame.request.onBeforeRequest.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onBeforeRequest event handler');
+    this.#getInterceptor().addEventListener('beforerequest', listener);
+    Log.info('Added beforerequest event listener');
   }
 
-  #addOnBeforeSendHeaders(e) {
-    if (typeof this.controlledFrame.request.onBeforeSendHeaders !== 'object') {
-      Log.warn('request.onBeforeSendHeaders: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_before_send_headers_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onBeforeSendHeaders fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
-      Log.info('Responding with BlockingResponse response');
-      if (extraInfoSpec.includes('blocking'))
-        return this.#readBlockingResponse();
+  #addOnBeforeSendHeaders() {
+    let listener = (e) => {
+      Log.evt('beforesendheaders fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
+      this.#maybeCancelRequest(e);
+      this.#maybeOverrideRequestHeaders(e);
     };
-    this.controlledFrame.request.onBeforeSendHeaders.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onBeforeSendHeaders event handler');
+    this.#getInterceptor().addEventListener('beforesendheaders', listener);
+    Log.info('Added beforesendheaders event listener');
   }
 
-  #addOnCompleted(e) {
-    if (typeof this.controlledFrame.request.onCompleted !== 'object') {
-      Log.warn('request.onCompleted: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_completed_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onCompleted fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
+  #addOnCompleted() {
+    let listener = (e) => {
+      Log.evt('completed fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
     };
-    this.controlledFrame.request.onCompleted.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onCompleted event handler');
+    this.#getInterceptor().addEventListener('completed', listener);
+    Log.info('Added completed event listener');
   }
 
-  #addOnErrorOccurred(e) {
-    if (typeof this.controlledFrame.request.onErrorOccurred !== 'object') {
-      Log.warn('request.onErrorOccurred: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_error_occurred_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onErrorOccurred fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
+  #addOnErrorOccurred() {
+    let listener = (e) => {
+      Log.evt('erroroccurred fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
     };
-    this.controlledFrame.request.onErrorOccurred.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onErrorOccurred event handler');
+    this.#getInterceptor().addEventListener('erroroccurred', listener);
+    Log.info('Added erroroccurred event listener');
   }
 
-  #addOnHeadersReceived(e) {
-    if (typeof this.controlledFrame.request.onHeadersReceived !== 'object') {
-      Log.warn('request.onHeadersReceived: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_headers_received_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onHeadersReceived fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
-      Log.info('Responding with BlockingResponse response');
-      if (extraInfoSpec.includes('blocking'))
-        return this.#readBlockingResponse();
+  #addOnHeadersReceived() {
+    let listener = (e) => {
+      Log.evt('headersreceived fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
+      this.#maybeCancelRequest(e);
+      this.#maybeRedirectRequest(e);
+      this.#maybeOverrideResponseHeaders(e);
     };
-    this.controlledFrame.request.onHeadersReceived.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onHeadersReceived event handler');
+    this.#getInterceptor().addEventListener('headersreceived', listener);
+    Log.info('Added headersreceived event listener');
   }
 
-  #addOnResponseStarted(e) {
-    if (typeof this.controlledFrame.request.onResponseStarted !== 'object') {
-      Log.warn('request.onResponseStarted: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_response_started_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onResponseStarted fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
+  #addOnResponseStarted() {
+    let listener = (e) => {
+      Log.evt('responsestarted fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
     };
-    this.controlledFrame.request.onResponseStarted.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onResponseStarted event handler');
+    this.#getInterceptor().addEventListener('responsestarted', listener);
+    Log.info('Added responsestarted event listener');
   }
 
-  #addOnSendHeaders(e) {
-    if (typeof this.controlledFrame.request.onSendHeaders !== 'object') {
-      Log.warn('request.onSendHeaders: API undefined');
-      return;
-    }
-
-    let filter = this.#readRequestFilter();
-    let extraInfoSpec = new Array();
-    for (const option of $('#on_send_headers_extra_info_spec').options) {
-      if (option.selected) extraInfoSpec.push(option.value);
-    }
-    let callback = details => {
-      Log.evt('onSendHeaders fired');
-      Log.info(`details = ${JSON.stringify(details)}`);
+  #addOnSendHeaders() {
+    let listener = (e) => {
+      Log.evt('sendheaders fired');
+      Log.info(`event = ${JSON.stringify(e)}`);
     };
-    this.controlledFrame.request.onSendHeaders.addListener(
-      callback,
-      filter,
-      extraInfoSpec
-    );
-    Log.info('Added onSendHeaders event handler');
+    this.#getInterceptor().addEventListener('sendheaders', listener);
+    Log.info('Added sendheaders event listener');
   }
 
   static controlledFrame;

@@ -111,7 +111,7 @@
               <option value="audio">audio</option>
             </select>
 
-            <label for="context_menus_create_properties_document_url_patterns_in">documentUrlPatterns</label>
+            <label for="context_menus_create_properties_document_url_patterns_in">documentURLPatterns</label>
             <input type="text" id="context_menus_create_properties_document_url_patterns_in" />
 
             <label for="context_menus_create_properties_enabled_chk">enabled</label>
@@ -123,7 +123,7 @@
             <label for="context_menus_create_properties_parentId_in">parentId</label>
             <input type="text" id="context_menus_create_properties_parentId_in" />
 
-            <label for="context_menus_create_properties_target_url_patterns_in">targetUrlPatterns</label>
+            <label for="context_menus_create_properties_target_url_patterns_in">targetURLPatterns</label>
             <input type="text" id="context_menus_create_properties_target_url_patterns_in" />
 
             <label for="context_menus_create_properties_title_in">title</label>
@@ -161,10 +161,10 @@
           <div class="subcontrols">
             <h4>WebRequest</h4>
 
-            <h5>RequestFilter filter</h5>
+            <h5>Interceptor options</h5>
 
-            <label for="request_filter_types">types</label>
-            <select id="request_filter_types" multiple>
+            <label for="interceptor_types">requestTypes</label>
+            <select id="interceptor_types" multiple>
               <option value="main_frame">main_frame</option>
               <option value="sub_frame">sub_frame</option>
               <option value="stylesheet">stylesheet</option>
@@ -180,30 +180,37 @@
               <option value="other">other</option>
             </select>
 
-            <label for="request_filter_urls">urls</label>
-            <input type="text" id="request_filter_urls" />
+            <label for="interceptor_urls">urlPatterns</label>
+            <input type="text" id="interceptor_urls" value="*://*" />
 
-            <label for="request_filter_window_id">windowId</label>
-            <input type="number" id="request_filter_window_id" />
+            <label for="interceptor_blocking">blocking</label>
+            <input type="checkbox" id="interceptor_blocking" />
 
-            <h5>BlockingResponse response</h5>
+            <label for="interceptor_headers">includeHeaders</label>
+            <select id="interceptor_headers">
+              <option value="none">none</option>
+              <option value="cors">cors</option>
+              <option value="all">all</option>
+            </select>
 
-            <label for="blocking_response_cancel">cancel</label>
-            <input type="checkbox" id="blocking_response_cancel" />
+            <h5>Event listener behavior</h5>
 
-            <label for="blocking_response_redirect_url">redirectUrl</label>
-            <input type="text" id="blocking_response_redirect_url" />
+            <label for="response_cancel">cancel</label>
+            <input type="checkbox" id="response_cancel" />
 
-            <label for="blocking_response_request_headers">requestHeaders JSON</label>
-            <textarea id="blocking_response_request_headers">
+            <label for="response_redirect_url">redirectUrl</label>
+            <input type="text" id="response_redirect_url" />
+
+            <label for="response_request_headers">requestHeaders JSON</label>
+            <textarea id="response_request_headers">
 {
   "name": "stringValue",
   "name": [1, 255],
 }
             </textarea>
 
-            <label for="blocking_response_response_headers">responseHeaders JSON</label>
-            <textarea id="blocking_response_response_headers">
+            <label for="response_response_headers">responseHeaders JSON</label>
+            <textarea id="response_response_headers">
 {
   "name": "stringValue",
   "name": [1, 255],
@@ -211,134 +218,38 @@
             </textarea>
 
             <h6>authCredentials</h6>
-            <label for="blocking_response_auth_credentials_password">password</label>
-            <input type="password" id="blocking_response_auth_credentials_password" />
 
-            <label for="blocking_response_auth_credentials_username">username</label>
-            <input type="text" id="blocking_response_auth_credentials_username" />
+            <label for="response_auth_credentials_username">username</label>
+            <input type="text" id="response_auth_credentials_username" />
+            <label for="response_auth_credentials_password">password</label>
+            <input type="password" id="response_auth_credentials_password" />
 
-            <h5>onAuthRequired(callback, filter, extraInfoSpec)</h5>
-            <p>BlockingResponse <code>response</code> is used if
-            <code>blocking</code> is specified in <code>extraInfoSpec</code> or
-            in the <code>asyncCallback</code> parameter of
-            <code>callback</code>.</p>
-
-            <label for="on_auth_required_extra_info_spec">extraInfoSpec</label>
-            <select id="on_auth_required_extra_info_spec" multiple>
-              <option value="responseHeaders">responseHeaders</option>
-              <option value="blocking">blocking</option>
-              <option value="asyncBlocking">asyncBlocking</option>
-              <option value="extraHeaders">extraHeaders</option>
-            </select>
-
-            <label for="request_on_auth_required_btn">Add onAuthRequired handler</label>
+            <h5>Listeners</h5>
+            <label for="request_on_auth_required_btn">Add authrequired listener</label>
             <button id="request_on_auth_required_btn">Add</button>
 
-            <h5>onBeforeRedirect(callback, filter, extraInfoSpec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_before_redirect_extra_info_spec">extraInfoSpec</label>
-            <select id="on_before_redirect_extra_info_spec" multiple>
-              <option value="responseHeaders">responseHeaders</option>
-              <option value="extraHeaders">extraHeaders</option>
-            </select>
-
-            <label for="request_on_before_redirect_btn">Add onBeforeRedirect handler</label>
+            <label for="request_on_before_redirect_btn">Add beforeredirect listener</label>
             <button id="request_on_before_redirect_btn">Add</button>
 
-            <h5>onBeforeRequest(callback, filter, extrainfospec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_before_request_extra_info_spec">extraInfoSpec</label>
-            <select id="on_before_request_extra_info_spec" multiple>
-              <option value="blocking">blocking</option>
-              <option value="requestbody">requestbody</option>
-              <option value="extraheaders">extraheaders</option>
-            </select>
-
-            <label for="request_on_before_request_btn">add onBeforeRequest handler</label>
+            <label for="request_on_before_request_btn">Add beforerequest listener</label>
             <button id="request_on_before_request_btn">add</button>
 
-            <h5>onBeforeSendHeaders(callback, filter, extrainfospec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_before_send_headers_extra_info_spec">extraInfoSpec</label>
-            <select id="on_before_send_headers_extra_info_spec" multiple>
-              <option value="blocking">blocking</option>
-              <option value="requestbody">requestbody</option>
-              <option value="extraheaders">extraheaders</option>
-            </select>
-
-            <label for="request_on_before_send_headers_btn">add onBeforeSendHeaders handler</label>
+            <label for="request_on_before_send_headers_btn">Add beforesendheaders listener</label>
             <button id="request_on_before_send_headers_btn">add</button>
 
-            <h5>onCompleted(callback, filter, extrainfospec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_completed_extra_info_spec">extraInfoSpec</label>
-            <select id="on_completed_extra_info_spec" multiple>
-              <option value="requestHeaders">requestHeaders</option>
-              <option value="blocking">blocking</option>
-              <option value="extraheaders">extraheaders</option>
-            </select>
-
-            <label for="request_on_completed_btn">add onCompleted handler</label>
+            <label for="request_on_completed_btn">Add completed listener</label>
             <button id="request_on_completed_btn">add</button>
 
-            <h5>onErrorOccurred(callback, filter, extrainfospec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_error_occurred_extra_info_spec">extraInfoSpec</label>
-            <select id="on_error_occurred_extra_info_spec" multiple>
-              <option value="extraheaders">extraheaders</option>
-            </select>
-
-            <label for="request_on_error_occurred_btn">add onErrorOccurred handler</label>
+            <label for="request_on_error_occurred_btn">Add erroroccurred listener</label>
             <button id="request_on_error_occurred_btn">add</button>
 
-            <h5>onHeadersReceived(callback, filter, extrainfospec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_headers_received_extra_info_spec">extraInfoSpec</label>
-            <select id="on_headers_received_extra_info_spec" multiple>
-              <option value="blocking">blocking</option>
-              <option value="responseHeaders">responseHeaders</option>
-              <option value="extraheaders">extraheaders</option>
-            </select>
-
-            <label for="request_on_headers_received_btn">add onHeadersReceived handler</label>
+            <label for="request_on_headers_received_btn">Add headersreceived listener</label>
             <button id="request_on_headers_received_btn">add</button>
 
-            <h5>onResponseStarted(callback, filter, extrainfospec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_response_started_extra_info_spec">extraInfoSpec</label>
-            <select id="on_response_started_extra_info_spec" multiple>
-              <option value="responseHeaders">responseHeaders</option>
-              <option value="extraheaders">extraheaders</option>
-            </select>
-
-            <label for="request_on_response_started_btn">add onResponseStarted handler</label>
+            <label for="request_on_response_started_btn">Add responsestarted listener</label>
             <button id="request_on_response_started_btn">add</button>
 
-            <h5>onSendHeaders(callback, filter, extrainfospec)</h5>
-            <p>BlockingResponse <code>response</code> is returned by
-            <code>callback</code>.</p>
-
-            <label for="on_send_headers_extra_info_spec">extraInfoSpec</label>
-            <select id="on_send_headers_extra_info_spec" multiple>
-              <option value="requestHeaders">requestHeaders</option>
-              <option value="extraheaders">extraheaders</option>
-            </select>
-
-            <label for="request_on_send_headers_btn">add onSendHeaders handler</label>
+            <label for="request_on_send_headers_btn">Add sendheaders listener</label>
             <button id="request_on_send_headers_btn">add</button>
           </div>
 
@@ -470,24 +381,18 @@
           <div class="subcontrols">
             <h4>Content Scripts: Content Injection</h4>
 
-            <h5>ContentScriptDetails detail</h5>
+            <h5>ContentScriptDetails</h5>
             <label for="content_script_details_allFrames_chk">allFrames</label>
             <div class="checkbox"><input type="checkbox" id="content_script_details_allFrames_chk" /></div>
 
-            <label for="content_script_details_excludeGlobs_in">excludeGlobs</label>
-            <input type="text" id="content_script_details_excludeGlobs_in" />
+            <label for="content_script_details_urlPatterns_in">urlPatterns</label>
+	          <input type="text" id="content_script_details_urlPatterns_in" value="*://*" />
 
-            <label for="content_script_details_excludeMatches_in">excludeMatches</label>
-            <input type="text" id="content_script_details_excludeMatches_in" />
-
-            <label for="content_script_details_includeGlobs_in">includeGlobs</label>
-            <input type="text" id="content_script_details_includeGlobs_in" />
+            <label for="content_script_details_excludeURLPatterns_in">excludeURLPatterns</label>
+            <input type="text" id="content_script_details_excludeURLPatterns_in" />
 
             <label for="content_script_details_matchAboutBlank_chk">matchAboutBlank</label>
             <div class="checkbox"><input type="checkbox" id="content_script_details_matchAboutBlank_chk" /></div>
-
-            <label for="content_script_details_matches_in">matches</label>
-	    <input type="text" id="content_script_details_matches_in" value="<all_urls>" />
 
             <label for="content_script_details_name_in">name</label>
             <input type="text" id="content_script_details_name_in" value="myRule" />
@@ -499,28 +404,26 @@
               <option value="document-idle">document-idle</option>
             </select>
 
-            <h6>InjectDetails detail.css</h6>
+            <h6>CSS details</h6>
             <label for="content_script_details_css_injection_items_code_in">code</label>
-            <textarea id="content_script_details_css_injection_items_code_in">
-body {
+            <textarea id="content_script_details_css_injection_items_code_in">body {
   background-color: red !important;
-}
-            </textarea>
+}</textarea>
 
             <label for="content_script_details_css_injection_items_files_in">files</label>
             <input type="text" id="content_script_details_css_injection_items_files_in" />
+            <p><code>/red.css</code> can be used to test CSS injection.</p>
 
-            <h6>InjectDetails detail.js</h6>
+            <h6>JS details</h6>
             <label for="content_script_details_js_injection_items_code_in">code</label>
-            <textarea id="content_script_details_js_injection_items_code_in">
-(function () {
+            <textarea id="content_script_details_js_injection_items_code_in">(function () {
   document.body.style.backgroundColor = 'red';
   return true;
-})();
-            </textarea>
+})();</textarea>
 
             <label for="content_script_details_js_injection_items_files_in">files</label>
             <input type="text" id="content_script_details_js_injection_items_files_in" />
+            <p><code>/red.js</code> can be used to test CSS injection.</p>
 
             <label for="add_content_scripts_result">addContentScripts([<br> detail])</label>
             <div id="add_content_scripts_result"></div>
@@ -534,14 +437,11 @@ body {
           <div class="subcontrols">
             <h4>executeScript: Content Injection</h4>
 
-            <h5>InjectDetails details</h5>
             <label for="inject_details_code_in">code</label>
-            <textarea id="inject_details_code_in">
-(function () {
+            <textarea id="inject_details_code_in">(function () {
   document.body.style.backgroundColor = 'red';
   return true;
-})();
-            </textarea>
+})();</textarea>
 
             <label for="inject_details_file_in">file</label>
             <input type="text" id="inject_details_file_in" />
@@ -554,13 +454,10 @@ body {
           <div class="subcontrols">
             <h4>insertCSS: Content Injection</h4>
 
-            <h5>InjectDetails details</h5>
             <label for="insertcss_inject_details_code_in">code</label>
-            <textarea id="insertcss_inject_details_code_in">
-body {
+            <textarea id="insertcss_inject_details_code_in">body {
   background-color: red !important;
-}
-            </textarea>
+}</textarea>
 
             <label for="insertcss_inject_details_file_in">file</label>
             <input type="text" id="insertcss_inject_details_file_in" />
