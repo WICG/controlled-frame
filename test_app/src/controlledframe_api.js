@@ -839,11 +839,6 @@ class ControlledFrameController {
     let createProperties = {
       checked: $('#context_menus_create_properties_checked_chk').checked,
       enabled: $('#context_menus_create_properties_enabled_chk').checked,
-      onclick: info => {
-        let infoJSON = JSON.stringify(info);
-        Log.info(`context menu item clicked: ${infoJSON}`);
-        $('#context_menus_on_click_result').innerText = infoJSON;
-      },
     };
 
     for (const keyName of ['id', 'parentId', 'title', 'type']) {
