@@ -89,6 +89,20 @@ th, td {
     ],
     "href": "https://github.com/WICG/isolated-web-apps/blob/main/Permissions.md",
     "title": "Isolated Web Apps High Watermark Permissions Explainer"
+  },
+  "RFC5280": {
+    "href": "https://datatracker.ietf.org/doc/html/rfc5280",
+    "title": "Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+    "authors": ["D. Cooper", "S. Santesson", "S. Farrell", "S. Boeyen", "R. Housley", "W. Polk"]
+  },
+  "RFC6234": {
+    "href": "https://datatracker.ietf.org/doc/html/rfc6234",
+    "title": "US Secure Hash Algorithms (SHA and SHA-based HMAC and HKDF)",
+    "authors": ["D. Eastlake 3rd", "T. Hansen"]
+  },
+  "X.690": {
+    "href": "https://www.itu.int/rec/T-REC-X.690",
+    "title": "Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)"
   }
 }
 </pre>
@@ -4622,20 +4636,22 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Set |info|["{{SecurityInfo/state}}"] to "{{ConnectionState/secure}}".
     :: Note: Browsers typically interrupt connections on certificate errors. If the user has explicitly allowed it, the state may be "{{ConnectionState/broken}}".
 
-  1. Let |certList| be an empty [=list=].
+  1. Let |leafCert| be the server's X.509 certificate (as defined in [[!RFC5280]]) associated with |response|.
 
-  1. Let |leafCert| be the server's leaf certificate associated with |response|.
+  1. Let |derBytes| be the result of DER-encoding |leafCert| (as defined in [[!X.690]]).
 
   1. Let |certInfo| be a [=new=] {{CertificateInfo}}.
 
   1. Let |fingerprint| be a [=new=] {{Fingerprint}}.
 
-  1. Set |fingerprint|["{{Fingerprint/sha256}}"] to the SHA-256 fingerprint of |leafCert|.
+  1. Set |fingerprint|["{{Fingerprint/sha256}}"] to the result of performing the SHA-256 algorithm (as defined in [[!RFC6234]]) on |derBytes|.
 
   1. Set |certInfo|["{{CertificateInfo/fingerprint}}"] to |fingerprint|.
 
   1. If |includeRawDER| is `true`:
-    1. Set |certInfo|["{{CertificateInfo/rawDER}}"] to the raw DER-encoded bytes of |leafCert|.
+    1. Set |certInfo|["{{CertificateInfo/rawDER}}"] to |derBytes|.
+
+  1. Let |certList| be an empty [=list=].
 
   1. [=list/Append=] |certInfo| to |certList|.
 
