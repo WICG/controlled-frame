@@ -89,6 +89,20 @@ th, td {
     ],
     "href": "https://github.com/WICG/isolated-web-apps/blob/main/Permissions.md",
     "title": "Isolated Web Apps High Watermark Permissions Explainer"
+  },
+  "RFC5280": {
+    "href": "https://datatracker.ietf.org/doc/html/rfc5280",
+    "title": "Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+    "authors": ["D. Cooper", "S. Santesson", "S. Farrell", "S. Boeyen", "R. Housley", "W. Polk"]
+  },
+  "RFC6234": {
+    "href": "https://datatracker.ietf.org/doc/html/rfc6234",
+    "title": "US Secure Hash Algorithms (SHA and SHA-based HMAC and HKDF)",
+    "authors": ["D. Eastlake 3rd", "T. Hansen"]
+  },
+  "X.690": {
+    "href": "https://www.itu.int/rec/T-REC-X.690",
+    "title": "Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)"
   }
 }
 </pre>
@@ -3128,12 +3142,32 @@ enum RequestedHeaders {
   "all",
 };
 
+enum ConnectionState {
+  "broken", "insecure", "secure"
+};
+
+dictionary Fingerprint {
+  required DOMString sha256;
+};
+
+dictionary CertificateInfo {
+  required Fingerprint fingerprint;
+  Uint8Array rawDER;
+};
+
+dictionary SecurityInfo {
+  required sequence<CertificateInfo> certificates;
+  required ConnectionState state;
+};
+
 dictionary WebRequestInterceptorOptions {
   required sequence<(URLPattern or URLPatternInput)> urlPatterns;
   sequence<ResourceType> resourceTypes = [];
   boolean blocking = false;
   boolean includeRequestBody = false;
   RequestedHeaders includeHeaders = "none";
+  boolean securityInfo = false;
+  boolean securityInfoRawDer = false;
 };
 
 [Exposed=Window, IsolatedContext]
@@ -3274,6 +3308,7 @@ interface WebRequestErrorOccurredEvent : WebRequestEvent {
 [Exposed=Window, IsolatedContext]
 interface WebRequestHeadersReceivedEvent : WebRequestEvent {
   readonly attribute WebRequestResponse response;
+  readonly attribute SecurityInfo? securityInfo;
 
   undefined redirect(USVString redirectURL);
   undefined setResponseHeaders((Headers or HeadersInit) responseHeaders);
@@ -3308,6 +3343,8 @@ Each {{WebRequestInterceptor}} has an associated:
     * <dfn>blocking</dfn>, which is a [=boolean=].
     * <dfn>includeRequestBody</dfn>, which is a [=boolean=].
     * <dfn>includeHeaders</dfn>, which is a {{RequestedHeaders}}.
+    * <dfn>securityInfo</dfn>, which is a [=boolean=].
+    * <dfn>securityInfoRawDer</dfn>, which is a [=boolean=].
   </div>
 
 Each {{UploadData}} has an associated:
@@ -3533,6 +3570,10 @@ Each {{WebRequestHeadersReceivedEvent}} has an associated:
 
         The <dfn attribute>response</dfn> getter steps are
         to return [=this=]'s [=WebRequestHeadersReceivedEvent/response=].
+    * <dfn>securityInfo</dfn>, which is a {{SecurityInfo}}.
+
+        The <dfn attribute>securityInfo</dfn> getter steps are
+        to return [=this=]'s [=WebRequestHeadersReceivedEvent/securityInfo=].
   </div>
 
 Each {{WebRequestResponseStartedEvent}} has an associated:
@@ -3562,6 +3603,12 @@ Each {{WebRequestResponseStartedEvent}} has an associated:
 
     :  [=WebRequestInterceptor/includeHeaders=]
     :: |options|["{{WebRequestInterceptorOptions/includeHeaders}}"]
+
+    :  [=WebRequestInterceptor/securityInfo=]
+    :: |options|["{{WebRequestInterceptorOptions/securityInfo}}"]
+
+    :  [=WebRequestInterceptor/securityInfoRawDer=]
+    :: |options|["{{WebRequestInterceptorOptions/securityInfoRawDer}}"]
 
   1. [=list/For each=] |urlPattern| in |options|["{{
       WebRequestInterceptorOptions/urlPatterns}}"]:
@@ -4134,6 +4181,10 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
               |response|, and |interceptor|'s
               [=WebRequestInterceptor/includeHeaders=].
 
+          1. If |interceptor|'s [=WebRequestInterceptor/securityInfo=] is `true` or |interceptor|'s [=WebRequestInterceptor/securityInfoRawDer=] is `true`, then:
+              1. Let |info| be the result of [=getting security info=] given |response| and |interceptor|'s [=WebRequestInterceptor/securityInfoRawDer=].
+              1. Set |event|'s [=WebRequestHeadersReceivedEvent/securityInfo=] to |info|.
+
           1. [=Dispatch=] |event| to |interceptor|.
 
           1. If |event|'s [=WebRequestHeadersReceivedEvent/cancel=] is `true`,
@@ -4567,6 +4618,46 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
       equal to `false`.
 
   1. Return |response|.
+
+</div>
+
+<div algorithm>
+  To <dfn>get security info</dfn> given a [=/response=] |response| and a boolean |includeRawDER|, run the following steps:
+
+  1. Let |info| be a [=new=] {{SecurityInfo}}.
+
+  1. Let |scheme| be |response|'s [=response/url=]'s [=url/scheme=].
+
+  1. If |scheme| is "http" or "ws":
+    1. set |info|["{{SecurityInfo/state}}"] to "{{ConnectionState/insecure}}".
+
+    1. Return |info|.
+
+  1. Set |info|["{{SecurityInfo/state}}"] to "{{ConnectionState/secure}}".
+    :: Note: Browsers typically interrupt connections on certificate errors. If the user has explicitly allowed it, the state may be "{{ConnectionState/broken}}".
+
+  1. Let |leafCert| be the server's X.509 certificate (as defined in [[!RFC5280]]) associated with |response|.
+
+  1. Let |derBytes| be the result of DER-encoding |leafCert| (as defined in [[!X.690]]).
+
+  1. Let |certInfo| be a [=new=] {{CertificateInfo}}.
+
+  1. Let |fingerprint| be a [=new=] {{Fingerprint}}.
+
+  1. Set |fingerprint|["{{Fingerprint/sha256}}"] to the result of performing the SHA-256 algorithm (as defined in [[!RFC6234]]) on |derBytes|.
+
+  1. Set |certInfo|["{{CertificateInfo/fingerprint}}"] to |fingerprint|.
+
+  1. If |includeRawDER| is `true`:
+    1. Set |certInfo|["{{CertificateInfo/rawDER}}"] to |derBytes|.
+
+  1. Let |certList| be an empty [=list=].
+
+  1. [=list/Append=] |certInfo| to |certList|.
+
+  1. Set |info|["{{SecurityInfo/certificates}}"] to |certList|.
+
+  1. Return |info|.
 
 </div>
 
