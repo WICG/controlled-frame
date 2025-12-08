@@ -233,6 +233,7 @@ spec: webidl; urlPrefix: https://webidl.spec.whatwg.org
         text: promise rejected; url: a-promise-rejected-with
         text: promise resolved; url: a-promise-resolved-with
         text: getting a promise for waiting for all promises; url: waiting-for-all-promise
+        text: create an ArrayBuffer; url: #es-arraybuffer-constructor
 
 spec: uievents; urlPrefix: https://www.w3.org/TR/uievents/
     type: dfn
@@ -4656,7 +4657,8 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
   1. Set |certInfo|["{{CertificateInfo/fingerprint}}"] to |fingerprint|.
 
   1. If |includeRawDER| is `true`:
-    1. Set |certInfo|["{{CertificateInfo/rawDER}}"] to |derBytes|.
+    1. Let |arrayBuffer| be the result of [=creating an ArrayBuffer=] from |derBytes|.
+    1. Set |certInfo|["{{CertificateInfo/rawDER}}"] to a [=new=] {{Uint8Array}} object viewing |arrayBuffer|.
 
   1. Let |certList| be an empty [=list=].
 
