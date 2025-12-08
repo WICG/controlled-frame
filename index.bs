@@ -2796,7 +2796,7 @@ For [=window open steps=]:
             1. <ins>[=Fire a "newwindow" event=] with |controlledFrameEmbedderParent|, |url|,
                 |target|, |targetNavigable|, and |windowOpenDisposition|.</ins>
 
-      1. <ins>Return null.<ins>
+      1. <ins>Return null.</ins>
 
 15. If windowType is either "new and unrestricted" or "new with no opener",
     then:
@@ -2843,7 +2843,7 @@ For [=completely finish loading=]:
 
 5. Otherwise, if container is non-null, then queue an element task on the DOM manipulation task source given container to fire an event named load at container.
 
-6. <ins>Let |controlledFrameEmbedderParent| be <var ignore=''>document</var>'s [=node navigable=]'s [=controlledFrameEmbedderParent=].
+6. <ins>Let |controlledFrameEmbedderParent| be <var ignore=''>document</var>'s [=node navigable=]'s [=controlledFrameEmbedderParent=].</ins>
 
 7. <ins> If |controlledFrameEmbedderParent| is {{HTMLControlledFrameElement}}, then [=Fire a "contentload" event=] with |controlledFrameEmbedderParent|.</ins>
 
@@ -2869,7 +2869,7 @@ For [=HTTP fetch=](loadredirect):
 
       1. <ins>If |request|'s [=request/window=] |window| is a [=environment settings object=] whose [=global object=] is a {{Window}} object:</ins>
 
-            1. <ins>Let |currentNavigable| be |window|'s associated [=Window/navigable=].
+            1. <ins>Let |currentNavigable| be |window|'s associated [=Window/navigable=].</ins>
 
             1. <ins>Let |controlledFrameEmbedderParent| be |currentNavigable|'s [=top-level traversable=]'s [=controlledFrameEmbedderParent=].</ins>
 
@@ -2879,7 +2879,7 @@ For [=HTTP fetch=](loadredirect):
 
                   1.<ins>Let |newUrl| be |response|'s [=response/location url=].</ins>
 
-                  1.<ins>Let |isTopLevel| be `false`, if |currentNavigable| has a null [=navigable/parent=] set |isTopLevel| to `true`.
+                  1.<ins>Let |isTopLevel| be `false`, if |currentNavigable| has a null [=navigable/parent=] set |isTopLevel| to `true`.</ins>
 
                   1.<ins>[=Fire a "loadredirect" event=] with |controlledFrameEmbedderParent|, |oldUrl|, |newUrl|, and |isTopLevel|.</ins>
 
@@ -2943,9 +2943,9 @@ For [=request a position=] (geolocation):
 
             1. <ins>Terminate this algorithm.</ins>
 
-      1. <ins>Let |embedderNavigator| be the [=associated Navigator=] of |nodeDocument|'s [=global object=].
+      1. <ins>Let |embedderNavigator| be the [=associated Navigator=] of |nodeDocument|'s [=global object=].</ins>
 
-      1. <ins>Let |embedderGeolocation| be the {{Navigator/geolocation}} of |embedderNavigator|.
+      1. <ins>Let |embedderGeolocation| be the {{Navigator/geolocation}} of |embedderNavigator|.</ins>
 
       1. <ins>Return the result of [=request a position=] with |embedderGeolocation|, <var ignore=''>successCallback</var>, <var ignore=''>errorCallback</var>, <var ignore=''>options</var>, and <var ignore=''>whatchId</var>.</ins>
 
@@ -4644,7 +4644,14 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
   1. Let |fingerprint| be a [=new=] {{Fingerprint}}.
 
-  1. Set |fingerprint|["{{Fingerprint/sha256}}"] to the result of performing the SHA-256 algorithm (as defined in [[!RFC6234]]) on |derBytes|.
+  1. Calculate the fingerprint string:
+    1. Let |hashBytes| be the result of performing the SHA-256 algorithm (as defined in [[!RFC6234]]) on |derBytes|.
+    1. Let |hexString| be an empty string.
+    1. For each byte |byte| in |hashBytes|:
+        1. If |hexString| is not empty, append U+003A (:) to |hexString|.
+        1. Let |hexPair| be the string comprising two ASCII upper hex digits representing |byte|.
+        1. Append |hexPair| to |hexString|.
+    1. Set |fingerprint|["{{Fingerprint/sha256}}"] to |hexString|.
 
   1. Set |certInfo|["{{CertificateInfo/fingerprint}}"] to |fingerprint|.
 
