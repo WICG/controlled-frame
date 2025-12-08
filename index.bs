@@ -4634,7 +4634,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
     1. Return |info|.
 
   1. Set |info|["{{SecurityInfo/state}}"] to "{{ConnectionState/secure}}".
-    :: Note: Browsers typically interrupt connections on certificate errors. If the user has explicitly allowed it, the state may be "{{ConnectionState/broken}}".
+    :: Note: Browsers typically interrupt connections on certificate errors. If the user has explicitly allowed it, the state may be set to "{{ConnectionState/broken}}" instead.
 
   1. Let |leafCert| be the server's X.509 certificate (as defined in [[!RFC5280]]) associated with |response|.
 
