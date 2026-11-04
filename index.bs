@@ -1319,7 +1319,7 @@ implementation of this isolation that can be implemented by all browsers.
       |executionSteps| given 0, `true`, and |details|["{{InjectDetails/code}}"].
 
   1. Otherwise, [=fetch an injection item=] given |controlledframe|,
-      |details|["{{InjectDetails/file}}"], `true`, 0, and |executionSteps|.
+      |details|["{{InjectDetails/file}}"], `false`, 0, and |executionSteps|.
 
 </div>
 
@@ -4324,7 +4324,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
                   1. If |resolvedValue| is a [=dictionary=] [=map/containing=]
                       two [=map/keys=] equal to "username" and "password", and
                       |result|'s [=WebRequestEvent result/authCredentials=]
-                      is undefined, then set |result|'s [=WebRequestEvent
+                      is null, then set |result|'s [=WebRequestEvent
                       result/authCredentials=] to |resolvedValue|.
 
                   1. Set |done| to `true`.
