@@ -1291,10 +1291,10 @@ implementation of this isolation that can be implemented by all browsers.
       undefined, then [=reject an embedder promise=] given |controlledframe|,
       |result|, and a {{TypeError}}, and abort these steps.
 
-  1. Let |executionSteps| be the following algorithm that takes a {{long}} and
-      a {{DOMString}} or [=boolean=] |scriptString|:
+  1. Let |executionSteps| be the following algorithm that takes a {{long}}, a
+      [=boolean=] |success|, and a {{DOMString}} |scriptString|:
 
-      1. If |scriptString| is not a {{DOMString}}, then [=reject an embedder
+      1. If |success| is `false`, then [=reject an embedder
           promise=] given |controlledframe|, |result|, and a {{TypeError}},
           and abort these steps.
 
@@ -1316,7 +1316,7 @@ implementation of this isolation that can be implemented by all browsers.
                   |result|, and |completionRecord|.`[[Value]]`.
 
   1. If |details|["{{InjectDetails/code}}"] is defined, then run
-      |executionSteps| given 0 and |details|["{{InjectDetails/code}}"].
+      |executionSteps| given 0, `true`, and |details|["{{InjectDetails/code}}"].
 
   1. Otherwise, [=fetch an injection item=] given |controlledframe|,
       |details|["{{InjectDetails/file}}"], `false`, 0, and |executionSteps|.
@@ -1361,7 +1361,7 @@ implementation of this isolation that can be implemented by all browsers.
       |executionSteps| given 0, `true`, and |details|["{{InjectDetails/code}}"].
 
   1. Otherwise, [=fetch an injection item=] given |controlledframe|,
-      |details|["{{InjectDetails/file}}"], `false`, 0, and |executionSteps|.
+      |details|["{{InjectDetails/file}}"], `true`, 0, and |executionSteps|.
 
 </div>
 
@@ -2403,7 +2403,8 @@ a [=boolean=], run the following steps:
 
       1. [=Queue a global task=] on the [=DOM manipulation task source=] of
           |embeddedDocument|'s [=relevant global object=] that runs
-          |completionSteps| with |e|["{{PermissionRequestEvent/permissionRequest}}"]["{{PermissionRequest/permission}}"]["[=PermissionRequestControllerBase/allow=]"].
+          |completionSteps| with |e|["{{PermissionRequestEvent/permissionRequest}}"]["{{PermissionRequest/request}}"]'s
+          [=PermissionRequestControllerBase/allow=].
 
 </div>
 
@@ -2916,13 +2917,13 @@ For [=request a position=] (geolocation):
 
       3. Terminate this algorithm.
 
-4. <ins>Let |blockedByEmbedder| be `false`.</ins>
+4. <ins>Let |allowedByEmbedder| be `false`.</ins>
 
 5. <ins>Check if |document| is [=allowed by embedder to use=] the "geolocation"
     feature given an algorithm that assigns its [=boolean=] argument to
-    |blockedByEmbedder| and continues with the remainder of these steps.</ins>
+    |allowedByEmbedder| and continues with the remainder of these steps.</ins>
 
-6. <ins>If |blockedByEmbedder| is `true`, then:</ins>
+6. <ins>If |allowedByEmbedder| is `false`, then:</ins>
 
       1. <ins>If watchId was passed, remove watchId from watchIDs.</ins>
 
@@ -4155,7 +4156,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
 
   1. Let |result| be a [=WebRequestEvent result=].
 
-  1. Let |pendingHandlerCount| be |interceptor|'s [=list/size=].
+  1. Let |pendingHandlerCount| be 0.
 
   1. Let |controlledFrameEmbedderGlobal| be the [=relevant global object=] of
       the result of [=getting an environment's controlledFrameEmbedderParent=] given
@@ -4323,7 +4324,7 @@ A <dfn>WebRequestEvent result</dfn> is a [=struct=] with the following
                   1. If |resolvedValue| is a [=dictionary=] [=map/containing=]
                       two [=map/keys=] equal to "username" and "password", and
                       |result|'s [=WebRequestEvent result/authCredentials=]
-                      is undefined, then set |result|'s [=WebRequestEvent
+                      is null, then set |result|'s [=WebRequestEvent
                       result/authCredentials=] to |resolvedValue|.
 
                   1. Set |done| to `true`.
